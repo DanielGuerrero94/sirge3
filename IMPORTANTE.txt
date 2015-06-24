@@ -1,0 +1,8 @@
+ORDEN PARA MIGRAR ESQUEMAS
+	1 . sistema
+	2 . pss
+	3 . efectores
+	4 .
+	5 . 
+	6 . 
+	...
