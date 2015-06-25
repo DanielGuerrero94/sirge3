@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+class CreateEntidades extends Migration {
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up() {
+		Schema::create('sistema.entidades', function (Blueprint $table) {
+			$table->string('id_entidad', 2)->primary();
+			$table->integer('id_tipo_entidad');
+			$table->integer('id_region');
+			$table->string('descripcion', 100);
+			$table->timestamps();
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down() {
+		Schema::drop('sistema.entidades');
+	}
+}

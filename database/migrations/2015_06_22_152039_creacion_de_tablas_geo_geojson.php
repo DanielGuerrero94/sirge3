@@ -14,7 +14,7 @@ class CreacionDeTablasGeoGeojson extends Migration {
 			$table->string('id_provincia', 2);
 			$table->primary('id_provincia');
 			$table->string('geojson_provincia', 5);
-			//$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
 		});
 	}
 

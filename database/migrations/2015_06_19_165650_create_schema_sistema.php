@@ -2,14 +2,14 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreacionSchemaEfectores extends Migration {
+class CreateSchemaSistema extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up() {
-		DB::statement('CREATE SCHEMA efectores');
+		DB::statement('CREATE SCHEMA sistema');
 	}
 
 	/**
@@ -18,6 +18,6 @@ class CreacionSchemaEfectores extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		DB::statement('DROP SCHEMA efectores CASCADE;');
+		DB::statement('DROP SCHEMA sistema CASCADE;');
 	}
 }
