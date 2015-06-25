@@ -1,7 +1,7 @@
 ESQUEMAS
 [R]	aplicacion_fondos_old
 [R]	beneficiarios
-[G]	comprobantes
+[X]	comprobantes
 [R]	comprobantes_old
 [R]	compromiso_anual
 [G]	consultas
