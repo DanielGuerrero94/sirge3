@@ -23,6 +23,7 @@ class CreateEsquemas extends Migration
         DB::statement('CREATE SCHEMA fondos;');
         DB::statement('CREATE SCHEMA geo;');
         DB::statement('CREATE SCHEMA indec;');
+        DB::statement('CREATE SCHEMA indicadores;');
         DB::statement('CREATE SCHEMA logs;');
         DB::statement('CREATE SCHEMA mobile;');
         DB::statement('CREATE SCHEMA osp;');
