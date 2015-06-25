@@ -1,8 +1,26 @@
-ORDEN PARA MIGRAR ESQUEMAS
-	1 . sistema
-	2 . pss
-	3 . efectores
-	4 .
-	5 . 
-	6 . 
-	...
+ESQUEMAS
+[R]	aplicacion_fondos_old
+[R]	beneficiarios
+[G]	comprobantes
+[R]	comprobantes_old
+[R]	compromiso_anual
+[G]	consultas
+[R]	ddjj
+[X]	efectores
+[G]	fondos
+[X]	geo
+[R]	indec
+[R]	indicadores
+[R]	logs
+[G]	mobile
+[R]	osp
+[X]	prestaciones
+[G]	prestaciones_old
+[R]	profe
+[R]	pss
+[G]	public
+[G]	puco
+[X]	sistema
+[R]	sss
+[G]	temporales
+[G]	trazadoras
