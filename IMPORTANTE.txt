@@ -7,7 +7,7 @@ ESQUEMAS
 [G]	consultas
 [R]	ddjj
 [X]	efectores
-[G]	fondos
+[X]	fondos
 [X]	geo
 [R]	indec
 [R]	indicadores
@@ -18,9 +18,9 @@ ESQUEMAS
 [G]	prestaciones_old
 [R]	profe
 [R]	pss
-[G]	public
+[X]	public
 [G]	puco
 [X]	sistema
 [R]	sss
-[G]	temporales
-[G]	trazadoras
+[X]	tmp
+[X]	trazadoras

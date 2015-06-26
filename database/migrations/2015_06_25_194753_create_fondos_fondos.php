@@ -3,14 +3,15 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateFondosA01 extends Migration {
+class CreateFondosFondos extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('fondos.a_01', function (Blueprint $table) {
+		Schema::create('fondos.fondos', function (Blueprint $table) {
+			$table->increments('id');
 			$table->string('efector', 14);
 			$table->date('fecha_gasto');
 			$table->integer('periodo');
@@ -21,6 +22,10 @@ class CreateFondosA01 extends Migration {
 			$table->decimal('monto');
 			$table->text('concepto')->nulleable();
 			$table->integer('lote');
+
+			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
+			$table->foreign('codigo_gasto')->references('codigo_gasto')->on('fondos.codigos_gasto');
+			DB::statement('ALTER TABLE fondos.fondos ADD CONSTRAINT fkey_subcodigo_gasto FOREIGN KEY (codigo_gasto , subcodigo_gasto) REFERENCES fondos.subcodigos_gasto (codigo_gasto , subcodigo_gasto) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION');
 		});
 	}
 
@@ -30,6 +35,6 @@ class CreateFondosA01 extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('fondos.a_01');
+		Schema::drop('fondos.fondos');
 	}
 }
