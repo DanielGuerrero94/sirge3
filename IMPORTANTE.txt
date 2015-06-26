@@ -19,7 +19,7 @@ ESQUEMAS
 [R]	profe
 [R]	pss
 [X]	public
-[G]	puco
+[X]	puco
 [X]	sistema
 [R]	sss
 [X]	tmp
