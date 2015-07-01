@@ -6,7 +6,7 @@ ESQUEMAS [T] : TERMINADO
 [R]	compromiso_anual [T]
 [G]	consultas 
 [R]	ddjj [T]
-[X]	efectores
+[R]	efectores [T]
 [X]	fondos
 [X]	geo
 [R]	indec
