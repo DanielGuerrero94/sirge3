@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateComprobantesComprobantes extends Migration {
 	/**
@@ -9,8 +9,10 @@ class CreateComprobantesComprobantes extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('comprobantes.comprobantes', function (Blueprint $table) {
+	public function up()
+	{
+		Schema::create('comprobantes.comprobantes', function(Blueprint $table)
+		{
 			$table->increments('id');
 			$table->char('id_provincia', 2);
 			$table->string('efector', 14);
@@ -26,9 +28,14 @@ class CreateComprobantesComprobantes extends Migration {
 			$table->string('factura_debitada', 50);
 			$table->text('concepto');
 			$table->integer('lote');
-
-			$table->primary(['id_provincia', 'numero_comprobante', 'tipo_comprobante', 'efector']);
 			$table->foreign('lote')->references('lote')->on('sistema.lotes');
+		});
+
+		\DB::statement('ALTER TABLE comprobantes.comprobantes DROP CONSTRAINT comprobantes_pkey');
+
+		Schema::table('comprobantes.comprobantes', function(Blueprint $table)
+		{
+			$table->primary(['id_provincia', 'numero_comprobante', 'tipo_comprobante', 'efector']);
 		});
 	}
 
@@ -37,7 +44,8 @@ class CreateComprobantesComprobantes extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down()
+	{
 		Schema::drop('comprobantes.comprobantes');
 	}
 }

@@ -22,26 +22,26 @@ class CreateTableFProviniciasOnSchemaAplicacionFondosOld extends Migration {
 				$prov = (string) $i;
 			}
 
-			Schema::create('aplicacion_fondos_old.f_$prov', function(Blueprint $table)
+			Schema::create('aplicacion_fondos_old.f_'.$prov, function(Blueprint $table)
 			{
 				$table->string('cuie', 6)->primary();
 				$table->date('fecha_gasto');
 				$table->string('periodo_rendicion', 50);
-				$table->numeric('item_11');
-				$table->numeric('item_12');
-				$table->numeric('item_13');
-				$table->numeric('item_21');
-				$table->numeric('item_22');
-				$table->numeric('item_23');
-				$table->numeric('item_31');
-				$table->numeric('item_32');
-				$table->numeric('item_41');
-				$table->numeric('item_42');
-				$table->numeric('item_43');
-				$table->numeric('item_51');
-				$table->numeric('item_52');
-				$table->numeric('item_53');
-				$table->numeric('item_61');
+				$table->float('item_11');
+				$table->float('item_12');
+				$table->float('item_13');
+				$table->float('item_21');
+				$table->float('item_22');
+				$table->float('item_23');
+				$table->float('item_31');
+				$table->float('item_32');
+				$table->float('item_41');
+				$table->float('item_42');
+				$table->float('item_43');
+				$table->float('item_51');
+				$table->float('item_52');
+				$table->float('item_53');
+				$table->float('item_61');
 			});
 
 		}

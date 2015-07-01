@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreatePucoResumenPuco extends Migration {
 	/**
@@ -9,8 +9,10 @@ class CreatePucoResumenPuco extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('puco.resumen_puco', function (Blueprint $table) {
+	public function up()
+	{
+		Schema::create('puco.resumen_puco', function(Blueprint $table)
+		{
 			$table->increments('id_puco');
 			$table->integer('periodo');
 			$table->string('clave', 8);
@@ -23,7 +25,8 @@ class CreatePucoResumenPuco extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down()
+	{
 		Schema::drop('puco.resumen_puco');
 	}
 }
