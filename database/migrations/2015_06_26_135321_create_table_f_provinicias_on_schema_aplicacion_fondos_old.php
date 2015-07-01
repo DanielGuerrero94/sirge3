@@ -11,7 +11,7 @@ class CreateTableFProviniciasOnSchemaAplicacionFondosOld extends Migration {
 	 */
 	public function up()
 	{
-		for ($i = 0; $i <= 24; $i++)
+		for ($i = 1; $i <= 24; $i++)
 		{
 			if ($i < 10)
 			{
@@ -55,7 +55,7 @@ class CreateTableFProviniciasOnSchemaAplicacionFondosOld extends Migration {
 	 */
 	public function down()
 	{
-		for ($i = 0; $i <= 24; $i++)
+		for ($i = 1; $i <= 24; $i++)
 		{
 			if ($i < 10)
 			{
@@ -65,7 +65,7 @@ class CreateTableFProviniciasOnSchemaAplicacionFondosOld extends Migration {
 			{
 				$prov = (string) $i;
 			}
-			Schema::drop('aplicacion_fondos_old.f_$prov');
+			Schema::drop('aplicacion_fondos_old.f_'.$prov);
 		}
 	}
 }
