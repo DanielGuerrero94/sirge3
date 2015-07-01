@@ -1,8 +1,8 @@
-ESQUEMAS
-[R]	aplicacion_fondos_old
-[R]	beneficiarios
+ESQUEMAS [T] : TERMINADO
+[R]	aplicacion_fondos_old [T]
+[R]	beneficiarios [T]
 [X]	comprobantes
-[R]	comprobantes_old
+[R]	comprobantes_old [T]
 [R]	compromiso_anual
 [G]	consultas
 [R]	ddjj
