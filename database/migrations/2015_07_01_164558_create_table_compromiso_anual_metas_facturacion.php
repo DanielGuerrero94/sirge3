@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableComprobantesMetasFacturacion extends Migration {
+class CreateTableCompromisoAnualMetasFacturacion extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -11,7 +11,7 @@ class CreateTableComprobantesMetasFacturacion extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('comprobantes.metas_facturacion', function(Blueprint $table)
+		Schema::create('compromiso_anual.metas_facturacion', function(Blueprint $table)
 		{
 			$table->char('id_provincia', 2);
 			$table->float('primer_semestre')->nullable();
@@ -28,6 +28,6 @@ class CreateTableComprobantesMetasFacturacion extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('comprobantes.metas_facturacion');
+		Schema::drop('compromiso_anual.metas_facturacion');
 	}
 }

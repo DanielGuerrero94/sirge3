@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableComprobantesMetasDescentralizacion extends Migration {
+class CreateTableCompromisoAnualMetasDescentralizacion extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -11,7 +11,7 @@ class CreateTableComprobantesMetasDescentralizacion extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('comprobantes.metas_descentralizacion', function(Blueprint $table)
+		Schema::create('compromiso_anual.metas_descentralizacion', function(Blueprint $table)
 		{
 			$table->char('id_provincia', 2);
 			$table->float('primer_semestre')->nullable();
@@ -28,6 +28,6 @@ class CreateTableComprobantesMetasDescentralizacion extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('compromiso.metas_descentralizacion');
+		Schema::drop('compromiso_anual.metas_descentralizacion');
 	}
 }
