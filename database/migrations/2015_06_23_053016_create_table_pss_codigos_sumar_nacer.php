@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTablePssCodigosSumarNacer extends Migration {
 	/**
@@ -9,10 +9,8 @@ class CreateTablePssCodigosSumarNacer extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('pss.codigos_sumar_nacer', function(Blueprint $table)
-		{
+	public function up() {
+		Schema::create('pss.codigos_sumar_nacer', function (Blueprint $table) {
 			$table->string('codigo_prestacion', 11);
 			$table->smallInteger('id_grupo_etario');
 			$table->string('codigo_prestacion_nacer', 6);
@@ -33,8 +31,7 @@ class CreateTablePssCodigosSumarNacer extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schema::drop('pss.codigo_prestacion_nacer');
+	public function down() {
+		Schema::drop('pss.codigos_sumar_nacer');
 	}
 }

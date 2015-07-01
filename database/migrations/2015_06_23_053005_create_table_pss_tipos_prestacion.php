@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTablePssTiposPrestacion extends Migration {
 	/**
@@ -9,11 +9,9 @@ class CreateTablePssTiposPrestacion extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('pss.tipos_prestacion', function(Blueprint $table)
-		{
-			$table->string('tipos_prestacion', 2)->primary();
+	public function up() {
+		Schema::create('pss.tipo_prestacion', function (Blueprint $table) {
+			$table->string('tipo_prestacion', 2)->primary();
 			$table->text('descripcion')->nullable();
 		});
 	}
@@ -23,8 +21,7 @@ class CreateTablePssTiposPrestacion extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schema::drop('pss.tipos_prestacion');
+	public function down() {
+		Schema::drop('pss.tipo_prestacion');
 	}
 }

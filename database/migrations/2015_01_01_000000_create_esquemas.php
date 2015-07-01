@@ -8,8 +8,7 @@ class CreateEsquemas extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
+	public function up() {
 		DB::statement('CREATE SCHEMA aplicacion_fondos_old;');
 		DB::statement('CREATE SCHEMA beneficiarios;');
 		DB::statement('CREATE SCHEMA comprobantes;');
@@ -41,31 +40,31 @@ class CreateEsquemas extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down() {
+		DB::statement('DROP SCHEMA indicadores;');
+		DB::statement('DROP SCHEMA mobile;');
+		DB::statement('DROP SCHEMA indec;');
+		DB::statement('DROP SCHEMA trazadoras;');
+		DB::statement('DROP SCHEMA tmp;');
+		DB::statement('DROP SCHEMA sss;');
+		DB::statement('DROP SCHEMA puco;');
+		DB::statement('DROP SCHEMA pss;');
+		DB::statement('DROP SCHEMA profe;');
+		DB::statement('DROP SCHEMA prestaciones_old;');
+		DB::statement('DROP SCHEMA prestaciones;');
+		DB::statement('DROP SCHEMA osp;');
+		DB::statement('DROP SCHEMA logs;');
+		DB::statement('DROP SCHEMA geo;');
+		DB::statement('DROP SCHEMA fondos;');
+		DB::statement('DROP SCHEMA efectores;');
+		DB::statement('DROP SCHEMA ddjj;');
+		DB::statement('DROP SCHEMA consultas;');
 		DB::statement('DROP SCHEMA aplicacion_fondos_old;');
 		DB::statement('DROP SCHEMA beneficiarios;');
 		DB::statement('DROP SCHEMA comprobantes;');
 		DB::statement('DROP SCHEMA comprobantes_old;');
 		DB::statement('DROP SCHEMA compromiso_anual;');
-		DB::statement('DROP SCHEMA consultas;');
-		DB::statement('DROP SCHEMA ddjj;');
-		DB::statement('DROP SCHEMA efectores;');
-		DB::statement('DROP SCHEMA fondos;');
-		DB::statement('DROP SCHEMA geo;');
-		DB::statement('DROP SCHEMA indec;');
-		DB::statement('DROP SCHEMA indicadores;');
-		DB::statement('DROP SCHEMA logs;');
-		DB::statement('DROP SCHEMA mobile;');
-		DB::statement('DROP SCHEMA osp;');
-		DB::statement('DROP SCHEMA prestaciones;');
-		DB::statement('DROP SCHEMA prestaciones_old;');
-		DB::statement('DROP SCHEMA profe;');
-		DB::statement('DROP SCHEMA pss;');
-		DB::statement('DROP SCHEMA puco;');
 		DB::statement('DROP SCHEMA sistema;');
-		DB::statement('DROP SCHEMA sss;');
-		DB::statement('DROP SCHEMA tmp;');
-		DB::statement('DROP SCHEMA trazadoras;');
+
 	}
 }

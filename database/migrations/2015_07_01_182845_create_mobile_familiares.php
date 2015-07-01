@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateMobileFamiliares extends Migration {
 	/**
@@ -9,10 +9,8 @@ class CreateMobileFamiliares extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('mobile.reporte_problemas', function(Blueprint $table)
-		{
+	public function up() {
+		Schema::create('mobile.familiares', function (Blueprint $table) {
 			$table->integer('id_usuario');
 			$table->smallInteger('id_tipo_familiar');
 			$table->char('sexo', 1);
@@ -29,8 +27,7 @@ class CreateMobileFamiliares extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schema::drop('mobile.reporte_problemas');
+	public function down() {
+		Schema::drop('mobile.familiares');
 	}
 }

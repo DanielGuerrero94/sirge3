@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateMobileUsuarios extends Migration {
 	/**
@@ -9,10 +9,8 @@ class CreateMobileUsuarios extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('mobile.usuarios', function(Blueprint $table)
-		{
+	public function up() {
+		Schema::create('mobile.usuarios', function (Blueprint $table) {
 			$table->increments('id_usuario');
 			$table->string('nombre', 200);
 			$table->string('apellido', 200);
@@ -36,8 +34,8 @@ class CreateMobileUsuarios extends Migration {
 
 		DB::statement('ALTER TABLE mobile.usuarios DROP CONSTRAINT usuarios_pkey;');
 
-		Schema::create('mobile.usuarios', function(Blueprint $table)
-		{
+		Schema::table('mobile.usuarios', function (Blueprint $table) {
+			$table->unique('id_usuario');
 			$table->primary(['tipo_documento', 'numero_documento', 'sexo', 'email']);
 		});
 	}
@@ -47,8 +45,7 @@ class CreateMobileUsuarios extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down() {
 		Schema::drop('mobile.usuarios');
 	}
 }

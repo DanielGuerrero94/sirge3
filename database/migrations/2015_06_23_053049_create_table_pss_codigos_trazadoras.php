@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTablePssCodigosTrazadoras extends Migration {
 	/**
@@ -9,10 +9,8 @@ class CreateTablePssCodigosTrazadoras extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('pss.codigos_trazadoras', function(Blueprint $table)
-		{
+	public function up() {
+		Schema::create('pss.codigos_trazadoras', function (Blueprint $table) {
 			$table->string('codigo_prestacion', 11);
 			$table->smallInteger('id_linea_cuidado');
 			$table->smallInteger('id_grupo_etario');
@@ -39,8 +37,7 @@ class CreateTablePssCodigosTrazadoras extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schama::drop('pss.codigos_trazadoras');
+	public function down() {
+		Schema::drop('pss.codigos_trazadoras');
 	}
 }
