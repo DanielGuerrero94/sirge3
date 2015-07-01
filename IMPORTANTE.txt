@@ -1,26 +1,26 @@
-ESQUEMAS [T] : TERMINADO
-[R]	aplicacion_fondos_old [T]
-[R]	beneficiarios [T]
-[X]	comprobantes 
-[R]	comprobantes_old [T]
-[R]	compromiso_anual [T]
+ESQUEMAS X : TERMINADO
+[R]	aplicacion_fondos_old X
+[R]	beneficiarios X
+[G]	comprobantes X
+[R]	comprobantes_old X
+[R]	compromiso_anual X
 [G]	consultas 
-[R]	ddjj [T]
-[R]	efectores [T]
-[X]	fondos
-[X]	geo
-[R]	indec
+[R]	ddjj X
+[R]	efectores X
+[G]	fondos X
+[R]	geo X
+[R]	indec X
 [R]	indicadores
 [R]	logs
-[X]	mobile
+[G]	mobile
 [R]	osp
-[X]	prestaciones
+[G]	prestaciones X
 [G]	prestaciones_old
 [R]	profe
-[R]	pss
+[R]	pss X
 [X]	public
-[X]	puco
-[X]	sistema
+[G]	puco X
+[X]	sistema X
 [R]	sss
-[X]	tmp
-[X]	trazadoras
+[G]	tmp X
+[R]	trazadoras X
