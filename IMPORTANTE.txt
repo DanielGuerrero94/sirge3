@@ -1,11 +1,11 @@
 ESQUEMAS [T] : TERMINADO
 [R]	aplicacion_fondos_old [T]
 [R]	beneficiarios [T]
-[X]	comprobantes
+[X]	comprobantes 
 [R]	comprobantes_old [T]
-[R]	compromiso_anual
-[G]	consultas
-[R]	ddjj
+[R]	compromiso_anual [T]
+[G]	consultas 
+[R]	ddjj [T]
 [X]	efectores
 [X]	fondos
 [X]	geo
