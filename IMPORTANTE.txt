@@ -12,7 +12,7 @@ ESQUEMAS [T] : TERMINADO
 [R]	indec
 [R]	indicadores
 [R]	logs
-[G]	mobile
+[X]	mobile
 [R]	osp
 [X]	prestaciones
 [G]	prestaciones_old
