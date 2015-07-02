@@ -1,26 +1,26 @@
 ESQUEMAS X : TERMINADO
-[R]	aplicacion_fondos_old X
-[R]	beneficiarios X
-[G]	comprobantes X
-[R]	comprobantes_old X
-[R]	compromiso_anual X
-[G]	consultas 
-[R]	ddjj X
-[R]	efectores X
-[G]	fondos X
-[R]	geo X
-[R]	indec X
-[R]	indicadores
-[R]	logs
-[G]	mobile
-[R]	osp
-[G]	prestaciones X
-[G]	prestaciones_old
-[R]	profe
-[R]	pss X
-[X]	public
-[G]	puco X
-[X]	sistema X
-[R]	sss
-[G]	tmp X
-[R]	trazadoras X
+[R][X]	aplicacion_fondos_old --> PASAR A OTRA BDD [sirge_pato]
+[R][X]	beneficiarios
+[G][X]	comprobantes
+[R][X]	comprobantes_old --> PASAR A OTRA BDD [sirge_pato]
+[R][X]	compromiso_anual
+[G][ ]	consultas 
+[R][X]	ddjj
+[R][X]	efectores
+[G][X]	fondos
+[R][X]	geo
+[R][X]	indec
+[R][ ]	indicadores
+[R][ ]	logs
+[G][ ]	mobile
+[R][ ]	osp
+[G][X]	prestaciones
+[G][X]	prestaciones_old --> PASAR A OTRA BDD [sirge_pato]
+[R][X]	profe
+[R][X]	pss
+[G][X]	public
+[G][X]	puco
+[G][X]	sistema
+[R][ ]	sss
+[G][X] 	tmp
+[R][X] 	trazadoras
