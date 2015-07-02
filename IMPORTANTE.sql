@@ -4,7 +4,7 @@ ESQUEMAS X : TERMINADO
 --[G][X]	comprobantes
 /*[R][X]	comprobantes_old */-> 'PASAR A OTRA BDD [sirge_pato]'
 --[R][X]	compromiso_anual
---[G][ ]	consultas
+--[G][X]	consultas
 --[R][X]	ddjj
 --[R][X]	efectores
 --[G][X]	fondos
