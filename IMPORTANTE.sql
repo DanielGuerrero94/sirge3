@@ -11,7 +11,7 @@ ESQUEMAS X : TERMINADO
 --[R][X]	geo
 --[R][X]	indec
 --[R][X]	indicadores
-[R][ ]	logs
+--[R][X]	logs
 --[G][X]	mobile
 [R][ ]	osp
 --[G][X]	prestaciones
