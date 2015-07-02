@@ -31,6 +31,6 @@ class CreateTableIndicadoresIndicadoresMedica extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('sistema.entidades');
+		Schema::drop('indicadores.indicadores_medica');
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreacionDeTablasGeoGeojson extends Migration {
 	/**
@@ -9,8 +9,10 @@ class CreacionDeTablasGeoGeojson extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('geo.geojson', function (Blueprint $table) {
+	public function up()
+	{
+		Schema::create('geo.geojson', function(Blueprint $table)
+		{
 			$table->string('id_provincia', 2);
 			$table->primary('id_provincia');
 			$table->string('geojson_provincia', 5);
@@ -23,7 +25,8 @@ class CreacionDeTablasGeoGeojson extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down()
+	{
 		Schema::drop('geo.geojson');
 	}
 }
