@@ -22,6 +22,8 @@ class CreateTableLogsLogQueriesDinamicos extends Migration {
 			->references('id_usuario')
 			->on('sistema.usuarios');
 		});
+
+		\DB::statement('ALTER TABLE logs.log_queries_dinamicos ADD COLUMN "timestamp" timestamp without time zone');
 	}
 
 	/**

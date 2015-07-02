@@ -14,10 +14,10 @@ class CreateTableBeneficiariosBeneficiariosPeriodos extends Migration {
 		Schema::create('beneficiarios.beneficiarios_periodos', function(Blueprint $table)
 		{
 			$table->string('clave_beneficiario', 16);
-			$table->integer('periodo');
+			$table->integer('periodo')->index();
 			$table->char('activo', 1);
-			$table->string('efector_asignado', 14)->nullable();
-			$table->string('efector_habitual', 14)->nullable();
+			$table->string('efector_asignado', 14)->nullable()->index();
+			$table->string('efector_habitual', 14)->nullable()->index();
 			$table->integer('id_ingreso');
 			$table->char('embarazo', 1)->default('N');
 			$table->primary(['clave_beneficiario', 'periodo']);
