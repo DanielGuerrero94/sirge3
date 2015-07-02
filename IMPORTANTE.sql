@@ -13,14 +13,14 @@ ESQUEMAS X : TERMINADO
 --[R][X]	indicadores
 --[R][X]	logs
 --[G][X]	mobile
-[R][ ]	osp
+--[R][X]	osp
 --[G][X]	prestaciones
 /*[G][X]	prestaciones_old */ -> 'PASAR A OTRA BDD [sirge_pato]'
-[R][ ]	profe
+--[R][X]	profe
 --[R][X]	pss
 --[G][X]	public
 --[G][X]	puco
 --[G][X]	sistema
-[R][ ]	sss
+--[R][X]	sss
 --[G][X] 	tmp
 --[R][X] 	trazadoras

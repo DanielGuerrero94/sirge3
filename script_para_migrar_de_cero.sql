@@ -1,9 +1,9 @@
 --QUERY PARA CORRER EN EL MOTOR
 
-DROP SCHEMA aplicacion_fondos_old CASCADE;
+--DROP SCHEMA aplicacion_fondos_old CASCADE;
 DROP SCHEMA beneficiarios CASCADE;
 DROP SCHEMA comprobantes CASCADE;
-DROP SCHEMA comprobantes_old CASCADE;
+--DROP SCHEMA comprobantes_old CASCADE;
 DROP SCHEMA compromiso_anual CASCADE;
 DROP SCHEMA consultas CASCADE;
 DROP SCHEMA ddjj CASCADE;
@@ -16,7 +16,7 @@ DROP SCHEMA logs CASCADE;
 DROP SCHEMA mobile CASCADE;
 DROP SCHEMA osp CASCADE;
 DROP SCHEMA prestaciones CASCADE;
-DROP SCHEMA prestaciones_old CASCADE;
+--DROP SCHEMA prestaciones_old CASCADE;
 DROP SCHEMA profe CASCADE;
 DROP SCHEMA pss CASCADE;
 DROP SCHEMA puco CASCADE;
