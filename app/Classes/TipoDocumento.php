@@ -4,7 +4,7 @@ namespace App\Classes;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Geo extends Model
+class TipoDocumento extends Model
 {
     //
 }
