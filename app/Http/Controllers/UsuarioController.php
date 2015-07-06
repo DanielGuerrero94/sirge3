@@ -7,8 +7,8 @@ class UsuarioController extends Controller {
 
 	public function test() {
 
-		$efectores = Usuario::find(1)->area;
-		echo $efectores;
+		$e = Usuario::find(1)->area->nombre;
+		echo '<pre>', print_r($e), '</pre>';
 	}
 
 }

@@ -30,6 +30,6 @@ class Area extends Model {
 	 * Obtener los usuarios asociados al área
 	 */
 	public function usuarios() {
-		return $this->belongsTo('App\Classes\Usuario' 'id_area' , 'id_area');
+		return $this->belongsTo('App\Classes\Usuario', 'id_area', 'id_area');
 	}
 }

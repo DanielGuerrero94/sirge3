@@ -12,10 +12,10 @@
  */
 
 Route::get('/', function () {
-	return view('index');
+	return view('welcome');
 });
 
-Route::post('/usuarios', 'EfectorController@test');
+Route::get('/usuarios', 'UsuarioController@test');
 
 /*
 Route::post('/usuarios' , function(){
