@@ -44,7 +44,7 @@ class CreacionDeTablasEfectoresEfectores extends Migration {
 			$table->string('compromiso_gestion', 1)->nullable();
 			$table->string('priorizado', 1)->default('N');
 			$table->string('ppac', 1)->nullable();
-			$table->string('sumar', 1)->nullable();
+			//$table->string('sumar', 1)->nullable();
 			$table->integer('id_estado')->nullable();
 			$table->foreign('id_estado')
 			->references('id_estado')->on('efectores.tipo_estado')
