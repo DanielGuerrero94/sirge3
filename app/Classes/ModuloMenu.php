@@ -17,7 +17,7 @@ class ModuloMenu extends Model {
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_modulo';
+	protected $primaryKey = 'id_relacion';
 
 	/**
 	 * Indicates if the model should be timestamped.
