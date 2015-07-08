@@ -25,4 +25,9 @@ class ModuloMenu extends Model {
 	 * @var bool
 	 */
 	public $timestamps = true;
+
+	/**
+	 *
+	 */
+
 }

@@ -29,7 +29,7 @@ class SubidaAceptada extends Model {
 	/**
 	 * Obtener el registro de subida
 	 */
-	public function subida(){
-		return $this->belo
+	public function subida() {
+		return $this->belongsTo('App\Classes\Subida', 'id_subida', 'id_subida');
 	}
 }

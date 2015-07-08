@@ -30,14 +30,14 @@ class Subida extends Model {
 	 * Obtener el registro aceptado de la subida.
 	 */
 	public function aceptado(){
-		return $this->hasOne('App\Classes\SubidaAceptada');
+		return $this->hasOne('App\Classes\SubidaAceptada', 'id_subida', 'id_subida');
 	}
 
 	/**
 	 * Obtener el registro eliminado de la subida.
 	 */
 	public function aceptado(){
-		return $this->hasOne('App\Classes\SubidaEliminada');
+		return $this->hasOne('App\Classes\SubidaEliminada', 'id_subida', 'id_subida');
 	}
 
 }

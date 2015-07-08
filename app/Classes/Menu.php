@@ -27,9 +27,16 @@ class Menu extends Model {
 	public $timestamps = true;
 
 	/**
-	 * Obtener todos los usuarios asociados al área.
+	 * Obtener el usuario asociado al área.
 	 */
 	public function usuarios() {
 		return $this->belongsTo('App\Classes\Usuario', 'id_menu', 'id_menu');
+	}
+
+	/**
+	 * Obtener todos los módulos que pertenecen al menú
+	 */
+	public function modulos() {
+		return $this->hasManyThrough('App\Classes\Modulo', 'App\Classes\ModuloMenu', 'id_menu', 'id_modulo');
 	}
 }

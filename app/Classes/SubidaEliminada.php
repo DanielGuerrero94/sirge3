@@ -25,4 +25,11 @@ class SubidaEliminada extends Model {
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+	 * Obtener el registro de subida
+	 */
+	public function subida() {
+		return $this->belongsTo('App\Classes\Subida');
+	}
 }
