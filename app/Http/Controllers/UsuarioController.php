@@ -1,23 +1,16 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Classes\Modulo;
-use App\Classes\Menu;
+use App\Classes\Pais;
+use App\Classes\Post;
 
 
 class UsuarioController extends Controller {
 
 	public function test() {
-
-		
-		$e = Menu::find(1)->modulos;
-		echo '<pre>', print_r($e), '</pre>';
-		/*
-		foreach ($e as $key => $value) {
-			echo $value->descripcion , '<br />';
+		$posts = Pais::find(1)->posts;
+		foreach ($posts as $key => $post) {
+			echo $post->titulo , '<br />';
 		}
-		*/
-
 	}
-
 }
