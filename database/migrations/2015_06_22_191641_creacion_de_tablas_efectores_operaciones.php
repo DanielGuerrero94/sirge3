@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreacionDeTablasEfectoresOperaciones extends Migration {
 	/**
@@ -9,20 +10,16 @@ class CreacionDeTablasEfectoresOperaciones extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		DB::statement("CREATE TABLE efectores.operaciones
-                    (
-                      id_efector integer NOT NULL,
-                      id_usuario_operacion integer,
-                      fecha_operacion timestamp without time zone NOT NULL DEFAULT ('now'::text)::timestamp without time zone,
-                      tipo_operacion integer,
-                      observaciones text,
-                      CONSTRAINT operaciones_pkey PRIMARY KEY (id_efector, fecha_operacion),
-                      CONSTRAINT fkey_id_efector_operaciones FOREIGN KEY (id_efector)
-                          REFERENCES efectores.efectores (id_efector) MATCH SIMPLE
-                          ON UPDATE NO ACTION ON DELETE CASCADE
-                    )");
-	}
+		Schema::create('efectores.operaciones' , function (Blueprint $table){
+			$table->increments('id_operacion');
+			$table->integer('id_efector');
+			$table->integer('id_usuario');
+			$table->timestamp('fecha')->default(DB::raw('now()::timestamp(0)');
+			$table->text('observaciones');
 
+			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');
+		});
+		
 	/**
 	 * Reverse the migrations.
 	 *

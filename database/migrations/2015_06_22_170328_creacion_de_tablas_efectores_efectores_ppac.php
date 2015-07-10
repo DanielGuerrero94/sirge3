@@ -12,11 +12,11 @@ class CreacionDeTablasEfectoresEfectoresPpac extends Migration {
 	public function up() {
 		Schema::create('efectores.efectores_ppac', function (Blueprint $table) {
 			$table->integer('id_efector')->primary();
-			$table->string('addenda_perinatal', 1)->nullable();
+			$table->char('addenda_perinatal', 1)->nullable();
 			$table->date('fecha_addenda_perinatal')->nullable();
-			$table->string('perinatal_ac', 1)->nullable();
-			$table->string('categoria_obstetrico', 1)->nullable();
-			$table->string('categoria_neonatal', 1)->nullable();
+			$table->char('perinatal_ac', 1)->nullable();
+			$table->char('categoria_obstetrico', 1)->nullable();
+			$table->char('categoria_neonatal', 1)->nullable();
 		});
 	}
 

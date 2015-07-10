@@ -14,11 +14,7 @@ class CreacionDeTablasEfectoresReferentes extends Migration {
 			$table->increments('id_referente');
 			$table->integer('id_efector');
 			$table->string('nombre', 200);
-			$table->foreign('id_efector')
-			->references('id_efector')
-			->on('efectores.efectores')
-			->onUpdate('NO ACTION')
-			->onDelete('cascade');
+			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');
 		});
 	}
 

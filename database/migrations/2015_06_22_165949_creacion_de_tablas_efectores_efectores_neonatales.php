@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresEfectoresNeonatales extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.efectores_neonatales', function (Blueprint $table) {
-			$table->string('siisa', 14)->primary();
+			$table->char('siisa', 14)->primary();
 			$table->integer('id_categoria');
 		});
 	}

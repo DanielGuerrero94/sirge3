@@ -12,7 +12,7 @@ class CreacionDeTablasEfectoresTipoEstado extends Migration {
 	public function up() {
 		Schema::create('efectores.tipo_estado', function (Blueprint $table) {
 			$table->increments('id_estado');
-			$table->string('descripcion', 100)->nullable();
+			$table->string('descripcion', 100);
 		});
 	}
 

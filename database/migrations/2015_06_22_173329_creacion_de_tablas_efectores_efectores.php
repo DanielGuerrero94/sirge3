@@ -20,11 +20,11 @@ class CreacionDeTablasEfectoresEfectores extends Migration {
 			$table->string('denominacion_legal', 200)->nullable();
 			$table->integer('id_tipo_efector');
 			//$table->string('horario', 20)->nullable();
-			$table->char('rural', 1)->nullable();
+			$table->char('rural', 1)->default('N');
 			//$table->integer('cantidad_camas_internacion')->nullable();
 			//$table->integer('cantidad_ambientes')->nullable();
-			$table->string('cics', 1)->nullable();
-			$table->integer('id_categorizacion')->nullable();
+			$table->string('cics', 1)->default('N');
+			$table->integer('id_categorizacion');
 			$table->integer('id_dependencia_administrativa');
 			$table->string('dependencia_sanitaria', 200)->nullable();
 			$table->string('codigo_provinicial_efector', 200)->nullable();

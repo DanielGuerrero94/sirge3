@@ -12,7 +12,7 @@ class CreacionDeTablasEfectoresTipoTelefono extends Migration {
 	public function up() {
 		Schema::create('efectores.tipo_telefono', function (Blueprint $table) {
 			$table->increments('id_tipo_telefono');
-			$table->string('descripcion', 100)->nullable();
+			$table->string('descripcion', 100);
 		});
 	}
 

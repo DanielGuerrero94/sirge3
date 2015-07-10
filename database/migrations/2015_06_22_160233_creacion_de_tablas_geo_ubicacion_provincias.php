@@ -11,7 +11,7 @@ class CreacionDeTablasGeoUbicacionProvincias extends Migration {
 	 */
 	public function up() {
 		Schema::create('geo.ubicacion_provincias', function (Blueprint $table) {
-			$table->string('id_provincia', 2)->primary();
+			$table->char('id_provincia', 2)->primary();
 			//$table->string('ll', 100);
 			$table->float('latitud');
 			$table->float('longitud');

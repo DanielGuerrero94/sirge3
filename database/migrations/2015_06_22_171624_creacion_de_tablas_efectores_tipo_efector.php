@@ -12,8 +12,8 @@ class CreacionDeTablasEfectoresTipoEfector extends Migration {
 	public function up() {
 		Schema::create('efectores.tipo_efector', function (Blueprint $table) {
 			$table->increments('id_tipo_efector');
-			$table->string('sigla', 3);
-			$table->string('descripcion', 50)->nullable();
+			$table->char('sigla', 3);
+			$table->string('descripcion', 50);
 		});
 	}
 
