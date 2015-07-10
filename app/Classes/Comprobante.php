@@ -4,20 +4,21 @@ namespace App\Classes;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Entidad extends Model {
-	/**
+class Comprobante extends Model
+{
+    /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'sistema.provincias';
+	protected $table = 'comprobantes.comprobantes';
 
 	/**
 	 * Primary key asociated with the table.
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_entidad';
+	protected $primaryKey = 'id_area';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -25,11 +26,4 @@ class Entidad extends Model {
 	 * @var bool
 	 */
 	public $timestamps = true;
-
-	/**
-	 * Obtener los usuarios asociados a la entidad.
-	 */
-	public function usuarios() {
-		return $this->belongsTo('App\Classes\Usuario', 'id_entidad', 'id_entidad');
-	}
 }

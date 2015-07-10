@@ -10,12 +10,11 @@ class CreateEntidades extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('sistema.entidades', function (Blueprint $table) {
-			$table->string('id_entidad', 2)->primary();
+		Schema::create('sistema.provincias', function (Blueprint $table) {
+			$table->char('id_entidad', 2)->primary();
 			$table->integer('id_tipo_entidad');
 			$table->integer('id_region');
 			$table->string('descripcion', 100);
-			$table->timestamps();
 		});
 	}
 
@@ -25,6 +24,6 @@ class CreateEntidades extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('sistema.entidades');
+		Schema::drop('sistema.provincias');
 	}
 }

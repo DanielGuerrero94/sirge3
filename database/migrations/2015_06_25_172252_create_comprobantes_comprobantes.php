@@ -13,7 +13,7 @@ class CreateComprobantesComprobantes extends Migration {
 	{
 		Schema::create('comprobantes.comprobantes', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->increments('id_comprobante');
 			$table->char('id_provincia', 2);
 			$table->string('efector', 14);
 			$table->string('numero_comprobante', 50);
@@ -29,13 +29,8 @@ class CreateComprobantesComprobantes extends Migration {
 			$table->text('concepto');
 			$table->integer('lote');
 			$table->foreign('lote')->references('lote')->on('sistema.lotes');
-		});
 
-		\DB::statement('ALTER TABLE comprobantes.comprobantes DROP CONSTRAINT comprobantes_pkey');
-
-		Schema::table('comprobantes.comprobantes', function(Blueprint $table)
-		{
-			$table->primary(['id_provincia', 'numero_comprobante', 'tipo_comprobante', 'efector']);
+			$table->unique(['id_provincia','numero_comprobante','tipo_comprobante','efector']);
 		});
 	}
 

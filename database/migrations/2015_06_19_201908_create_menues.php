@@ -15,7 +15,6 @@ class CreateMenues extends Migration
         Schema::create('sistema.menues', function (Blueprint $table) {
             $table->increments('id_menu');
             $table->string('descripcion' , 100)->unique();
-            $table->timestamps();
         });
     }
 

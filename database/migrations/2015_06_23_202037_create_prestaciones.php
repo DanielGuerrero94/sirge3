@@ -29,19 +29,14 @@ class CreatePrestaciones extends Migration {
 			$table->smallInteger('orden');
 			$table->integer('lote');
 			$table->jsonb('datos_reportables')->nullable();
-			$table->char('siisa', 1)->default('N');
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+
+			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.provincias');
 			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
 			$table->foreign('codigo_prestacion')->references('codigo_prestacion')->on('pss.codigos');
 			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios');
 			$table->foreign('lote')->references('lote')->on('sistema.lotes');
-		});
 
-		\DB::statement('ALTER TABLE prestaciones.prestaciones DROP CONSTRAINT prestaciones_pkey');
-
-		Schema::table('prestaciones.prestaciones', function(Blueprint $table)
-		{
-			$table->primary(['numero_comprobante', 'codigo_prestacion', 'subcodigo_prestacion', 'fecha_prestacion', 'clave_beneficiario', 'orden']);
+			$table->unique(['numero_comprobante', 'codigo_prestacion', 'subcodigo_prestacion', 'fecha_prestacion', 'clave_beneficiario', 'orden']);
 		});
 	}
 

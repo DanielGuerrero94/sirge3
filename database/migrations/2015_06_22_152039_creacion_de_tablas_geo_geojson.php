@@ -13,10 +13,9 @@ class CreacionDeTablasGeoGeojson extends Migration {
 	{
 		Schema::create('geo.geojson', function(Blueprint $table)
 		{
-			$table->string('id_provincia', 2);
-			$table->primary('id_provincia');
-			$table->string('geojson_provincia', 5);
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			$table->char('id_provincia', 2)->primary();
+			$table->char('geojson_provincia', 5)->unique();
+			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.provincias');
 		});
 	}
 

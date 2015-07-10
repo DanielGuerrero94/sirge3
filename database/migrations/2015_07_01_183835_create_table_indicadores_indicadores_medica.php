@@ -20,7 +20,7 @@ class CreateTableIndicadoresIndicadoresMedica extends Migration {
 			$table->primary(['id_provincia', 'periodo', 'codigo_indicador']);
 			$table->foreign('id_provincia')
 			->references('id_entidad')
-			->on('sistema.entidades');
+			->on('sistema.provincias');
 		});
 	}
 

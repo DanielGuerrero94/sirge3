@@ -16,7 +16,6 @@ class CreateTipoDocumento extends Migration
             $table->increments('id_tipo_documento');
             $table->char('tipo_documento' , 3)->unique();
             $table->string('descripcion' , 100);
-            $table->timestamps();
         });
     }
 

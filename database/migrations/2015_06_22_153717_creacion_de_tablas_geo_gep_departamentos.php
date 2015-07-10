@@ -11,11 +11,13 @@ class CreacionDeTablasGeoGepDepartamentos extends Migration {
 	 */
 	public function up() {
 		Schema::create('geo.gep_departamentos', function (Blueprint $table) {
-			$table->integer('id_punto')->unsigned();
-			$table->string('id_provincia', 2);
-			$table->string('id_departamento', 3);
+			$table->integer('id_punto')->primary();
+			$table->char('id_provincia', 2);
+			$table->char('id_departamento', 3);
 			$table->float('latitud');
 			$table->float('longitud');
+
+			$table->unique(['id_punto','id_provincia','id_departamento']);
 		});
 	}
 

@@ -16,7 +16,7 @@ class CreatePucoGruposObrasSociales extends Migration {
 			$table->integer('grupo_os')->primary();
 			$table->string('nombre_grupo', 200);
 			$table->char('id_entidad', 2);
-			$table->foreign('id_entidad')->references('id_entidad')->on('sistema.entidades');
+			$table->foreign('id_entidad')->references('id_entidad')->on('sistema.provincias');
 		});
 	}
 

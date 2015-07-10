@@ -30,7 +30,7 @@ class Menu extends Model {
 	 * Obtener el usuario asociado al área.
 	 */
 	public function usuarios() {
-		return $this->belongsTo('App\Classes\Usuario', 'id_menu', 'id_menu');
+		return $this->belongsToMany('App\Classes\Usuario', 'id_menu', 'id_menu');
 	}
 
 	/**

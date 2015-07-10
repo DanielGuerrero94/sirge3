@@ -11,11 +11,13 @@ class CreacionDeTablasGeoLocalidades extends Migration {
 	 */
 	public function up() {
 		Schema::create('geo.localidades', function (Blueprint $table) {
-			$table->string('id_provincia', 2);
-			$table->string('id_departamento', 3);
-			$table->string('id_localidad', 3);
-			$table->primary(['id_provincia', 'id_departamento', 'id_localidad']);
-			$table->string('nombre_localidad', 200)->nullable();
+			$table->
+			$table->char('id_provincia', 2);
+			$table->char('id_departamento', 3);
+			$table->char('id_localidad', 3);
+			$table->string('nombre_localidad', 200);
+
+			$table->unique(['id_provincia', 'id_departamento', 'id_localidad']);
 		});
 	}
 

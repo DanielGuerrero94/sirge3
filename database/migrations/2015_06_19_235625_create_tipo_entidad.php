@@ -14,8 +14,7 @@ class CreateTipoEntidad extends Migration
     {
         Schema::create('sistema.tipo_entidad', function (Blueprint $table) {
             $table->increments('id_tipo_entidad');
-            $table->string('descripcion' , 100);
-            $table->timestamps();
+            $table->string('descripcion' , 100)->unique();
         });
     }
 
