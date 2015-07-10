@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreacionDeTablasGeoEntidades extends Migration {
@@ -18,7 +19,6 @@ class CreacionDeTablasGeoEntidades extends Migration {
 			$table->string('nombre_entidad' , 200);
 
 			$table->unique(['id_provincia' , 'id_departamento' , 'id_localidad' , 'id_entidad']);
-			$table->index(['id_provincia' , 'id_departamento' , 'id_localidad' , 'id_entidad']);
 		});
 	}
 

@@ -13,14 +13,12 @@ class CreateTableIndicadoresIndicadoresMedica extends Migration {
 	{
 		Schema::create('indicadores.indicadores_medica', function(Blueprint $table)
 		{
-			$table->char('id_provincia', 1);
+			$table->char('id_provincia', 2);
 			$table->integer('periodo');
 			$table->string('codigo_indicador', 6);
 			$table->integer('resultado')->unsigned()->default(0);
 			$table->primary(['id_provincia', 'periodo', 'codigo_indicador']);
-			$table->foreign('id_provincia')
-			->references('id_entidad')
-			->on('sistema.provincias');
+			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
 		});
 	}
 

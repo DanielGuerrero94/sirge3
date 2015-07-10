@@ -12,7 +12,7 @@ class CreacionDeTablasEfectoresCategoriasPpac extends Migration {
 	public function up() {
 		Schema::create('efectores.categorias_ppac', function (Blueprint $table) {
 			$table->increments('id_categoria');
-			$table->string('categoria', 4)->unique();
+			$table->char('categoria', 4)->unique();
 		});
 	}
 

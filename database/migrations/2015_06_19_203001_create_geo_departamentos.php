@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreacionDeTablasGeoV1 extends Migration {
+class CreateGeoDepartamentos extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -16,7 +17,6 @@ class CreacionDeTablasGeoV1 extends Migration {
 			$table->string('nombre_departamento' , 200);
 
 			$table->unique(['id_provincia', 'id_departamento']);
-			$table->index(['id_provincia', 'id_departamento']);
 		});
 	}
 

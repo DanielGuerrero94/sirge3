@@ -27,7 +27,7 @@ class CreateTableBeneficiariosResumenBeneficiarios extends Migration {
 			$table->integer('beneficiarios_2064')->default(0);
 			$table->primary(['id_provincia', 'periodo']);
 			$table->foreign('id_provincia')
-			->references('id_entidad')
+			->references('id_provincia')
 			->on('sistema.provincias');
 		});
 	}

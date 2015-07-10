@@ -17,7 +17,7 @@ class Entidad extends Model {
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_entidad';
+	protected $primaryKey = 'id_provincia';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -30,6 +30,6 @@ class Entidad extends Model {
 	 * Obtener los usuarios asociados a la entidad.
 	 */
 	public function usuarios() {
-		return $this->belongsTo('App\Classes\Usuario', 'id_entidad', 'id_entidad');
+		return $this->belongsTo('App\Classes\Usuario', 'id_provincia', 'id_provincia');
 	}
 }

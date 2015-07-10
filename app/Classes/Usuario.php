@@ -44,7 +44,7 @@ class Usuario extends Model {
 	 * Obtener la entidad asociada al usuario.
 	 */
 	public function entidad() {
-		return $this->hasOne('App\Classes\Entidad', 'id_entidad', 'id_entidad');
+		return $this->hasOne('App\Classes\Entidad', 'id_provincia', 'id_provincia');
 	}
 
 	/**

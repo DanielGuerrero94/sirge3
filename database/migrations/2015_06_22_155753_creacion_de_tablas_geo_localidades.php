@@ -11,7 +11,7 @@ class CreacionDeTablasGeoLocalidades extends Migration {
 	 */
 	public function up() {
 		Schema::create('geo.localidades', function (Blueprint $table) {
-			$table->
+			$table->increments('id');
 			$table->char('id_provincia', 2);
 			$table->char('id_departamento', 3);
 			$table->char('id_localidad', 3);

@@ -11,7 +11,7 @@ class CreateEntidades extends Migration {
 	 */
 	public function up() {
 		Schema::create('sistema.provincias', function (Blueprint $table) {
-			$table->char('id_entidad', 2)->primary();
+			$table->char('id_provincia', 2)->primary();
 			$table->integer('id_tipo_entidad');
 			$table->integer('id_region');
 			$table->string('descripcion', 100);

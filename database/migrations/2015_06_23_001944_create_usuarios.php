@@ -17,7 +17,7 @@ class CreateUsuarios extends Migration {
 			$table->string('nombre', 100);
 			$table->string('email', 50)->unique();
 			$table->char('activo', 1);
-			$table->string('id_entidad', 2);
+			$table->string('id_provincia', 2);
 			$table->integer('id_menu');
 			$table->integer('id_area');
 			$table->string('ruta_imagen', 100);
@@ -32,7 +32,7 @@ class CreateUsuarios extends Migration {
 			$table->timestamps();
 			$table->enum('sexos', ['M', 'F', 'T']);
 
-			$table->foreign('id_entidad')->references('id_entidad')->on('sistema.provincias');
+			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
 			$table->foreign('id_menu')->references('id_menu')->on('sistema.menues');
 			$table->foreign('id_area')->references('id_area')->on('sistema.areas');
 		});

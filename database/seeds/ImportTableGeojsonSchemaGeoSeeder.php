@@ -22,7 +22,7 @@ class ImportTableGeojsonSchemaGeoSeeder extends Seeder {
 					'id_provincia'    => $fila[0],
 					'id_departamento' => $fila[1],
 					'id_localidad'    => $fila[2],
-					'id_entidad'      => $fila[3],
+					'id_provincia'      => $fila[3],
 					'nombre_entidad'  => $fila[4],
 				));
 			}

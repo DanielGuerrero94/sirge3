@@ -13,14 +13,14 @@ class CreatePucoProcesosObrasSociales extends Migration {
 	{
 		Schema::create('puco.procesos_obras_sociales', function(Blueprint $table)
 		{
-			$table->char('id_entidad', 2);
+			$table->char('id_provincia', 2);
 			$table->integer('codigo_osp');
 			$table->integer('periodo');
 			$table->char('puco', 1)->default('N');
 			$table->integer('registros_in');
 			$table->integer('registros_out');
-			$table->primary(['id_entidad', 'codigo_osp', 'periodo', 'puco']);
-			$table->foreign('id_entidad')->references('id_entidad')->on('sistema.provincias');
+			$table->primary(['id_provincia', 'codigo_osp', 'periodo', 'puco']);
+			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
 			$table->foreign('codigo_osp')->references('codigo_osp')->on('puco.obras_sociales');
 		});
 	}

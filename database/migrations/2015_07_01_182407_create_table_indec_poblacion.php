@@ -15,9 +15,7 @@ class CreateTableIndecPoblacion extends Migration {
 		{
 			$table->char('id_provincia', 2)->primary();
 			$table->integer('habitantes')->unsigned();
-			$table->foreign('id_provincia')
-			->references('id_entidad')
-			->on('sistema.provincias');
+			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
 		});
 	}
 
