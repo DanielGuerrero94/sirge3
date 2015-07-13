@@ -24,7 +24,7 @@ class Area extends Model {
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
 
 	/**
 	 * Obtener los usuarios asociados al área
