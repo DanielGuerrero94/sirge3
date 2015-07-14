@@ -13,7 +13,7 @@ class CreateFondosFondos extends Migration {
 	{
 		Schema::create('fondos.fondos', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->increments('id_gasto');
 			$table->string('efector', 14);
 			$table->date('fecha_gasto');
 			$table->integer('periodo');
@@ -24,11 +24,11 @@ class CreateFondosFondos extends Migration {
 			$table->decimal('monto');
 			$table->text('concepto')->nullable();
 			$table->integer('lote');
+			
 			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
 			$table->foreign('codigo_gasto')->references('codigo_gasto')->on('fondos.codigos_gasto');
+			$table->foreign(['codigo_gasto','subcodigo_gasto'])->references(['codigo_gasto','subcodigo_gasto'])->on('fondos.subcodigos_gasto');
 		});
-
-		\DB::statement('ALTER TABLE fondos.fondos ADD CONSTRAINT fkey_subcodigo_gasto FOREIGN KEY (codigo_gasto , subcodigo_gasto) REFERENCES fondos.subcodigos_gasto (codigo_gasto , subcodigo_gasto) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION');
 	}
 
 	/**

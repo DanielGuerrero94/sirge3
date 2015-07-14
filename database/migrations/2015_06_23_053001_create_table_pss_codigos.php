@@ -17,10 +17,9 @@ class CreateTablePssCodigos extends Migration {
 			$table->string('tipo', 2);
 			$table->string('objeto', 4);
 			$table->string('diagnostico', 5)->unique();
-			$table->string('codigo_logico', 1);
-			$table->foreign('diagnostico')
-			->references('diagnostico')
-			->on('pss.diagnosticos');
+			$table->string('codigo_logico', 1)->nulleable();
+			
+			$table->foreign('diagnostico')->references('diagnostico')->on('pss.diagnosticos');
 		});
 	}
 

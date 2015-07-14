@@ -28,8 +28,8 @@ class CreateComprobantesComprobantes extends Migration {
 			$table->string('factura_debitada', 50);
 			$table->text('concepto');
 			$table->integer('lote');
-			$table->foreign('lote')->references('lote')->on('sistema.lotes');
 
+			$table->foreign('lote')->references('lote')->on('sistema.lotes');
 			$table->unique(['id_provincia','numero_comprobante','tipo_comprobante','efector']);
 		});
 	}

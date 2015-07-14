@@ -10,21 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
  */
-/*
-Event::listen('illuminate.query', function($query)
-{
-    echo($query);
-});
-*/
 
 Route::get('/', function () {
-	return view('welcome');
+	return view('admin_template');
 });
-
-Route::get('/usuarios', 'UsuarioController@test');
-
-/*
-Route::post('/usuarios' , function(){
-print_r($request->nombre());
-});
- */

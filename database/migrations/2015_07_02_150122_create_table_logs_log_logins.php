@@ -15,9 +15,7 @@ class CreateTableLogsLogLogins extends Migration {
 		{
 			$table->increments('id_inicio');
 			$table->integer('id_usuario')->unsigned();
-			$table->foreign('id_usuario')
-			->references('id_usuario')
-			->on('sistema.usuarios');
+			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});
 
 		\DB::statement("ALTER TABLE logs.log_logins ADD COLUMN fecha_login timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone, ADD COLUMN ip cidr;");

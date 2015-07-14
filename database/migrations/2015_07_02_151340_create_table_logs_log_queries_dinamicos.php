@@ -18,9 +18,7 @@ class CreateTableLogsLogQueriesDinamicos extends Migration {
 			$table->text('consulta')->nullable();
 			$table->char('consulta_ok', 1)->nullable();
 			$table->char('descarga', 1)->nullable()->default('N');
-			$table->foreign('id_usuario')
-			->references('id_usuario')
-			->on('sistema.usuarios');
+			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});
 
 		\DB::statement('ALTER TABLE logs.log_queries_dinamicos ADD COLUMN "timestamp" timestamp without time zone');
