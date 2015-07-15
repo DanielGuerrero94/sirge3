@@ -20,8 +20,8 @@ class CreacionDeTablasEfectoresDatosGeograficos extends Migration {
 			//$table->float('longitud')->nullable();
 			//$table->integer('msnm')->nullable();
 
-			$table->foreign(['id_provincia', 'id_departamento'])->references(['id_provincia', 'id_departamento'])->on('geo.departamentos')
-			$table->foreign(['id_provincia', 'id_departamento', 'id_localidad'])->references(['id_provincia', 'id_departamento', 'id_localidad'])->on('geo.localidades')
+			$table->foreign(['id_provincia', 'id_departamento'])->references(['id_provincia', 'id_departamento'])->on('geo.departamentos');
+			$table->foreign(['id_provincia', 'id_departamento', 'id_localidad'])->references(['id_provincia', 'id_departamento', 'id_localidad'])->on('geo.localidades');
 			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');
 		});
 	}

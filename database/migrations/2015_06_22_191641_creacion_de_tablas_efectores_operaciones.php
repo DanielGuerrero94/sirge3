@@ -14,12 +14,13 @@ class CreacionDeTablasEfectoresOperaciones extends Migration {
 			$table->increments('id_operacion');
 			$table->integer('id_efector');
 			$table->integer('id_usuario');
-			$table->timestamp('fecha')->default(DB::raw('now()::timestamp(0)');
+			$table->timestamp('fecha')->default(DB::raw('now()::timestamp(0)'));
 			$table->text('observaciones');
 
 			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');
+			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});
-		
+	}
 	/**
 	 * Reverse the migrations.
 	 *

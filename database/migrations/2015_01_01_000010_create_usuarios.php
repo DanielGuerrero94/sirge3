@@ -21,7 +21,7 @@ class CreateUsuarios extends Migration {
 			$table->integer('id_entidad');
 			$table->integer('id_area');
 			$table->integer('id_menu');
-			$table->string('ruta_imagen', 100);
+			$table->string('ruta_imagen', 100)->nullable();
 			$table->date('fecha_nacimiento')->nullable();
 			$table->string('ocupacion', 100)->nullable();
 			$table->string('facebook', 200)->default('#');

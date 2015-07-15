@@ -13,7 +13,7 @@ class CreacionDeTablasEfectoresEfectores extends Migration {
 		Schema::create('efectores.efectores', function (Blueprint $table) {
 			$table->increments('id_efector');
 			$table->char('cuie', 6)->unique();
-			$table->char('siisa', 14)->;
+			$table->char('siisa', 14)->unique();
 			$table->string('nombre', 200);
 			$table->string('domicilio', 500);
 			$table->string('codigo_postal', 8)->nullable();
