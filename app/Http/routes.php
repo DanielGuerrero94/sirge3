@@ -21,5 +21,5 @@ Route::get('/', function () {
 Route::post('/login' , 'Auth\AuthController@postLogin');
 
 Route::get('/dashboard' , function(){
-	print_r(Auth::user());
+	echo '<pre>' , print_r(Auth::user()) , '</pre>';
 });
