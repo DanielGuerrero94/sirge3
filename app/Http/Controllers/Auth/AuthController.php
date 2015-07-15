@@ -21,16 +21,16 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers;
-    
+
     /**
      * Ruta a redireccionar en caso de no validar los datos
      */
-    protected $loginPath = '/login';
+    protected $loginPath = '/';
 
     /**
      * Ruta a redireccionar al ingresar al sistema
      */
-    protected $redirectPath = '/';
+    protected $redirectPath = '/dashboard';
 
     /**
      * Create a new authentication controller instance.
@@ -51,7 +51,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            //'name' => 'required|max:255',
+            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);

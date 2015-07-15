@@ -12,11 +12,14 @@
  */
 
 Route::get('/', function () {
-	return view('login');
+	if (! Auth::check())
+		return view('login');
+	else 
+		return redirect()->intended('/dashboard');
 });
 
 Route::post('/login' , 'Auth\AuthController@postLogin');
 
 Route::get('/dashboard' , function(){
-	return 'Bienvenido';
+	print_r(Auth::user());
 });
