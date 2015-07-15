@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Classes\Usuario;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -21,6 +21,16 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers;
+    
+    /**
+     * Ruta a redireccionar en caso de no validar los datos
+     */
+    protected $loginPath = '/login';
+
+    /**
+     * Ruta a redireccionar al ingresar al sistema
+     */
+    protected $redirectPath = '/';
 
     /**
      * Create a new authentication controller instance.
@@ -41,7 +51,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            //'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -55,7 +65,7 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return Usuario::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
