@@ -12,5 +12,9 @@
  */
 
 Route::get('/', function () {
-	return view('admin_template');
+	return view('login');
+});
+
+Route::post('/login' , function() {
+	return 'Hello';
 });
