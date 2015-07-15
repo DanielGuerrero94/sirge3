@@ -11,6 +11,10 @@ class ProvinciasSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('sistema.provincias')->insert([
+        	'id_provincia' => 1,
+        	'id_region' => 1,
+        	'descripcion' => 'CABA'
+    	]);
     }
 }

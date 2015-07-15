@@ -16,5 +16,5 @@ Route::get('/', function () {
 });
 
 Route::post('/login' , function() {
-	return 'Hello';
+	
 });
