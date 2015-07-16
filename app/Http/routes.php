@@ -20,8 +20,9 @@ Route::post('/login' , 'Auth\AuthController@postLogin');
 Route::get('/logout' , 'Auth\AuthController@getLogout');
 
 //Registration routes ...
+//Route::get('/usuario' , '');
+//Route::post('/usuario' , '');
+
 
 //Dashboard route ...
-Route::get('/dashboard' , function(){
-    echo '<pre>' , print_r(Auth::user()) , '</pre>';
-});
+Route::get('/dashboard' , 'HomeController@dashboard');

@@ -16,10 +16,18 @@ class HomeController extends Controller
      * @return Response
      */
     public function index(){
-    	if (! Auth::check()){
-            return redirect()->intended('/login');
-        } else {
+    	if (Auth::check()){
             return redirect()->intended('/dashboard');
+        } else {
+            return redirect()->intended('/login');            
         }
+    }
+    
+    public function dashboard(){
+        $data = [
+            'page_title' => 'Dashboard'
+        ];
+        
+        return view('dashboard' , $data);
     }
 }
