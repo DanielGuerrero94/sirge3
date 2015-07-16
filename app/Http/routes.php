@@ -19,10 +19,8 @@ Route::get('/', function () {
 });
 */
 //Authentication routes ...
-Route::get('index' , [
-	'uses' => 'HomeController@index',
-	'as' => 'login'
-]);
+Route::get('/' , 'HomeController@index');
+	
 Route::post('/login' , 'Auth\AuthController@postLogin');
 
 Route::get('/dashboard' , function(){
