@@ -25,7 +25,10 @@ class HomeController extends Controller
     
     public function dashboard(){
         $data = [
-            'page_title' => 'Dashboard'
+            'page_title' => 'Dashboard',
+            'usuario' => Auth::user()->nombre,
+            'ocupacion' => 'Desarrollador PHP',
+            'alta' => 'Oct. 2012'
         ];
         
         return view('dashboard' , $data);
