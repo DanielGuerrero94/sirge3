@@ -10,16 +10,25 @@
 | and give it the controller to call when that URI is requested.
 |
  */
-
+/*
 Route::get('/', function () {
 	if (! Auth::check())
 		return view('login');
 	else 
 		return redirect()->intended('/dashboard');
 });
-
+*/
+//Authentication routes ...
+Route::get('index' , [
+	'uses' => 'HomeController@index',
+	'as' => 'login'
+]);
 Route::post('/login' , 'Auth\AuthController@postLogin');
 
 Route::get('/dashboard' , function(){
 	echo '<pre>' , print_r(Auth::user()) , '</pre>';
 });
+
+Route::get('/out' , 'Auth\AuthController@getLogout');
+
+//Registration routes ...

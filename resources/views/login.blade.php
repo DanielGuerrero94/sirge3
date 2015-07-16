@@ -27,6 +27,16 @@
         <b>SIRGe</b>Web
       </div><!-- /.login-logo -->
       <div class="login-box-body">
+      @if (count ($errors) > 0)
+        <div class="alert alert-danger">
+          Por favor corrija los siguientes errores:<br><br>
+          <ul>
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
         <p class="login-box-msg">Ingrese sus datos</p>
         <form action="login" method="post">
           <div class="form-group has-feedback">
