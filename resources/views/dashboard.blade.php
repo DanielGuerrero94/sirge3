@@ -77,5 +77,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
       user experience -->
+<script>
+$('#prueba').click(function(event){
+    event.preventDefault();
+    $.ajax({
+        method : 'get',
+        url : 'prueba',
+        success : function(data){
+            console.log(data);
+        }
+    });
+});
+</script>
 </body>
 </html>

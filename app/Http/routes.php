@@ -15,9 +15,9 @@
 Route::get('/' , 'HomeController@index');
 
 //Authentication routes ...
-Route::get('/login' , 'Auth\AuthController@getLogin');
-Route::post('/login' , 'Auth\AuthController@postLogin');
-Route::get('/logout' , 'Auth\AuthController@getLogout');
+Route::get('login' , 'Auth\AuthController@getLogin');
+Route::post('login' , 'Auth\AuthController@postLogin');
+Route::get('logout' , 'Auth\AuthController@getLogout');
 
 //Registration routes ...
 //Route::get('/usuario' , '');
@@ -25,4 +25,7 @@ Route::get('/logout' , 'Auth\AuthController@getLogout');
 
 
 //Dashboard route ...
-Route::get('/dashboard' , 'HomeController@dashboard');
+Route::get('dashboard' , 'HomeController@dashboard');
+
+//Menu routes...
+Route::get('prueba' , 'MenuController@prueba');
