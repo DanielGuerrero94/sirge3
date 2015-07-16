@@ -10,23 +10,18 @@
 | and give it the controller to call when that URI is requested.
 |
  */
-/*
-Route::get('/', function () {
-	if (! Auth::check())
-		return view('login');
-	else 
-		return redirect()->intended('/dashboard');
-});
-*/
-//Authentication routes ...
+
+//Main route ...
 Route::get('/' , 'HomeController@index');
-	
+
+//Authentication routes ...
+Route::get('/login' , 'Auth\AuthController@getLogin');
 Route::post('/login' , 'Auth\AuthController@postLogin');
-
-Route::get('/dashboard' , function(){
-	echo '<pre>' , print_r(Auth::user()) , '</pre>';
-});
-
-Route::get('/out' , 'Auth\AuthController@getLogout');
+Route::get('/logout' , 'Auth\AuthController@getLogout');
 
 //Registration routes ...
+
+//Dashboard route ...
+Route::get('/dashboard' , function(){
+    echo '<pre>' , print_r(Auth::user()) , '</pre>';
+});
