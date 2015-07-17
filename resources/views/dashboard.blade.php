@@ -84,7 +84,7 @@ $('#prueba').click(function(event){
         method : 'get',
         url : 'prueba',
         success : function(data){
-            console.log(data);
+            $('.content').html(data);
         }
     });
 });
