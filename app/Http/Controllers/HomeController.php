@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Classes\ModuloMenu;
+use App\Classes\Modulo;
 
 class HomeController extends Controller
 {
@@ -23,14 +23,28 @@ class HomeController extends Controller
         }
     }
     
+    protected function getMenu($id_menu){
+        $menu = array();
+        $i = 0;
+        $relaciones = ModuloMenu::where('id_menu' , $id_menu)->get();
+        foreach ($relaciones as $key => $relacion){
+            $modulo = Modulo::find($relacion->id_modulo);
+            $menu[$i]['descripcion'] = $modulo->descripcion;
+            $menu[$i]['modulo'] = $modulo->modulo;
+            $i++;
+        }
+        return $menu;
+    }
+    
     public function dashboard(){
         $data = [
             'page_title' => 'Dashboard',
             'usuario' => Auth::user()->nombre,
             'ocupacion' => 'Desarrollador PHP',
-            'alta' => 'Oct. 2012'
+            'alta' => 'Oct. 2012',
+            'modulos' => $this->getMenu(Auth::user()->id_menu)
         ];
-        
+        //echo '<pre>' , print_r ($this->getMenu(Auth::user()->id_menu)) , '</pre>';
         return view('dashboard' , $data);
     }
 }

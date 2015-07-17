@@ -31,6 +31,11 @@
         <!-- /.search form -->
         
         <!-- Sidebar Menu -->
+        @foreach ($modulos as $modulo)
+            @foreach ($modulo as $menu)
+                {{$menu}}
+            @endforeach
+        @endforeach
         <ul class="sidebar-menu">
             <li class="header">MENU PRINCIPAL</li>
             <!-- Optionally, you can add icons to the links -->

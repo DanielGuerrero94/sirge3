@@ -25,11 +25,4 @@ class Modulo extends Model {
 	 * @var bool
 	 */
 	public $timestamps = true;
-
-	/**
-	 * Obtener todos los menues en que figure el módulo
-	 */
-	public function menues() {
-		return $this->hasMany('App\Classes\ModuloMenu', 'id_modulo', 'id_modulo');
-	}
 }

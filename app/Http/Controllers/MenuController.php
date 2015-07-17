@@ -10,6 +10,6 @@ use App\Http\Controllers\Controller;
 class MenuController extends Controller
 {
     public function prueba(){
-        echo 'Hola';
+        return view('test');
     }
 }

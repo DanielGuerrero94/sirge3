@@ -25,11 +25,11 @@ class ModuloMenu extends Model {
 	 * @var bool
 	 */
 	public $timestamps = true;
-
-	/**
-	 * Obtener todos los menues que pertenecen a un módulo
-	 */
-	public function menues(){
-		return $this->belongsToMany('App\Classes\Menu' , 'id_menu' , 'id_menu');
-	}
+        
+        /**
+         * Obtener el detalle de los módulos
+         */
+        public function modulos(){
+            return $this->belongsToMany('App\Classes\Modulo', 'sistema.modulos' , 'id_modulo', 'id_modulo');
+        }
 }
