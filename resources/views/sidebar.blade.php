@@ -31,14 +31,14 @@
         <!-- /.search form -->
         
         <!-- Sidebar Menu -->
-        @foreach ($modulos as $modulo)
-            @foreach ($modulo as $menu)
-                {{$menu}}
-            @endforeach
-        @endforeach
         <ul class="sidebar-menu">
             <li class="header">MENU PRINCIPAL</li>
-            <!-- Optionally, you can add icons to the links -->
+            @foreach ($modulos as $key => $modulo)
+                @if ($modulo['arbol'] === 'S')
+                
+                @endif
+            @endforeach
+            <!-- Optionally, you can add icons to the links 
             <li class="active"><a href="#"><span>Link</span></a></li>
             <li><a href="prueba" id="prueba"><span>PRUEBA</span></a></li>
             <li class="treeview">
@@ -48,6 +48,7 @@
                     <li><a href="#">Link in level 2</a></li>
                 </ul>
             </li>
+            -->
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

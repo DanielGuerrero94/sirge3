@@ -14,6 +14,7 @@ class CreateModulos extends Migration
     {
         Schema::create('sistema.modulos', function (Blueprint $table) {
             $table->increments('id_modulo');
+            $table->char('arbol');
             $table->integer('nivel_1');
             $table->integer('nivel_2')->nulleable();
             $table->string('descripcion' , 100);
