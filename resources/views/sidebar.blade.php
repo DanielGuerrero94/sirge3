@@ -33,9 +33,18 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="header">MENU PRINCIPAL</li>
-            @foreach ($modulos as $key => $modulo)
+            @foreach ($modulos as $key_padre => $modulo)
                 @if ($modulo['arbol'] === 'S')
-                
+                    <li class="treeview">
+                        <a href="#"><i class="fa {{ $modulo['icono'] }}"></i><span>{{ $modulo['descripcion'] }}</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            @foreach ($modulo['hijos'] as $key_hijo => $modulo_hijo)
+                            <li><a href="{{ $modulo_hijo['modulo'] }}">{{ $modulo_hijo['descripcion'] }}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>        
+                @else
+                    <li><a href="{{ $modulo['modulo'] }}"><i class="fa {{ $modulo['icono'] }}"></i><span>{{ $modulo['descripcion'] }}</span></a></li>
                 @endif
             @endforeach
             <!-- Optionally, you can add icons to the links 

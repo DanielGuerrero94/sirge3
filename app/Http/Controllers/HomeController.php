@@ -17,25 +17,36 @@ class HomeController extends Controller
      */
     public function index(){
     	if (Auth::check()){
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('dashboard');
         } else {
-            return redirect()->intended('/login');            
+            return redirect()->intended('login');            
         }
     }
     
     protected function getMenu($id_menu){
         $menu = array();
-        $i = 0;
         $relaciones = ModuloMenu::where('id_menu' , $id_menu)->get();
         foreach ($relaciones as $key => $relacion){
             $modulo = Modulo::find($relacion->id_modulo);
-            $menu[$i]['descripcion'] = $modulo->descripcion;
-            $menu[$i]['modulo'] = $modulo->modulo;
-            $menu[$i]['nivel_1'] = $modulo->nivel_1;
-            $menu[$i]['nivel_2'] = $modulo->nivel_2;
-            $menu[$i]['icono'] = $modulo->icono;
-            $menu[$i]['arbol'] = $modulo->arbol;
-            $i++;
+            $menu[$key]['descripcion'] = $modulo->descripcion;
+            $menu[$key]['modulo'] = $modulo->modulo;
+            $menu[$key]['nivel_1'] = $modulo->nivel_1;
+            $menu[$key]['nivel_2'] = $modulo->nivel_2;
+            $menu[$key]['icono'] = $modulo->icono;
+            $menu[$key]['arbol'] = $modulo->arbol;
+            $menu[$key]['id_padre'] = $modulo->id_padre;
+            $menu[$key]['hijos'] = [];
+        }
+        return $this->armaArbol($menu);
+    }
+
+    protected function armaArbol($menu){
+        foreach ($menu as $key => $modulo){
+            if (! is_null($modulo['id_padre'])){
+                $index = $modulo['id_padre'] - 1;
+                array_push($menu[$index]['hijos'] , $modulo);
+                unset ($menu[$key]);
+            }
         }
         return $menu;
     }
@@ -48,7 +59,6 @@ class HomeController extends Controller
             'alta' => 'Oct. 2012',
             'modulos' => $this->getMenu(Auth::user()->id_menu)
         ];
-        //return view('dashboard' , $data);
-        echo '<pre>' , print_r($this->getMenu(Auth::user()->id_menu)) , '</pre>';
+        return view('dashboard' , $data);
     }
 }
