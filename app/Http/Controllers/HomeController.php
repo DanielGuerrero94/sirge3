@@ -19,7 +19,7 @@ class HomeController extends Controller
     	if (Auth::check()){
             return redirect()->intended('dashboard');
         } else {
-            return redirect()->intended('login');            
+            return redirect()->intended('login');
         }
     }
     
@@ -52,6 +52,11 @@ class HomeController extends Controller
     }
     
     public function dashboard(){
+
+        if (! Auth::check()){
+            return redirect()->intended('login');
+        }
+
         $data = [
             'page_title' => 'Dashboard',
             'usuario' => Auth::user()->nombre,

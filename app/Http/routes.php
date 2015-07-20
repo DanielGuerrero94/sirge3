@@ -28,4 +28,3 @@ Route::get('logout' , 'Auth\AuthController@getLogout');
 Route::get('dashboard' , 'HomeController@dashboard');
 
 //Menu routes...
-Route::get('prueba' , 'MenuController@prueba');

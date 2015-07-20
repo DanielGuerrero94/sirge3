@@ -44,7 +44,7 @@
                         </ul>
                     </li>        
                 @else
-                    <li><a href="{{ $modulo['modulo'] }}"><i class="fa {{ $modulo['icono'] }}"></i><span>{{ $modulo['descripcion'] }}</span></a></li>
+                    <li><a href="{{ $modulo['modulo'] }}"><i class="fa {{ $modulo['icono'] }}"></i> <span>{{ $modulo['descripcion'] }}</span></a></li>
                 @endif
             @endforeach
             <!-- Optionally, you can add icons to the links 
