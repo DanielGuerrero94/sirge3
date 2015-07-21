@@ -108,7 +108,7 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-	  <div class="info-box bg-orange">
+	  <div class="info-box bg-lime">
 	    <span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">PRESTACIONES</span>
@@ -121,7 +121,7 @@
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
-	  <div class="info-box bg-orange">
+	  <div class="info-box bg-lime">
 	    <span class="info-box-icon"><i class="fa fa-file-text"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Comprobantes</span>
@@ -134,7 +134,7 @@
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
-	  <div class="info-box bg-orange">
+	  <div class="info-box bg-lime">
 	    <span class="info-box-icon"><i class="fa fa-usd"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Uso de Fondos</span>
@@ -147,7 +147,7 @@
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
-	  <div class="info-box bg-orange">
+	  <div class="info-box bg-lime">
 	    <span class="info-box-icon"><i class="fa fa-database"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Puco</span>
@@ -167,11 +167,11 @@
 <div class="row">
     <div class="col-md-6">
       <!-- USERS LIST -->
-      <div class="box box-info">
+      <div class="box box-danger">
         <div class="box-header with-border">
           <h3 class="box-title">Nuevos Usuarios</h3>
           <div class="box-tools pull-right">
-            <span class="label label-info">8 Nuevos miembros</span>
+            <span class="label label-danger">8 Nuevos miembros</span>
           </div>
         </div><!-- /.box-header -->
         <div class="box-body no-padding">
@@ -198,6 +198,16 @@
         </div><!-- /.box-footer -->
       </div><!--/.box -->
     </div><!-- /.col -->
+    <div class="col-md-6">
+    	<div class="box box-warning">
+    		 <div class="box-header with-border">
+		      <h3 class="box-title">Calendario</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+		    	<div id="calendar"></div>	
+		    </div>
+    	</div>
+    </div>
   </div>
 
 <script type="text/javascript">
@@ -242,5 +252,13 @@
 		barWidth : '7',
 		height : '40',
 		chartRangeMin : '0'
-	}); 
+	});
+
+	$('#calendar').fullCalendar({
+		height: 340,
+		googleCalendarApiKey : 'AIzaSyCL-n8uiQC8bdd-bSFCQn3P1Xk6e04uHTY',
+		events : {
+			googleCalendarId : 'gustavo.hekel@gmail.com'
+		}
+	});
 </script>

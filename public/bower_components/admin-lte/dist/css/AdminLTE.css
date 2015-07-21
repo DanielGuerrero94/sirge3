@@ -3591,7 +3591,7 @@ table.text-center th {
   margin: 0;
 }
 .fc-day-number {
-  font-size: 20px;
+  font-size: 13px;
   font-weight: 300;
   padding-right: 10px;
 }
@@ -3879,7 +3879,7 @@ table.text-center th {
   background-color: #3d9970 !important;
 }
 .bg-lime {
-  background-color: #01ff70 !important;
+  background-color: #90CC35 !important;
 }
 .bg-orange {
   background-color: #ff851b !important;

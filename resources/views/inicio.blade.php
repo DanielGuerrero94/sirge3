@@ -14,8 +14,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Fullcalendar -->
+    <link href="{{ asset("/bower_components/admin-lte/plugins/fullcalendar/fullcalendar.css") }}" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
-    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
@@ -83,6 +85,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="http://code.highcharts.com/mapdata/countries/ar/ar-all.js" type="text/javascript"></script>
 <!-- Jquery Sparkline -->
 <script src="{{ asset ("/bower_components/admin-lte/plugins/sparkline/jquery.sparkline.min.js") }}" type="text/javascript"></script>
+<!--- MomentJs -->
+<script src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/moment.js") }}" type="text/javascript"></script>
+<!-- Fullcalendar -->
+<script src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/fullcalendar.min.js") }}" type="text/javascript"></script>
+<!-- Google Calendar -->
+<script src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/gcal.js") }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}" type="text/javascript"></script>
 
