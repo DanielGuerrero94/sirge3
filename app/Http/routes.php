@@ -24,7 +24,9 @@ Route::get('logout' , 'Auth\AuthController@getLogout');
 //Route::post('/usuario' , '');
 
 
-//Dashboard route ...
-Route::get('dashboard' , 'HomeController@dashboard');
+//Inicio route ...
+Route::get('inicio' , 'HomeController@inicio');
 
 //Menu routes...
+	// Dashboard
+Route::get('dashboard' , 'HomeController@dashboard');

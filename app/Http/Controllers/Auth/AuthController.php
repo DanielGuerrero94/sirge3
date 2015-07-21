@@ -30,7 +30,7 @@ class AuthController extends Controller
     /**
      * Ruta a redireccionar al ingresar al sistema
      */
-    protected $redirectPath = '/dashboard';
+    protected $redirectPath = '/inicio';
 
     /**
      * Create a new authentication controller instance.
