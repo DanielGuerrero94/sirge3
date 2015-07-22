@@ -106,6 +106,8 @@ $(document).ready(function(){
 
     $('.sidebar-menu a[href!="#"]').click(function(event){
         event.preventDefault();
+        var modulo = $(this).attr('href');
+        console.log(modulo);
 
     });
 });

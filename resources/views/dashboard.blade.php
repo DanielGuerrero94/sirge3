@@ -165,29 +165,44 @@
 <!-- FIN INDICADORES DE PROGRESO -->
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <!-- USERS LIST -->
-      <div class="box box-danger">
+      <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">Nuevos Usuarios</h3>
           <div class="box-tools pull-right">
-            <span class="label label-danger">8 Nuevos miembros</span>
+            <span class="label label-info">8 Nuevos miembros</span>
           </div>
         </div><!-- /.box-header -->
         <div class="box-body no-padding">
           <ul class="users-list clearfix">
             <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image" />
+              <img src="{{ asset("/bower_components/admin-lte/dist/img/user1-128x128.jpg") }}" class="img-circle" alt="User Image" />
               <a class="users-list-name" href="#">Rodrigo Cadaval</a>
               <span class="users-list-date">20 Oct. 2014</span>
             </li>
             <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image" />
+              <img src="{{ asset("/bower_components/admin-lte/dist/img/user4-128x128.jpg") }}" class="img-circle" alt="User Image" />
               <a class="users-list-name" href="#">Javier Minsky</a>
               <span class="users-list-date">17 Oct. 2012</span>
             </li>
             <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image" />
+              <img src="{{ asset("/bower_components/admin-lte/dist/img/user3-128x128.jpg") }}" class="img-circle" alt="User Image" />
+              <a class="users-list-name" href="#">Ariel J.</a>
+              <span class="users-list-date">18 Abr. 1932</span>
+            </li>
+            <li>
+              <img src="{{ asset("/bower_components/admin-lte/dist/img/user1-128x128.jpg") }}" class="img-circle" alt="User Image" />
+              <a class="users-list-name" href="#">Ariel J.</a>
+              <span class="users-list-date">18 Abr. 1932</span>
+            </li>
+            <li>
+              <img src="{{ asset("/bower_components/admin-lte/dist/img/user5-128x128.jpg") }}" class="img-circle" alt="User Image" />
+              <a class="users-list-name" href="#">Ariel J.</a>
+              <span class="users-list-date">18 Abr. 1932</span>
+            </li>
+            <li>
+              <img src="{{ asset("/bower_components/admin-lte/dist/img/user6-128x128.jpg") }}" class="img-circle" alt="User Image" />
               <a class="users-list-name" href="#">Ariel J.</a>
               <span class="users-list-date">18 Abr. 1932</span>
             </li>
@@ -198,7 +213,7 @@
         </div><!-- /.box-footer -->
       </div><!--/.box -->
     </div><!-- /.col -->
-    <div class="col-md-6">
+    <div class="col-md-8">
     	<div class="box box-warning">
     		 <div class="box-header with-border">
 		      <h3 class="box-title">Calendario</h3>
@@ -208,7 +223,7 @@
 		    </div>
     	</div>
     </div>
-  </div>
+</div>
 
 <script type="text/javascript">
 	$('#map-container').highcharts('Map', {
