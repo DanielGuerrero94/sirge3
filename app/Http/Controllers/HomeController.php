@@ -10,14 +10,25 @@ use App\Classes\Modulo;
 
 class HomeController extends Controller
 {
+     /**
+     * Create a new authentication controller instance.
+     *
+     * @return void
+     */
     public function __construct(){
         $this->middleware('auth');
     }
 
+    /**
+     * Vista principal en caso de no ingresar login o inicio
+     */
     public function index(){
     	return redirect()->intended('inicio');
     }
     
+    /**
+     * Armado de menú
+     */
     protected function getMenu($id_menu){
         $menu = array();
         $relaciones = ModuloMenu::where('id_menu' , $id_menu)->get();
@@ -35,6 +46,9 @@ class HomeController extends Controller
         return $this->armaArbol($menu);
     }
 
+    /**
+     * Armo árbol con módulos
+     */
     protected function armaArbol($menu){
         foreach ($menu as $key => $modulo){
             if ($modulo['id_padre']){
@@ -46,8 +60,10 @@ class HomeController extends Controller
         return $menu;
     }
     
+    /**
+     * Retorna vista principal
+     */
     public function inicio(){
-
         $data = [
             'page_title' => 'Dashboard',
             'usuario' => Auth::user()->nombre,
@@ -58,6 +74,9 @@ class HomeController extends Controller
         return view('inicio' , $data);
     }
 
+    /**
+     * Retorna vista dashboard
+     */
     public function dashboard(){
         return view ('dashboard');
     }
