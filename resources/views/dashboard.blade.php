@@ -1,6 +1,3 @@
-<script type="text/javascript" src="http://code.highcharts.com/mapdata/countries/ar/ar-all.js"></script>
-
-
 <!-- INDICADORES GRANDES -->
 <div class="row">
 	<div class="col-lg-3 col-md-4">
@@ -226,6 +223,7 @@
 </div>
 
 <script type="text/javascript">
+	
 	$('#map-container').highcharts('Map', {
 		title : {
 			text : ''
@@ -252,8 +250,8 @@
 			dataLabels: {
 				enabled: false,
 				format: '{point.name}'
-			},
-			/*point : {
+			},/*
+			point : {
 				events : {
 					click : InfoProvincia
 				}
@@ -261,6 +259,8 @@
 			cursor : 'pointer'
 		}]
 	});
+	
+
 	$('.inlinesparkline').sparkline('html' , {
 		type : 'bar',
 		barColor : 'white',

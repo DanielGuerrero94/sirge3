@@ -27,6 +27,32 @@ Route::get('logout' , 'Auth\AuthController@getLogout');
 //Inicio route ...
 Route::get('inicio' , 'HomeController@inicio');
 
-//Menu routes...
-	// Dashboard
+/*************
+ * MENU ROUTES
+ ************/
+
+/**
+ * DASHBOARD
+ */
 Route::get('dashboard' , 'HomeController@dashboard');
+	
+/**
+ * PADRONES
+ */
+Route::get('prestaciones' , 'PadronController@prestacion');
+Route::get('comprobantes' , 'PadronController@comprobante');
+Route::get('fondos' , 'PadronController@fondo');
+Route::get('osp' , 'PadronController@osp');
+Route::get('profe' , 'PadronController@profe');
+Route::get('sss' , 'PadronController@sss');
+
+/**
+ * USUARIO
+ */
+Route::get('perfil' , 'UsuarioController@perfil');
+Route::get('ajustes' , 'UsuarioController@ajustes');
+
+/**
+ * CONTACTOS
+ */
+Route::get('contacto' , 'ContactoController@index');
