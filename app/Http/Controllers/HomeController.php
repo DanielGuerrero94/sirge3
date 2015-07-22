@@ -10,17 +10,12 @@ use App\Classes\Modulo;
 
 class HomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function index(){
-    	if (Auth::check()){
-            return redirect()->intended('inicio');
-        } else {
-            return redirect()->intended('login');
-        }
+    	return redirect()->intended('inicio');
     }
     
     protected function getMenu($id_menu){
@@ -52,10 +47,6 @@ class HomeController extends Controller
     }
     
     public function inicio(){
-
-        if (! Auth::check()){
-            return redirect()->intended('login');
-        }
 
         $data = [
             'page_title' => 'Dashboard',

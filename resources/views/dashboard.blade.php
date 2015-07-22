@@ -271,9 +271,9 @@
 
 	$('#calendar').fullCalendar({
 		height: 340,
-		googleCalendarApiKey : 'AIzaSyCL-n8uiQC8bdd-bSFCQn3P1Xk6e04uHTY',
+		googleCalendarApiKey : 'AIzaSyAY1AZ5aKTuMen9SBQcXmc9xtnXZkxYep8',
 		events : {
-			googleCalendarId : 'gustavo.hekel@gmail.com'
+			googleCalendarId : 'sirgeweb@gmail.com'
 		}
 	});
 </script>
