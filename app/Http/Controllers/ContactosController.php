@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Classes\Usuario;
 
 class ContactosController extends Controller
 {
@@ -21,6 +22,7 @@ class ContactosController extends Controller
     public function index(){
         $data = [
             'page_title' => 'Contactos SUMAR',
+            'contactos' => Usuario::all()
         ];
     	return view('contactos.listado' , $data);
     }
