@@ -1,3 +1,5 @@
+@extends('content')
+@section('content')
 <!-- INDICADORES GRANDES -->
 <div class="row">
 	<div class="col-lg-3 col-md-4">
@@ -277,3 +279,4 @@
 		}
 	});
 </script>
+@endsection

@@ -65,7 +65,6 @@ class HomeController extends Controller
      */
     public function inicio(){
         $data = [
-            'page_title' => 'Dashboard',
             'usuario' => Auth::user()->nombre,
             'ocupacion' => 'Desarrollador PHP',
             'alta' => 'Oct. 2012',
@@ -78,6 +77,9 @@ class HomeController extends Controller
      * Retorna vista dashboard
      */
     public function dashboard(){
-        return view ('dashboard');
+        $data = [
+            'page_title' => 'Dashboard'
+        ];
+        return view ('dashboard' , $data);
     }
 }

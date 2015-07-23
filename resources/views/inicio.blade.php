@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @include('sidebar')
 
     <!-- Content Wrapper. Contains page content -->
-    @include('content');
+    <div class="content-wrapper"></div><!-- /.content-wrapper -->
 
     <!-- Footer -->
     @include('footer')
@@ -80,14 +80,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 $(document).ready(function(){
     
     $.get('dashboard', function(data){
-        $('.content').html(data);
+        $('.content-wrapper').html(data);
     });
 
     $('.sidebar-menu a[href!="#"]').click(function(event){
         event.preventDefault();
         var modulo = $(this).attr('href');
         $.get(modulo , function (data){
-            $('.content').html(data);
+            $('.content-wrapper').html(data);
         });
     });
 });

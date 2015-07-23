@@ -55,4 +55,4 @@ Route::get('ajustes' , 'UsuarioController@ajustes');
 /**
  * CONTACTOS
  */
-Route::get('contacto' , 'ContactoController@index');
+Route::get('contactos' , 'ContactosController@index');
