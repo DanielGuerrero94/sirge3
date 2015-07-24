@@ -12,7 +12,7 @@
                 <div class="main">
                     <h3 class="name">{{ $usuario->nombre }}</h3>
                     <p class="profession">{{ $usuario->ocupacion }}</p>
-                    <p class="text-center"><button type="button" class="btn btn-info btn-sm">Enviar mensaje</button></p>
+                    <p class="text-center"><button id="enviar-mensaje" id-usuario="{{ $usuario->id_usuario }}" type="button" class="btn btn-info btn-sm">Enviar mensaje</button></p>
                     <h5><i class="fa fa-map-marker fa-fw text-muted"></i> {{ $usuario->provincia->descripcion }} </h5>
                     <h5><i class="fa fa-building-o fa-fw text-muted"></i> Unidad Ejecutora Central. </h5>
                     <h5><i class="fa fa-envelope-o fa-fw text-muted"></i> {{ $usuario->email }} </h5>
@@ -31,10 +31,10 @@
             </div> 
             <div class="content">
                 <div class="main">
-                    <h4 class="text-center">Experince</h4>
-                    <p>Inna was working with our team since 2012.</p>
-                    <h4 class="text-center">Areas of Expertise</h4>
-                    <p>Web design, Adobe Photoshop, HTML5, CSS3, Corel and many others...</p>
+                    <h4 class="text-center">Experiencia</h4>
+                    <p>Miemrbo del Programa SUMAR / Plan Nacer desde Octubre de 2012.</p>
+                    <h4 class="text-center">Cumpleaños</h4>
+                    <p class="text-center"><i class="fa fa-birthday-cake"></i> {{ date ('d M', strtotime($usuario->fecha_nacimiento)) }}</p>
                 </div>
             </div>
             <div class="footer">
@@ -42,9 +42,11 @@
                     <i class="fa fa-reply"></i> Atr&aacute;s
                 </button>
                 <div class="social-links text-center">
-                    <a href="http://creative-tim.com" class="facebook"><i class="fa fa-facebook fa-fw"></i></a>
-                    <a href="http://creative-tim.com" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
-                    <a href="http://creative-tim.com" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
+                    <a href="{{ $usuario->facebook }}" class="facebook"><i class="fa fa-facebook fa-fw"></i></a>
+                    <a href="{{ $usuario->google }}" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
+                    <a href="{{ $usuario->twitter }}" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
+                    <a href="{{ $usuario->skype }}" class="skype"><i class="fa fa-skype fa-fw"></i></a>
+                    <a href="{{ $usuario->linkedin }}" class="linkedin"><i class="fa fa-linkedin-square fa-fw"></i></a>
                 </div>
             </div>
         </div> 

@@ -58,3 +58,4 @@ Route::get('ajustes' , 'UsuarioController@ajustes');
 Route::get('contactos' , 'ContactosController@index');
 Route::get('listado/{nombre?}' , 'ContactosController@listado');
 Route::get('tarjeta/{id}' , 'ContactosController@tarjeta');
+Route::get('mensajes/{id_from}/{id_to}' , 'ContactosController@mensajes');

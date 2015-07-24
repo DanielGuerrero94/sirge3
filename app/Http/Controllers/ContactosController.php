@@ -44,4 +44,8 @@ class ContactosController extends Controller
         $data = ['usuario' => Usuario::with('provincia')->get()->find($id)];
         return view('contactos.tarjeta' , $data);
     }
+
+    public function mensajes($id_from , $id_to){
+        
+    }
 }
