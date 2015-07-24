@@ -4,7 +4,7 @@ namespace App\Classes;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Entidad extends Model {
+class Provincia extends Model {
 	/**
 	 * The table associated with the model.
 	 *

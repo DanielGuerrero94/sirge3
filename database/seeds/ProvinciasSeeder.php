@@ -16,5 +16,18 @@ class ProvinciasSeeder extends Seeder
         	'id_region' => 1,
         	'descripcion' => 'CABA'
     	]);
+
+        DB::table('sistema.provincias')->insert([
+            'id_provincia' => '04',
+            'id_region' => 1,
+            'descripcion' => 'Córdoba'
+        ]);
+
+        DB::table('sistema.provincias')->insert([
+            'id_provincia' => '13',
+            'id_region' => 1,
+            'descripcion' => 'Santa Fe'
+        ]);
+
     }
 }

@@ -1521,6 +1521,9 @@ a:focus {
 .box.box-default {
   border-top-color: #d2d6de;
 }
+.box.box-lime {
+  border-top-color: #90cc35;
+}
 .box.collapsed-box .box-body,
 .box.collapsed-box .box-footer {
   display: none;

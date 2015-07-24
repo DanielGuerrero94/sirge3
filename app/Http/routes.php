@@ -56,3 +56,4 @@ Route::get('ajustes' , 'UsuarioController@ajustes');
  * CONTACTOS
  */
 Route::get('contactos' , 'ContactosController@index');
+Route::get('tarjeta/{id}' , 'ContactosController@tarjeta');
