@@ -10,7 +10,7 @@ use App\Classes\Modulo;
 
 class HomeController extends Controller
 {
-     /**
+    /**
      * Create a new authentication controller instance.
      *
      * @return void

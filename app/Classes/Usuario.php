@@ -60,4 +60,11 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
 	public function sexo() {
 		return $this->hasOne('App\Classes\Sexo', 'id_sexo', 'id_sexo');
 	}
+
+	/**
+	 * Obtener conexiones
+	 */
+	public function conexion() {
+		return $this->hasOne('App\Classes\Login' , 'id_usuario' , 'id_usuario')->latest('fecha_login');
+	}
 }

@@ -16,7 +16,7 @@ Route::get('/' , 'HomeController@index');
 
 //Authentication routes ...
 Route::get('login' , 'Auth\AuthController@getLogin');
-Route::post('login' , 'Auth\AuthController@postLogin');
+Route::post('login' , 'AuthController@authenticate');
 Route::get('logout' , 'Auth\AuthController@getLogout');
 
 //Registration routes ...
@@ -56,4 +56,5 @@ Route::get('ajustes' , 'UsuarioController@ajustes');
  * CONTACTOS
  */
 Route::get('contactos' , 'ContactosController@index');
+Route::get('listado/{nombre?}' , 'ContactosController@listado');
 Route::get('tarjeta/{id}' , 'ContactosController@tarjeta');

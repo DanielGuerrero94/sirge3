@@ -29,9 +29,9 @@
       <div class="login-box-body">
       @if (count ($errors) > 0)
         <div class="alert alert-danger">
-          Por favor corrija los siguientes errores:<br><br>
+          Error en ingreso:<br><br>
           <ul>
-            @foreach ($errors->all() as $error)
+            @foreach ($errors as $error)
               <li>{{ $error }}</li>
             @endforeach
           </ul>

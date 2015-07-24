@@ -23,15 +23,25 @@ class ContactosController extends Controller
     public function index(){
         $data = [
             'page_title' => 'Contactos SUMAR',
-            'contactos' => Usuario::with('provincia')->get()
+            'contactos' => Usuario::with(['provincia' , 'conexion'])->orderBy('id_usuario')->get()
         ];
-    	return view('contactos.listado' , $data);
+    	return view('contactos.main' , $data);
+    }
+
+    public function listado($nombre) {
+        
+        if ($nombre == 'ALL'){
+            $contactos = Usuario::with(['provincia' , 'conexion'])->orderBy('id_usuario')->get();  
+        } else {
+            $contactos = Usuario::with(['provincia' , 'conexion'])->where('nombre' , 'ilike' , "%{$nombre}%")->orderBy('id_usuario')->get();
+        }
+
+        $data = ['contactos' => $contactos];
+        return view('contactos.listado' , $data);
     }
 
     public function tarjeta($id){
-        $data = [
-            'usuario' => Usuario::with('provincia')->get()->find($id)
-        ];
+        $data = ['usuario' => Usuario::with('provincia')->get()->find($id)];
         return view('contactos.tarjeta' , $data);
     }
 }
