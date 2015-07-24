@@ -11,7 +11,7 @@ class CreateTableLogsLogQueriesDinamicos extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('logs.log_queries_dinamicos', function(Blueprint $table)
+		Schema::create('logs.queries_dinamicos', function(Blueprint $table)
 		{
 			$table->increments('id_query_dinamico');
 			$table->integer('id_usuario')->unsigned();
@@ -21,7 +21,7 @@ class CreateTableLogsLogQueriesDinamicos extends Migration {
 			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});
 
-		\DB::statement('ALTER TABLE logs.log_queries_dinamicos ADD COLUMN "timestamp" timestamp without time zone');
+		\DB::statement('ALTER TABLE logs.queries_dinamicos ADD COLUMN "timestamp" timestamp without time zone');
 	}
 
 	/**
@@ -31,6 +31,6 @@ class CreateTableLogsLogQueriesDinamicos extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('logs.log_queries_dinamicos');
+		Schema::drop('logs.queries_dinamicos');
 	}
 }

@@ -11,14 +11,14 @@ class CreateTableLogsLogLogins extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('logs.log_logins', function(Blueprint $table)
+		Schema::create('logs.logins', function(Blueprint $table)
 		{
 			$table->increments('id_inicio');
 			$table->integer('id_usuario')->unsigned();
 			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});
 
-		\DB::statement("ALTER TABLE logs.log_logins ADD COLUMN fecha_login timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone, ADD COLUMN ip cidr;");
+		\DB::statement("ALTER TABLE logs.logins ADD COLUMN fecha_login timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone, ADD COLUMN ip cidr;");
 	}
 
 	/**
@@ -28,6 +28,6 @@ class CreateTableLogsLogLogins extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('logs.log_logins');
+		Schema::drop('logs.logins');
 	}
 }

@@ -1,3 +1,4 @@
+<link href="{{ asset("/dist/css/rotating-card.css") }}" rel="stylesheet" type="text/css" />
 <div class="card-container manual-flip">
     <div class="card">
         <div class="front">
@@ -5,7 +6,7 @@
                 <img src="{{asset ("/dist/img/Sumar_4.3.png") }}"/>
             </div>
             <div class="user">
-                <img src="http://localhost/sirge3/public/bower_components/admin-lte/dist/img/user2-160x160.jpg" class="user-image img-circle" alt="User Image">
+                <img src="{{asset ("/dist/img/usuarios/$usuario->ruta_imagen") }}" class="user-image img-circle" alt="User Image">
             </div>
             <div class="content">
                 <div class="main">
@@ -15,7 +16,7 @@
                     <h5><i class="fa fa-map-marker fa-fw text-muted"></i> {{ $usuario->provincia->descripcion }} </h5>
                     <h5><i class="fa fa-building-o fa-fw text-muted"></i> Unidad Ejecutora Central. </h5>
                     <h5><i class="fa fa-envelope-o fa-fw text-muted"></i> {{ $usuario->email }} </h5>
-
+                    <h5><i class="fa fa-phone fa-fw text-muted"></i> {{ $usuario->telefono }} </h5>
                 </div>
                 <div class="footer">
                     <button class="btn btn-simple" onclick="rotateCard(this)">

@@ -1,7 +1,6 @@
 @extends('content')
 @section('content')
 <!-- Contact list -->
-<link href="{{ asset("/dist/css/rotating-card.css") }}" rel="stylesheet" type="text/css" />
 <div class="row">
 	<div class="col-md-4">
 		<div class="row">
@@ -22,7 +21,7 @@
 		    		<div class="container" style="margin-top:20px;">
 		      		<div class="media">
 				        <a href="#" class="pull-left usuario" id-usuario="{{ $contacto['id_usuario'] }}">
-				        	<img src="http://localhost/sirge3/public/bower_components/admin-lte/dist/img/user2-160x160.jpg" class="user-image img-circle" alt="User Image" style="width: 48px; height: 48px;">
+				        	<img src="{{asset ("/dist/img/usuarios/$contacto->ruta_imagen") }}" class="user-image img-circle" alt="User Image" style="width: 48px; height: 48px;">
 				        </a>
 				        <div class="media-body">
 				          <h4 class="media-heading usuario" id-usuario="{{ $contacto['id_usuario'] }}"><a href="#">{{ $contacto->nombre }}</a></h4>
