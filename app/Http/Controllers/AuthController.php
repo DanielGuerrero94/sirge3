@@ -24,7 +24,7 @@ class AuthController extends Controller
         	$login->ip = $_SERVER['REMOTE_ADDR'];
         	$login->save();
 
-            return redirect()->intended('dashboard');
+            return redirect()->intended('inicio');
         } else {
         	// Authentication failed...
         	$data = [
