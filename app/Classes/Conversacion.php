@@ -30,7 +30,7 @@ class Conversacion extends Model {
 	 * Obtener todos los mensajes de una conversacion
 	 */
 	public function mensajes(){
-		return $this->hasMany('App\Classes\Mensaje' , 'id_mensaje' , 'id');
+		return $this->hasMany('App\Classes\Mensaje' , 'id_conversacion' , 'id');
 	}
     
 }

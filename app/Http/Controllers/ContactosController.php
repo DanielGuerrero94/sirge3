@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Auth;
+use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\Usuario;
 use App\Classes\Provincia;
+use App\Classes\Conversacion;
+use App\Classes\Mensaje;
 
 class ContactosController extends Controller
 {
@@ -45,7 +48,46 @@ class ContactosController extends Controller
         return view('contactos.tarjeta' , $data);
     }
 
-    public function mensajes($id_from , $id_to){
+    public function chat($id_from , $id_to){
         
+        $c = DB::select("select * from chat.conversaciones where usuarios @> '{ {$id_from},{$id_to} }'");
+
+        if (! sizeof($c)){
+            // Creo un nuevo chat
+            $chat = new Conversacion;
+            $chat->usuarios = "{{$id_from},{$id_to}}";
+            $chat->save();
+        }
+
+        $mensajes = Conversacion::with([
+            'mensajes' => function ($query){$query->orderBy('fecha','desc');}, 
+            'mensajes.usuario' => function($query){}
+        ])->where('usuarios' , '=' , "{{$id_from},{$id_to}}")->get();
+
+        $data = [
+            'info' => $mensajes
+        ];
+
+        return view('contactos.mensajes' , $data);
+        //echo '<pre>' , $mensajes , '</pre>';
+    }
+
+    private function getChat ($id){
+         $mensajes = Conversacion::find($id)->with([
+            'mensajes' => function ($query){$query->orderBy('fecha','desc');}, 
+            'mensajes.usuario' => function($query){}
+        ])->get();
+
+        return view('contactos.mensajes' , $mensajes[0]);
+    }
+
+    public function nuevoMensaje (Request $request){
+        $m = new Mensaje;
+        $m->id_conversacion = $request->id_conversacion;
+        $m->id_usuario = Auth::user()->id_usuario;
+        $m->mensaje = $request->message;
+        $m->save();
+
+        return $this->getChat($request->id_conversacion);
     }
 }

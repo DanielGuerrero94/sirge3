@@ -32,6 +32,14 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#busqueda').click(function(event){
+		var query = $('#busqueda-contacto').val();
+		if (! query.length) { query = 'ALL'; }
+		$.get('listado/' + query , function(data){
+			$('#listado-contactos').html(data);
+		});	
+	});
+
 	$('#card-profile').on('click' , '#enviar-mensaje' , function(){
 		var user_to = $(this).attr('id-usuario');
 		var user_from = {{ Auth::user()->id_usuario }};
@@ -45,14 +53,12 @@ $(document).ready(function(){
 		}
 	});
 
-	$('#busqueda').click(function(event){
-		var query = $('#busqueda-contacto').val();
-		if (! query.length) { query = 'ALL'; }
-		$.get('listado/' + query , function(data){
-			$('#listado-contactos').html(data);
-		});	
+/*
+	$('#box-mensajes').on('submit' , '#form-mensaje' , function(){
+		var mensaje = $(this).serialize();
+		alert(mensaje);
 	});
-
+*/
 });
 </script>
 @endsection

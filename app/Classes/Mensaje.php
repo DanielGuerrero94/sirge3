@@ -25,4 +25,11 @@ class Mensaje extends Model{
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+	 * Obtener los datos del usuario que escribió el mensaje
+	 */
+	public function usuario(){
+		return $this->hasOne('App\Classes\Usuario' , 'id_usuario' , 'id_usuario');
+	}
 }
