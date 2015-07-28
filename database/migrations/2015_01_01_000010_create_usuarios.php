@@ -30,6 +30,7 @@ class CreateUsuarios extends Migration {
 			$table->string('google', 200)->default('#');
 			$table->string('skype', 200)->default('#');
 			$table->string('telefono', 20)->nullable();
+			$table->timestamp('last_login');
 			$table->timestamps();
 			$table->rememberToken()->nullable();
 

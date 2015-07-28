@@ -52,13 +52,6 @@ $(document).ready(function(){
 			});	
 		}
 	});
-
-/*
-	$('#box-mensajes').on('submit' , '#form-mensaje' , function(){
-		var mensaje = $(this).serialize();
-		alert(mensaje);
-	});
-*/
 });
 </script>
 @endsection

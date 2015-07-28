@@ -23,6 +23,10 @@ class ContactosController extends Controller
     	$this->middleware('auth');
     }
 
+    /**
+     * Crea la vista principal del módulo de Contactos
+     * @return view
+     */
     public function index(){
         $data = [
             'page_title' => 'Contactos SUMAR',
@@ -31,6 +35,12 @@ class ContactosController extends Controller
     	return view('contactos.main' , $data);
     }
 
+    /**
+     * Crea el listado de usuarios registrados y maneja la búsqueda
+     * @param string Nombre de usuario a buscar
+     *
+     * @return view
+     */
     public function listado($nombre) {
         
         if ($nombre == 'ALL'){
@@ -43,6 +53,12 @@ class ContactosController extends Controller
         return view('contactos.listado' , $data);
     }
 
+    /**
+     * Genera la tarjeta de información del usuario seleccionado
+     * @param int Id del usuario buscado
+     *
+     * @return view
+     */
     public function tarjeta($id){
         $data = ['usuario' => Usuario::with('provincia')->get()->find($id)];
         return view('contactos.tarjeta' , $data);

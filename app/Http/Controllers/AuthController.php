@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Classes\Login;
+use App\Classes\Usuario;
 
 class AuthController extends Controller
 {
@@ -23,6 +24,10 @@ class AuthController extends Controller
         	$login->id_usuario = Auth::user()->id_usuario;
         	$login->ip = $_SERVER['REMOTE_ADDR'];
         	$login->save();
+
+            $user = Usuario::find(Auth::user()->id_usuario);
+            $user->last_login = date("Y-m-d H:i:s");
+            $user->save();
 
             return redirect()->intended('inicio');
         } else {
