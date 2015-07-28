@@ -27,14 +27,15 @@ class InboxController extends Controller{
     public function index(){
     	$user = Auth::user()->id_usuario;
     	$usuarios = DB::select("
-		select u.*
+		select u.* , p.descripcion
 		from (
 			select 
 				unnest(usuarios) as usuarios 
 			from chat.conversaciones 
 			where usuarios @> '{{$user}}'
 			) a  left join 
-			sistema.usuarios u on a.usuarios = u.id_usuario
+			sistema.usuarios u on a.usuarios = u.id_usuario left join
+			sistema.provincias p on u.id_provincia = p.id_provincia
 		where usuarios <> $user");
 
     	$data = [

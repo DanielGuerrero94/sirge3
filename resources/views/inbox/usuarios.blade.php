@@ -8,8 +8,8 @@
         		</a>
         		<div class="media-body">
 	          		<h4 class="media-heading usuario" id-usuario="{{ $contacto->id_usuario }}"><a href="#">{{ $contacto->nombre }}</a></h4>
-	          		<p class="small"></p>
-	          		<p class="small"><span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" ></span></p>
+	          		<p class="small">{{ $contacto->descripcion }}</p>
+	          		<p class="small"><span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" ></span> {{ date ('d M y', strtotime($contacto->last_login)) }}</p>
         		</div>
       		</div>
 		</div>
