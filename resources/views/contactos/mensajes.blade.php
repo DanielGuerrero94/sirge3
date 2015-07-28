@@ -11,29 +11,43 @@
 	      </span>
 	    </div>
 	    
-	    <input name="id_conversacion" type="hidden" value="{{ $info->conversacion->id }}">
+	    <input name="id_conversacion" type="hidden" value="{{ $info[0]->id }}">
 	    {!! csrf_field() !!}
 	  </form>
 	</div><!-- /.box-footer-->
 	<div class="box-body" style="display: block;">
 		<!-- Conversations are loaded here -->
 		<div class="direct-chat-messages">
-@foreach ($mensajes as $key => $mensaje)
-			<div class="direct-chat-msg 
-			@if ($mensaje['id_usuario'] != Auth::user()->id_usuario)
-				right
-			@endif
-			">
-		      <div class="direct-chat-info clearfix">
-		        <span class="direct-chat-name pull-left">{{ $mensaje['usuario']['nombre'] }}</span>
-		        <span class="direct-chat-timestamp pull-right">{{ date ('d M y - H:m:s', strtotime($mensaje['fecha'])) }}</span>
-		      </div><!-- /.direct-chat-info -->
-		      <img class="direct-chat-img" src="{{asset ("/dist/img/usuarios/") . '/' . $mensaje['usuario']['ruta_imagen']}}" alt="message user image"><!-- /.direct-chat-img -->
-		      <div class="direct-chat-text">
-		        {{ $mensaje['mensaje'] }}
-		      </div><!-- /.direct-chat-text -->
-		    </div><!-- /.direct-chat-msg -->
-@endforeach
+			@foreach ($info as $key => $mensaje)
+				@foreach ($mensaje->mensajes as $key2 => $data)
+					<div class="direct-chat-msg
+					@if ($data->id_usuario != Auth::user()->id_usuario)
+						right
+					@endif
+					">
+						<div class="direct-chat-info clearfix">
+							<span class="direct-chat-name 
+								@if ($data->id_usuario != Auth::user()->id_usuario)
+									pull-right
+								@else 
+									pull-left
+								@endif
+							">{{ $data->usuario->nombre }}</span>
+							<span class="direct-chat-timestamp
+								@if ($data->id_usuario != Auth::user()->id_usuario)
+									pull-left
+								@else 
+									pull-right
+								@endif
+							">{{ date ('d M y - H:m:s', strtotime($data->fecha)) }}</span>
+						</div>
+						<img class="direct-chat-img" src="{{asset ("/dist/img/usuarios/") . '/' . $data->usuario->ruta_imagen}}" alt="message user image"><!-- /.direct-chat-img -->
+						<div class="direct-chat-text">
+							{{ $data->mensaje }}
+					  	</div><!-- /.direct-chat-text -->
+					</div>
+				@endforeach
+			@endforeach
 		</div><!--/.direct-chat-messages-->
 	</div><!-- /.box-body -->
 
@@ -42,7 +56,6 @@
 	$('#form-mensaje').submit(function(event){
 		event.preventDefault();
 		var mensaje = $(this).serializeArray();
-		console.log(mensaje);
 		$('.box-body').load('mensajes .direct-chat-messages', mensaje, function(data){
 			$('#form-mensaje')[0].reset();
 		});

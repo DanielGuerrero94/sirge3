@@ -48,39 +48,65 @@ class ContactosController extends Controller
         return view('contactos.tarjeta' , $data);
     }
 
+    /**
+     * Levanto el chat entre usuarios
+     * @param int $id_from usuario que envia el mensaje
+     * @param int $id_to usuario que recibe el mensaje
+     *
+     * @return view
+     */
     public function chat($id_from , $id_to){
         
-        $c = DB::select("select * from chat.conversaciones where usuarios @> '{ {$id_from},{$id_to} }'");
+        $c = DB::select("select * from chat.conversaciones where usuarios @> '{{$id_from},{$id_to}}'");
 
         if (! sizeof($c)){
-            // Creo un nuevo chat
             $chat = new Conversacion;
             $chat->usuarios = "{{$id_from},{$id_to}}";
             $chat->save();
+            $id_conversacion = $chat->id;
+        } else {
+            $id_conversacion = $c[0]->id;
         }
 
         $mensajes = Conversacion::with([
             'mensajes' => function ($query){$query->orderBy('fecha','desc');}, 
             'mensajes.usuario' => function($query){}
-        ])->where('usuarios' , '=' , "{{$id_from},{$id_to}}")->get();
+        ])->where('id' , '=' , $id_conversacion)->get();
 
+        $data = [
+            'info' => $mensajes
+        ];
+        return view('contactos.mensajes' , $data);
+    }
+
+
+    /**
+     * Levanta una conversacion por su id
+     * @param int $id Id de la conversacion
+     * 
+     * @return view
+     */
+    private function getChat ($id){
+        
+        $mensajes = Conversacion::with([
+            'mensajes' => function ($query){$query->orderBy('fecha','desc');}, 
+            'mensajes.usuario' => function($query){}
+        ])->where('id', '=' , $id)->get();
+        
         $data = [
             'info' => $mensajes
         ];
 
         return view('contactos.mensajes' , $data);
-        //echo '<pre>' , $mensajes , '</pre>';
     }
 
-    private function getChat ($id){
-         $mensajes = Conversacion::find($id)->with([
-            'mensajes' => function ($query){$query->orderBy('fecha','desc');}, 
-            'mensajes.usuario' => function($query){}
-        ])->get();
 
-        return view('contactos.mensajes' , $mensajes[0]);
-    }
-
+    /**
+     * Guarda el mensaje nuevo
+     * @param request Formulario del mensaje
+     *
+     * @return view
+     */
     public function nuevoMensaje (Request $request){
         $m = new Mensaje;
         $m->id_conversacion = $request->id_conversacion;
