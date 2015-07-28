@@ -60,3 +60,8 @@ Route::get('listado/{nombre?}' , 'ContactosController@listado');
 Route::get('tarjeta/{id}' , 'ContactosController@tarjeta');
 Route::get('mensajes/{id_from}/{id_to}' , 'ContactosController@chat');
 Route::post('mensajes' , 'ContactosController@nuevoMensaje');
+
+/**
+ * INBOX
+ */
+Route::get('inbox' , 'InboxController@index');

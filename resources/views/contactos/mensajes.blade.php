@@ -53,12 +53,25 @@
 
 </div>
 <script type="text/javascript">
+	
+	function reloadChat (){
+		setInterval(function(){
+			var user_to = $('#enviar-mensaje').attr('id-usuario');
+			var user_from = {{ Auth::user()->id_usuario }};
+				$('.box-body').load('mensajes/' + user_from + '/' + user_to + ' .direct-chat-messages');	
+		} , 2000);
+	}
+
 	$('#form-mensaje').submit(function(event){
 		event.preventDefault();
 		var mensaje = $(this).serializeArray();
 		$('.box-body').load('mensajes .direct-chat-messages', mensaje, function(data){
 			$('#form-mensaje')[0].reset();
 		});
+	});
+
+	$(document).ready(function(){
+		reloadChat();
 	});
 </script>
 	  

@@ -79,7 +79,6 @@ class ContactosController extends Controller
         return view('contactos.mensajes' , $data);
     }
 
-
     /**
      * Levanta una conversacion por su id
      * @param int $id Id de la conversacion
@@ -99,7 +98,6 @@ class ContactosController extends Controller
 
         return view('contactos.mensajes' , $data);
     }
-
 
     /**
      * Guarda el mensaje nuevo
