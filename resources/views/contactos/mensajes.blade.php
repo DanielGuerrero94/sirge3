@@ -39,7 +39,7 @@
 								@else 
 									pull-right
 								@endif
-							">{{ date ('d M y - h:i:s', strtotime($data->fecha)) }}</span>
+							">{{ date ('d M y - H:i:s', strtotime($data->fecha)) }}</span>
 						</div>
 						<img class="direct-chat-img" src="{{asset ("/dist/img/usuarios/") . '/' . $data->usuario->ruta_imagen}}" alt="message user image"><!-- /.direct-chat-img -->
 						<div class="direct-chat-text">

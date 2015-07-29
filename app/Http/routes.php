@@ -20,8 +20,8 @@ Route::post('login' , 'AuthController@authenticate');
 Route::get('logout' , 'Auth\AuthController@getLogout');
 
 //Registration routes ...
-//Route::get('/usuario' , '');
-//Route::post('/usuario' , '');
+Route::get('registrar' , 'RegistrationController@index');
+Route::post('registrar' , 'RegistrationController@register');
 
 
 //Inicio route ...
@@ -65,3 +65,11 @@ Route::post('mensajes' , 'ContactosController@nuevoMensaje');
  * INBOX
  */
 Route::get('inbox' , 'InboxController@index');
+
+/**
+ * ADMIN
+ */
+Route::get('usuarios' , 'UsuariosController@index');
+Route::get('areas' , 'AreasController@areas');
+Route::get('menues' , 'MenuesController@menues');
+Route::get('modulos' , 'ModulosController@modulos');

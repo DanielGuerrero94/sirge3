@@ -9,7 +9,7 @@
         		<div class="media-body">
 	          		<h4 class="media-heading usuario" id-usuario="{{ $contacto->id_usuario }}"><a href="#">{{ $contacto->nombre }}</a></h4>
 	          		<p class="small">{{ $contacto->provincia->descripcion }}</p>
-	          		<p class="small"><span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" ></span> {{ date ('d M y', strtotime($contacto->conexion->fecha_login)) }}</p>
+	          		<p class="small"><span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" ></span> {{ date ('d M y', strtotime($contacto->conexion->fecha_login))}}</p>
         		</div>
       		</div>
 		</div>

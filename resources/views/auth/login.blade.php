@@ -70,7 +70,7 @@
         </div><!-- /.social-auth-links -->
 
         <a href="recuperar_password">Olvidé mi contrase&ntilde;a</a><br>
-        <a href="solicitar_usuario" class="text-center">Solicitar un usuario</a>
+        <a href="registrar" class="text-center">Solicitar un usuario</a>
 
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
