@@ -17,4 +17,14 @@ class RegistrationController extends Controller
     public function index(){
     	return view('registration.main');
     }
+
+    /**
+     * Muestra el formulario de registro
+     * @param request Información del formulario
+     * 
+     * @return view
+     */
+    public function register(Request $r){
+    	print_r($r->nombre);
+    }
 }

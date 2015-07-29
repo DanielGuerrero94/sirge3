@@ -50,17 +50,17 @@
                               <div class="col-sm-6">
                                   <div class="form-group">
                                     <label for="nombre">Nombre</label>
-                                    <input type="text" class="form-control" id="nombre" placeholder="Nombre ...">
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre ...">
                                   </div>
                                   <div class="form-group">
                                     <label for="apellido">Apellido</label>
-                                    <input type="text" class="form-control" id="apellido" placeholder="Apellido ...">
+                                    <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido ...">
                                   </div>
                               </div>
                               <div class="col-sm-10 col-sm-offset-1">
                                   <div class="form-group">
                                       <label>Email</label>
-                                      <input type="email" class="form-control" placeholder="Email ...">
+                                      <input type="email" class="form-control" name="email" placeholder="Email ...">
                                   </div>
                               </div>
                           </div>
@@ -71,7 +71,7 @@
                                 <div class="col-sm-10 col-sm-offset-1">
                                     <div class="col-sm-4">
                                         <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="job" value="uec">
+                                            <input type="radio" name="entidad" value="1">
                                             <div class="icon">
                                                 <i class="fa fa-building-o"></i>
                                             </div>
@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="job" value="ugsp">
+                                            <input type="radio" name="entidad" value="2">
                                             <div class="icon">
                                                 <i class="fa fa-university"></i>
                                             </div>
@@ -90,13 +90,12 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="job" value="externo">
+                                            <input type="radio" name="entidad" value="3">
                                             <div class="icon">
                                                 <i class="fa fa-hospital-o"></i>
                                             </div>
                                             <h6>Externo</h6>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -124,11 +123,19 @@
                                 </div>
                             </div>
                             <div class="row">
+                            	<div class="col-sm-12">
+	                            	<div class="form-group">
+                                		<label>Mensaje personal</label>
+                                		<input class="form-control" type="text" name="mensaje-personal" placeholder="SUMAR es más Salud Pública ...">
+                                	</div>
+                            	</div>
+                            </div>
+                            <div class="row">
                             	<div class="col-sm-4">
 	                            	<div class="form-group">
 	                            		<div class="input-group">
 										 	<span class="input-group-addon" id="fb"><i class="fa fa-facebook"></i></span>
-										 	<input type="text" class="form-control" placeholder="Facebook" aria-describedby="fb">
+										 	<input type="text" class="form-control" name="fb" placeholder="Facebook" aria-describedby="fb">
 										</div>
 	                            	</div>
                             	</div>
@@ -136,7 +143,7 @@
 	                            	<div class="form-group">
 	                            		<div class="input-group">
 										 	<span class="input-group-addon" id="tw"><i class="fa fa-twitter"></i></span>
-										 	<input type="text" class="form-control" placeholder="Twitter" aria-describedby="tw">
+										 	<input type="text" class="form-control" name="tw" placeholder="Twitter" aria-describedby="tw">
 										</div>
 	                            	</div>
                             	</div>
@@ -144,7 +151,7 @@
 	                            	<div class="form-group">
 	                            		<div class="input-group">
 										 	<span class="input-group-addon" id="g+"><i class="fa fa-google-plus"></i></span>
-										 	<input type="text" class="form-control" placeholder="Google +" aria-describedby="g+">
+										 	<input type="text" class="form-control" name="gp" placeholder="Google +" aria-describedby="g+">
 										</div>
 	                            	</div>
                             	</div>
@@ -154,7 +161,7 @@
 	                            	<div class="form-group">
 	                            		<div class="input-group">
 										 	<span class="input-group-addon" id="skype"><i class="fa fa-skype"></i></span>
-										 	<input type="text" class="form-control" placeholder="Skype" aria-describedby="skype">
+										 	<input type="text" class="form-control" name="skype" placeholder="Skype" aria-describedby="skype">
 										</div>
 	                            	</div>
                             	</div>
@@ -162,58 +169,47 @@
 	                            	<div class="form-group">
 	                            		<div class="input-group">
 										 	<span class="input-group-addon" id="ln"><i class="fa fa-linkedin"></i></span>
-										 	<input type="text" class="form-control" placeholder="LinkedIn" aria-describedby="ln">
+										 	<input type="text" class="form-control" name="ln" placeholder="LinkedIn" aria-describedby="ln">
 										</div>
 	                            	</div>
-                            	</div>
-                            </div>
-                            <div class="row">
-                            	<div class="col-sm-12">
-	                            	<div class="form-group">
-                                		<label>Mensaje personal</label>
-                                		<input class="form-control" type="text" name="mensaje-personal" placeholder="SUMAR es más Salud Pública ...">
-                                	</div>
                             	</div>
                             </div>
                         </div>
                         <div class="tab-pane" id="address">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h4 class="info-text"> Desde donde estás trabajando? </h4>
+                                    <h4 class="info-text"> Ubicado en? </h4>
                                 </div>
-                                <div class="col-sm-7 col-sm-offset-1">
-                                     <div class="form-group">
-                                        <labe>Street Name</label>
-                                        <input type="text" class="form-control" placeholder="5h Avenue">
-                                      </div>
-                                </div>
-                                <div class="col-sm-3">
-                                     <div class="form-group">
-                                        <label>Street Number</label>
-                                        <input type="text" class="form-control" placeholder="242">
-                                      </div>
-                                </div>
-                                <div class="col-sm-5 col-sm-offset-1">
-                                     <div class="form-group">
-                                        <label>City</label>
-                                        <input type="text" class="form-control" placeholder="New York...">
-                                      </div>
-                                </div>
-                                <div class="col-sm-5">
-                                     <div class="form-group">
-                                        <label>Country</label><br>
-                                         <select name="country" class="form-control">
-                                            <option value="Afghanistan"> Afghanistan </option>
-                                            <option value="Albania"> Albania </option>
-                                            <option value="Algeria"> Algeria </option>
-                                            <option value="American Samoa"> American Samoa </option>
-                                            <option value="Andorra"> Andorra </option>
-                                            <option value="Angola"> Angola </option>
-                                            <option value="Anguilla"> Anguilla </option>
-                                            <option value="Antarctica"> Antarctica </option>
-                                            <option value="...">...</option>
-                                        </select>
-                                      </div>
+                                <div class="col-sm-12">
+                                	<div class="form-group">
+									    <label>Provincia</label><br>
+									     <select name="provincia" class="form-control">
+									        <option value="01">Ciudad Autónoma de Buenos Aires</option>
+									        <option value="02">Buenos Aires</option>
+									        <option value="03">Catamarca</option>
+									        <option value="04">Córdoba</option>
+									        <option value="05">Corrientes</option>
+									        <option value="06">Entre Ríos</option>
+									        <option value="07">Jujuy</option>
+									        <option value="08">La Rioja</option>
+									        <option value="09">Mendoza</option>
+									        <option value="10">Salta</option>
+									        <option value="11">San Juan</option>
+									        <option value="12">San Luis</option>
+									        <option value="13">Santa Fe</option>
+									        <option value="14">Santiago del Estero</option>
+									        <option value="15">Tucumán</option>
+									        <option value="16">Chaco</option>
+									        <option value="17">Chubut</option>
+									        <option value="18">Formosa</option>
+									        <option value="19">La Pampa</option>
+									        <option value="20">Misiones</option>
+									        <option value="21">Nequén</option>
+									        <option value="22">Rio Negro</option>
+									        <option value="23">Santa Cruz</option>
+									        <option value="24">Tierra del Fuego</option>
+									    </select>
+									  </div>
                                 </div>
                             </div>
                         </div>
@@ -221,7 +217,7 @@
                     <div class="wizard-footer">
                     	<div class="pull-right">
                             <input type='button' class='btn btn-next btn-fill btn-primary btn-wd btn-sm' name='next' value='Siguiente' />
-                            <input type='button' class='btn btn-finish btn-fill btn-primary btn-wd btn-sm' name='finish' value='Solicitar usuario' />
+                            <input type='submit' class='btn btn-finish btn-fill btn-primary btn-wd btn-sm' name='finish' value='Solicitar usuario' />
                         </div>
                         <div class="pull-left">
                             <input type='button' class='btn btn-previous btn-fill btn-default btn-wd btn-sm' name='previous' value='Anterior' />
@@ -229,6 +225,7 @@
                         <div class="clearfix"></div>
                     </div>	
                 </div>
+                {!! csrf_field() !!}
                 </form>
             </div> <!-- wizard container -->
         </div>
