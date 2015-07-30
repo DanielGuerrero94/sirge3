@@ -2,6 +2,45 @@ searchVisible = 0;
 transparent = true;
 
 $(document).ready(function(){
+
+    var $validator = $('#my-form').validate({
+        rules : {
+            nombre : {
+                required: true,
+                minlength: 4
+            },
+            apellido : {
+                required: true,
+                minlength: 4
+            },
+            email : {
+                required: true,
+                email: true,
+                remote: 'checkemail'
+            },
+            entidad : {
+                required: true
+            },
+            fecha_nacimiento : {
+                required: true
+            },
+            ocupacion : {
+                required: true,
+                minlength: 8
+            },
+            provincia : {
+                required: true
+            },
+            pass : {
+                required: true,
+                minlength: 6
+            },
+            area : {
+                required : true
+            }
+        }
+    });
+
     /*  Activate the tooltips      */
     $('[rel="tooltip"]').tooltip();
     
@@ -40,6 +79,13 @@ $(document).ready(function(){
             } else {
                 $(wizard).find('.btn-next').show();
                 $(wizard).find('.btn-finish').hide();
+            }
+        },
+        onNext : function(tab, navigation, index){
+            var $valid = $("#my-form").valid();
+            if(!$valid) {
+                $validator.focusInvalid();
+                return false;
             }
         }
     });

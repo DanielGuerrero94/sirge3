@@ -22,6 +22,11 @@ Route::get('logout' , 'Auth\AuthController@getLogout');
 //Registration routes ...
 Route::get('registrar' , 'RegistrationController@index');
 Route::post('registrar' , 'RegistrationController@register');
+Route::get('checkemail' , 'RegistrationController@email');
+
+Route::get('test' , function(){
+	return view('registration.test');
+});
 
 
 //Inicio route ...

@@ -19,8 +19,18 @@
 	    <div class="col-sm-8 col-sm-offset-2">
             <!-- Wizard container -->   
             <div class="wizard-container"> 
-                <form action="registrar" method="post">
+                <form action="registrar" method="post" id="my-form">
+
                 <div class="card wizard-card ct-wizard-blue" id="wizard">
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <!-- You can switch "ct-wizard-orange"  with one of the next bright colors: "ct-wizard-blue", "ct-wizard-green", "ct-wizard-orange", "ct-wizard-red"             -->
                 	<div class="wizard-header">
                     	<h3>
@@ -32,9 +42,138 @@
                     	<li><a href="#about" data-toggle="tab">Acerca</a></li>
                         <li><a href="#account" data-toggle="tab">Sede</a></li>
                         <li><a href="#address" data-toggle="tab">Provincia</a></li>
+                        <li><a href="#areas" data-toggle="tab">Área</a></li>
                         <li><a href="#more-about" data-toggle="tab">Más</a></li>
+                        <li><a href="#password" data-toggle="tab">Contraseña</a></li>
                     </ul>
                     <div class="tab-content">
+                        <div class="tab-pane" id="areas">
+                            <h4 class="info-text"> En qué área?</h4>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <div class="choice" data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="16">
+                                            <div class="icon">
+                                                <i class="fa fa-briefcase"></i>
+                                            </div>
+                                            <h6>Coordinación</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="choice" data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="5">
+                                            <div class="icon">
+                                                <i class="fa fa-gavel"></i>
+                                            </div>
+                                            <h6>Legal</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="choice"  data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="17">
+                                            <div class="icon">
+                                                <i class="fa fa-bullhorn"></i>
+                                            </div>
+                                            <h6>Comunicación</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="choice"  data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="2">
+                                            <div class="icon">
+                                                <i class="fa fa-puzzle-piece"></i>
+                                            </div>
+                                            <h6>Planificación estratégica</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <div class="choice" data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="19">
+                                            <div class="icon">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <h6>Supervisión</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="choice" data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="3">
+                                            <div class="icon">
+                                                <i class="fa fa-stethoscope"></i>
+                                            </div>
+                                            <h6>Cobertura prestacional</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="choice"  data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="20">
+                                            <div class="icon">
+                                                <i class="fa fa-university"></i>
+                                            </div>
+                                            <h6>Asistencia técnica</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="choice"  data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="4">
+                                            <div class="icon">
+                                                <i class="fa fa-inbox"></i>
+                                            </div>
+                                            <h6>Cápitas</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4">
+                                        <div class="choice" data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="18">
+                                            <div class="icon">
+                                                <i class="fa fa-building-o"></i>
+                                            </div>
+                                            <h6>Administración</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="choice" data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="6">
+                                            <div class="icon">
+                                                <i class="fa fa-heartbeat"></i>
+                                            </div>
+                                            <h6>Planes especiales</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="choice"  data-toggle="wizard-radio">
+                                            <input type="radio" name="area" value="1">
+                                            <div class="icon">
+                                                <i class="fa fa-laptop"></i>
+                                            </div>
+                                            <h6>Sistemas informáticos</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="password">
+                            <div class="row">
+                                <h4 class="info-text"> Para terminar ingrese una contraseña</h4>  
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                      <label>Contraseña</label>
+                                      <input type="password" name="pass" class="form-control" id="pass">
+                                      <div id="messages"></div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="tab-pane" id="about">
                           <div class="row">
                               <h4 class="info-text"> Empezemos con información básica</h4>
@@ -86,7 +225,6 @@
                                             </div>
                                             <h6>UGSP</h6>
                                         </div>
-                                        
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="choice"  data-toggle="wizard-radio">
@@ -106,7 +244,7 @@
                                 <div class="col-sm-4">
                                 	<div class="form-group">
                                 		<label>Fecha de nacimiento</label>
-                                		<input class="form-control" type="text" name="fecha-nacimiento" id="fecha-nacimiento">
+                                		<input class="form-control" type="text" name="fecha_nacimiento" id="fecha-nacimiento">
                                 	</div>
                                 </div>
                                 <div class="col-sm-4">
@@ -126,7 +264,7 @@
                             	<div class="col-sm-12">
 	                            	<div class="form-group">
                                 		<label>Mensaje personal</label>
-                                		<input class="form-control" type="text" name="mensaje-personal" placeholder="SUMAR es más Salud Pública ...">
+                                		<input class="form-control" type="text" name="mensaje_personal" placeholder="SUMAR es más Salud Pública ...">
                                 	</div>
                             	</div>
                             </div>
@@ -180,7 +318,9 @@
                                 <div class="col-sm-12">
                                     <h4 class="info-text"> Ubicado en? </h4>
                                 </div>
-                                <div class="col-sm-12">
+                                <div class="col-sm-2">
+                                </div>
+                                <div class="col-sm-8">
                                 	<div class="form-group">
 									    <label>Provincia</label><br>
 									     <select name="provincia" class="form-control">
@@ -235,6 +375,8 @@
 	<script src="{{ asset ("/bower_components/admin-lte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 	<!-- Bootstrap 3.3.2 JS -->
 	<script src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}"></script>
+    <!-- jQuery validator -->
+    <script src="{{ asset ("/dist/js/jquery.validate.min.js") }}"></script>
 	<!-- jQuery Wizard -->
 	<script src="{{ asset ("/dist/js/jquery.bootstrap.wizard.js") }}"></script>
 	<!-- Wizard -->
@@ -243,12 +385,17 @@
 	<script src="{{ asset ("/dist/js/jquery.inputmask.js") }}"></script>
 	<!-- Inputmask -->
 	<script src="{{ asset ("/dist/js/inputmask.js") }}"></script>
+    <!-- Password Strength -->
+    <script src="{{ asset ("/dist/js/pwstrength-bootstrap.js") }}"></script>
 	<!-- Backstrech -->
     <script src="{{ asset ("/bower_components/admin-lte/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
+
 		$('#fecha-nacimiento').inputmask('99/99/9999');
 		$('#telefono').inputmask('(999) 9999 - 9999')
+
+        $('#pass').pwstrength();
 
 		$.backstretch([
 			"http://dl.dropbox.com/u/515046/www/outside.jpg"
