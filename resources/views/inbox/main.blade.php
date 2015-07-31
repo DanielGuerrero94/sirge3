@@ -18,6 +18,8 @@
 			@include('inbox.usuarios')
 		</div>
 	</div>
-	<div class="col-md-8" id="box-messages"></div>
+	<div class="col-md-8" id="box-messages">
+		@include('inbox.mensajes')
+	</div>
 </div>
 @endsection

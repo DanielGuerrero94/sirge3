@@ -53,16 +53,15 @@ class RegistrationController extends Controller
         if ($user->save()){
             Mail::send('emails.reminder', ['usuario' => $user], function ($m) use ($user) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-                $m->to('gustavo.hekel@gmail.com', $user->nombre);
+                $m->to('sistemasuec@gmail.com', $user->nombre);
                 $m->subject('Solicitud de usuario!');
             });
             return view('registration.aviso');
         }
-
     }
 
     /**
-     * Método para el plugin jQuery Validator
+     * Método para el plugin jQuery Validator que busca si existe un email
      * @param request QueryString
      *
      * @return json
@@ -77,7 +76,6 @@ class RegistrationController extends Controller
         } else {
             $json = false;
         }
-
         return json_encode($json);
     }
 

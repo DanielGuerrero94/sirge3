@@ -29,6 +29,7 @@ $(document).ready(function(){
 		var usuario = $(this).attr('id-usuario');
 		$.get('tarjeta/' + usuario, function(data){
 			$('#card-profile').html(data);
+			$('#box-mensajes').html('');
 		});
 	});
 
