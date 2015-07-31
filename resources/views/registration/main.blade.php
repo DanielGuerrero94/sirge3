@@ -20,19 +20,19 @@
             <!-- Wizard container -->   
             <div class="wizard-container"> 
                 <form action="registrar" method="post" id="my-form">
-
                 <div class="card wizard-card ct-wizard-blue" id="wizard">
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <!-- You can switch "ct-wizard-orange"  with one of the next bright colors: "ct-wizard-blue", "ct-wizard-green", "ct-wizard-orange", "ct-wizard-red"             -->
                 	<div class="wizard-header">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                            Por favor solucione los siguientes errores
+                                <ol>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ol>
+                            </div>
+                        @endif
                     	<h3>
                     	   <b>CREA</b> TU PERFIL <br>
                     	   <small>Esta información será utilizada para registrarte al SIRGe Web.</small>
@@ -50,116 +50,24 @@
                         <div class="tab-pane" id="areas">
                             <h4 class="info-text"> En qué área?</h4>
                             <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-3">
-                                        <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="16">
-                                            <div class="icon">
-                                                <i class="fa fa-briefcase"></i>
-                                            </div>
-                                            <h6>Coordinación</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="5">
-                                            <div class="icon">
-                                                <i class="fa fa-gavel"></i>
-                                            </div>
-                                            <h6>Legal</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="17">
-                                            <div class="icon">
-                                                <i class="fa fa-bullhorn"></i>
-                                            </div>
-                                            <h6>Comunicación</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="2">
-                                            <div class="icon">
-                                                <i class="fa fa-puzzle-piece"></i>
-                                            </div>
-                                            <h6>Planificación estratégica</h6>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label>Área</label><br>
+                                    <select name="area" class="form-control">
+                                        <option value="16">Coordinación</option>
+                                        <option value="5">Legal</option>
+                                        <option value="17">Comunicación</option>
+                                        <option value="2">Planificación estratégica</option>
+                                        <option value="19">Supervisión</option>
+                                        <option value="3">Cobertura prestacional</option>
+                                        <option value="20">Asistencia técnica y capacitación</option>
+                                        <option value="4">Cápitas</option>
+                                        <option value="18">Administración</option>
+                                        <option value="6">Planes especiales</option>
+                                        <option value="1">Sistemas informáticos</option>
+                                        <option value="21">Externo</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-3">
-                                        <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="19">
-                                            <div class="icon">
-                                                <i class="fa fa-search"></i>
-                                            </div>
-                                            <h6>Supervisión</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="3">
-                                            <div class="icon">
-                                                <i class="fa fa-stethoscope"></i>
-                                            </div>
-                                            <h6>Cobertura prestacional</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="20">
-                                            <div class="icon">
-                                                <i class="fa fa-university"></i>
-                                            </div>
-                                            <h6>Asistencia técnica</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="4">
-                                            <div class="icon">
-                                                <i class="fa fa-inbox"></i>
-                                            </div>
-                                            <h6>Cápitas</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-4">
-                                        <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="18">
-                                            <div class="icon">
-                                                <i class="fa fa-building-o"></i>
-                                            </div>
-                                            <h6>Administración</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="6">
-                                            <div class="icon">
-                                                <i class="fa fa-heartbeat"></i>
-                                            </div>
-                                            <h6>Planes especiales</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="area" value="1">
-                                            <div class="icon">
-                                                <i class="fa fa-laptop"></i>
-                                            </div>
-                                            <h6>Sistemas informáticos</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>    
                         </div>
                         <div class="tab-pane" id="password">
                             <div class="row">
@@ -210,7 +118,7 @@
                                 <div class="col-sm-10 col-sm-offset-1">
                                     <div class="col-sm-4">
                                         <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="entidad" value="1">
+                                            <input type="radio" name="sede" value="1">
                                             <div class="icon">
                                                 <i class="fa fa-building-o"></i>
                                             </div>
@@ -219,7 +127,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="choice" data-toggle="wizard-radio">
-                                            <input type="radio" name="entidad" value="2">
+                                            <input type="radio" name="sede" value="2">
                                             <div class="icon">
                                                 <i class="fa fa-university"></i>
                                             </div>
@@ -228,7 +136,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="choice"  data-toggle="wizard-radio">
-                                            <input type="radio" name="entidad" value="3">
+                                            <input type="radio" name="sede" value="3">
                                             <div class="icon">
                                                 <i class="fa fa-hospital-o"></i>
                                             </div>

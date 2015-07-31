@@ -31,7 +31,7 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
 	 *
 	 * @var bool
 	 */
-	public $timestamps = false;
+	public $timestamps = true;
 
 	/**
      * The attributes excluded from the model's JSON form.

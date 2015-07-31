@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Input;
+use Response;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\Usuario;
+use App\Http\Requests\SolicitudUsuarioRequest;
 
 class RegistrationController extends Controller
 {
@@ -26,19 +28,17 @@ class RegistrationController extends Controller
      * 
      * @return view
      */
-    public function register(Request $r)
+    public function register(SolicitudUsuarioRequest $r)
     {
-        $this->validate($r , [
-            
-        ]);
-        /*
     	$user = new Usuario;
         $user->nombre = $r->nombre . ' ' . $r->apellido;
+        $user->usuario = $r->email;
         $user->email = $r->email;
         $user->activo = 'N';
         $user->id_provincia = $r->provincia;
-        $user->id_entidad = $r->entidad;
-        $user->area = $r->area;
+        $user->id_entidad = $r->sede;
+        $user->id_area = $r->area;
+        $user->id_menu = 1;
         $user->fecha_nacimiento = $r->fecha_nacimiento;
         $user->ocupacion = $r->ocupacion;
         $user->facebook = $r->fb;
@@ -47,8 +47,11 @@ class RegistrationController extends Controller
         $user->google = $r->gp;
         $user->skype = $r->skype;
         $user->telefono = $r->telefono;
-        $user->save();
-        */
+        $user->password = bcrypt($r->pass);
+        
+        if ($user->save()){
+            return view('registration.aviso');
+        }
 
     }
 

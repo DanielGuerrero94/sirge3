@@ -25,7 +25,7 @@ Route::post('registrar' , 'RegistrationController@register');
 Route::get('checkemail' , 'RegistrationController@email');
 
 Route::get('test' , function(){
-	return view('registration.test');
+	return view('registration.aviso');
 });
 
 

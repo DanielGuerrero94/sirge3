@@ -7,18 +7,20 @@ $(document).ready(function(){
         rules : {
             nombre : {
                 required: true,
-                minlength: 4
+                minlength: 4,
+                maxlength: 30
             },
             apellido : {
                 required: true,
-                minlength: 4
+                minlength: 4,
+                maxlength: 30
             },
             email : {
                 required: true,
                 email: true,
                 remote: 'checkemail'
             },
-            entidad : {
+            sede : {
                 required: true
             },
             fecha_nacimiento : {
@@ -26,14 +28,16 @@ $(document).ready(function(){
             },
             ocupacion : {
                 required: true,
-                minlength: 8
+                minlength: 8,
+                maxlength: 30
             },
             provincia : {
                 required: true
             },
             pass : {
                 required: true,
-                minlength: 6
+                minlength: 6,
+                maxlength: 30
             },
             area : {
                 required : true
