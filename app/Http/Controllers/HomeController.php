@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 use Auth;
+use Mail;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\ModuloMenu;
 use App\Classes\Modulo;
+use App\Classes\Usuario;
 
 class HomeController extends Controller
 {
@@ -64,6 +66,8 @@ class HomeController extends Controller
      * Retorna vista principal
      */
     public function inicio(){
+
+        $user = Usuario::findOrFail(8);
         $data = [
             'usuario' => Auth::user()->nombre,
             'ocupacion' => 'Desarrollador PHP',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Input;
+use Mail;
 use Response;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -50,6 +51,11 @@ class RegistrationController extends Controller
         $user->password = bcrypt($r->pass);
         
         if ($user->save()){
+            Mail::send('emails.reminder', ['usuario' => $user], function ($m) use ($user) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to('gustavo.hekel@gmail.com', $user->nombre);
+                $m->subject('Solicitud de usuario!');
+            });
             return view('registration.aviso');
         }
 
