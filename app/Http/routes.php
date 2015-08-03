@@ -40,6 +40,7 @@ Route::get('inicio' , 'HomeController@inicio');
  * DASHBOARD
  */
 Route::get('dashboard' , 'HomeController@dashboard');
+Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
 	
 /**
  * PADRONES
@@ -70,7 +71,7 @@ Route::post('mensajes' , 'ContactosController@nuevoMensaje');
  * INBOX
  */
 Route::get('inbox' , 'InboxController@index');
-
+Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
 /**
  * ADMIN
  */

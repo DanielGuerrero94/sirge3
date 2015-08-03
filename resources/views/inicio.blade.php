@@ -83,13 +83,38 @@ $(document).ready(function(){
         $('.content-wrapper').html(data);
     });
 
-    $('.sidebar-menu a[href!="#"]').click(function(event){
+    $.get('nuevos-mensajes', function(data){
+        var m = data;
+        if (m > 0) {
+            $('.new-messages').html(m);
+            $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
+        } else {
+            $('.new-messages-text').html('Usted no tiene mensajes nuevos');
+        }
+    });
+    
+
+    $('.sidebar-menu a[href!="#"] , .ajax-link').click(function(event){
         event.preventDefault();
         var modulo = $(this).attr('href');
         $.get(modulo , function (data){
             $('.content-wrapper').html(data);
         });
     });
+
+    function reloadNewMessages(){
+        setInterval(function(){
+            $.get('nuevos-mensajes', function(data){
+                var m = data;
+                if (m > 0) {
+                    $('.new-messages').html(m);
+                    $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
+                }
+            });
+        } , 10000);
+    }
+
+    reloadNewMessages();
 });
 </script>
 </body>
