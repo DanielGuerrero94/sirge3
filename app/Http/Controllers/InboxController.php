@@ -44,7 +44,8 @@ class InboxController extends Controller{
             ) a  left join 
             sistema.usuarios u on a.usuarios = u.id_usuario left join
             sistema.provincias p on u.id_provincia = p.id_provincia
-        where usuarios <> $user");
+        where usuarios <> $user
+        order by u.last_login");
 
         foreach ($usuarios as $key => $usuario){
             if ($usuario->nuevos_mensajes){
