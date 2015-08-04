@@ -109,6 +109,9 @@ $(document).ready(function(){
                 if (m > 0) {
                     $('.new-messages').html(m);
                     $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
+                } else {
+                    $('.new-messages').html('');
+                    $('.new-messages-text').html('Usted no tiene mensajes nuevos');
                 }
             });
         } , 10000);

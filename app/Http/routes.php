@@ -11,22 +11,23 @@
 |
  */
 
-//Main route ...
+// Main route ...
 Route::get('/' , 'HomeController@index');
 
-//Authentication routes ...
+// Authentication routes ...
 Route::get('login' , 'Auth\AuthController@getLogin');
 Route::post('login' , 'AuthController@authenticate');
 Route::get('logout' , 'Auth\AuthController@getLogout');
 
-//Registration routes ...
+// Registration routes ...
 Route::get('registrar' , 'RegistrationController@index');
 Route::post('registrar' , 'RegistrationController@register');
 Route::get('checkemail' , 'RegistrationController@email');
 
-Route::get('test' , function(){
-	return view('registration.aviso');
-});
+// Password recovery routes ...
+Route::get('password' , 'PasswordController@index');
+Route::post('password' , 'PasswordController@recover');
+Route::get('checkemail-exists' , 'PasswordController@email');
 
 
 //Inicio route ...
@@ -75,7 +76,7 @@ Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
 /**
  * ADMIN
  */
-Route::get('usuarios' , 'UsuariosController@index');
-Route::get('areas' , 'AreasController@areas');
-Route::get('menues' , 'MenuesController@menues');
-Route::get('modulos' , 'ModulosController@modulos');
+Route::get('usuarios' , 'UserController@index');
+Route::get('areas' , 'AreasController@index');
+Route::get('menues' , 'MenuesController@index');
+Route::get('modulos' , 'ModulosController@index');

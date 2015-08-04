@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Input;
 use Mail;
-use Response;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\Usuario;
@@ -61,7 +59,7 @@ class RegistrationController extends Controller
     }
 
     /**
-     * Método para el plugin jQuery Validator que busca si existe un email
+     * Método para el plugin jQuery Validator que busca si no existe un email
      * @param request QueryString
      *
      * @return json

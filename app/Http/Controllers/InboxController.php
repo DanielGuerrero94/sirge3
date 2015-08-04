@@ -31,7 +31,7 @@ class InboxController extends Controller{
     	$usuarios = DB::select("
 		select 
             case when
-                (select count (*) from chat.mensajes where id_conversacion = a.id and leido = 'N') > 0 then 1 else 0 end as nuevos_mensajes ,
+                (select count (*) from chat.mensajes where id_conversacion = a.id and leido = 'N' and id_usuario <> 8) > 0 then 1 else 0 end as nuevos_mensajes ,
                 u.* , 
                 p.descripcion
         from (
@@ -69,26 +69,28 @@ class InboxController extends Controller{
     	$user = Auth::user()->id_usuario;
     	$mensajes = DB::select("
     		select count (*) as nuevos_mensajes
-    		from (
-				select
-					count (*)
-				from
-					chat.conversaciones c inner join
-					chat.mensajes m on c.id = m.id_conversacion
-				where
-					c.usuarios @> '{{$user}}'
+            from (
+                select
+                    count (*)
+                from
+                    chat.conversaciones c inner join
+                    chat.mensajes m on c.id = m.id_conversacion
+                where
+                    c.usuarios @> '{{$user}}'
+                    and m.id_usuario <> $user
                     and leido = 'N'
-				group by c.id ) a ");
+                group by c.id ) a");
     	return $mensajes[0]->nuevos_mensajes;
     }
 
     /**
      * Actualizo todos los mensajes como leídos cuando se abre la conversación
      *
-     * @return bool
+     * @return null
      */
     public function updateMensajes($id){
-        $mensajes = Mensaje::where('id_conversacion' , '=' , $id)->update(['leido' => 'S']);
+        $user = Auth::user()->id_usuario;
+        $mensajes = Mensaje::where('id_conversacion' , '=' , $id)->where('id_usuario' , '<>' , $user)->update(['leido' => 'S']);
     }
 
     /**
