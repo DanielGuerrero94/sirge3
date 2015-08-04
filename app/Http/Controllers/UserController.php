@@ -23,8 +23,20 @@ class UserController extends Controller
      *
      * @return view
      */
-    public function index(){
+    public function index(Request $r){
     	$usuarios = Usuario::with('menu' , 'area' , 'provincia' , 'conexiones')->paginate(2);;
-    	return view('admin.usuarios' , ['usuarios' => $usuarios]);
+    	$usuarios->setPath('usuarios');
+    	//echo '<pre>',print_r($r->query()),'</pre>';
+    	$data = [
+    		'page_title' => 'ABM Usuarios',
+    		'usuarios' => $usuarios
+    	];
+    	
+    	if (sizeof($r->query())){
+    		return view('admin.usuarios-table' , $data);
+    	} else {
+    		return view('admin.usuarios' , $data);
+    	}
+    	
     }
 }
