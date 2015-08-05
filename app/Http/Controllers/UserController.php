@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\Usuario;
+use App\Classes\Provincia;
+use App\Classes\Entidad;
 
 class UserController extends Controller
 {
@@ -26,7 +28,6 @@ class UserController extends Controller
     public function index(Request $r){
     	$usuarios = Usuario::with('menu' , 'area' , 'provincia' , 'conexiones')->paginate(15);;
     	$usuarios->setPath('usuarios');
-    	//echo '<pre>',print_r($r->query()),'</pre>';
     	$data = [
     		'page_title' => 'ABM Usuarios',
     		'usuarios' => $usuarios
@@ -37,6 +38,24 @@ class UserController extends Controller
     	} else {
     		return view('admin.usuarios' , $data);
     	}
-    	
+    }
+
+    /**
+     * Devuelve la vista para editar un usuario
+     * @param int Id del usuario
+     *
+     * @return void
+     */
+    public function edit($id){
+        $user = Usuario::find($id);
+        $provincias = Provincia::all();
+        $entidades = Entidad::all();
+
+        $data = [
+            'usuario' => $user,
+            'provincias' => $provincias,
+            'entidades' => $entidades
+        ];
+        return view ('admin.usuarios-edit' , $data);
     }
 }

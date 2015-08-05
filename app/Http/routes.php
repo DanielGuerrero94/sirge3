@@ -77,6 +77,7 @@ Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
  * ADMIN
  */
 Route::get('usuarios' , 'UserController@index');
+Route::get('edit-usuario/{id}' , 'UserController@edit');
 Route::get('areas' , 'AreasController@index');
 Route::get('menues' , 'MenuesController@index');
 Route::get('modulos' , 'ModulosController@index');

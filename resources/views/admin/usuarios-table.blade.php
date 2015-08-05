@@ -11,8 +11,10 @@
                       <tr>
                         <th>Nombre</th>
                         <th>Email</th>
-                        <th>Usuario</th>
-                        <th>Menú</th>
+                        <th>Provincia</th>
+                        <th>Area</th>
+                        <th>Permisos</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -20,8 +22,10 @@
                         <tr>
                             <td>{{ $usuario->nombre }}</td> 
                             <td>{{ $usuario->email }}</td>
-                            <td>{{ $usuario->usuario }}</td>
+                            <td>{{ $usuario->provincia->descripcion }}</td>
+                            <td>{{ $usuario->area->nombre }}</td>
                             <td>{{ $usuario->menu->descripcion }}</td>
+                            <td><button id-usuario="{{ $usuario->id_usuario }}" class="edit-user btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button></td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -29,6 +33,15 @@
                 {!! $usuarios->render() !!}        
             </div>
         </div>
-        
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.edit-user').click(function(){
+            var id = $(this).attr('id-usuario');
+            $.get('edit-usuario/' + id, function(data){
+                $('#usuarios-container').html(data);
+            });
+        });
+    });
+</script>
