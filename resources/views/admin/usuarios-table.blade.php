@@ -6,7 +6,7 @@
                 <p>Se muestran todos los usuarios registrados al sistema:</p>
             </div>
             <div class="box-body">
-                <table class="table table table-striped">
+                <table class="table table table-hover">
                     <thead>
                       <tr>
                         <th>Nombre</th>
@@ -19,7 +19,11 @@
                     </thead>
                     <tbody>
                     @foreach ($usuarios as $usuario)
-                        <tr>
+                        @if ($usuario->activo == 'N')
+                            <tr class="danger">
+                        @else
+                            <tr>
+                        @endif
                             <td>{{ $usuario->nombre }}</td> 
                             <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->provincia->descripcion }}</td>
