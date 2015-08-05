@@ -70,7 +70,7 @@ class UserController extends Controller
      * @param int ID del usuario
      * @param request Datos
      *
-     * @return void
+     * @return string
      */
     public function postEdit($id , Request $r){
         $usr = Usuario::find($id);
@@ -84,4 +84,19 @@ class UserController extends Controller
             return 'Se ha modificado el usuario ' . $usr->nombre;
         }
     }
+
+    /**
+     * Acualiza el campo activo a "N" de un usuario por su ID
+     * @param int ID del usuario
+     *
+     * @return string
+     */
+    public function postBaja($id){
+        $u = Usuario::find($id);
+        $u->activo = 'N';
+        if ($u->save()){
+            return 'Se ha bloqueado el acceso al usuario ' . $u->nombre;
+        }
+    }
 }
+

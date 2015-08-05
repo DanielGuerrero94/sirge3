@@ -74,7 +74,14 @@
 			});
 		});
 
-		$('.block').click(function(){});
+		$('.block').click(function(){
+			var id = $(this).attr('id-usuario');
+			$.post('baja-usuario/' + id , $('#form-edit-user').serialize() , function(data){
+				//console.log(data);
+				$('#modal-text').html(data);
+				$('.modal').modal();
+			});
+		});
 
 		$('.save').click(function(){
 			var id = $(this).attr('id-usuario');
@@ -82,7 +89,7 @@
 				//console.log(data);
 				$('#modal-text').html(data);
 				$('.modal').modal();
-			})
+			});
 		});
 
 	});
