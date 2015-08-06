@@ -28,7 +28,7 @@ class UserController extends Controller
      * @return view
      */
     public function index(Request $r){
-    	$usuarios = Usuario::with('menu' , 'area' , 'provincia' , 'conexiones')->paginate(3);;
+    	$usuarios = Usuario::with('menu' , 'area' , 'provincia' , 'conexiones')->orderBy('nombre')->paginate(3);;
     	$usuarios->setPath('usuarios');
     	$data = [
     		'page_title' => 'ABM Usuarios',
