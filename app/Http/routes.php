@@ -80,6 +80,7 @@ Route::get('usuarios' , 'UserController@index');
 Route::get('edit-usuario/{id}' , 'UserController@getEdit');
 Route::post('edit-usuario/{id}' , 'UserController@postEdit');
 Route::post('baja-usuario/{id}' , 'UserController@postBaja');
+Route::post('unblock-usuario/{id}' , 'UserController@postUnblock');
 Route::get('areas' , 'AreasController@index');
 Route::get('menues' , 'MenuesController@index');
 Route::get('modulos' , 'ModulosController@index');

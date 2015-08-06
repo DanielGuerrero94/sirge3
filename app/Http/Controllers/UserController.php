@@ -98,5 +98,19 @@ class UserController extends Controller
             return 'Se ha bloqueado el acceso al usuario ' . $u->nombre;
         }
     }
+
+    /**
+     * Acualiza el campo activo a "S" de un usuario por su ID
+     * @param int ID del usuario
+     *
+     * @return string
+     */
+    public function postUnblock($id){
+        $u = Usuario::find($id);
+        $u->activo = 'S';
+        if ($u->save()){
+            return 'Se desbloqueado el acceso al usuario ' . $u->nombre;
+        }
+    }
 }
 

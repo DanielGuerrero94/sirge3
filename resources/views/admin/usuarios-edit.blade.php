@@ -41,7 +41,11 @@
 				<div class="box-footer">
 					<div class="btn-group " role="group">
 					 	<button type="button" class="back btn btn-info">Atrás</button>
+					 	@if ($usuario->activo == 'S')
 						<button id-usuario="{{ $usuario->id_usuario }}" type="button" class="block btn btn-danger">Bloquear</button>
+						@else
+						<button id-usuario="{{ $usuario->id_usuario }}" type="button" class="unblock btn btn-success">Desbloquear</button>
+						@endif
 						<button id-usuario="{{ $usuario->id_usuario }}" type="button" class="save btn btn-info">Guardar</button>
 					</div>
 				</div>
@@ -77,7 +81,6 @@
 		$('.block').click(function(){
 			var id = $(this).attr('id-usuario');
 			$.post('baja-usuario/' + id , $('#form-edit-user').serialize() , function(data){
-				//console.log(data);
 				$('#modal-text').html(data);
 				$('.modal').modal();
 			});
@@ -86,11 +89,18 @@
 		$('.save').click(function(){
 			var id = $(this).attr('id-usuario');
 			$.post('edit-usuario/' + id , $('#form-edit-user').serialize() , function(data){
-				//console.log(data);
 				$('#modal-text').html(data);
 				$('.modal').modal();
 			});
 		});
+
+		$('.unblock').click(function(){
+			var id = $(this).attr('id-usuario');
+			$.post('unblock-usuario/' + id , $('#form-edit-user').serialize() , function(data){
+				$('#modal-text').html(data);
+				$('.modal').modal();
+			});
+		})
 
 	});
 </script>
