@@ -82,8 +82,16 @@ Route::get('edit-usuario/{id}' , 'UserController@getEdit');
 Route::post('edit-usuario/{id}' , 'UserController@postEdit');
 Route::post('baja-usuario/{id}' , 'UserController@postBaja');
 Route::post('unblock-usuario/{id}' , 'UserController@postUnblock');
+
 Route::get('areas' , 'AreasController@index');
+Route::get('edit-area/{id}' , 'AreasController@getEdit');
+Route::post('edit-area/{id}' , 'AreasController@postEdit');
+Route::get('new-area' , 'AreasController@getNew');
+Route::post('new-area' , 'AreasController@postNew');
+
 Route::get('menues' , 'MenuesController@index');
+Route::get('new-menu' , 'MenuesController@getNew');
+
 Route::get('modulos' , 'ModulosController@index');
 
 /********************************************************************************

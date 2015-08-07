@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="box box-info">
             <div class="box-header">
-                <h2>Usuarios</h2>
+                <h2 class="box-title">Usuarios</h2>
                 <p>Se muestran todos los usuarios registrados al sistema:</p>
             </div>
             <div class="box-body">

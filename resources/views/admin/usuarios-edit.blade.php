@@ -2,7 +2,7 @@
 	<div class="col-md-10 col-md-offset-1">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2>{{ $usuario->nombre }}</h2>
+				<h2 class="box-title">{{ $usuario->nombre }}</h2>
 			</div>
 			<div class="box-body">
 				<form id="form-edit-user">
