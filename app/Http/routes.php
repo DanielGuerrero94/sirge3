@@ -33,9 +33,9 @@ Route::get('checkemail-exists' , 'PasswordController@email');
 //Inicio route ...
 Route::get('inicio' , 'HomeController@inicio');
 
-/*************
- * MENU ROUTES
- ************/
+/********************************************************************************
+ *								 MENU ROUTES 									*
+ ********************************************************************************/
 
 /**
  * DASHBOARD
@@ -73,6 +73,7 @@ Route::post('mensajes' , 'ContactosController@nuevoMensaje');
  */
 Route::get('inbox' , 'InboxController@index');
 Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
+
 /**
  * ADMIN
  */
@@ -84,3 +85,9 @@ Route::post('unblock-usuario/{id}' , 'UserController@postUnblock');
 Route::get('areas' , 'AreasController@index');
 Route::get('menues' , 'MenuesController@index');
 Route::get('modulos' , 'ModulosController@index');
+
+/********************************************************************************
+ *								 	WS ROUTES 									*
+ ********************************************************************************/
+Route::resource('prestaciones' , 'Ws\SIISAController' , [
+	'only' => ['index']]);
