@@ -95,11 +95,42 @@ class MenuesController extends Controller
     }
 
     /**
+     * Retorna el menu seleccionado con los índices correctos
+     * @param int ID del menu a editar
+     *
+     * @return array
+     */
+    protected function getMenu ($id){
+        $modulos = Modulo::orderBy('nivel_1')->orderBy('nivel_2')->get();
+        foreach ($modulos as $key => $modulo) {
+            //$menu[$modulo->id_modulo]['id_modulo'] = $modulo->id_modulo;
+            $menu[$modulo->id_modulo]['text'] = $modulo->descripcion;
+            $menu[$modulo->id_modulo]['id_padre'] = $modulo->id_padre;
+            if ($modulo->arbol == 'S') {
+                $menu[$modulo->id_modulo]['nodes'] = [];
+            }
+        }
+        return $menu;
+    }
+
+    /**
      * Arma el árbol con todos los módulos disponibles
      *
      * @return json
      */
     public function tree($id){
-        $modulos = Modulo::all();
+        $menu_final = [];
+        $modulos = $this->getMenu($id);
+        foreach ($modulos as $key => $modulo){
+            if ($modulo['id_padre']){
+                $index = $modulo['id_padre'];
+                array_push($modulos[$index]['nodes'] , $modulo);
+                unset($modulos[$key]);
+                //array_push($menu_final , $modulos[$index]);
+            }
+        }
+        return response()->json(array_values($modulos));
+        // echo '<pre>', print_r($test) ,'</pre>';
+        // echo '<pre>', print_r($modulos) ,'</pre>';
     }
 }
