@@ -36,9 +36,9 @@ class UserController extends Controller
     	];
 
     	if (sizeof($r->query())){
-    		return view('admin.usuarios-table' , $data);
+    		return view('admin.usuarios.table' , $data);
     	} else {
-    		return view('admin.usuarios' , $data);
+    		return view('admin.usuarios.usuarios' , $data);
     	}
     }
 
@@ -62,7 +62,7 @@ class UserController extends Controller
             'areas' => $areas,
             'menues' => $menues
         ];
-        return view ('admin.usuarios-edit' , $data);
+        return view ('admin.usuarios.edit' , $data);
     }
 
     /**

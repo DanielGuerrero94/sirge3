@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Classes\Menu;
+use App\Classes\Modulo;
 
 class MenuesController extends Controller
 {
@@ -24,7 +25,7 @@ class MenuesController extends Controller
      * Devuelve el listado de menues
      * @param Request
      * 
-     * @return void
+     * @return null
      */
     public function index(Request $r){
     	$menues = Menu::orderBy('id_menu')->paginate(15);
@@ -35,9 +36,9 @@ class MenuesController extends Controller
     	];
 
     	if (sizeof($r->query())){
-    		return view('admin.menues-table' , $data);
+    		return view('admin.menues.table' , $data);
     	} else {
-    		return view('admin.menues' , $data);
+    		return view('admin.menues.menues' , $data);
     	}
     }
 
@@ -45,14 +46,14 @@ class MenuesController extends Controller
      * Devuelve la vista para editar un menú
      * @param int ID del area
      *
-     * @return void
+     * @return null
      */
     public function getEdit($id){
         $menu = Menu::find($id);
         $data = [
-            'menu' => $area,
+            'menu' => $menu,
         ];
-        return view ('admin.menu-edit' , $data);
+        return view ('admin.menues.edit' , $data);
     }
 
     /**
@@ -63,10 +64,10 @@ class MenuesController extends Controller
      * @return string
      */
     public function postEdit($id , Request $r){
-        $area = Area::find($id);
-        $area->nombre = $r->nombre;
-        if ($area->save()){
-            return 'Se ha modificado el area a ' . $area->nombre;
+        $menu = Menu::find($id);
+        $menu->descripcion = $r->nombre;
+        if ($menu->save()){
+            return 'Se ha modificado el area a ' . $menu->descripcion;
         }
     }
 
@@ -76,7 +77,7 @@ class MenuesController extends Controller
      * @return null
      */
     public function getNew(){
-    	return view('admin.menues-new');
+    	return view('admin.menues.new');
     }
 
     /**
@@ -91,5 +92,14 @@ class MenuesController extends Controller
     	if ($menu->save()){
     		return 'Se ha dado de alta el menú ' . $menu->descripcion . ' con el ID : ' . $menu->id_menu;
     	}
+    }
+
+    /**
+     * Arma el árbol con todos los módulos disponibles
+     *
+     * @return json
+     */
+    public function tree($id){
+        $modulos = Modulo::all();
     }
 }

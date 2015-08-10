@@ -35,9 +35,9 @@ class AreasController extends Controller
     	];
 
     	if (sizeof($r->query())){
-    		return view('admin.areas-table' , $data);
+    		return view('admin.areas.table' , $data);
     	} else {
-    		return view('admin.areas' , $data);
+    		return view('admin.areas.areas' , $data);
     	}
     }
 
@@ -52,7 +52,7 @@ class AreasController extends Controller
         $data = [
             'area' => $area,
         ];
-        return view ('admin.areas-edit' , $data);
+        return view ('admin.areas.edit' , $data);
     }
 
     /**
@@ -76,7 +76,7 @@ class AreasController extends Controller
      * @return null
      */
     public function getNew(){
-    	return view('admin.areas-new');
+    	return view('admin.areas.new');
     }
 
     /**

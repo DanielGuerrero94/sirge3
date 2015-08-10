@@ -90,8 +90,9 @@ Route::get('new-area' , 'AreasController@getNew');
 Route::post('new-area' , 'AreasController@postNew');
 
 Route::get('menues' , 'MenuesController@index');
-Route::get('edit-menu/{id}' , 'MenuesConroller@getEdit');
-Route::post('edit-menu/{id}' , 'MenuesConroller@postEdit');
+Route::get('edit-menu/{id}' , 'MenuesController@getEdit');
+Route::get('tree/{id}' , 'MenuesController@tree');
+Route::post('edit-menu/{id}' , 'MenuesController@postEdit');
 Route::get('new-menu' , 'MenuesController@getNew');
 Route::post('new-menu' , 'MenuesController@postNew');
 

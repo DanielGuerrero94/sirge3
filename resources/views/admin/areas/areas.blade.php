@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
 		<div id="areas-container">
-			@include('admin.areas-table')
+			@include('admin.areas.table')
 		</div>
 	</div>
 </div>
