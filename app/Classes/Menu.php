@@ -24,7 +24,7 @@ class Menu extends Model {
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
 
 	/**
 	 * Obtener el usuario asociado al área.

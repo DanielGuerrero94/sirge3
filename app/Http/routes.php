@@ -90,7 +90,10 @@ Route::get('new-area' , 'AreasController@getNew');
 Route::post('new-area' , 'AreasController@postNew');
 
 Route::get('menues' , 'MenuesController@index');
+Route::get('edit-menu/{id}' , 'MenuesConroller@getEdit');
+Route::post('edit-menu/{id}' , 'MenuesConroller@postEdit');
 Route::get('new-menu' , 'MenuesController@getNew');
+Route::post('new-menu' , 'MenuesController@postNew');
 
 Route::get('modulos' , 'ModulosController@index');
 

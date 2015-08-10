@@ -42,21 +42,21 @@ class MenuesController extends Controller
     }
 
     /**
-     * Devuelve la vista para editar un area
+     * Devuelve la vista para editar un menú
      * @param int ID del area
      *
      * @return void
      */
     public function getEdit($id){
-        $area = Area::find($id);
+        $menu = Menu::find($id);
         $data = [
-            'area' => $area,
+            'menu' => $area,
         ];
-        return view ('admin.areas-edit' , $data);
+        return view ('admin.menu-edit' , $data);
     }
 
     /**
-     * Edita el area con los datos del formulario recibido
+     * Edita el menú con los datos del formulario recibido
      * @param int ID del area
      * @param request Datos
      *
@@ -80,16 +80,16 @@ class MenuesController extends Controller
     }
 
     /**
-     * Dar de alta un área
+     * Dar de alta un menú
      * @param Request r
      *
      * @return string
      */
     public function postNew(Request $r){
-    	$area = new Area;
-    	$area->nombre = $r->nombre;
-    	if ($area->save()){
-    		return 'Se ha dado de alta el área ' . $area->nombre . ' con el ID : ' . $area->id_area;
+    	$menu = new Menu;
+    	$menu->descripcion = $r->nombre;
+    	if ($menu->save()){
+    		return 'Se ha dado de alta el menú ' . $menu->descripcion . ' con el ID : ' . $menu->id_menu;
     	}
     }
 }

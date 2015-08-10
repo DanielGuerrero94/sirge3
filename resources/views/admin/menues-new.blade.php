@@ -52,8 +52,10 @@
 			$.post('new-menu' , $('#form-new-menu').serialize() , function(data){
 				$('#modal-text').html(data);
 				$('.modal').modal();
-				$.get('areas' , function(data){
-					$('.content-wrapper').html(data);
+				$('.modal').on('hidden.bs.modal' , function(e){
+					$.get('menues' , function(data){
+						$('.content-wrapper').html(data);
+					});	
 				});
 			});
 		});
