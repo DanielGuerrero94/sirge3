@@ -22,7 +22,7 @@
 				<div class="box-footer">
 					<div class="btn-group" role="group">
 					 	<button type="button" class="back btn btn-info">Atrás</button>
-						<button id-menu="{{ $menu->id_area }}" type="button" class="save btn btn-info">Guardar</button>
+						<button id-menu="{{ $menu->id_menu }}" type="button" class="save btn btn-info">Guardar</button>
 					</div>
 				</div>
 			</form>
@@ -65,7 +65,7 @@
 		});
 
 		function getTree(){
-			$.get('tree/1' , function(data){
+			$.get('tree/{{ $menu->id_menu }}' , function(data){
 				$('#modulos').treeview({
 					data: data,
 					showCheckbox: true

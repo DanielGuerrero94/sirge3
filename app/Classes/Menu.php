@@ -36,7 +36,7 @@ class Menu extends Model {
 	/**
 	 * Obtener todos los módulos que pertenecen al menú
 	 */
-	public function modulos() {
+	public function relaciones() {
 		return $this->hasMany('App\Classes\ModuloMenu', 'id_menu', 'id_menu');
 	}
 }

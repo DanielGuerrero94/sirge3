@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Classes\Menu;
 use App\Classes\Modulo;
+use App\Classes\ModuloMenu;
 
 class MenuesController extends Controller
 {
@@ -101,11 +102,18 @@ class MenuesController extends Controller
      * @return array
      */
     protected function getMenu ($id){
+
+        $menu_usuario = Menu::where('id_menu' , '=' , 2)->with('relaciones.modulos')->get();
         $modulos = Modulo::orderBy('nivel_1')->orderBy('nivel_2')->get();
+        $menu = [];
         foreach ($modulos as $key => $modulo) {
-            //$menu[$modulo->id_modulo]['id_modulo'] = $modulo->id_modulo;
+            $menu[$modulo->id_modulo]['href'] = $modulo->id_modulo;
             $menu[$modulo->id_modulo]['text'] = $modulo->descripcion;
             $menu[$modulo->id_modulo]['id_padre'] = $modulo->id_padre;
+            $menu[$modulo->id_modulo]['state'] = [
+                'checked' => 'true'
+            ];
+
             if ($modulo->arbol == 'S') {
                 $menu[$modulo->id_modulo]['nodes'] = [];
             }
@@ -119,6 +127,8 @@ class MenuesController extends Controller
      * @return json
      */
     public function tree($id){
+
+
         $menu_final = [];
         $modulos = $this->getMenu($id);
         foreach ($modulos as $key => $modulo){
@@ -126,11 +136,9 @@ class MenuesController extends Controller
                 $index = $modulo['id_padre'];
                 array_push($modulos[$index]['nodes'] , $modulo);
                 unset($modulos[$key]);
-                //array_push($menu_final , $modulos[$index]);
             }
         }
         return response()->json(array_values($modulos));
-        // echo '<pre>', print_r($test) ,'</pre>';
-        // echo '<pre>', print_r($modulos) ,'</pre>';
+        //echo '<pre>',print_r(json_encode(array_values($modulos),JSON_PRETTY_PRINT)),'</pre>';
     }
 }

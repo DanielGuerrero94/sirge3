@@ -26,10 +26,10 @@ class ModuloMenu extends Model {
 	 */
 	public $timestamps = true;
         
-        /**
-         * Obtener el detalle de los módulos
-         */
-        public function modulos(){
-            return $this->belongsToMany('App\Classes\Modulo', 'sistema.modulos' , 'id_modulo', 'id_modulo');
-        }
+    /**
+     * Obtener el detalle de los módulos
+     */
+    public function modulos(){
+        return $this->hasOne('App\Classes\Modulo', 'id_modulo', 'id_modulo');
+    }
 }

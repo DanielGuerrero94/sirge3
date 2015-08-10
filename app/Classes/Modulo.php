@@ -25,4 +25,10 @@ class Modulo extends Model {
 	 * @var bool
 	 */
 	public $timestamps = true;
+
+	/**
+	 *
+	 *
+	 */
+	
 }
