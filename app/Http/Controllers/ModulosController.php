@@ -62,12 +62,14 @@ class ModulosController extends Controller
         $m->arbol = $r->arbol;
         $m->nivel_1 = $r->nivel_1;
         $m->nivel_2 = $r->nivel_2;
-        $m->descripcion = strtoupper($r->nombre);
+        $m->descripcion = mb_strtoupper($r->nombre);
         $m->modulo = strtolower($r->ruta);
         $m->icono = strtolower($r->icono);
 
         if ($m->save()){
             return 'Se ha dado de alta el módulo ' . $m->descripcion;
+        } else {
+            return 'Ha ocurrido un error, por favor revise el formulario';
         }
     }
 
@@ -92,9 +94,19 @@ class ModulosController extends Controller
      */
     public function postEdit($id , Request $r){
         $m = Modulo::find($id);
-        $m->descripcion = strtoupper($r->nombre);
+        $m->id_padre = $r->id_padre;
+        $m->arbol = $r->arbol;
         $m->nivel_1 = $r->nivel_1;
         $m->nivel_2 = $r->nivel_2;
+        $m->descripcion = mb_strtoupper($r->nombre);
+        $m->modulo = strtolower($r->ruta);
+        $m->icono = strtolower($r->icono);
+
+        if ($m->save()){
+            return 'Se ha modificado módulo ' . $m->descripcion;
+        } else {
+            return 'Ha ocurrido un error, por favor revise el formulario';
+        }
     }
 
 }
