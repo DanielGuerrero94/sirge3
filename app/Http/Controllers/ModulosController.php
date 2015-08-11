@@ -40,4 +40,24 @@ class ModulosController extends Controller
     		return view('admin.modulos.modulos' , $data);
     	}
     }
+
+    /**
+     * Devuelve la vista para el ingreso de un nuevo módulo
+     *
+     * @return null
+     */
+    public function getNew(){
+        return view('admin.modulos.new');
+    }
+
+    /**
+     * Da de alta un nuevo módulo
+     * @param Request 
+     *
+     * @return string
+     */
+    public function postNew(Request $r){
+        
+    }
+
 }
