@@ -51,7 +51,7 @@
 	$(document).ready(function(){
 
 		$('.back').click(function(){
-			$.get('areas' , function(data){
+			$.get('menues' , function(data){
 				$('.content-wrapper').html(data);
 			});
 		});

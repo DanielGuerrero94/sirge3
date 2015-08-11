@@ -104,12 +104,13 @@ class MenuesController extends Controller
     protected function getMenu ($id){
 
         $menu_usuario = Menu::where('id_menu' , '=' , $id)->with('relaciones')->get();
-        
+        $modulos_activos = [];
         foreach ($menu_usuario as $key => $data) {
             foreach ($data->relaciones as $key => $relacion) {
                 $modulos_activos[] = $relacion->id_modulo;
             }
-        }
+        }    
+        
 
         $modulos = Modulo::orderBy('nivel_1')->orderBy('nivel_2')->get();
         $menu = [];

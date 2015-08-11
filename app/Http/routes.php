@@ -84,19 +84,19 @@ Route::post('baja-usuario/{id}' , 'UserController@postBaja');
 Route::post('unblock-usuario/{id}' , 'UserController@postUnblock');
 
 Route::get('areas' , 'AreasController@index');
-Route::get('edit-area/{id}' , 'AreasController@getEdit');
-Route::post('edit-area/{id}' , 'AreasController@postEdit');
 Route::get('new-area' , 'AreasController@getNew');
 Route::post('new-area' , 'AreasController@postNew');
+Route::get('edit-area/{id}' , 'AreasController@getEdit');
+Route::post('edit-area/{id}' , 'AreasController@postEdit');
 
 Route::get('menues' , 'MenuesController@index');
+Route::get('new-menu' , 'MenuesController@getNew');
+Route::post('new-menu' , 'MenuesController@postNew');
 Route::get('edit-menu/{id}' , 'MenuesController@getEdit');
+Route::post('edit-menu/{id}' , 'MenuesController@postEdit');
 Route::get('tree/{id}' , 'MenuesController@getTree');
 Route::post('check-tree/{modulo}/{menu}' , 'MenuesController@check');
 Route::post('uncheck-tree/{modulo}/{menu}' , 'MenuesController@uncheck');
-Route::post('edit-menu/{id}' , 'MenuesController@postEdit');
-Route::get('new-menu' , 'MenuesController@getNew');
-Route::post('new-menu' , 'MenuesController@postNew');
 
 Route::get('modulos' , 'ModulosController@index');
 
