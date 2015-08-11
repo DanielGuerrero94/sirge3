@@ -57,7 +57,18 @@ class ModulosController extends Controller
      * @return string
      */
     public function postNew(Request $r){
-        
+        $m = new Modulo;
+        $m->id_padre = $r->id_padre;
+        $m->arbol = $r->arbol;
+        $m->nivel_1 = $r->nivel_1;
+        $m->nivel_2 = $r->nivel_2;
+        $m->descripcion = strtoupper($r->nombre);
+        $m->modulo = strtolower($r->ruta);
+        $m->icono = strtolower($r->icono);
+
+        if ($m->save()){
+            return 'Se ha dado de alta el módulo ' . $m->descripcion;
+        }
     }
 
 }

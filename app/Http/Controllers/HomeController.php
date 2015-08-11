@@ -33,7 +33,8 @@ class HomeController extends Controller
      */
     protected function getMenu($id_menu){
         $menu = array();
-        $relaciones = ModuloMenu::where('id_menu' , $id_menu)->get();
+        $relaciones = ModuloMenu::join('sistema.modulos' , 'sistema.modulos_menu.id_modulo' , '=' , 'sistema.modulos.id_modulo')->orderBy('nivel_1')->orderBy('nivel_2')->get();
+
         foreach ($relaciones as $key => $relacion){
             $modulo = Modulo::find($relacion->id_modulo);
             $menu[$modulo->id_modulo]['descripcion'] = $modulo->descripcion;
@@ -67,7 +68,6 @@ class HomeController extends Controller
      */
     public function inicio(){
 
-        $user = Usuario::findOrFail(8);
         $data = [
             'usuario' => Auth::user()->nombre,
             'ocupacion' => 'Desarrollador PHP',
