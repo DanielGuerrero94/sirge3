@@ -5,7 +5,7 @@
 				<h2 class="box-title">Nuevo Módulo</h2>
 			</div>
 			<div class="box-body">
-				<form class="formulario" id="form-new-modulo">
+				<form id="form-new-modulo">
 					{!! csrf_field() !!}
 					<!-- NOMBRE -->
 					<div class="form-group">
@@ -54,8 +54,8 @@
 						</div>						
 					</div>
 					<div class="box-footer">
-						<div class="btn-group " role="group">
-						 	<button class="back btn btn-info">Atrás</button>
+						<div class="btn-group" role="group">
+						 	<button type="button" class="back btn btn-info">Atrás</button>
 							<button class="save btn btn-info">Guardar</button>
 						</div>
 					</div>
@@ -85,7 +85,6 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-
 		$('.back').click(function(){
 			$.get('modulos' , function(data){
 				$('.content-wrapper').html(data);
@@ -93,7 +92,7 @@
 		});
 
 		$('.save').click(function(){
-			$('form').validate({
+			$('#form-new-modulo').validate({
 				rules : {
 					nombre : {
 						required : true

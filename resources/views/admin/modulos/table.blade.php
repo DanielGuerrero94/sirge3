@@ -46,10 +46,11 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        
         $('.edit-modulo').click(function(){
             var id = $(this).attr('id-modulo');
             $.get('edit-modulo/' + id, function(data){
-                $('#menues-container').html(data);
+                $('#modulos-container').html(data);
             });
         });
 
