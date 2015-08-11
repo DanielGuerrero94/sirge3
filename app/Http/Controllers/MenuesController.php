@@ -103,17 +103,25 @@ class MenuesController extends Controller
      */
     protected function getMenu ($id){
 
-        $menu_usuario = Menu::where('id_menu' , '=' , 2)->with('relaciones.modulos')->get();
+        $menu_usuario = Menu::where('id_menu' , '=' , $id)->with('relaciones')->get();
+        
+        foreach ($menu_usuario as $key => $data) {
+            foreach ($data->relaciones as $key => $relacion) {
+                $modulos_activos[] = $relacion->id_modulo;
+            }
+        }
+
         $modulos = Modulo::orderBy('nivel_1')->orderBy('nivel_2')->get();
         $menu = [];
         foreach ($modulos as $key => $modulo) {
             $menu[$modulo->id_modulo]['href'] = $modulo->id_modulo;
             $menu[$modulo->id_modulo]['text'] = $modulo->descripcion;
             $menu[$modulo->id_modulo]['id_padre'] = $modulo->id_padre;
-            $menu[$modulo->id_modulo]['state'] = [
-                'checked' => 'true'
-            ];
-
+            if(in_array($modulo->id_modulo , $modulos_activos)) {
+                $menu[$modulo->id_modulo]['state'] = [
+                    'checked' => 'true'
+                ];    
+            }
             if ($modulo->arbol == 'S') {
                 $menu[$modulo->id_modulo]['nodes'] = [];
             }
@@ -126,10 +134,7 @@ class MenuesController extends Controller
      *
      * @return json
      */
-    public function tree($id){
-
-
-        $menu_final = [];
+    public function getTree($id){
         $modulos = $this->getMenu($id);
         foreach ($modulos as $key => $modulo){
             if ($modulo['id_padre']){
@@ -139,6 +144,36 @@ class MenuesController extends Controller
             }
         }
         return response()->json(array_values($modulos));
-        //echo '<pre>',print_r(json_encode(array_values($modulos),JSON_PRETTY_PRINT)),'</pre>';
+        // echo '<pre>',print_r(json_encode(array_values($modulos),JSON_PRETTY_PRINT)),'</pre>';
+    }
+
+    /**
+     * Agrega el módulo seleccionado al menu en edición
+     * @param int ID del módulo
+     * @param int ID del menú
+     *
+     * @return string
+     */
+    public function check ($modulo , $menu){
+        $mm = new ModuloMenu;
+        $mm->id_modulo = $modulo;
+        $mm->id_menu = $menu;
+        if ($mm->save()){
+            return 'Se ha agregado el módulo seleccionado';
+        }
+    }
+
+    /**
+     * Elimina el módulo del menu en edición
+     * @param int ID del módulo
+     * @param int ID del menú
+     *
+     * @return string
+     */
+    public function uncheck ($modulo , $menu){
+        $delete = ModuloMenu::where('id_modulo' , '=' , $modulo)->where('id_menu' , '=' , $menu)->delete();
+        if ($delete){
+            return 'Se ha quitado el módulo seleccionado';
+        }
     }
 }

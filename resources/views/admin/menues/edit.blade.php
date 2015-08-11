@@ -68,7 +68,19 @@
 			$.get('tree/{{ $menu->id_menu }}' , function(data){
 				$('#modulos').treeview({
 					data: data,
-					showCheckbox: true
+					showCheckbox: true,
+					onNodeChecked : function (event , node){
+						$.post('check-tree/' + node.href  + '/{{ $menu->id_menu }}' , function(data){
+							$('#modal-text').html(data);
+							$('.modal').modal();			
+						});
+					},
+					onNodeUnchecked : function(event , node){
+						$.post('uncheck-tree/' + node.href  + '/{{ $menu->id_menu }}' , function(data){
+							$('#modal-text').html(data);
+							$('.modal').modal();			
+						});	
+					}
 				});
 			});
 		}

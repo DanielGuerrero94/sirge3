@@ -8,6 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="UTF-8">
     <title>SIRGe Web</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap 3.3.2 -->
     <link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons -->
@@ -23,7 +24,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           apply the skin class to the body tag so the changes take effect.
     -->
     <link href="{{ asset("/bower_components/admin-lte/dist/css/skins/skin-red-light.min.css")}}" rel="stylesheet" type="text/css" />
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -79,6 +79,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script>
 $(document).ready(function(){
     
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $.get('dashboard', function(data){
         $('.content-wrapper').html(data);
     });
