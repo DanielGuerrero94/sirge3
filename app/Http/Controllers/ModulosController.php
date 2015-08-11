@@ -71,4 +71,30 @@ class ModulosController extends Controller
         }
     }
 
+    /**
+     * Devuelve la vista para editar un módulo
+     * @param int ID del módulo
+     *
+     * @return string
+     */
+    public function getEdit($id){
+        $m = Modulo::find($id);
+        $data = ['modulo' => $m];
+        return view('admin.modulos.edit' , $data);
+    }
+
+    /**
+     * Actualiza el módulo
+     * @param int ID del módulo
+     * @param Request
+     *
+     * @return string
+     */
+    public function postEdit($id , Request $r){
+        $m = Modulo::find($id);
+        $m->descripcion = strtoupper($r->nombre);
+        $m->nivel_1 = $r->nivel_1;
+        $m->nivel_2 = $r->nivel_2;
+    }
+
 }
