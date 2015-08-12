@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+
+use Auth;
+
 use App\Classes\Usuario;
 use App\Classes\Provincia;
 use App\Classes\Entidad;
@@ -111,6 +114,23 @@ class UserController extends Controller
         if ($u->save()){
             return 'Se desbloqueado el acceso al usuario ' . $u->nombre;
         }
+    }
+
+    /**
+     * Devuelve el perfil del usuario
+     *
+     * @return null
+     */
+    public function getProfile(){
+        $id = Auth::user()->id_usuario;
+        $user = Usuario::with(['provincia' , 'entidad' ,'area' , 'menu' , 'conexiones' => function($query){
+            $query->orderBy('fecha_login' , 'desc')->take(5);
+        }])->where('id_usuario' , $id)->get()[0];
+        $data = [
+            'page_title' => 'Perfil',
+            'usuario' => $user
+        ];
+        return view('user.profile' , $data);
     }
 }
 

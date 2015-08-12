@@ -72,6 +72,13 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
 	 * Obtener conexiones
 	 */
 	public function conexiones() {
-		return $this->hasMany('App\Classes\Login' , 'id_usuario' , 'id_usuario')->latest('fecha_login');
+		return $this->hasMany('App\Classes\Login' , 'id_usuario' , 'id_usuario');
+	}
+
+	/**
+	 * Obtener la entidad
+	 */
+	public function entidad() {
+		return $this->hasOne('App\Classes\Entidad' , 'id' , 'id_entidad');
 	}
 }
