@@ -124,7 +124,7 @@ $(document).ready(function(){
     }
 
     function newMessages(){
-        setInterval(function(){ getMessages() } , 1000);
+        setInterval(function(){ getMessages() } , 10000);
     }
 
     getMessages();

@@ -58,7 +58,15 @@
 		setInterval(function(){
 			var user_to = $('#enviar-mensaje').attr('id-usuario');
 			var user_from = {{ Auth::user()->id_usuario }};
-				$('.box-body').load('mensajes/' + user_from + '/' + user_to + ' .direct-chat-messages');	
+			// $('.box-body').load('mensajes/' + user_from + '/' + user_to + ' .direct-chat-messages');	
+			$.ajax({
+				global : false,
+				url : 'mensajes/' + user_from + '/' + user_to,
+				method : 'get',
+				success : function(data){
+					$('.direct-chat-messages').html($(data).find('.direct-chat-messages').html());
+				}
+			})
 		} , 2000);
 	}
 
