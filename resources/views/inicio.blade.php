@@ -19,6 +19,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="{{ asset("/bower_components/admin-lte/plugins/fullcalendar/fullcalendar.css") }}" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
     <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
+    <!-- Loading Modal -->
+    <link href="{{ asset("/dist/css/loading-modal.css")}}" rel="stylesheet" type="text/css" />
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
@@ -45,6 +47,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Footer -->
     @include('footer')
+
+    <div class="loading-modal"></div>
 
 </div><!-- ./wrapper -->
 
@@ -85,20 +89,14 @@ $(document).ready(function(){
         }
     });
 
+    $(document).on({
+        ajaxStart: function() { $('body').addClass("loading");    },
+        ajaxStop: function() { $('body').removeClass("loading"); }    
+    });
+
     $.get('dashboard', function(data){
         $('.content-wrapper').html(data);
     });
-
-    $.get('nuevos-mensajes', function(data){
-        var m = data;
-        if (m > 0) {
-            $('.new-messages').html(m);
-            $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
-        } else {
-            $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-        }
-    });
-    
 
     $('.sidebar-menu a[href!="#"] , .ajax-link').click(function(event){
         event.preventDefault();
@@ -108,22 +106,29 @@ $(document).ready(function(){
         });
     });
 
-    function reloadNewMessages(){
-        setInterval(function(){
-            $.get('nuevos-mensajes', function(data){
+    function getMessages(){
+        $.ajax({
+            global : false,
+            url : 'nuevos-mensajes',
+            method : 'get',
+            success : function(data){
                 var m = data;
                 if (m > 0) {
                     $('.new-messages').html(m);
                     $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
                 } else {
-                    $('.new-messages').html('');
                     $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-                }
-            });
-        } , 10000);
+                }        
+            }
+        })
     }
 
-    reloadNewMessages();
+    function newMessages(){
+        setInterval(function(){ getMessages() } , 10000);
+    }
+
+    getMessages();
+    newMessages();
 });
 </script>
 </body>

@@ -121,7 +121,8 @@ class InboxController extends Controller{
         ])->where('id' , '=' , $id_conversacion)->get();
 
         $data = [
-            'info' => $mensajes
+            'info' => $mensajes,
+            'user_to' => $id_to
         ];
         return view('inbox.mensajes' , $data);
     }
