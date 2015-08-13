@@ -141,9 +141,15 @@ class UserController extends Controller
     public function getEditProfile(){
         $id = Auth::user()->id_usuario;
         $usuario = Usuario::find($id);
+        $provincias = Provincia::all();
+        $areas = Area::all();
+        $entidades = Entidad::all();
         $data = [
             'page_title' => 'Editar perfil',
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'provincias' => $provincias,
+            'areas' => $areas,
+            'entidades' => $entidades
         ];
         return view('user.edit' , $data);
     }
