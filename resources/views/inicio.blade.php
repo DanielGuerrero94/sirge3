@@ -98,17 +98,6 @@ $(document).ready(function(){
         $('.content-wrapper').html(data);
     });
 
-    $.get('nuevos-mensajes', function(data){
-        var m = data;
-        if (m > 0) {
-            $('.new-messages').html(m);
-            $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
-        } else {
-            $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-        }
-    });
-    
-
     $('.sidebar-menu a[href!="#"] , .ajax-link').click(function(event){
         event.preventDefault();
         var modulo = $(this).attr('href');
@@ -117,22 +106,29 @@ $(document).ready(function(){
         });
     });
 
-    function reloadNewMessages(){
-        setInterval(function(){
-            $.get('nuevos-mensajes', function(data){
+    function getMessages(){
+        $.ajax({
+            global : false,
+            url : 'nuevos-mensajes',
+            method : 'get',
+            success : function(data){
                 var m = data;
                 if (m > 0) {
                     $('.new-messages').html(m);
                     $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
                 } else {
-                    $('.new-messages').html('');
                     $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-                }
-            });
-        } , 10000);
+                }        
+            }
+        })
     }
 
-    reloadNewMessages();
+    function newMessages(){
+        setInterval(function(){ getMessages() } , 1000);
+    }
+
+    getMessages();
+    newMessages();
 });
 </script>
 </body>
