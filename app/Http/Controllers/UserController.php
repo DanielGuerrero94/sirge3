@@ -132,5 +132,20 @@ class UserController extends Controller
         ];
         return view('user.profile' , $data);
     }
+
+    /**
+     * Devuelve el formulario para editar el perfil del usuario
+     *
+     * @return null
+     */
+    public function getEditProfile(){
+        $id = Auth::user()->id_usuario;
+        $usuario = Usuario::find($id);
+        $data = [
+            'page_title' => 'Editar perfil',
+            'usuario' => $usuario
+        ];
+        return view('user.edit' , $data);
+    }
 }
 

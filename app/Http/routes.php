@@ -57,7 +57,7 @@ Route::get('sss' , 'PadronController@sss');
  * USUARIO
  */
 Route::get('perfil' , 'UserController@getProfile');
-Route::get('ajustes' , 'UsuarioController@ajustes');
+Route::get('ajustes' , 'UserController@getEditProfile');
 
 /**
  * CONTACTOS
