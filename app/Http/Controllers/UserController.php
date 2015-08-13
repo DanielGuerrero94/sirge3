@@ -153,5 +153,16 @@ class UserController extends Controller
         ];
         return view('user.edit' , $data);
     }
+
+    /**
+     * Actualiza los datos del usuario
+     * @param Request Datos del formulario
+     *
+     * @return null
+     */
+    public function postEditProfile(UserEditProfileRequest $r){
+        $user = Usuario::find(Auth::user()->id_usuario);
+
+    }
 }
 

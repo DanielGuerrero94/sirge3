@@ -75,7 +75,7 @@
 				</div>
 				<div class="box-footer">
 					<div class="btn-group" role="group">
-						<button class="btn btn-info">Guardar</button>
+						<button class="save btn btn-info">Guardar</button>
 						<button class="btn btn-warning">Cambiar contraseña</button>
 					</div>
 				</div>
@@ -90,6 +90,22 @@
 <!-- Inputmask -->
 <script src="{{ asset ("/dist/js/inputmask.js") }}"></script>
 <script type="text/javascript">
-	
+	$(document).ready(function(){
+		$('.save').click(function(){
+			$('#form-edit-user').validate({
+				rules : {
+					nombre : {
+						required : true
+					},
+					email : {
+						required : true,
+						email : true,
+						remote : 'checkemail'
+					}
+				},
+				submitHandler : function(from){}
+			});
+		});
+	});
 </script>
 @endsection
