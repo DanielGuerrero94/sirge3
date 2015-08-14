@@ -42,6 +42,11 @@ $(document).ready(function(){
 	});
 
 	$('#card-profile').on('click' , '#enviar-mensaje' , function(){
+		
+		if (typeof interval != 'undefined'){
+			clearInterval(interval);
+		}
+
 		var user_to = $(this).attr('id-usuario');
 		var user_from = {{ Auth::user()->id_usuario }};
 
