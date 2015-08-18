@@ -20,13 +20,18 @@
 	$(document).ready(function(){
 
 		$('.usuario').click(function(){
+
+			if (typeof interval != 'undefined'){
+				console.log(interval);
+				clearInterval(interval);
+			}
+
 			var user_to = $(this).attr('id-usuario');
 			var user_from = {{ Auth::user()->id_usuario }};
 			
 			$.get('mensajes-inbox/' + user_from + '/' + user_to , function(data){
 				$('#box-mensajes').html(data);
-			});	
+			});
 		});
-
 	});
 </script>
