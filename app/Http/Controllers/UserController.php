@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Controllers\Controller;
 
 use Auth;
@@ -161,7 +162,11 @@ class UserController extends Controller
      * @return null
      */
     public function postEditProfile(UserEditProfileRequest $r){
-        $user = Usuario::find(Auth::user()->id_usuario);
+        $user = Usuario::where('email' , $r->email)->where('id_usuario' , '<>' , Auth::user()->id_usuario)->first();
+        if ($user->exists){
+            echo 'email en uso';
+        }
+        // echo '<pre>' ,print_r($user),'</pre>';
 
     }
 }

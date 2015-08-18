@@ -72,6 +72,52 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+                        		<div class="input-group">
+								 	<span class="input-group-addon" id="fb"><i class="fa fa-facebook"></i></span>
+								 	<input type="text" class="form-control" name="fb" placeholder="Facebook" aria-describedby="fb">
+								</div>
+                        	</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+                        		<div class="input-group">
+								 	<span class="input-group-addon" id="tw"><i class="fa fa-twitter"></i></span>
+								 	<input type="text" class="form-control" name="tw" placeholder="Twitter" aria-describedby="tw">
+								</div>
+                        	</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+                        		<div class="input-group">
+								 	<span class="input-group-addon" id="g+"><i class="fa fa-google-plus"></i></span>
+								 	<input type="text" class="form-control" name="gp" placeholder="Google +" aria-describedby="g+">
+								</div>
+                        	</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+                        		<div class="input-group">
+								 	<span class="input-group-addon" id="skype"><i class="fa fa-skype"></i></span>
+								 	<input type="text" class="form-control" name="skype" placeholder="Skype" aria-describedby="skype">
+								</div>
+                        	</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+                            		<div class="input-group">
+									 	<span class="input-group-addon" id="ln"><i class="fa fa-linkedin"></i></span>
+									 	<input type="text" class="form-control" name="ln" placeholder="LinkedIn" aria-describedby="ln">
+									</div>
+                            	</div>
+                        	</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
 				</div>
 				<div class="box-footer">
 					<div class="btn-group" role="group">

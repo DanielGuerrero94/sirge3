@@ -24,8 +24,8 @@ class SolicitudUsuarioRequest extends Request
     public function rules()
     {
         return [
-            'nombre' => 'required|min:3|max:30',
-            'apellido' => 'required|min:3|max:30',
+            'nombre' => 'required|min:3|max:60',
+            'apellido' => 'required|min:3|max:60',
             'email' => 'required|email',
             'provincia' => 'required',
             'sede' => 'required',

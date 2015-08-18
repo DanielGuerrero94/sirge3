@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use Auth;
 
 class UserEditProfileRequest extends Request
 {
@@ -13,7 +14,7 @@ class UserEditProfileRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,10 +26,9 @@ class UserEditProfileRequest extends Request
     {
         return [
             'nombre' => 'required|min:3|max:60',
-            'apellido' => 'required|min:3|max:60',
-            'email' => 'required|email|unique:sistema.usuarios,email,' . $user->id,
+            'email' => 'required|email',
             'provincia' => 'required',
-            'sede' => 'required',
+            'entidad' => 'required',
             'fecha_nacimiento' => 'required|date_format:d/m/Y',
             'ocupacion' => 'required|max:30',
             'fb' => 'url',
