@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Controllers\Controller;
 
 use Auth;
@@ -161,8 +162,57 @@ class UserController extends Controller
      * @return null
      */
     public function postEditProfile(UserEditProfileRequest $r){
-        $user = Usuario::find(Auth::user()->id_usuario);
+        $id = Auth::user()->id_usuario;
+        $email = Usuario::where('email' , $r->email)->where('id_usuario' , '<>' , $id)->get();
+        if (! count($email)){
+            
+            $user = Usuario::find($id);
+            $user->nombre = $r->nombre;
+            $user->usuario = $r->email;
+            $user->email = $r->email;
+            $user->id_provincia = $r->provincia;
+            $user->id_entidad = $r->entidad;
+            $user->id_area = $r->area;
+            $user->fecha_nacimiento = $r->fecha_nacimiento;
+            $user->ocupacion = $r->ocupacion;
+            $user->facebook = $r->fb;
+            $user->twitter = $r->tw;
+            $user->linkedin = $r->ln;
+            $user->google = $r->gp;
+            $user->skype = $r->skype;
+            $user->telefono = $r->telefono;
+            if ($user->save()){
+                return 1;
+            }
+        } else {
+            return response('MAL' , 422);
+        }
+    }
 
+    /**
+     * Devuelve la vista para cambiar la contraseña
+     *
+     * @return null
+     */
+    public function getNewPassword(){
+        return view('user.password');
+    }
+
+    /**
+     * Cambia la password desde el perfil del usuario
+     *
+     * @return string
+     */
+    public function postNewPassword(Request $r){
+        $this->validate($r, [
+            'pass' => 'required|min:6',
+        ]);
+
+        $user = Auth::user();
+        $user->password = bcrypt($r->pass);
+        if ($user->save()){
+            return 'Se ha modificado la contraseña';
+        }
     }
 }
 

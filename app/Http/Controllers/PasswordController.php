@@ -56,4 +56,6 @@ class PasswordController extends Controller
         }
         return json_encode($json);
     }
+
+    
 }

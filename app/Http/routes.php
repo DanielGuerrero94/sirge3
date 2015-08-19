@@ -1,5 +1,5 @@
 <?php
-
+use App\Classes\Usuario;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -59,6 +59,8 @@ Route::get('sss' , 'PadronController@sss');
 Route::get('perfil' , 'UserController@getProfile');
 Route::get('ajustes' , 'UserController@getEditProfile');
 Route::post('ajustes' , 'UserController@postEditProfile');
+Route::get('new-password' , 'UserController@getNewPassword');
+Route::post('new-password' , 'UserController@postNewPassword');
 
 /**
  * CONTACTOS
@@ -110,3 +112,8 @@ Route::post('edit-modulo/{id}' , 'ModulosController@postEdit');
  ********************************************************************************/
 Route::resource('prestaciones' , 'Ws\SIISAController' , [
 	'only' => ['index']]);
+
+Route::get('test' , function(){
+	$u = Usuario::find(8);
+	echo $u->nombre;
+});
