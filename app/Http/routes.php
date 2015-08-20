@@ -61,6 +61,7 @@ Route::get('ajustes' , 'UserController@getEditProfile');
 Route::post('ajustes' , 'UserController@postEditProfile');
 Route::get('new-password' , 'UserController@getNewPassword');
 Route::post('new-password' , 'UserController@postNewPassword');
+Route::get('usuario-imagen' , 'UserController@getAvatar');
 
 /**
  * CONTACTOS
@@ -114,6 +115,5 @@ Route::resource('prestaciones' , 'Ws\SIISAController' , [
 	'only' => ['index']]);
 
 Route::get('test' , function(){
-	$u = Usuario::find(8);
-	echo $u->nombre;
+	return view('test');
 });

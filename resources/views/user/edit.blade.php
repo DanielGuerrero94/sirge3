@@ -1,5 +1,26 @@
 @extends('content')
 @section('content')
+<style type="text/css">
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+</style>
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
 		<div id="action-container">
@@ -37,14 +58,14 @@
 							<div class="col-md-3">
 								<!--- ENTIDAD -->
 								<div class="form-group">
-									<label for="nombre">Entidad</label>
+									<label for="entidad">Entidad</label>
 									@include('common.select-entidad')
 								</div>
 							</div>
 							<div class="col-md-3">
 								<!--- AREA -->
 								<div class="form-group">
-									<label for="nombre">Área</label>
+									<label for="area">Área</label>
 									@include('common.select-area')
 								</div>
 							</div>
@@ -60,22 +81,22 @@
 							<div class="col-md-3">
 								<!--- FECHA DE NACIMIENTO -->
 								<div class="form-group">
-									<label for="nombre">Fecha de nacimiento</label>
+									<label for="fecha-nacimiento">Fecha de nacimiento</label>
 									<input id="fecha-nacimiento" class="form-control" type="text" name="fecha_nacimiento" value="{{ date('d/m/Y' , strtotime($usuario->fecha_nacimiento)) }}">
 								</div>
 							</div>
 							<div class="col-md-3">
 								<!--- TELEFONO -->
 								<div class="form-group">
-									<label for="nombre">Teléfono</label>
+									<label for="telefono">Teléfono</label>
 									<input id="telefono" class="form-control" type="text" name="telefono" value="{{ $usuario->telefono }}">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<!--- MENSAJE PERSONAL -->
 								<div class="form-group">
-									<label for="nombre">Mensaje peronsal</label>
-									<input class="form-control" type="text" name="mensaje" value="{{ $usuario->mensaje }}">
+									<label for="mensaje">Mensaje peronsal</label>
+									<input id="mensaje" class="form-control" type="text" name="mensaje" value="{{ $usuario->mensaje }}">
 								</div>
 							</div>
 						</div>
@@ -122,7 +143,18 @@
 									</div>
 	                        	</div>
 							</div>
-							<div class="col-md-4"></div>
+							<div class="col-md-4">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="avatar">Imagen de perfil</label>
+									<span class="form-control btn btn-primary btn-file">
+										Elegir una imagen <input name="avatar" type="file">
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="box-footer">

@@ -27,8 +27,33 @@ class Modulo extends Model {
 	public $timestamps = true;
 
 	/**
-	 *
-	 *
-	 */
+     * Ingresar el nombre del modulo
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setDescripcionAttribute($value){
+        $this->attributes['descripcion'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Ingresar la ruta del modulo
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setModuloAttribute($value){
+        $this->attributes['modulo'] = strtolower($value);
+    }
+
+    /**
+     * Ingresar el ícono del modulo
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setIconoAttribute($value){
+        $this->attributes['icono'] = strtolower($value);
+    }
 	
 }

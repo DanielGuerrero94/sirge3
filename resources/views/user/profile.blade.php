@@ -87,6 +87,13 @@
 								</div>
 							</div>
 
+							<!-- TELEFONO -->
+							<div class="form-group">
+								<label class="col-md-5 control-label">Teléfono</label>
+								<div class="col-md-7">
+									<p class="form-control-static">{{ $usuario->telefono }}</p>
+								</div>
+							</div>
 						</form>
 					</div>
 					<div class="col-md-4">

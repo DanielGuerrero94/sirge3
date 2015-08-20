@@ -214,5 +214,18 @@ class UserController extends Controller
             return 'Se ha modificado la contraseña';
         }
     }
+
+    /**
+     * Devuelve la vista para cambiar la imagen de perfil
+     *
+     * @return null
+     */
+    public function getAvatar(){
+        $data = [
+            'page_title' => 'Cambiar imágen de perfil',
+
+        ];
+        return view('user.avatar' , $data);
+    }
 }
 
