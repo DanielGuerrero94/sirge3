@@ -221,9 +221,10 @@ class UserController extends Controller
      * @return null
      */
     public function getAvatar(){
+
         $data = [
             'page_title' => 'Cambiar imágen de perfil',
-
+            'user' => Auth::user()
         ];
         return view('user.avatar' , $data);
     }
