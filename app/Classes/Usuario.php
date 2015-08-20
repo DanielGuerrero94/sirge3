@@ -40,6 +40,86 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * Ingresar el nombre del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setNombreAttribute($value){
+        $this->attributes['nombre'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Get the user's name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getNombreAttribute($value){
+        return ucwords(strtolower($value));
+    }
+
+    /**
+     * Ingresar el email del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setEmailAttribute($value){
+        $this->attributes['email'] = strtolower($value);
+    }
+
+    /**
+     * Ingresar el Facebook del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setFacebookAttribute($value){
+        $this->attributes['facebook'] = strtolower($value);
+    }
+
+    /**
+     * Ingresar el Twitter del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setTwitterAttribute($value){
+        $this->attributes['twitter'] = strtolower($value);
+    }
+
+    /**
+     * Ingresar el Linkedin del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setLinkedinAttribute($value){
+        $this->attributes['linkedin'] = strtolower($value);
+    }
+
+    /**
+     * Ingresar el Google del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setGoogleAttribute($value){
+        $this->attributes['google'] = strtolower($value);
+    }
+
+    /**
+     * Ingresar el Skype del usuario
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setSkypeAttribute($value){
+        $this->attributes['skype'] = strtolower($value);
+    }
+
 	/**
 	 * Obtener el menú asociado al usuario.
 	 */

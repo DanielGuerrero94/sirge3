@@ -29,7 +29,7 @@ $(document).ready(function(){
             ocupacion : {
                 required: true,
                 minlength: 8,
-                maxlength: 30
+                maxlength: 100
             },
             provincia : {
                 required: true
