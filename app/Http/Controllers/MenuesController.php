@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Classes\Menu;
-use App\Classes\Modulo;
-use App\Classes\ModuloMenu;
+use App\Models\Menu;
+use App\Models\Modulo;
+use App\Models\ModuloMenu;
 
 class MenuesController extends Controller
 {

@@ -9,11 +9,11 @@ use App\Http\Controllers\Controller;
 
 use Auth;
 
-use App\Classes\Usuario;
-use App\Classes\Provincia;
-use App\Classes\Entidad;
-use App\Classes\Area;
-use App\Classes\Menu;
+use App\Models\Usuario;
+use App\Models\Provincia;
+use App\Models\Entidad;
+use App\Models\Area;
+use App\Models\Menu;
 
 class UserController extends Controller
 {
@@ -227,6 +227,19 @@ class UserController extends Controller
             'user' => Auth::user()
         ];
         return view('user.avatar' , $data);
+    }
+
+    /**
+     * Recibe la imagen
+     * @param Request $r
+     *
+     * @return null
+     */
+    public function postAvatar(Request $r){
+        $imageName = 'foto' . $r->file('avatar_file')->getClientOriginalExtension();
+
+
+        $r->file('avatar_file')->move(base_path().'/public/dist/img/usuarios' , $imageName);
     }
 }
 

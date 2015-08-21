@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Mail;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\Usuario;
+use App\Models\Usuario;
 use App\Http\Requests\SolicitudUsuarioRequest;
 
 class RegistrationController extends Controller

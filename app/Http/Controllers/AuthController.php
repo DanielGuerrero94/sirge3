@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Classes\Login;
-use App\Classes\Usuario;
+use App\Models\Login;
+use App\Models\Usuario;
 
 class AuthController extends Controller
 {

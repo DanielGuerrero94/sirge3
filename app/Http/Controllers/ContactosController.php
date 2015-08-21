@@ -7,10 +7,10 @@ use Auth;
 use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\Usuario;
-use App\Classes\Provincia;
-use App\Classes\Conversacion;
-use App\Classes\Mensaje;
+use App\Models\Usuario;
+use App\Models\Provincia;
+use App\Models\Conversacion;
+use App\Models\Mensaje;
 
 class ContactosController extends Controller
 {
