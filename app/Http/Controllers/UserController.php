@@ -238,10 +238,6 @@ class UserController extends Controller
      * @return null
      */
     public function postAvatar(Request $r){
-        // echo $r->avatar_data;
-//        $imageName = 'foto' . $r->file('avatar_file')->getClientOriginalExtension();
-//        $r->file('avatar_file')->move(base_path().'/public/dist/img/usuarios' , $imageName);
-
         $crop = new Crop(
             ($r->file('avatar_src') !== null) ? $r->file('avatar_src') : null,
             $r->avatar_data,
@@ -251,8 +247,12 @@ class UserController extends Controller
         $response = array(
           'state'  => 200,
           'message' => $crop -> getMsg(),
-          'result' => 'dist/img/usuarios/test.png'
+          'result' => $crop -> getNewRoute()
         );
+
+        $u = Auth::user();
+        $u->ruta_imagen = $crop -> getNewFile();
+        $u->save();
 
         return response()->json($response);
     }
