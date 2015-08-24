@@ -1,11 +1,10 @@
 @extends('content')
 @section('content')
 <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/cropper/dist/cropper.css") }}">
-<link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/cropper/dist/cropper.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/cropper/dist/main.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("/dist/css/default.css") }}">
 
-<div class="container" id="crop-avatar">
+<div class="" id="crop-avatar">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="box box-info">
