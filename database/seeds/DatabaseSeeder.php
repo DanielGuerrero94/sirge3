@@ -28,6 +28,20 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaUsuarios');
 		$this->call('GeoDepartamentos');
 		$this->call('GeoEntidades');
+		$this->call('GeoGeojson');
+		$this->call('GeoGepDepartamentos');
+		$this->call('GeoLocalidades');
+		$this->call('GeoUbicacionProvincias');
+		$this->call('EfectoresCategoriasPpac');
+		$this->call('EfectoresNeonatales');
+		$this->call('EfectoresObstetricos');
+		$this->call('EfectoresEfectoresPpac');
+		$this->call('EfectoresTipoCategorizacion');
+		$this->call('EfectoresTipoDependenciaAdministrativa');
+		$this->call('EfectoresTipoEfecotr');
+		$this->call('EfectoresTipoEstado');
+		$this->call('EfectoresTipoTelefono');
+		$this->call('EfectoresEfectores');
 
 		Model::reguard();
 	}
