@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/cropper/dist/cropper.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/cropper/dist/cropper.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/cropper/dist/main.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("/dist/css/default.css") }}">
 
 <div class="container" id="crop-avatar">
 	<div class="row">
@@ -147,7 +148,9 @@
 	                  			<input type="hidden" class="avatar-src" name="avatar_src">
 	                  			<input type="hidden" class="avatar-data" name="avatar_data">
 	                  			<label for="avatarInput">Archivo local</label>
-	                  			<input type="file" class="avatar-input" id="avatarInput" name="avatar_file">
+	                  			<span class="btn btn-primary btn-file">
+	                  				Seleccionar nueva imagen<input type="file" class="avatar-input" id="avatarInput" name="avatar_file">
+	                  			</span>
                 			</div>
 
                 			<!-- Crop and preview -->
