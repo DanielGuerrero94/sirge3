@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="#" class="logo"><b>SIRGe</b>Web</a>
+    <a href="" class="logo"><b>SIRGe</b>Web</a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">

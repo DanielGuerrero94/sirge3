@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use Auth;
+
 class Crop {
   private $src;
   private $data;
@@ -9,6 +11,9 @@ class Crop {
   private $type;
   private $extension;
   private $msg;
+  private $new_file;
+  private $new_route;
+  private $unique;
 
   function __construct($src, $data, $file) {
     $this -> setSrc($src);
@@ -37,7 +42,10 @@ class Crop {
   }
 
   private function setFile($file) {
-  	//echo '<pre>' , print_r($file->getPathName()) , '</pre>';die();
+  	$this -> unique = uniqid();
+  	$this -> new_route = 'dist/img/usuarios/' . Auth::user()->id_usuario . '_' . $this -> unique . '.png';
+  	$this -> new_file = Auth::user()->id_usuario . '_' . $this -> unique . '.png';
+
     $errorCode = $file->getError();
 
     if ($errorCode === UPLOAD_ERR_OK) {
@@ -45,7 +53,7 @@ class Crop {
 
       if ($type) {
         $extension = image_type_to_extension($type);
-        $src = base_path().'/public/dist/img/usuarios/test.png';
+        $src = base_path().'/public/dist/img/usuarios/' . Auth::user()->id_usuario . '_' . $this -> unique . '.png';
 
         if ($type == IMAGETYPE_GIF || $type == IMAGETYPE_JPEG || $type == IMAGETYPE_PNG) {
 
@@ -53,7 +61,7 @@ class Crop {
             unlink($src);
           }
 
-          $result = $file->move(base_path().'/public/dist/img/usuarios' , 'test.png');
+          $result = $file->move(base_path().'/public/dist/img/usuarios' , Auth::user()->id_usuario . '_' . $this -> unique . '.png');
           // $result = move_uploaded_file($file->getPathName(), $src);
 
           if ($result) {
@@ -76,7 +84,7 @@ class Crop {
   }
 
   private function setDst() {
-    $this -> dst = base_path().'/public/dist/img/usuarios/test.png';
+    $this -> dst = base_path().'/public/dist/img/usuarios/' . Auth::user()->id_usuario . '_' . $this -> unique . '.png';
   }
 
   private function crop($src, $dst, $data) {
@@ -210,5 +218,13 @@ class Crop {
 
   public function getMsg() {
     return $this -> msg;
+  }
+
+  public function getNewRoute() {
+  	return $this -> new_route;
+  }
+
+  public function getNewFile() {
+  	return $this -> new_file;
   }
 }
