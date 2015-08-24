@@ -9,11 +9,11 @@ class EfectoresEfectores extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement(" INSERT INTO efectores.efectores(id_efector,cuie,siisa,nombre,domicilio,codigo_postal,denominacion_legal,id_tipo_efector,rural,cics,id_categorizacion,id_dependencia_administrativa,dependencia_sanitaria,integrante,compromiso_gestion,priorizado,ppac,id_estado)
+		\DB::statement(" INSERT INTO efectores.efectores(id_efector,cuie,siisa,nombre,domicilio,codigo_postal,denominacion_legal,id_tipo_efector,rural,cics,id_categorizacion,id_dependencia_administrativa,dependencia_sanitaria,integrante,compromiso_gestion,priorizado,ppac,id_estado,created_at,updated_at)
 (
 	SELECT *
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-	    'SELECT id_efector,cuie,siisa,nombre,domicilio,codigo_postal,denominacion_legal,id_tipo_efector,rural,cics,id_categorizacion,id_dependencia_administrativa,dependencia_sanitaria,integrante,compromiso_gestion,priorizado,coalesce(ppac,''N''),id_estado
+	    'SELECT id_efector,cuie,siisa,nombre,domicilio,codigo_postal,denominacion_legal,id_tipo_efector,rural,cics,id_categorizacion,id_dependencia_administrativa,dependencia_sanitaria,integrante,compromiso_gestion,priorizado,coalesce(ppac,''N''),id_estado,now() as created_at, now() as updated_at
 		    FROM efectores.efectores')
 	    AS migracion(id_efector integer,
   cuie character(6),
@@ -32,7 +32,10 @@ class EfectoresEfectores extends Seeder {
   compromiso_gestion character(1),
   priorizado character(1),
   ppac character(1),
-  id_estado integer)
+  id_estado integer,
+  created_at timestamp(0) without time zone,
+  updated_at timestamp(0) without time zone
+  )
 );");
 	}
 }
