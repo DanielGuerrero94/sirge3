@@ -266,7 +266,8 @@
     },
 
     submitStart: function () {
-      this.$loading.fadeIn();
+      // this.$loading.fadeIn();
+      $('body').addClass("loading");
     },
 
     submitDone: function (data) {
@@ -299,7 +300,8 @@
     },
 
     submitEnd: function () {
-      this.$loading.fadeOut();
+      // this.$loading.fadeOut();
+      $('body').removeClass("loading");
     },
 
     cropDone: function () {
