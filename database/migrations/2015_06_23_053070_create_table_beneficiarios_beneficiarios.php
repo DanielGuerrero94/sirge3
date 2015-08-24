@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTableBeneficiariosBeneficiarios extends Migration {
 	/**
@@ -9,10 +9,8 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('beneficiarios.beneficiarios', function(Blueprint $table)
-		{
+	public function up() {
+		Schema::create('beneficiarios.beneficiarios', function (Blueprint $table) {
 			$table->string('clave_beneficiario', 16)->primary();
 			$table->string('apellido', 100);
 			$table->string('nombre', 100);
@@ -25,7 +23,7 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 			$table->date('fecha_inscripcion');
 			$table->date('fecha_alta_efectiva')->nullable();
 			$table->char('id_provincia_alta', 2)->nullable();
-			$table->char('discapacidad', 1);
+			$table->char('discapacidad', 1)->nullable();
 			$table->string('observaciones', 200)->nullable();
 			$table->smallInteger('grupo_actual')->nullable();
 			$table->char('grupo_alta', 1)->nullable();
@@ -49,8 +47,7 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down() {
 		Schema::drop('beneficiarios.beneficiarios');
 	}
 }
