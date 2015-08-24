@@ -7,8 +7,8 @@ use Auth;
 use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\Conversacion;
-use App\Classes\Mensaje;
+use App\Models\Conversacion;
+use App\Models\Mensaje;
 
 class InboxController extends Controller{
     

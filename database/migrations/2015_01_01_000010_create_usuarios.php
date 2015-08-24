@@ -17,9 +17,9 @@ class CreateUsuarios extends Migration {
 			$table->string('nombre', 100);
 			$table->string('email', 50)->unique();
 			$table->char('activo', 1);
-			$table->char('id_provincia', 2);
-			$table->integer('id_entidad');
-			$table->integer('id_area');
+			//$table->char('id_provincia', 2);
+			$table->char('id_entidad', 2);
+			$table->integer('id_area')->nullable();
 			$table->integer('id_menu');
 			$table->string('ruta_imagen', 100)->nullable();
 			$table->date('fecha_nacimiento')->nullable();
@@ -27,12 +27,14 @@ class CreateUsuarios extends Migration {
 			$table->string('facebook', 200)->default('#');
 			$table->string('twitter', 200)->default('#');
 			$table->string('linkedin', 200)->default('#');
-			$table->string('google', 200)->default('#');
+			$table->string('google_plus', 200)->default('#');
 			$table->string('skype', 200)->default('#');
 			$table->string('telefono', 20)->nullable();
-			$table->timestamp('last_login');
-			$table->timestamps();
+			$table->timestamp('last_login')->nullable();
+			$table->timestamps()->nullable();
 			$table->rememberToken()->nullable();
+			$table->string('cargo', 100)->nullable();
+			$table->text('mensaje')->nullable();
 
 			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
 			$table->foreign('id_menu')->references('id_menu')->on('sistema.menues');

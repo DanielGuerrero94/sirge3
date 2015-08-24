@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\WSPrestacion;
-use App\Classes\WSPrestacionSIISA;
+use App\Models\WSPrestacion;
+use App\Models\WSPrestacionSIISA;
 
 class SIISAController extends Controller
 {

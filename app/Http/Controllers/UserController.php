@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Controllers\Controller;
 
 use Auth;
 
-use App\Classes\Usuario;
-use App\Classes\Provincia;
-use App\Classes\Entidad;
-use App\Classes\Area;
-use App\Classes\Menu;
+use App\Models\Usuario;
+use App\Models\Provincia;
+use App\Models\Entidad;
+use App\Models\Area;
+use App\Models\Menu;
+
+use App\Classes\Crop;
 
 class UserController extends Controller
 {
@@ -141,11 +144,117 @@ class UserController extends Controller
     public function getEditProfile(){
         $id = Auth::user()->id_usuario;
         $usuario = Usuario::find($id);
+        $provincias = Provincia::all();
+        $areas = Area::all();
+        $entidades = Entidad::all();
         $data = [
             'page_title' => 'Editar perfil',
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'provincias' => $provincias,
+            'areas' => $areas,
+            'entidades' => $entidades
         ];
         return view('user.edit' , $data);
+    }
+
+    /**
+     * Actualiza los datos del usuario
+     * @param Request Datos del formulario
+     *
+     * @return null
+     */
+    public function postEditProfile(UserEditProfileRequest $r){
+        $id = Auth::user()->id_usuario;
+        $email = Usuario::where('email' , $r->email)->where('id_usuario' , '<>' , $id)->get();
+        if (! count($email)){
+            
+            $user = Usuario::find($id);
+            $user->nombre = $r->nombre;
+            $user->usuario = $r->email;
+            $user->email = $r->email;
+            $user->id_provincia = $r->provincia;
+            $user->id_entidad = $r->entidad;
+            $user->id_area = $r->area;
+            $user->fecha_nacimiento = $r->fecha_nacimiento;
+            $user->ocupacion = $r->ocupacion;
+            $user->facebook = $r->fb;
+            $user->twitter = $r->tw;
+            $user->linkedin = $r->ln;
+            $user->google = $r->gp;
+            $user->skype = $r->skype;
+            $user->telefono = $r->telefono;
+            if ($user->save()){
+                return 1;
+            }
+        } else {
+            return response('MAL' , 422);
+        }
+    }
+
+    /**
+     * Devuelve la vista para cambiar la contraseña
+     *
+     * @return null
+     */
+    public function getNewPassword(){
+        return view('user.password');
+    }
+
+    /**
+     * Cambia la password desde el perfil del usuario
+     *
+     * @return string
+     */
+    public function postNewPassword(Request $r){
+        $this->validate($r, [
+            'pass' => 'required|min:6',
+        ]);
+
+        $user = Auth::user();
+        $user->password = bcrypt($r->pass);
+        if ($user->save()){
+            return 'Se ha modificado la contraseña';
+        }
+    }
+
+    /**
+     * Devuelve la vista para cambiar la imagen de perfil
+     *
+     * @return null
+     */
+    public function getAvatar(){
+
+        $data = [
+            'page_title' => 'Cambiar imágen de perfil',
+            'user' => Auth::user()
+        ];
+        return view('user.avatar' , $data);
+    }
+
+    /**
+     * Recibe la imagen
+     * @param Request $r
+     *
+     * @return null
+     */
+    public function postAvatar(Request $r){
+        $crop = new Crop(
+            ($r->file('avatar_src') !== null) ? $r->file('avatar_src') : null,
+            $r->avatar_data,
+            ($r->file('avatar_file') !== null) ? $r->file('avatar_file') : null
+        );
+
+        $response = array(
+          'state'  => 200,
+          'message' => $crop -> getMsg(),
+          'result' => $crop -> getNewRoute()
+        );
+
+        $u = Auth::user();
+        $u->ruta_imagen = $crop -> getNewFile();
+        $u->save();
+
+        return response()->json($response);
     }
 }
 

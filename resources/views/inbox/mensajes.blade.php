@@ -50,25 +50,10 @@
 			@endforeach
 		</div><!--/.direct-chat-messages-->
 	</div><!-- /.box-body -->
-	<div style="display:none" id="ajax-help"></div>
 </div>
 <script type="text/javascript">
 	
-	function reloadChat (){
-		setInterval(function(){
-			var user_from = {{ Auth::user()->id_usuario }};
-			var user_to = {{ $user_to }}
-			// $('.box-body').load('mensajes/' + user_from + '/' + user_to + ' .direct-chat-messages');	
-			$.ajax({
-				global : false,
-				url : 'mensajes/' + user_from + '/' + user_to,
-				method : 'get',
-				success : function(data){
-					$('.direct-chat-messages').html($(data).find('.direct-chat-messages').html());
-				}
-			})
-		} , 2000);
-	}
+	var interval;
 
 	$('#form-mensaje').submit(function(event){
 		event.preventDefault();
@@ -78,9 +63,25 @@
 		});
 	});
 
-	$(document).ready(function(){
-		reloadChat();
-	});
+
+	function reloadChat (user_to , user_from){
+		$.ajax({
+			global : false,
+			url : 'mensajes-inbox/' + {{ Auth::user()->id_usuario }} + '/' + {{ $user_to }},
+			method : 'get',
+			success : function(data){
+				$('.direct-chat-messages').html($(data).find('.direct-chat-messages').html());
+			},
+			error : function(){
+				//clearInterval(interval);
+				console.log('error');
+			}
+		});
+	}
+
+	interval = setInterval(reloadChat , 2000);
+	
+
 </script>
 	  
 	

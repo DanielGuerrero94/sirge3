@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -58,6 +57,11 @@ Route::get('sss' , 'PadronController@sss');
  */
 Route::get('perfil' , 'UserController@getProfile');
 Route::get('ajustes' , 'UserController@getEditProfile');
+Route::post('ajustes' , 'UserController@postEditProfile');
+Route::get('new-password' , 'UserController@getNewPassword');
+Route::post('new-password' , 'UserController@postNewPassword');
+Route::get('usuario-imagen' , 'UserController@getAvatar');
+Route::post('usuario-imagen' , 'UserController@postAvatar');
 
 /**
  * CONTACTOS
@@ -109,3 +113,7 @@ Route::post('edit-modulo/{id}' , 'ModulosController@postEdit');
  ********************************************************************************/
 Route::resource('prestaciones' , 'Ws\SIISAController' , [
 	'only' => ['index']]);
+
+Route::get('php-info' , function(){
+	phpinfo();
+});

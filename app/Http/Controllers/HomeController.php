@@ -6,9 +6,9 @@ use Mail;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\ModuloMenu;
-use App\Classes\Modulo;
-use App\Classes\Usuario;
+use App\Models\ModuloMenu;
+use App\Models\Modulo;
+use App\Models\Usuario;
 
 class HomeController extends Controller
 {
