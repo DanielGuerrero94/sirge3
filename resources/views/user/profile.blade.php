@@ -175,8 +175,9 @@
         	</div>
       	</div>
     </div><!-- /.modal -->
-    <!-- Loading state -->
+    <!-- Loading state 
     <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+    -->
 </div>
 <script type="text/javascript" src="{{ asset("/bower_components/cropper/dist/cropper.js") }}"></script>
 <script type="text/javascript" src="{{ asset("/bower_components/cropper/dist/main.js") }}"></script>

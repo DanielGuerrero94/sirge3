@@ -1,7 +1,3 @@
-body {
-  background-color: #fcfcfc;
-}
-
 .avatar-view {
   display: block;
   margin: 15% auto 5%;
@@ -109,15 +105,16 @@ body {
   margin-right: 5px;
 }
 
-.loading {
+/*.loading {
   display: none;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: #fff url("../../../dist/img/loading.gif") no-repeat center center;*/
+  background: #fff url("../../../dist/img/loading.gif") no-repeat center center;
   opacity: .75;
   filter: alpha(opacity=75);
   z-index: 20140628;
 }
+*/
