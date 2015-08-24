@@ -15,6 +15,8 @@ use App\Models\Entidad;
 use App\Models\Area;
 use App\Models\Menu;
 
+use App\Classes\Crop;
+
 class UserController extends Controller
 {
     /**
@@ -236,10 +238,23 @@ class UserController extends Controller
      * @return null
      */
     public function postAvatar(Request $r){
-        $imageName = 'foto' . $r->file('avatar_file')->getClientOriginalExtension();
+        // echo $r->avatar_data;
+//        $imageName = 'foto' . $r->file('avatar_file')->getClientOriginalExtension();
+//        $r->file('avatar_file')->move(base_path().'/public/dist/img/usuarios' , $imageName);
 
+        $crop = new Crop(
+            ($r->file('avatar_src') !== null) ? $r->file('avatar_src') : null,
+            $r->avatar_data,
+            ($r->file('avatar_file') !== null) ? $r->file('avatar_file') : null
+        );
 
-        $r->file('avatar_file')->move(base_path().'/public/dist/img/usuarios' , $imageName);
+        $response = array(
+          'state'  => 200,
+          'message' => $crop -> getMsg(),
+          'result' => 'dist/img/usuarios/test.png'
+        );
+
+        return response()->json($response);
     }
 }
 

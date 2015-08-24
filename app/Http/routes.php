@@ -114,6 +114,6 @@ Route::post('edit-modulo/{id}' , 'ModulosController@postEdit');
 Route::resource('prestaciones' , 'Ws\SIISAController' , [
 	'only' => ['index']]);
 
-Route::get('test' , function(){
-	return view('test');
+Route::get('php-info' , function(){
+	phpinfo();
 });
