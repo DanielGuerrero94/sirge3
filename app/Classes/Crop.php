@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Classes;
+
 class Crop {
   private $src;
   private $data;
@@ -34,14 +37,15 @@ class Crop {
   }
 
   private function setFile($file) {
-    $errorCode = $file['error'];
+  	//echo '<pre>' , print_r($file->getPathName()) , '</pre>';die();
+    $errorCode = $file->getError();
 
     if ($errorCode === UPLOAD_ERR_OK) {
-      $type = exif_imagetype($file['tmp_name']);
+      $type = exif_imagetype($file->getPathName());
 
       if ($type) {
         $extension = image_type_to_extension($type);
-        $src = 'img/' . date('YmdHis') . '.original' . $extension;
+        $src = base_path().'/public/dist/img/usuarios/test.png';
 
         if ($type == IMAGETYPE_GIF || $type == IMAGETYPE_JPEG || $type == IMAGETYPE_PNG) {
 
@@ -49,7 +53,8 @@ class Crop {
             unlink($src);
           }
 
-          $result = move_uploaded_file($file['tmp_name'], $src);
+          $result = $file->move(base_path().'/public/dist/img/usuarios' , 'test.png');
+          // $result = move_uploaded_file($file->getPathName(), $src);
 
           if ($result) {
             $this -> src = $src;
@@ -71,7 +76,7 @@ class Crop {
   }
 
   private function setDst() {
-    $this -> dst = 'img/' . date('YmdHis') . '.png';
+    $this -> dst = base_path().'/public/dist/img/usuarios/test.png';
   }
 
   private function crop($src, $dst, $data) {
