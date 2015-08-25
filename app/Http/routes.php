@@ -41,7 +41,15 @@ Route::get('inicio' , 'HomeController@inicio');
  */
 Route::get('dashboard' , 'HomeController@dashboard');
 Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
-	
+
+/**
+ * SOLICITUDES
+ */
+Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
+Route::get('asignacion-solicitud' , 'SolicitudController@getNew');
+Route::get('cierre-solicitud' , 'SolicitudController@getNew');
+Route::get('listado-solicitud' , 'SolicitudController@getNew');
+
 /**
  * PADRONES
  */

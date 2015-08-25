@@ -42,11 +42,11 @@
                     <i class="fa fa-reply"></i> Atr&aacute;s
                 </button>
                 <div class="social-links text-center">
-                    <a href="{{ $usuario->facebook }}" class="facebook"><i class="fa fa-facebook fa-fw"></i></a>
-                    <a href="{{ $usuario->google }}" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
-                    <a href="{{ $usuario->twitter }}" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
-                    <a href="{{ $usuario->skype }}" class="skype"><i class="fa fa-skype fa-fw"></i></a>
-                    <a href="{{ $usuario->linkedin }}" class="linkedin"><i class="fa fa-linkedin-square fa-fw"></i></a>
+                    <a href="{{ strlen($usuario->facebook) ? $usuario->facebook : '#' }}" class="facebook"><i class="fa fa-facebook fa-fw"></i></a>
+                    <a href="{{ strlen($usuario->google) ? $usuario->google : '#' }}" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
+                    <a href="{{ strlen($usuario->twitter) ? $usuario->twitter : '#' }}" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
+                    <a href="{{ strlen($usuario->skype) ? $usuario->skype : '#' }}" class="skype"><i class="fa fa-skype fa-fw"></i></a>
+                    <a href="{{ strlen($usuario->linkedin) ? $usuario->linkedin : '#' }}" class="linkedin"><i class="fa fa-linkedin-square fa-fw"></i></a>
                 </div>
             </div>
         </div> 

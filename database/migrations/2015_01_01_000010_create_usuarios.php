@@ -24,11 +24,11 @@ class CreateUsuarios extends Migration {
 			$table->string('ruta_imagen', 100)->nullable();
 			$table->date('fecha_nacimiento')->nullable();
 			$table->string('ocupacion', 100)->nullable();
-			$table->string('facebook', 200)->default('#');
-			$table->string('twitter', 200)->default('#');
-			$table->string('linkedin', 200)->default('#');
-			$table->string('google_plus', 200)->default('#');
-			$table->string('skype', 200)->default('#');
+			$table->string('facebook', 200)->nullable();
+			$table->string('twitter', 200)->nullable();
+			$table->string('linkedin', 200)->nullable();
+			$table->string('google_plus', 200)->nullable();
+			$table->string('skype', 200)->nullable();
 			$table->string('telefono', 20)->nullable();
 			$table->timestamp('last_login')->nullable();
 			$table->timestamps()->nullable();

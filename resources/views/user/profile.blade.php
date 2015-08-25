@@ -20,11 +20,11 @@
 						    </div>
 							<br />
 							<div class="text-center">
-								<a href="{{ $usuario->google }}" class="btn btn-danger"><i class="fa fa-google-plus fa-lg"></i></a>
-								<a href="{{ $usuario->facebook }}" class="btn btn-primary"><i class="fa fa-facebook fa-lg"></i></a>
-								<a href="{{ $usuario->linkedin }}" class="btn btn-primary"><i class="fa fa-linkedin fa-lg"></i></a>
-								<a href="{{ $usuario->twitter }}" class="btn btn-info"><i class="fa fa-twitter fa-lg"></i></a>
-								<a href="{{ $usuario->skype }}" class="btn btn-info"><i class="fa fa-skype fa-lg"></i></a>
+								<a href="{{ strlen($usuario->google) ? $usuario->google : '#' }}" class="btn btn-danger"><i class="fa fa-google-plus fa-lg"></i></a>
+								<a href="{{ strlen($usuario->facebook) ? $usuario->facebook : '#' }}" class="btn btn-primary"><i class="fa fa-facebook fa-lg"></i></a>
+								<a href="{{ strlen($usuario->linkedin) ? $usuario->linkedin : '#' }}" class="btn btn-primary"><i class="fa fa-linkedin fa-lg"></i></a>
+								<a href="{{ strlen($usuario->twitter) ? $usuario->twitter : '#' }}" class="btn btn-info"><i class="fa fa-twitter fa-lg"></i></a>
+								<a href="{{ strlen($usuario->skype) ? $usuario->skype : '#' }}" class="btn btn-info"><i class="fa fa-skype fa-lg"></i></a>
 							</div>
 						</div>
 						<div class="col-md-5">

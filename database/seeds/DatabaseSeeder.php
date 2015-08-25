@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresTipoEstado');
 		$this->call('EfectoresTipoTelefono');
 		$this->call('EfectoresEfectores');
-
+		
 		Model::reguard();
 	}
 }

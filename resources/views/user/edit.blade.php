@@ -8,13 +8,11 @@
 					<h2 class="box-title">{{ $usuario->nombre }}</h2>
 				</div>
 				<form id="form-edit-user">
-
-				    <div class="alert alert-danger" id="errores-div">
-				        <ul id="errores-form">
-				        </ul>
-				    </div>
-					
 					<div class="box-body">
+					    <div class="alert alert-danger" id="errores-div">
+					        <ul id="errores-form">
+					        </ul>
+					    </div>
 						<!--- NOMBRE -->
 						<div class="form-group">
 							<label for="nombre">Nombre</label>
