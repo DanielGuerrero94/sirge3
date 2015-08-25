@@ -1,9 +1,7 @@
-<select id="entidad" name="entidad" class="form-control">
-@foreach ($entidades as $entidad)
-	@if ($usuario->id_entidad == $entidad->id)
-	<option value="{{ $entidad->id }}" selected>{{ $entidad->descripcion }}</option>
-	@else
-	<option value="{{ $entidad->id }}">{{ $entidad->descripcion }}</option>
-	@endif
+<label for="tipo-solicitud">Seleccione el tipo de requerimiento</label>
+<select id="tipo-solicitud" name="tipo_solicitud" class="form-control">
+	<option value="0">Seleccione ...</option>
+@foreach ($tipos as $tipo)
+	<option value="{{ $tipo->id }}">{{ $tipo->descripcion }}</option>
 @endforeach
 </select>

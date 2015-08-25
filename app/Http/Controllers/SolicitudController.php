@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Solicitudes\Grupos;
+use App\Models\Solicitudes\Tipos;
 
 class SolicitudController extends Controller
 {
@@ -32,5 +33,19 @@ class SolicitudController extends Controller
             'sectores' => $grupos
     	];
     	return view('requests.new' , $data);
+    }
+
+    /**
+     * Devuelve la vista con los tipos de solicitud para el grupo seleccionado
+     * @param int $grupo
+     *
+     * @return null
+     */
+    public function getTipos($id){
+        $tipos = Tipos::where('grupo' , $id)->get();
+        $data = [
+            'tipos' => $tipos
+        ];
+        return view ('common.select-tipo-solicitud' , $data);
     }
 }
