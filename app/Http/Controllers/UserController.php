@@ -187,7 +187,7 @@ class UserController extends Controller
                 return 1;
             }
         } else {
-            return response('MAL' , 422);
+            return response('Error' , 422);
         }
     }
 

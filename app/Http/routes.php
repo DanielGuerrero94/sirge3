@@ -47,6 +47,7 @@ Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
  */
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
+Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
 
 Route::get('asignacion-solicitud' , 'SolicitudController@getNew');
 Route::get('cierre-solicitud' , 'SolicitudController@getNew');

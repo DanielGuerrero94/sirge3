@@ -9,6 +9,10 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Solicitudes\Grupos;
 use App\Models\Solicitudes\Tipos;
+use App\Models\Solicitudes\Prioridades;
+use App\Models\Solicitudes;
+
+use App\Requests\NuevaSolicitudRequest;
 
 class SolicitudController extends Controller
 {
@@ -28,11 +32,13 @@ class SolicitudController extends Controller
      */
     public function getNuevaSolicitud(){
         $grupos = Grupos::all();
-    	$data = [
-    		'page_title' => 'Ingreso de nueva solicitud',
-            'sectores' => $grupos
-    	];
-    	return view('requests.new' , $data);
+        $prioridades = Prioridades::all();
+        $data = [
+            'page_title' => 'Ingreso de nueva solicitud',
+            'sectores' => $grupos,
+            'prioridades' => $prioridades
+        ];
+        return view('requests.new' , $data);
     }
 
     /**
@@ -43,9 +49,20 @@ class SolicitudController extends Controller
      */
     public function getTipos($id){
         $tipos = Tipos::where('grupo' , $id)->get();
+
         $data = [
             'tipos' => $tipos
         ];
         return view ('common.select-tipo-solicitud' , $data);
+    }
+
+    /**
+     * Ingresa un nuevo requerimiento
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function postNuevaSolicitud (NuevaSolicitudRequest $r){
+        $s = new Solicitud
     }
 }
