@@ -46,7 +46,7 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label for="ref">Reclamo asociado</label>
-								<input class="form-control" type="text" name="ref" id="ref" data-toggle="tooltip" data-placement="left" title="Ingrese el número de reclamo anterior si la solución brindada no es satisfactoria">
+								<input class="form-control" type="number" name="ref" id="ref" data-toggle="tooltip" data-placement="left" title="Ingrese el número de reclamo anterior si la solución brindada no es satisfactoria">
 							</div>
 						</div>
 					</div>
@@ -144,7 +144,6 @@
 			daysOfWeekDisabled: "0,6",
 			autoclose : true
 		});
-		$('#ref').inputmask('99999999')
 
 		$('#grupo').change(function(){
 			var g = $(this).val();
@@ -206,6 +205,9 @@
 							});
 							$('#errores-form').html(html);
 							$('#errores-div').show();
+						},
+						complete : function(){
+							$('#form-new-request').trigger('reset');
 						}
 					})
 				}

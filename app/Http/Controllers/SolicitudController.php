@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Requests\NuevaSolicitudRequest;
 use App\Http\Controllers\Controller;
 
 use App\Models\Solicitudes\Grupos;
 use App\Models\Solicitudes\Tipos;
 use App\Models\Solicitudes\Prioridades;
-use App\Models\Solicitudes;
-
-use App\Requests\NuevaSolicitudRequest;
+use App\Models\Solicitud;
 
 class SolicitudController extends Controller
 {
@@ -63,6 +64,16 @@ class SolicitudController extends Controller
      * @return string
      */
     public function postNuevaSolicitud (NuevaSolicitudRequest $r){
-        $s = new Solicitud
+        $s = new Solicitud;
+        $s->referencia = strlen($r->ref) ? $r->ref : 0;
+        $s->usuario_solicitante = Auth::user()->id_usuario;
+        $s->fecha_estimada_solucion = $r->fecha;
+        $s->prioridad = $r->prioridad;
+        $s->tipo = $r->tipo_solicitud;
+        $s->descripcion_solicitud = $r->descripcion;
+        if ($s->save()){
+            return 'Se ha enviado su solicitud. Nos estaremos comunicando con usted a la brevedad. Muchas gracias';
+        }
+
     }
 }

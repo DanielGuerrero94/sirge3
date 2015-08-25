@@ -28,7 +28,8 @@ class NuevaSolicitudRequest extends Request
             'tipo_solicitud' => 'required',
             'fecha' => 'required|date_format:d/m/Y|after:tomorrow',
             'prioridad' => 'required',
-            'descripcion' => 'required'
+            'descripcion' => 'required',
+            'ref' => 'exists:solicitudes.solicitudes,id'
         ];
     }
 }

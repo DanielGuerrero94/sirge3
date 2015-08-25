@@ -1,4 +1,4 @@
-<select id="prioridades" name="prioridades" class="form-control">
+<select id="prioridades" name="prioridad" class="form-control">
 @foreach ($prioridades as $prioridad)
 	<option value="{{ $prioridad->id }}">{{ $prioridad->descripcion }}</option>
 @endforeach
