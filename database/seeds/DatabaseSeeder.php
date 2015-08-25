@@ -42,7 +42,23 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresTipoEstado');
 		$this->call('EfectoresTipoTelefono');
 		$this->call('EfectoresEfectores');
-		
+		$this->call('EfectoresCompromisoGestion');
+		$this->call('EfectoresConvenioAdministrativo');
+		$this->call('EfectoresDatosGeograficos');
+		$this->call('EfectoresDescentralizacion');
+		$this->call('EfectoresEmail');
+		$this->call('EfectoresOperaciones');
+		$this->call('EfectoresReferentes');
+		$this->call('EfectoresTelefonos');
+		$this->call('SistemaEstados');
+		$this->call('SistemaPadrones');
+		$this->call('SistemaRegiones');
+		$this->call('SistemaParametros');
+		$this->call('SistemaModulos');
+		$this->call('SistemaModulosMenu');
+		$this->call('SistemaComentarios');
+		$this->call('SistemaSugerencias');
+
 		Model::reguard();
 	}
 }

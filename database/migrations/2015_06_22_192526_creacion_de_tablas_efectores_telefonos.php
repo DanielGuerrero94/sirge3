@@ -14,9 +14,9 @@ class CreacionDeTablasEfectoresTelefonos extends Migration {
 			$table->increments('id_telefono');
 			$table->integer('id_efector');
 			$table->string('numero_telefono', 200);
-			$table->integer('id_tipo_telefono');
+			$table->integer('id_tipo_telefono')->nullable();
 			$table->string('observaciones', 100)->nullable();
-			
+
 			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');
 			$table->foreign('id_tipo_telefono')->references('id_tipo_telefono')->on('efectores.tipo_telefono')->onUpdate('NO ACTION')->onDelete('NO ACTION');
 		});

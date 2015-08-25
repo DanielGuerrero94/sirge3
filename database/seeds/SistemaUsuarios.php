@@ -9,17 +9,29 @@ class SistemaUsuarios extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement(" INSERT INTO sistema.menues(id_menu,descripcion)
+		\DB::statement(" INSERT INTO sistema.usuarios(id_usuario,usuario,password,nombre,email,activo,id_area,id_menu,telefono,id_entidad,last_login,created_at,updated_at)
  (
 	SELECT *
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
-	    'SELECT *
-		    FROM sistema.menues')
-	    AS sirge_menues(id_menu integer, descripcion character varying(100))
- )
-        			   	");
+	    'SELECT id_usuario,usuario,password,descripcion as nombre,email,activo,id_area,id_menu,null as telefono,id_entidad,now() as last_login,now() as created_at, now() as updated_at
+		    FROM sistema.usuarios')
+	    AS migracion( id_usuario integer,
+			  usuario character varying(50),
+			  password character varying(100),
+			  nombre character varying(100),
+			  email character varying(50),
+			  activo character(1),
+			  id_area integer,
+			  id_menu integer,
+			  telefono character varying(20),
+			  id_entidad character(2),
+			  last_login timestamp(0) without time zone,
+			  created_at timestamp(0) without time zone,
+			  updated_at timestamp(0) without time zone
+		)
+ );
 
-		\DB::statement(" UPDATE sistema.usuarios SET ruta_imagen = ruta, fecha_nacimiento = nacimiento, ocupacion = ocup, facebook = face, twitter = twr, linkedin = lk, google_plus = plus, skype = sk, cargo = car, mensaje = men
+ UPDATE sistema.usuarios SET ruta_imagen = ruta, fecha_nacimiento = nacimiento, ocupacion = ocup, facebook = face, twitter = twr, linkedin = lk, google_plus = plus, skype = sk, cargo = car, mensaje = men
 	FROM
 		dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
 	    'SELECT id_usuario,ruta_imagen,fecha_nacimiento,ocupacion,facebook,twitter,linkedin,google_plus,skype,cargo,mensaje
@@ -39,8 +51,7 @@ class SistemaUsuarios extends Seeder {
 			  )
 	WHERE id_usuario = id_user ;
 
-	UPDATE sistema.usuarios SET ruta_imagen = 'public/img/users/unknown_user.png' WHERE ruta_imagen is null;"
-		);
-
+	UPDATE sistema.usuarios SET ruta_imagen = 'public/img/users/unknown_user.png' WHERE ruta_imagen is null;
+        			   	");
 	}
 }

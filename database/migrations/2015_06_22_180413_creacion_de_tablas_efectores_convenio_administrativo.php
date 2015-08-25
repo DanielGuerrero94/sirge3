@@ -15,7 +15,7 @@ class CreacionDeTablasEfectoresConvenioAdministrativo extends Migration {
 			$table->integer('id_efector');
 			$table->string('numero_compromiso', 50);
 			$table->string('firmante', 200);
-			$table->string('nombre_tercer_adminstrador', 200)->nullable();
+			$table->string('nombre_tercer_administrador', 200)->nullable();
 			$table->string('codigo_tercer_administrador', 50)->nullable();
 			$table->date('fecha_suscripcion');
 			$table->date('fecha_inicio');

@@ -1,37 +1,34 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateModulos extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('sistema.modulos', function (Blueprint $table) {
-            $table->increments('id_modulo');
-            $table->char('arbol' , 1);
-            $table->integer('nivel_1');
-            $table->integer('nivel_2')->nulleable();
-            $table->string('descripcion' , 100);
-            $table->string('modulo' , 100);
-            $table->string('icono')->nulleable();
+class CreateModulos extends Migration {
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up() {
+		Schema::create('sistema.modulos', function (Blueprint $table) {
+			$table->increments('id_modulo');
+			$table->char('arbol', 1)->nullable();
+			$table->integer('nivel_1');
+			$table->integer('nivel_2')->nullable();
+			$table->string('descripcion', 100);
+			$table->string('modulo', 100)->nullable();
+			$table->string('icono')->nullable();
 
-            $table->unique(['nivel_1','nivel_2']);
-        });
-    }
+			$table->unique(['nivel_1', 'nivel_2']);
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('sistema.modulos');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down() {
+		Schema::drop('sistema.modulos');
+	}
 }
