@@ -26,7 +26,7 @@ class NuevaSolicitudRequest extends Request
         return [
             'grupo' => 'required',
             'tipo_solicitud' => 'required',
-            'fecha' => 'required|date_format:d/m/Y|after:tomorrow',
+            'fecha' => 'required|date_format:d/m/Y|after:today',
             'prioridad' => 'required',
             'descripcion' => 'required',
             'ref' => 'exists:solicitudes.solicitudes,id'

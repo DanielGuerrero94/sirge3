@@ -196,6 +196,7 @@
 						success : function(data){
 							$('#modal-text').html(data);
 							$('.modal-info').modal();
+							$('#form-new-request').trigger('reset');
 						},
 						error : function(data){
 							var html = '';
@@ -205,9 +206,6 @@
 							});
 							$('#errores-form').html(html);
 							$('#errores-div').show();
-						},
-						complete : function(){
-							$('#form-new-request').trigger('reset');
 						}
 					})
 				}
