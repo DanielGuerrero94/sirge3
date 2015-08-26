@@ -48,7 +48,8 @@ Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
-Route::get('listado-solicitudes-usuario' , 'SolicitudController@listadoUsuario');
+Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
+Route::get('ver-solicitud/{id}' , 'SolicitudController@getSolicitud');
 
 Route::get('asignacion-solicitud' , 'SolicitudController@getNew');
 Route::get('cierre-solicitud' , 'SolicitudController@getNew');
@@ -129,3 +130,4 @@ Route::resource('prestaciones' , 'Ws\SIISAController' , [
 Route::get('php-info' , function(){
 	phpinfo();
 });
+

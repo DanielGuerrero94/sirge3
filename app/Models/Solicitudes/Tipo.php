@@ -12,4 +12,11 @@ class Tipo extends Model
 	 * @var string
 	 */
 	protected $table = 'solicitudes.tipo_solicitud';
+
+	/**
+	 * Grupo
+	 */
+	public function grupos(){
+		return $this->hasOne('App\Models\Solicitudes\Grupo' , 'id' , 'grupo');
+	}
 }

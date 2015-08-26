@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $(document).on('click', '.pagination a', function (event) {
+        $('#menues-container').off().on('click', '.pagination a', function (event) {
             event.preventDefault();
             var route = $(this).attr('href');
             $.get(route , function(data){

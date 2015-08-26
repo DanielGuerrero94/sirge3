@@ -81,11 +81,30 @@ class SolicitudController extends Controller
      * 
      * @return null
      */
-    public function listadoUsuario(Request $r){
-        $s = Solicitud::with(['tipos','estados'])->paginate(3);
+    public function getMisSolicitudes(Request $r){
+        $s = Solicitud::with(['tipos','estados'])->paginate(5);
+        $s->setPath('mis-solicitudes');
         $data = [
+            'page_title' => 'Mis solicitudes',
             'solicitudes' => $s
         ];
         return view('requests.user-requests' , $data);
+    }
+
+    /**
+     * Devuelve el detalle de una solicitud determinada
+     * @param int $id
+     *
+     * @return null
+     */
+    public function getSolicitud($id){
+        $s = Solicitud::with(['tipos' => function($q){
+            $q->with('grupos');
+        },'estados','operador','prioridades'])->find($id);
+        $data = [
+            'solicitud' => $s
+        ];
+        // echo '<pre>',print_r($s),'</pre>';
+        return view('requests.details' , $data);
     }
 }

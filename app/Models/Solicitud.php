@@ -36,4 +36,18 @@ class Solicitud extends Model
     public function estados(){
         return $this->hasOne('App\Models\Solicitudes\Estado' , 'id' , 'estado');
     }
+
+    /**
+     * Operador
+     */
+    public function operador(){
+        return $this->hasOne('App\Models\Usuario' , 'id_usuario' , 'usuario_asignacion');
+    }
+
+    /**
+     * Prioridad
+     */
+    public function prioridades(){
+        return $this->hasOne('App\Models\Solicitudes\Prioridad' , 'id' , 'prioridad');
+    }
 }
