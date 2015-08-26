@@ -14,8 +14,7 @@ class CreateSugerencias extends Migration {
 			$table->increments('id_sugerencia');
 			$table->integer('id_usuario');
 			$table->text('sugerencia');
-			$table->timestamps('fecha')->default(DB::raw('now()::timestamp(0)'));
-
+			$table->timestamp('fecha')->default(DB::raw('now()::timestamp(0)'));
 			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});
 	}

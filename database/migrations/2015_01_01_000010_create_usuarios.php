@@ -31,12 +31,12 @@ class CreateUsuarios extends Migration {
 			$table->string('skype', 200)->nullable();
 			$table->string('telefono', 20)->nullable();
 			$table->timestamp('last_login')->nullable();
-			$table->timestamps()->nullable();
+			$table->timestamps();
 			$table->rememberToken()->nullable();
 			$table->string('cargo', 100)->nullable();
 			$table->text('mensaje')->nullable();
 
-			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
+			$table->foreign('id_entidad')->references('id_entidad')->on('sistema.entidades');
 			$table->foreign('id_menu')->references('id_menu')->on('sistema.menues');
 			$table->foreign('id_area')->references('id_area')->on('sistema.areas');
 		});

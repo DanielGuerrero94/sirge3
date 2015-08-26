@@ -12,13 +12,13 @@ class CreateLotes extends Migration {
 	public function up() {
 		Schema::create('sistema.lotes', function (Blueprint $table) {
 			$table->increments('lote');
-			$table->integer('id_subida');
+			$table->integer('id_subida')->nullable();
 			$table->integer('id_usuario');
 			$table->string('id_provincia', 2);
 			$table->integer('id_estado');
 			$table->integer('registros_in');
 			$table->integer('registros_out');
-			$table->integer('registros_mod');
+			$table->integer('registros_mod')->default(0);
 			$table->timestamp('inicio')->default(DB::raw('now()::timestamp(0)'));
 			$table->timestamp('fin');
 

@@ -13,7 +13,7 @@ class CreateLotesRechazados extends Migration {
 		Schema::create('sistema.lotes_rechazados', function (Blueprint $table) {
 			$table->integer('lote')->primary();
 			$table->integer('id_usuario');
-			$table->timestamp('fecha_aceptado');
+			$table->timestamp('fecha_rechazado');
 
 			$table->foreign('lote')->references('lote')->on('sistema.lotes');
 			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
