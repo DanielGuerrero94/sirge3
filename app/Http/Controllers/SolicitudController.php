@@ -82,7 +82,7 @@ class SolicitudController extends Controller
      * @return null
      */
     public function getMisSolicitudes(Request $r){
-        $s = Solicitud::with(['tipos','estados'])->paginate(5);
+        $s = Solicitud::with(['tipos','estados'])->orderBy('id','desc')->paginate(5);
         $s->setPath('mis-solicitudes');
         $data = [
             'page_title' => 'Mis solicitudes',

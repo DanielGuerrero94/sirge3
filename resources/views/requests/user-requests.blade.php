@@ -11,7 +11,7 @@
                     <thead>
                       <tr>
                         <th>Nº</th>
-                        <th>Fecha</th>
+                        <th>Fecha ingreso</th>
                         <th>Tipo</th>
                         <th>Estado</th>
                         <th>Detalles</th>
