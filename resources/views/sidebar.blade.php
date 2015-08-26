@@ -32,7 +32,9 @@
         
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">MENU PRINCIPAL</li>
+            <li class="header">
+                <img style="width:200px" src="{{ asset ("/dist/img/logo.png")}}">
+            </li>
             @foreach ($modulos as $key_padre => $modulo)
                 @if ($modulo['arbol'] === 'S')
                     <li class="treeview">
