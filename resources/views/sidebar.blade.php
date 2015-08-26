@@ -33,7 +33,8 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="header">
-                <img style="width:200px" src="{{ asset ("/dist/img/logo.png")}}">
+                <img style="width:50px" src="{{ asset ("/dist/img/logo_sumar.png")}}">
+                <img style="width:160px" src="{{ asset ("/dist/img/identidad_msal_header.png")}}">
             </li>
             @foreach ($modulos as $key_padre => $modulo)
                 @if ($modulo['arbol'] === 'S')
