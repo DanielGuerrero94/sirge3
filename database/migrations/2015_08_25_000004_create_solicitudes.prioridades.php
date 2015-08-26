@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSolicitudes.prioridades extends Migration
+class CreateSolicitudesPrioridades extends Migration
 {
     /**
      * Run the migrations.

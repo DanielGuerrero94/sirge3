@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/datepicker/datepicker3.css") }}">
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-12">
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">
@@ -65,18 +65,6 @@
 					</div>
 				</div>
 			</form>
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">
-					Listado de solicitudes ingresadas
-				</h2>
-			</div>
-			<div class="box-body">
-				
-			</div>
 		</div>
 	</div>
 </div>
@@ -211,7 +199,6 @@
 				}
 			})
 		});
-
 	});
 </script>
 @endsection

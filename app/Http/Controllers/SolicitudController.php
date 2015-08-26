@@ -10,9 +10,9 @@ use App\Http\Requests;
 use App\Http\Requests\NuevaSolicitudRequest;
 use App\Http\Controllers\Controller;
 
-use App\Models\Solicitudes\Grupos;
-use App\Models\Solicitudes\Tipos;
-use App\Models\Solicitudes\Prioridades;
+use App\Models\Solicitudes\Grupo;
+use App\Models\Solicitudes\Tipo;
+use App\Models\Solicitudes\Prioridad;
 use App\Models\Solicitud;
 
 class SolicitudController extends Controller
@@ -32,8 +32,8 @@ class SolicitudController extends Controller
      * @return null
      */
     public function getNuevaSolicitud(){
-        $grupos = Grupos::all();
-        $prioridades = Prioridades::all();
+        $grupos = Grupo::all();
+        $prioridades = Prioridad::all();
         $data = [
             'page_title' => 'Ingreso de nueva solicitud',
             'sectores' => $grupos,
@@ -49,7 +49,7 @@ class SolicitudController extends Controller
      * @return null
      */
     public function getTipos($id){
-        $tipos = Tipos::where('grupo' , $id)->get();
+        $tipos = Tipo::where('grupo' , $id)->get();
 
         $data = [
             'tipos' => $tipos
@@ -74,6 +74,18 @@ class SolicitudController extends Controller
         if ($s->save()){
             return 'Se ha enviado su solicitud. Nos estaremos comunicando con usted a la brevedad. Muchas gracias';
         }
+    }
 
+    /**
+     * Devuelve el listado de requerimientos ingresados
+     * 
+     * @return null
+     */
+    public function listadoUsuario(Request $r){
+        $s = Solicitud::with(['tipos','estados'])->paginate(3);
+        $data = [
+            'solicitudes' => $s
+        ];
+        return view('requests.user-requests' , $data);
     }
 }
