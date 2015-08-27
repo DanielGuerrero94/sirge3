@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Datatables;
+use Auth;
+
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Controllers\Controller;
-
-use Auth;
 
 use App\Models\Usuario;
 use App\Models\Provincia;
@@ -46,6 +47,23 @@ class UserController extends Controller
     	} else {
     		return view('admin.usuarios.usuarios' , $data);
     	}
+    }
+
+    /**
+     * Devuelve el json para el datatable
+     * 
+     * @return json
+     */
+    public function tabla(){
+        $usuarios = Usuario::with(['provincia','area','menu','entidad'])->get();
+        return Datatables::of($usuarios)
+            ->addColumn('action' , function($usuario){
+                return '<button id-usuario="'. $usuario->id_usuario .'" class="edit-user btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';
+            })
+            ->setRowClass(function($usuario){
+                return $usuario->activo == 'N' ? 'danger' : '';
+            })
+            ->make(true);
     }
 
     /**

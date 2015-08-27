@@ -148,7 +148,8 @@ return [
          * Manual Application Providers
          */
         'Collective\Html\HtmlServiceProvider',
-        'Barryvdh\DomPDF\ServiceProvider'
+        'Barryvdh\DomPDF\ServiceProvider',
+        yajra\Datatables\DatatablesServiceProvider::class,
 
     ],
 
@@ -200,6 +201,7 @@ return [
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
         'PDF'       => 'Barryvdh\DomPDF\Facade',
+        'Datatables' => yajra\Datatables\Datatables::class,
 
     ],
 

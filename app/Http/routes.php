@@ -66,6 +66,12 @@ Route::get('profe' , 'PadronController@profe');
 Route::get('sss' , 'PadronController@sss');
 
 /**
+ * BENEFICIARIOS
+ */
+Route::get('listado-beneficiarios' , 'BeneficiariosController@index');
+Route::get('listado' , 'BeneficiariosController@tabla');
+
+/**
  * USUARIO
  */
 Route::get('perfil' , 'UserController@getProfile');
@@ -95,12 +101,14 @@ Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
  * ADMIN
  */
 Route::get('usuarios' , 'UserController@index');
+Route::get('usuarios-table' , 'UserController@tabla');
 Route::get('edit-usuario/{id}' , 'UserController@getEdit');
 Route::post('edit-usuario/{id}' , 'UserController@postEdit');
 Route::post('baja-usuario/{id}' , 'UserController@postBaja');
 Route::post('unblock-usuario/{id}' , 'UserController@postUnblock');
 
 Route::get('areas' , 'AreasController@index');
+Route::get('areas-table' , 'AreasController@tabla');
 Route::get('new-area' , 'AreasController@getNew');
 Route::post('new-area' , 'AreasController@postNew');
 Route::get('edit-area/{id}' , 'AreasController@getEdit');
