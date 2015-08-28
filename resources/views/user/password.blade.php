@@ -19,10 +19,6 @@
 		</div>
 	</form>
 </div>
-<!-- jQuery validator -->
-<script src="{{ asset ("/dist/js/jquery.validate.min.js") }}"></script>
-<!-- Password Strength -->
-<script src="{{ asset ("/dist/js/pwstrength-bootstrap.js") }}"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		

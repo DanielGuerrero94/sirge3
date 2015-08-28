@@ -38,6 +38,13 @@ class Solicitud extends Model
     }
 
     /**
+     * Usuario
+     */
+    public function usuario(){
+        return $this->hasOne('App\Models\Usuario' , 'id_usuario' , 'usuario_solicitante');
+    }
+
+    /**
      * Operador
      */
     public function operador(){

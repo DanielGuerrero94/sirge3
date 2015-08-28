@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Datatables;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -29,18 +31,24 @@ class MenuesController extends Controller
      * @return null
      */
     public function index(Request $r){
-    	$menues = Menu::orderBy('id_menu')->paginate(15);
-    	$menues->setPath('menues');
     	$data = [
-    		'page_title' => 'ABM Menues',
-    		'menues' => $menues
+    		'page_title' => 'ABM Menues'
     	];
+		return view('admin.menues.menues' , $data);
+    }
 
-    	if (sizeof($r->query())){
-    		return view('admin.menues.table' , $data);
-    	} else {
-    		return view('admin.menues.menues' , $data);
-    	}
+    /**
+     * Devuelve el json para la datatable
+     * 
+     * @return json
+     */
+    public function tabla(){
+        $menues = Menu::all();
+        return Datatables::of($menues)
+            ->addColumn('action' , function($menue){
+                return '<button id-menu="'. $menue->id_menu .'" class="edit-menu btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';
+            })
+            ->make(true);
     }
 
     /**

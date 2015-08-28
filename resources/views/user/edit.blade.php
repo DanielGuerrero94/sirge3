@@ -151,12 +151,6 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div>
-<!-- jQuery validator -->
-<script src="{{ asset ("/dist/js/jquery.validate.min.js") }}"></script>
-<!-- Inputmask jQuery -->
-<script src="{{ asset ("/dist/js/jquery.inputmask.js") }}"></script>
-<!-- Inputmask -->
-<script src="{{ asset ("/dist/js/inputmask.js") }}"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 

@@ -19,6 +19,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/fullcalendar/fullcalendar.css") }}"  />
     <!-- Bootstrap Datatables -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.css") }}" />
+    <!-- iCheck -->
+    <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/iCheck/square/red.css")}}"  />
     <!-- Theme style -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.css")}}"  />
     <!-- Loading Modal -->
@@ -80,6 +82,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset("/bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js") }}"></script>
 <!-- Bootstrap Datatables -->
 <script type="text/javascript" src="{{ asset("/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.js") }}"></script>
+<!-- iCheck -->
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/iCheck/icheck.min.js") }}"></script>
+<!-- jQuery validator -->
+<script type="text/javascript" src="{{ asset ("/dist/js/jquery.validate.min.js") }}"></script>
+<!-- Inputmask jQuery -->
+<script type="text/javascript" src="{{ asset ("/dist/js/jquery.inputmask.js") }}"></script>
+<!-- Inputmask -->
+<script type="text/javascript" src="{{ asset ("/dist/js/inputmask.js") }}"></script>
+<!-- Password Strength -->
+<script type="text/javascript" src="{{ asset ("/dist/js/pwstrength-bootstrap.js") }}"></script>
 <!-- AdminLTE App -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
 

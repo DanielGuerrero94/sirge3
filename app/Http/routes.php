@@ -48,12 +48,19 @@ Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
-Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
-Route::get('ver-solicitud/{id}' , 'SolicitudController@getSolicitud');
 
-Route::get('asignacion-solicitud' , 'SolicitudController@getNew');
+Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
+Route::get('mis-solicitudes-table' , 'SolicitudController@myRequestsTable');
+
+Route::get('asignacion-solicitud' , 'SolicitudController@getSolicitudesNoAsignadas');
+Route::get('asignaciones-table' , 'SolicitudController@asignacionSolicitudesTable');
+Route::post('asignar-operador' , 'SolicitudController@postOperador');
+Route::get('ver-solicitud/{id}/{back}' , 'SolicitudController@getSolicitud');
+
 Route::get('cierre-solicitud' , 'SolicitudController@getNew');
 Route::get('listado-solicitud' , 'SolicitudController@getNew');
+
+Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
 
 /**
  * PADRONES
@@ -115,6 +122,7 @@ Route::get('edit-area/{id}' , 'AreasController@getEdit');
 Route::post('edit-area/{id}' , 'AreasController@postEdit');
 
 Route::get('menues' , 'MenuesController@index');
+Route::get('menues-table' , 'MenuesController@tabla');
 Route::get('new-menu' , 'MenuesController@getNew');
 Route::post('new-menu' , 'MenuesController@postNew');
 Route::get('edit-menu/{id}' , 'MenuesController@getEdit');

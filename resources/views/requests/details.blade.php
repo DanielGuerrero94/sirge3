@@ -100,7 +100,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('.back').click(function(){
-			$.get('mis-solicitudes' , function(data){
+			$.get('{{ $back }}' , function(data){
 				$('.content-wrapper').html(data);
 			});
 		});

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Datatables;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -27,18 +29,24 @@ class AreasController extends Controller
      * @return void
      */
     public function index(Request $r){
-    	$areas = Area::orderBy('id_area')->paginate(15);
-    	$areas->setPath('areas');
     	$data = [
     		'page_title' => 'ABM Areas',
-    		'areas' => $areas
     	];
+		return view('admin.areas.areas' , $data);
+    }
 
-    	if (sizeof($r->query())){
-    		return view('admin.areas.table' , $data);
-    	} else {
-    		return view('admin.areas.areas' , $data);
-    	}
+    /**
+     * Devuelve el json para la datatable
+     * 
+     * @return json
+     */
+    public function tabla(){
+        $areas = Area::all();
+        return Datatables::of($areas)
+            ->addColumn('action' , function($area){
+                return '<button id-area="'. $area->id_area .'" class="edit-area btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';
+            })
+            ->make(true);
     }
 
     /**

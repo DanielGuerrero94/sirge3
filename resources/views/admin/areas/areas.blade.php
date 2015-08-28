@@ -3,18 +3,51 @@
 <div class="row">
     <div class="col-md-12">
 		<div id="areas-container">
-			@include('admin.areas.table')
+			<div class="box box-info">
+                <div class="box-header">
+                    <h2 class="box-title">Areas</h2>
+                    <p>Se muestran todas las áreas registradas:</p>
+                    <div class="box-tools pull-right">
+                        <button class="new-area btn btn-success">Nueva área <i class="fa fa-plus-circle"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table table-hover" id="areas-table">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
 		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#areas-container').off().on('click', '.pagination a', function (event) {
-            event.preventDefault();
-            var route = $(this).attr('href');
-            $.get(route , function(data){
-            	$('#areas-container').html(data);
+        $('#areas-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax : 'areas-table',
+            columns: [
+                { data: 'nombre', name: 'nombre' },
+                { data: 'action', name: 'action' }
+            ]
+        });
+
+        $('#areas-table').on('click' , '.edit-area' , function(){
+            var id = $(this).attr('id-area');
+            $.get('edit-area/' + id, function(data){
+                $('#areas-container').html(data);
+            });
+        });
+
+        $('.new-area').click(function(){
+            $.get('new-area' , function(data){
+               $('#areas-container').html(data); 
             })
         });
     }); 
