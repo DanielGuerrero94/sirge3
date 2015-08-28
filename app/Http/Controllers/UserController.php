@@ -35,22 +35,14 @@ class UserController extends Controller
      * @return view
      */
     public function index(Request $r){
-    	$usuarios = Usuario::with('menu' , 'area' , 'provincia' , 'conexiones')->orderBy('nombre')->paginate(3);
-    	$usuarios->setPath('usuarios');
     	$data = [
-    		'page_title' => 'ABM Usuarios',
-    		'usuarios' => $usuarios
+    		'page_title' => 'ABM Usuarios'
     	];
-
-    	if (sizeof($r->query())){
-    		return view('admin.usuarios.table' , $data);
-    	} else {
-    		return view('admin.usuarios.usuarios' , $data);
-    	}
+		return view('admin.usuarios.usuarios' , $data);
     }
 
     /**
-     * Devuelve el json para el datatable
+     * Devuelve el json para la datatable
      * 
      * @return json
      */

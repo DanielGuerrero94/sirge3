@@ -124,6 +124,7 @@ Route::post('check-tree/{modulo}/{menu}' , 'MenuesController@check');
 Route::post('uncheck-tree/{modulo}/{menu}' , 'MenuesController@uncheck');
 
 Route::get('modulos' , 'ModulosController@index');
+Route::get('modulos-table' , 'ModulosController@tabla');
 Route::get('new-modulo' , 'ModulosController@getNew');
 Route::post('new-modulo' , 'ModulosController@postNew');
 Route::get('edit-modulo/{id}' , 'ModulosController@getEdit');

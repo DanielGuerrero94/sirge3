@@ -1,6 +1,5 @@
 @extends('content')
 @section('content')
-<link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.css") }}">
 <div class="row">
     <div class="col-md-12">
         <div id="usuarios-container">
@@ -9,7 +8,7 @@
                     <h2 class="box-title">Listado completo de beneficiarios</h2>
                 </div>
                 <div class="box-body">
-                    <table class="table table-bordered" id="usuarios-table">
+                    <table class="table table-hover" id="usuarios-table">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -26,10 +25,6 @@
         </div>
     </div>
 </div>
-<!--
--->
-<script type="text/javascript" src="{{ asset("/bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js") }}"></script>
-<script type="text/javascript" src="{{ asset("/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.js") }}"></script>
 <script>
 $(function() {
     $('#usuarios-table').DataTable({

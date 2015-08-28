@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Datatables;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -27,18 +28,24 @@ class ModulosController extends Controller
      * @return null
      */
     public function index(Request $r){
-    	$modulos = Modulo::orderBy('nivel_1')->orderBy('nivel_2')->paginate(15);
-    	$modulos->setPath('modulos');
     	$data = [
-    		'page_title' => 'ABM Modulos',
-    		'modulos' => $modulos
+    		'page_title' => 'ABM Modulos'
     	];
+   		return view('admin.modulos.modulos' , $data);
+    }
 
-    	if (sizeof($r->query())){
-    		return view('admin.modulos.table' , $data);
-    	} else {
-    		return view('admin.modulos.modulos' , $data);
-    	}
+    /**
+     * Devuelve el json para la datatable
+     * 
+     * @return json
+     */
+    public function tabla(){
+        $modulos = Modulo::all();
+        return Datatables::of($modulos)
+            ->addColumn('action' , function($modulo){
+                return '<button id-modulo="'. $modulo->id_modulo .'" class="edit-modulo btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';
+            })
+            ->make(true);
     }
 
     /**
