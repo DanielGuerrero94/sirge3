@@ -22,6 +22,6 @@ class CreateTablePssTiposPrestacion extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('pss.tipo_prestacion');
+		Schema::drop('pss.tipos_prestacion');
 	}
 }
