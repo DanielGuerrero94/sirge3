@@ -46,20 +46,19 @@ Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
  * SOLICITUDES
  */
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
-Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
-
 Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
 Route::get('mis-solicitudes-table' , 'SolicitudController@myRequestsTable');
-
 Route::get('asignacion-solicitud' , 'SolicitudController@getSolicitudesNoAsignadas');
-Route::get('asignaciones-table' , 'SolicitudController@asignacionSolicitudesTable');
+Route::get('asignacion-solicitud-table' , 'SolicitudController@asignacionSolicitudesTable');
+Route::get('solicitudes-pendientes' , 'SolicitudController@getPendientes');
+Route::get('solicitudes-pendientes-table' , 'SolicitudController@solicitudesPendientesTable');
+Route::get('cerrar-solicitud/{id}' , 'SolicitudController@getCerrar');
+Route::post('cerrar-solicitud/{id}' , 'SolicitudController@postCerrar');
+
 Route::post('asignar-operador' , 'SolicitudController@postOperador');
 Route::get('ver-solicitud/{id}/{back}' , 'SolicitudController@getSolicitud');
-
-Route::get('cierre-solicitud' , 'SolicitudController@getNew');
-Route::get('listado-solicitud' , 'SolicitudController@getNew');
-
+Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
 
 /**
@@ -147,4 +146,5 @@ Route::resource('prestaciones' , 'Ws\SIISAController' , [
 Route::get('php-info' , function(){
 	phpinfo();
 });
+
 

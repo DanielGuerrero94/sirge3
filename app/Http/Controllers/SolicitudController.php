@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Datatables;
+use PDF;
+use Mail;
 
 use Illuminate\Http\Request;
 
@@ -126,7 +128,7 @@ class SolicitudController extends Controller
      * @return json
      */
     public function asignacionSolicitudesTable(){
-        $requests = Solicitud::with(['tipos','estados','usuario','prioridades'])->where('usuario_asignacion', null)->get();
+        $requests = Solicitud::with(['tipos','estados','usuario','prioridades'])->where('estado', 1)->get();
         return Datatables::of($requests)
             ->addColumn('estado_label' , function($request){
                 return '<span class="label label-'. $request->estados->css .'">'. $request->estados->descripcion .'</span>';
@@ -151,9 +153,11 @@ class SolicitudController extends Controller
      */
     public function postOperador(Request $r){
         $s = Solicitud::find($r->solicitud);
+        $s->estado = 2;
         $s->usuario_asignacion = $r->operador;
         $s->fecha_asignacion = date('Y-m-d H:i:s');
         if ($s->save()){
+            $this->notificarAsignacion($s->id);
             return 'Se ha asignado el requerimiento al usuario solicitado';
         }
     }
@@ -182,7 +186,9 @@ class SolicitudController extends Controller
      */
     public function getOperadores($id){
         $s = Solicitud::with('tipos')->find($id);
-        $operadores = Operador::with('usuario')->where('id_grupo' , $s->tipos->grupo)->get();
+        $operadores = Operador::with(['usuario' => function($q){
+            $q->orderBy('id_usuario');
+        }])->where('id_grupo' , $s->tipos->grupo)->get();
         $data = [
             'operadores' => $operadores,
             'id_solicitud' => $id
@@ -197,7 +203,103 @@ class SolicitudController extends Controller
      *
      * @return bool
      */
-    public function notificarAsignacion($id){
+    protected function notificarAsignacion($id){
+        $path = base_path() . '/storage/pdf/asignaciones/' . $id . '.pdf';
+        $user = Auth::user();
+        $s = Solicitud::with(['usuario','operador'])->find($id);
+        $data = [
+            'solicitud' => $s
+        ];
+        $pdf = PDF::loadView('pdf.asignacion' , $data);
+        $pdf->save($path);
 
+        Mail::send('emails.request-asignacion', ['usuario' => $user], function ($m) use ($user , $path , $id , $s) {
+            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+            $m->to($s->usuario->email)->cc($s->operador->email);
+            $m->subject('Asignación requerimiento Nº ' . $id);
+            $m->attach($path);
+        });
+    }
+
+    /**
+     * Devuelve el listado con las tareas asignadas al usuario
+     *
+     * @return null
+     */
+    public function getPendientes(){
+        $data = [
+            'page_title' => 'Solicitudes asignadas'
+        ];
+        return view('requests.pendientes' , $data);
+    }
+
+    /**
+     * Devuelve el json para la datatable
+     * 
+     * @return json
+     */
+    public function solicitudesPendientesTable(){
+        $requests = Solicitud::with(['tipos','estados','usuario','prioridades'])->where('estado', 2)->where('usuario_asignacion' , Auth::user()->id_usuario)->get();
+        return Datatables::of($requests)
+            ->addColumn('estado_label' , function($request){
+                return '<span class="label label-'. $request->estados->css .'">'. $request->estados->descripcion .'</span>';
+                //return 'DESAPARECIO';
+            })
+            ->addColumn('action' , function($request){
+                return '
+                    <button id-solicitud="'. $request->id .'" class="view-solicitud btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>
+                    <button id-solicitud="'. $request->id .'" class="cerrar-solicitud btn btn-danger btn-xs"><i class="fa fa-pencil-square-o"></i> Cerrar</button>';
+            })
+            ->setRowClass(function ($request){
+                return $request->prioridad == 5 ? 'danger' : '';
+            })
+            ->make(true);
+    }
+
+    /**
+     * Devuelve el formulario para el cierre de la solicitud
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getCerrar($id){
+        $s = Solicitud::find($id);
+        $data = [
+            's' => $s
+        ];
+        return view('requests.cerrar' , $data);
+    }
+
+    /**
+     * Cierra la solicitud y avisa por mail al usuario
+     * @param Request $r
+     * @param int $id
+     *
+     * @return string 
+     */
+    public function postCerrar(Request $r , $id){
+        $s = Solicitud::find($id);
+        $s->fecha_solucion = date('Y-m-d H:i:s');
+        $s->descripcion_solucion = $r->solucion;
+        $s->estado = 3;
+        if ($s->save()){
+            $path = base_path() . '/storage/pdf/soluciones/' . $id . '.pdf';
+            $user = Auth::user();
+            $s = Solicitud::with(['usuario','operador'])->find($id);
+            $data = [
+                'solicitud' => $s
+            ];
+            $pdf = PDF::loadView('pdf.cierre' , $data);
+            $pdf->save($path);
+
+            Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id], function ($m) use ($user , $path , $id , $s) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to($s->usuario->email)->cc($s->operador->email);
+                $m->subject('Cierre requerimiento Nº ' . $id);
+                $m->attach($path);
+            });
+
+            return 'Se ha cerrado el requerimiento y se avisó al usuario por email';
+        }
     }
 }

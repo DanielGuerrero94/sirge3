@@ -29,7 +29,7 @@
          var dt = $('#asignaciones-requests-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax : 'asignaciones-table',
+            ajax : 'asignacion-solicitud-table',
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'usuario.nombre', name: 'usuario.nombre' },

@@ -20,7 +20,7 @@
                     <input type="hidden" name="solicitud" value="{{ $id_solicitud }}">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
                     <button class="asignar btn btn-outline">Asignar</button>
                 </div>
             </form>
@@ -40,7 +40,7 @@
                     <p class="modal-text"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->
