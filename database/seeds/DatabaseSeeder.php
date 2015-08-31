@@ -58,6 +58,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaModulosMenu');
 		$this->call('SistemaComentarios');
 		$this->call('SistemaSugerencias');
+		$this->call('SistemaSubidas');
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
 		$this->call('SistemaLotesRechazados');
