@@ -60,6 +60,7 @@ Route::post('asignar-operador' , 'SolicitudController@postOperador');
 Route::get('ver-solicitud/{id}/{back}' , 'SolicitudController@getSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
+Route::get('solicitud-final/{id}' , 'SolicitudController@finalizarSolicitud');
 
 /**
  * PADRONES

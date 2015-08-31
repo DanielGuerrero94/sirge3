@@ -302,4 +302,18 @@ class SolicitudController extends Controller
             return 'Se ha cerrado el requerimiento y se avisó al usuario por email';
         }
     }
+
+    /**
+     * Finaliza la solicitud con el ok del usuario
+     * @param int $id
+     *
+     * @return null
+     */
+    public function finalizarSolicitud($id){
+        $s = Solicitud::find($id);
+        $s->estado = 4;
+        if ($s->save()){
+            return view('requests.gracias');
+        }
+    }
 }
