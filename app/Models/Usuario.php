@@ -57,7 +57,7 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
      * @return string
      */
     public function getNombreAttribute($value){
-        return ucwords(strtolower($value));
+        return ucwords(mb_strtolower($value));
     }
 
     /**
