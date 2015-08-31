@@ -2,14 +2,14 @@
 
 use Illuminate\Database\Seeder;
 
-class PssTiposPrestacion extends Seeder {
+class PssTipoPrestacion extends Seeder {
 	/**
 	 * Run the database seeds.
 	 *
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement("INSERT INTO pss.tipos_prestacion(tipo_prestacion,descripcion)
+		\DB::statement("INSERT INTO pss.tipo_prestacion(tipo_prestacion,descripcion)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
