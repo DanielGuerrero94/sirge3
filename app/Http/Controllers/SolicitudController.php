@@ -190,4 +190,14 @@ class SolicitudController extends Controller
         //echo '<pre>',print_r($data),'</pre>';
         return view('requests.operadores' , $data);
     }
+
+    /**
+     * Envia un email al usuario con el operador asignado a su requerimiento
+     * @param int $id
+     *
+     * @return bool
+     */
+    public function notificarAsignacion($id){
+
+    }
 }
