@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <div class="box box-info">
             <div class="box-header">
-                <h2 class="box-title">Requerimientos pendientes de asignación</h2>
+                <h2 class="box-title">Solicitudes ingresadas</h2>
             </div>
             <div class="box-body">
                 <table class="table table table-hover " id="listado-requests-table">
@@ -23,7 +23,22 @@
         </div>
     </div>
 </div>
-<div id="operadores-modal-container"></div>
+<div class="modal fade modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Atención!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
     $(document).ready(function() {
         
@@ -47,6 +62,14 @@
             var id = $(this).attr('id-solicitud');
             $.get('ver-solicitud/' + id + '/listado-solicitudes', function(data){
                 $('#request-container').html(data);
+            })
+        });
+
+        $('#listado-requests-table').on('click','.notificar-solicitud' , function(){
+            var id = $(this).attr('id-solicitud');
+            $.get('notificar-cierre/' + id , function(data){
+                $('#modal-text').html(data);
+                $('.modal').modal();
             })
         });
     }); 

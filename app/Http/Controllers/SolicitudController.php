@@ -188,7 +188,7 @@ class SolicitudController extends Controller
         $s = Solicitud::with('tipos')->find($id);
         $operadores = Operador::with(['usuario' => function($q){
             $q->orderBy('id_usuario');
-        }])->where('id_grupo' , $s->tipos->grupo)->get();
+        }])->where('id_grupo' , $s->tipos->grupo)->where('habilitado' , 'S')->get();
         $data = [
             'operadores' => $operadores,
             'id_solicitud' => $id
@@ -278,7 +278,7 @@ class SolicitudController extends Controller
      * @return string 
      */
     public function postCerrar(Request $r , $id){
-        $s = Solicitud::find($id);
+        $s = Solicitud::with(['usuario','operador'])->find($id);
         $s->fecha_solucion = date('Y-m-d H:i:s');
         $s->descripcion_solucion = $r->solucion;
         $s->estado = 3;
@@ -286,7 +286,6 @@ class SolicitudController extends Controller
         if ($s->save()){
             $path = base_path() . '/storage/pdf/soluciones/' . $id . '.pdf';
             $user = Auth::user();
-            $s = Solicitud::with(['usuario','operador'])->find($id);
             $data = [
                 'solicitud' => $s
             ];
@@ -343,12 +342,41 @@ class SolicitudController extends Controller
                 return '<span class="label label-'. $request->estados->css .'">'. $request->estados->descripcion .'</span>';
             })
             ->addColumn('action' , function($request){
-                return '
-                    <button id-solicitud="'. $request->id .'" class="view-solicitud btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+                $col = '<button id-solicitud="'. $request->id .'" class="view-solicitud btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+                if ($request->estado == 3){
+                    $col .= ' <button id-solicitud="'. $request->id .'" class="notificar-solicitud btn btn-warning btn-xs"><i class="fa fa-pencil-square-o"></i> Notificar</button>';
+                }
+                return $col;
             })
             ->setRowClass(function ($request){
                 return $request->prioridad == 5 ? 'danger' : '';
             })
             ->make(true);
+    }
+
+    /**
+     * Notifica por email al usuario el cierre del requerimiento
+     * @param int $id
+     *
+     * @return string
+     */
+    public function notificarCierre($id){
+        $s = Solicitud::with(['usuario','operador'])->find($id);
+        $path = base_path() . '/storage/pdf/soluciones/' . $id . '.pdf';
+        $user = Auth::user();
+        $data = [
+            'solicitud' => $s
+        ];
+        $pdf = PDF::loadView('pdf.cierre' , $data);
+        $pdf->save($path);
+
+        Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id , 'hash' => $s->hash], function ($m) use ($user , $path , $id , $s) {
+            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+            $m->to($s->usuario->email);
+            $m->subject('Cierre requerimiento Nº ' . $id);
+            $m->attach($path);
+        });
+
+        return 'Se ha notificado al usuario por email';
     }
 }

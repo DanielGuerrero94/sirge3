@@ -19,4 +19,11 @@ class Operador extends Model
     public function usuario(){
         return $this->hasOne('App\Models\Usuario' , 'id_usuario' , 'id_usuario');
     }
+
+    /**
+     * Grupo
+     */
+    public function sector(){
+    	return $this->hasOne('App\Models\Solicitudes\Grupo' , 'id' , 'id_grupo');
+    }
 }

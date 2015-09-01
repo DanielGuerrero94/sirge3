@@ -61,6 +61,7 @@ Route::post('asignar-operador' , 'SolicitudController@postOperador');
 Route::get('ver-solicitud/{id}/{back}' , 'SolicitudController@getSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
+Route::get('notificar-cierre/{id}' , 'SolicitudController@notificarCierre');
 Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicitud');
 
 /**
@@ -138,6 +139,13 @@ Route::get('new-modulo' , 'ModulosController@getNew');
 Route::post('new-modulo' , 'ModulosController@postNew');
 Route::get('edit-modulo/{id}' , 'ModulosController@getEdit');
 Route::post('edit-modulo/{id}' , 'ModulosController@postEdit');
+
+Route::get('operadores' , 'OperadoresController@index');
+Route::get('operadores-table' , 'OperadoresController@tabla');
+Route::post('habilitar-operador' , 'OperadoresController@enable');
+Route::post('deshabilitar-operador' , 'OperadoresController@disable');
+Route::get('new-operador' , 'OperadoresController@getNew');
+Route::post('new-operador' , 'OperadoresController@postNew');
 
 /********************************************************************************
  *								 	WS ROUTES 									*
