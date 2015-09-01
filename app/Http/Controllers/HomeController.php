@@ -33,7 +33,11 @@ class HomeController extends Controller
      */
     protected function getMenu($id_menu){
         $menu = array();
-        $relaciones = ModuloMenu::join('sistema.modulos' , 'sistema.modulos_menu.id_modulo' , '=' , 'sistema.modulos.id_modulo')->orderBy('nivel_1')->orderBy('nivel_2')->get();
+        $relaciones = ModuloMenu::join('sistema.modulos' , 'sistema.modulos_menu.id_modulo' , '=' , 'sistema.modulos.id_modulo')
+            ->where('id_menu' , $id_menu)
+            ->orderBy('nivel_1')
+            ->orderBy('nivel_2')
+            ->get();
 
         foreach ($relaciones as $key => $relacion){
             $modulo = Modulo::find($relacion->id_modulo);

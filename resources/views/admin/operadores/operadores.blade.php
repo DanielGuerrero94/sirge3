@@ -66,6 +66,9 @@
 			$.post('habilitar-operador' , 'id_operador=' + id , function(data){
 				$('#modal-text').html(data);
 				$('.modal').modal();
+				$('.modal').on('hidden.bs.modal', function (e) {
+		            dt.ajax.reload( null, false );
+		        });
 			});
 		});
 

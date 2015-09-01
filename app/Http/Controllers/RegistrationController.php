@@ -38,6 +38,7 @@ class RegistrationController extends Controller
         $user->id_entidad = $r->sede;
         $user->id_area = $r->area;
         $user->id_menu = 2;
+        $user->ruta_imagen = 'default-avatar.png';
         $user->fecha_nacimiento = $r->fecha_nacimiento;
         $user->ocupacion = $r->ocupacion;
         $user->facebook = $r->fb;

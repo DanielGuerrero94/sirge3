@@ -85,16 +85,7 @@
                         <div class="tab-pane" id="about">
                           <div class="row">
                               <h4 class="info-text"> Empezemos con información básica</h4>
-                              <div class="col-sm-4 col-sm-offset-1">
-                                 <div class="picture-container">
-                                      <div class="picture">
-                                          <img src="{{ asset ("/dist/img/usuarios/default-avatar.png")}}" class="picture-src" id="wizardPicturePreview" title=""/>
-                                          <input type="file" name="picture">
-                                      </div>
-                                      <h6>Elija una foto</h6>
-                                  </div>
-                              </div>
-                              <div class="col-sm-6">
+                              <div class="col-sm-10 col-sm-offset-1">
                                   <div class="form-group">
                                     <label for="nombre">Nombre</label>
                                     <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre ...">
