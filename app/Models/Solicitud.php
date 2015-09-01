@@ -24,6 +24,60 @@ class Solicitud extends Model
     }
 
     /**
+     * Ingresar la descripción de la solución
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setDescripcionSolucionAttribute($value){
+        $this->attributes['descripcion_solucion'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaSolicitudAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaEstimadaSolucionAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaAsignacionAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaSolucionAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
      * Tipo de solicitud
      */
     public function tipos(){

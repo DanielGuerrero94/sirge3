@@ -24,8 +24,10 @@ class CreateSolicitudes extends Migration
             $table->integer('estado')->default(1);
             $table->integer('usuario_asignacion')->nullable();
             $table->timestamp('fecha_asignacion')->nullable();
-            $table->date('fecha_solucion')->nullable();
+            $table->timestamp('fecha_solucion')->nullable();
             $table->text('descripcion_solucion')->nullable();
+            $table->timestamp('fecha_cierre_usuario')->nullable();
+            $table->string('hash' , 100)->nullable();
             $table->timestamps();
 
             $table->foreign('usuario_solicitante')->references('id_usuario')->on('sistema.usuarios');

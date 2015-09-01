@@ -27,6 +27,16 @@ class Menu extends Model {
 	public $timestamps = false;
 
 	/**
+     * Ingresar la descripción del requerimiento
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setDescripcionAttribute($value){
+        $this->attributes['descripcion'] = mb_strtoupper($value);
+    }
+
+	/**
 	 * Obtener el usuario asociado al área.
 	 */
 	public function usuarios() {

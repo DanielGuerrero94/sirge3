@@ -282,6 +282,7 @@ class SolicitudController extends Controller
         $s->fecha_solucion = date('Y-m-d H:i:s');
         $s->descripcion_solucion = $r->solucion;
         $s->estado = 3;
+        $s->hash = uniqid();
         if ($s->save()){
             $path = base_path() . '/storage/pdf/soluciones/' . $id . '.pdf';
             $user = Auth::user();
@@ -292,9 +293,9 @@ class SolicitudController extends Controller
             $pdf = PDF::loadView('pdf.cierre' , $data);
             $pdf->save($path);
 
-            Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id], function ($m) use ($user , $path , $id , $s) {
+            Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id , 'hash' => $s->hash], function ($m) use ($user , $path , $id , $s) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-                $m->to($s->usuario->email)->cc($s->operador->email);
+                $m->to($s->usuario->email);
                 $m->subject('Cierre requerimiento Nº ' . $id);
                 $m->attach($path);
             });
@@ -309,11 +310,45 @@ class SolicitudController extends Controller
      *
      * @return null
      */
-    public function finalizarSolicitud($id){
-        $s = Solicitud::find($id);
+    public function finalizarSolicitud($id , $hash){
+        $s = Solicitud::where('id' , $id)->where('hash' , $hash)->firstOrFail();
         $s->estado = 4;
+        $s->fecha_cierre_usuario = date('Y-m-d H:i:s');
         if ($s->save()){
             return view('requests.gracias');
         }
+    }
+
+    /**
+     * Devuelve un listado completo
+     *
+     * @return null
+     */
+    public function listado(){
+        $data = [
+            'page_title' => 'Listado completo'
+        ];
+        return view('requests.listado' , $data);
+    }
+
+    /**
+     *  Devuelve el json para la datatable
+     *
+     * @return json
+     */
+    public function listadoTable(){
+        $requests = Solicitud::with(['tipos','estados','usuario','prioridades'])->get();
+        return Datatables::of($requests)
+            ->addColumn('estado_label' , function($request){
+                return '<span class="label label-'. $request->estados->css .'">'. $request->estados->descripcion .'</span>';
+            })
+            ->addColumn('action' , function($request){
+                return '
+                    <button id-solicitud="'. $request->id .'" class="view-solicitud btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+            })
+            ->setRowClass(function ($request){
+                return $request->prioridad == 5 ? 'danger' : '';
+            })
+            ->make(true);
     }
 }

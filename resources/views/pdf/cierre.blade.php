@@ -20,7 +20,7 @@
 					<h4><u>Estimado {{ $solicitud->usuario->nombre }}:</u></h4>
 					<br/>
 					<br/>
-					Le informamos que la solicitud ingresada el día <b>{{ date ('d M y' , strtotime($solicitud->fecha_solicitud)) }}</b> con la siguiente descripción:
+					Le informamos que la solicitud ingresada el día <b>{{ $solicitud->fecha_solicitud }}</b> con la siguiente descripción:
 					<br/>
 					<br/>
 					<blockquote>

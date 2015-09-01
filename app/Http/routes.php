@@ -55,12 +55,13 @@ Route::get('solicitudes-pendientes' , 'SolicitudController@getPendientes');
 Route::get('solicitudes-pendientes-table' , 'SolicitudController@solicitudesPendientesTable');
 Route::get('cerrar-solicitud/{id}' , 'SolicitudController@getCerrar');
 Route::post('cerrar-solicitud/{id}' , 'SolicitudController@postCerrar');
-
+Route::get('listado-solicitudes' , 'SolicitudController@listado');
+Route::get('listado-solicitudes-table' , 'SolicitudController@listadoTable');
 Route::post('asignar-operador' , 'SolicitudController@postOperador');
 Route::get('ver-solicitud/{id}/{back}' , 'SolicitudController@getSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
 Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
-Route::get('solicitud-final/{id}' , 'SolicitudController@finalizarSolicitud');
+Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicitud');
 
 /**
  * PADRONES

@@ -41,10 +41,16 @@
 							</p>
 						</div>
 
-						<!-- FECHA ESTIMADA -->
+						<!-- FECHA INGRESADO -->
+						<label class="col-md-5 control-label">Fecha de solicitud : </label>
+						<div class="col-md-7">
+							<p class="form-control-static">{{ $solicitud->fecha_solicitud }}</p>
+						</div>
+
+						<!-- FECHA ESTIMADA POR USUARIO -->
 						<label class="col-md-5 control-label">Fecha estimada de solución : </label>
 						<div class="col-md-7">
-							<p class="form-control-static">{{ date ('d M Y', strtotime($solicitud->fecha_solicitud)) }}</p>
+							<p class="form-control-static">{{ $solicitud->fecha_estimada_solucion }}</p>
 						</div>
 
 						<!-- DETALLE PROBLEMA -->
@@ -63,7 +69,7 @@
 								<span class="label label-warning">ASIGNACIÓN PENDIENTE</span>
 							</p>
 							@else	
-							<p class="form-control-static">{{ date ('d M Y', strtotime($solicitud->fecha_asignacion)) }}</p>
+							<p class="form-control-static">{{ $solicitud->fecha_asignacion }}</p>
 							@endif
 						</div>
 
@@ -75,7 +81,7 @@
 								<span class="label label-danger">SOLUCIÓN PENDIENTE</span>
 							</p>
 							@else	
-							<p class="form-control-static">{{ date ('d M Y', strtotime($solicitud->fecha_solucion)) }}</p>
+							<p class="form-control-static">{{ $solicitud->fecha_solucion }}</p>
 							@endif
 						</div>
 
