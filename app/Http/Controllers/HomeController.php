@@ -74,8 +74,8 @@ class HomeController extends Controller
 
         $data = [
             'usuario' => Auth::user()->nombre,
-            'ocupacion' => 'Desarrollador PHP',
-            'alta' => 'Oct. 2012',
+            'ocupacion' => Auth::user()->ocupacion,
+            'mensaje' => Auth::user()->mensaje,
             'modulos' => $this->getMenu(Auth::user()->id_menu)
         ];
         return view('inicio' , $data);

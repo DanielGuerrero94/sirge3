@@ -62,7 +62,7 @@
                             <img src="{{ asset("/dist/img/usuarios/" . '/' . Auth::user()->ruta_imagen ) }}" class="img-circle" alt="User Image" />
                             <p>
                                 {{ $usuario }} - {{ $ocupacion }}
-                                <small>Miembro desde {{ $alta }}</small>
+                                <small>{{ $mensaje }}</small>
                             </p>
                         </li>
                         <!-- Menu Body 
