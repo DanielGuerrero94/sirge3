@@ -7,6 +7,7 @@
 				<h2 class="box-title">Detalle del efector: {{ $efector->nombre }}</h2>
 			</div>
 			<div class="box-body">
+				<h4>Detalle del efector: {{ $efector->nombre }}</h4>
 				
 			</div>
 		</div>
