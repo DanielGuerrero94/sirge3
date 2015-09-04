@@ -81,6 +81,15 @@ Route::get('listado-beneficiarios' , 'BeneficiariosController@index');
 Route::get('listado' , 'BeneficiariosController@tabla');
 
 /**
+ * EFECTORES
+ */
+Route::get('efectores-listado' , 'EfectoresController@listado');
+Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
+Route::get('efectores-detalle/{id}' , 'EfectoresController@detalle');
+
+
+
+/**
  * USUARIO
  */
 Route::get('perfil' , 'UserController@getProfile');
