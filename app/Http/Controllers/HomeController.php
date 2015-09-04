@@ -23,6 +23,8 @@ class HomeController extends Controller
 
     /**
      * Vista principal en caso de no ingresar login o inicio
+     * 
+     * @return null
      */
     public function index(){
     	return redirect()->intended('inicio');
@@ -30,6 +32,9 @@ class HomeController extends Controller
     
     /**
      * Armado de menú
+     * @param int $id_menu
+     *
+     * @return array
      */
     protected function getMenu($id_menu){
         $menu = array();
@@ -55,6 +60,9 @@ class HomeController extends Controller
 
     /**
      * Armo árbol con módulos
+     * @param array $menu
+     *
+     * @return string
      */
     protected function armaArbol($menu){
         foreach ($menu as $key => $modulo){
@@ -69,6 +77,8 @@ class HomeController extends Controller
     
     /**
      * Retorna vista principal
+     *
+     * @return null
      */
     public function inicio(){
 
@@ -83,6 +93,8 @@ class HomeController extends Controller
 
     /**
      * Retorna vista dashboard
+     *
+     * @return null
      */
     public function dashboard(){
         $data = [
