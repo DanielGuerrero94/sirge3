@@ -31,7 +31,7 @@ class InboxController extends Controller{
     	$usuarios = DB::select("
 		select 
             case when
-                (select count (*) from chat.mensajes where id_conversacion = a.id and leido = 'N' and id_usuario <> 8) > 0 then 1 else 0 end as nuevos_mensajes ,
+                (select count (*) from chat.mensajes where id_conversacion = a.id and leido = 'N' and id_usuario <> $user) > 0 then 1 else 0 end as nuevos_mensajes ,
                 u.* , 
                 p.descripcion
         from (
