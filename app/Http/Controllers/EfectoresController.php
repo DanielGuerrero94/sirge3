@@ -41,7 +41,7 @@ class EfectoresController extends Controller
      * @return json
      */
     public function listadoTabla(){
-    	$hospitals = Efector::with(['estado'])->get();
+    	$hospitals = Efector::with(['estado'])->take(20)->get();
         return Datatables::of($hospitals)
         	->addColumn('label_estado' , function($hospital){
         		return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
@@ -59,7 +59,17 @@ class EfectoresController extends Controller
      * @return null
      */
     public function detalle($id){
-    	$efector = Efector::find($id);
+    	$efector = Efector::with([
+                'estado' , 
+                'tipo' , 
+                'categoria' ,
+                'geo' => function($q){ 
+                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                },
+                'dependencia'
+                ])
+        ->where('id_efector' , $id)->find($id);
+
     	$data = [
     		'page_title' => $efector->nombre,
     		'efector' => $efector

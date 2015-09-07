@@ -102,7 +102,6 @@ class SolicitudController extends Controller
         return Datatables::of($requests)
             ->addColumn('estado_label' , function($request){
                 return '<span class="label label-'. $request->estados->css .'">'. $request->estados->descripcion .'</span>';
-                //return 'DESAPARECIO';
             })
             ->addColumn('action' , function($request){
                 return '<button id-solicitud="'. $request->id .'" class="view-solicitud btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';

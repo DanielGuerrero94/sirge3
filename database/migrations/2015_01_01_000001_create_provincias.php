@@ -10,7 +10,7 @@ class CreateProvincias extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('sistema.provincias', function (Blueprint $table) {
+		Schema::create('geo.provincias', function (Blueprint $table) {
 			$table->char('id_provincia', 2)->primary();
 			$table->integer('id_region');
 			$table->string('descripcion', 100);
@@ -23,6 +23,6 @@ class CreateProvincias extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('sistema.provincias');
+		Schema::drop('geo.provincias');
 	}
 }

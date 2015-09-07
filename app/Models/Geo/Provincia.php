@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Geo;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,9 +27,12 @@ class Provincia extends Model {
 	public $timestamps = true;
 
 	/**
-	 * Obtener los usuarios asociados a la entidad.
-	 */
-	public function usuarios() {
-		return $this->belongsTo('App\Models\Usuario', 'id_provincia', 'id_provincia');
-	}
+     * Nombre de la provincia
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getdescripcionAttribute($value){
+        return (mb_strtoupper($value));
+    }
 }
