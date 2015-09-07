@@ -115,7 +115,7 @@
 						<div class="col-md-4">
 							<!-- ESTADO -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Dependencia</label>
+								<label class="col-md-6 control-label">Dependencia</label>
 								<div class="col-md-6">
 									<p class="form-control-static">{{ $efector->dependencia->descripcion }}</p>
 								</div>
@@ -146,7 +146,7 @@
 						<div class="col-md-4">
 							<!-- DEPARTAMENTO -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Departamento</label>
+								<label class="col-md-6 control-label">Departamento</label>
 								<div class="col-md-6">
 									<p class="form-control-static">{{ $efector->geo->departamento->nombre_departamento }}</p>
 								</div>
@@ -155,13 +155,14 @@
 						<div class="col-md-4">
 							<!-- LOCALIDAD -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Localidad</label>
+								<label class="col-md-6 control-label">Localidad</label>
 								<div class="col-md-6">
 									<p class="form-control-static">{{ $efector->geo->localidad->nombre_localidad }}</p>
 								</div>
 							</div>
 						</div>
 					</div>
+						<h4>Compromiso</h4>
 					<div class="row">
 						<div class="col-md-4">
 							<!-- PROVINCIA -->
