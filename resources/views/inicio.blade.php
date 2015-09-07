@@ -63,11 +63,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 3.3.2 JS -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}" ></script>
 <!-- Highcharts -->
-<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/highcharts/js/highcharts.js") }}" ></script>
+<script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/highcharts.js") }}" ></script>
 <!-- Highcharts exporting server -->
-<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/highcharts/js/modules/exporting.js") }}" ></script>
+<script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/modules/exporting.js") }}" ></script>
 <!-- Highmaps -->
-<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/highmaps/js/modules/map.js") }}"></script>
+<script type="text/javascript" src="{{ asset ("/plugins/highmaps/js/modules/map.js") }}"></script>
 <!-- Highmaps Argentina -->
 <script type="text/javascript" src="http://code.highcharts.com/mapdata/countries/ar/ar-all.js" ></script>
 <!-- Jquery Sparkline -->
@@ -92,6 +92,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/dist/js/inputmask.js") }}"></script>
 <!-- Password Strength -->
 <script type="text/javascript" src="{{ asset ("/dist/js/pwstrength-bootstrap.js") }}"></script>
+<!-- JS Tree -->
+<script type="text/javascript" src="{{ asset ("/plugins/bootstrap-treeview-master/dist/bootstrap-treeview.min.js") }}" ></script>
 <!-- AdminLTE App -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
 

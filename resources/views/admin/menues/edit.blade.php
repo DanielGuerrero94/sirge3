@@ -45,8 +45,7 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div>
-<!-- JS Tree -->
-<script src="{{ asset ("/bower_components/admin-lte/plugins/bootstrap-treeview-master/dist/bootstrap-treeview.min.js") }}" type="text/javascript"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 
