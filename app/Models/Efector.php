@@ -62,4 +62,48 @@ class Efector extends Model
 		return $this->hasOne('App\Models\Efectores\DependenciaAdministrativa' , 'id_dependencia_administrativa' , 'id_dependencia_administrativa');
 	}
 
+	/**
+	 * Devuelvo el compromiso
+	 */
+	public function compromisos(){
+		return $this->hasMany('App\Models\Efectores\Gestion' , 'id_efector' , 'id_efector');
+	}
+
+	/**
+	 
+
+
+		VER QUE ONDA CON EL CONVENIO ADMINISTRATIVO
+
+
+
+	 */
+
+	/**
+	 * Devuelvo los teléfonos
+	 */
+	public function telefonos(){
+		return $this->hasMany('App\Models\Efectores\Telefono' , 'id_efector' , 'id_efector');
+	}
+
+	/**
+	 * Devuelvo los emails
+	 */
+	public function emails(){
+		return $this->hasMany('App\Models\Efectores\Email' , 'id_efector' , 'id_efector');
+	}
+
+	/**
+	 * Devuelvo los referentes
+	 */
+	public function referentes(){
+		return $this->hasMany('App\Models\Efectores\Referente' , 'id_efector' , 'id_efector');
+	}
+
+	/**
+	 * Devuelve la descentralización
+	 */
+	public function internet(){
+		return $this->hasOne('App\Models\Efectores\Descentralizacion' , 'id_efector' , 'id_efector');
+	}
 }

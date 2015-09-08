@@ -66,7 +66,12 @@ class EfectoresController extends Controller
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'departamento' , 'localidad']); 
                 },
-                'dependencia'
+                'dependencia',
+                'compromisos',
+                'emails',
+                'telefonos',
+                'referentes',
+                'internet'
                 ])
         ->where('id_efector' , $id)->find($id);
 

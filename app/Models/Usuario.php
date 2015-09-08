@@ -138,7 +138,7 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
 	 * Obtener la entidad asociada al usuario.
 	 */
 	public function provincia() {
-		return $this->hasOne('App\Models\Provincia', 'id_provincia', 'id_provincia');
+		return $this->hasOne('App\Models\Geo\Provincia', 'id_provincia', 'id_provincia');
 	}
 
 	/**

@@ -8,7 +8,7 @@ use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Usuario;
-use App\Models\Provincia;
+use App\Models\Geo\Provincia;
 use App\Models\Conversacion;
 use App\Models\Mensaje;
 

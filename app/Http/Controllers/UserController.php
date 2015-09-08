@@ -11,7 +11,7 @@ use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Controllers\Controller;
 
 use App\Models\Usuario;
-use App\Models\Provincia;
+use App\Models\Geo\Provincia;
 use App\Models\Entidad;
 use App\Models\Area;
 use App\Models\Menu;
