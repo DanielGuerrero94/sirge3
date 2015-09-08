@@ -287,7 +287,7 @@
     <!-- Password Strength -->
     <script src="{{ asset ("/dist/js/pwstrength-bootstrap.js") }}"></script>
 	<!-- Backstrech -->
-    <script src="{{ asset ("/bower_components/admin-lte/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
+    <script src="{{ asset ("/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 

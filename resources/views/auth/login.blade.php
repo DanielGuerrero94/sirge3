@@ -62,13 +62,6 @@
           {!! csrf_field() !!}
         </form>
 
-        <!--
-        <div class="social-auth-links text-center">
-          <p>- OR -</p>
-          <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
-          <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>
-        </div><!-- /.social-auth-links -->
-
         <a href="password">Olvidé mi contrase&ntilde;a</a><br>
         <a href="registrar" class="text-center">Solicitar un usuario</a>
 
@@ -81,6 +74,8 @@
     <script src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}"></script>
     <!-- iCheck -->
     <script src="{{ asset ("/bower_components/admin-lte/plugins/iCheck/icheck.min.js") }}"></script>
+    <!-- Backstrech -->
+    <script src="{{ asset ("/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
     <script>
       $(function () {
         $('input').iCheck({
@@ -89,10 +84,7 @@
           increaseArea: '20%' // optional
         });
       });
-    </script>
-    <!-- Backstrech -->
-    <script src="{{ asset ("/bower_components/admin-lte/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
-    <script>
+    
       $.backstretch([
         "http://dl.dropbox.com/u/515046/www/outside.jpg"
       , "http://dl.dropbox.com/u/515046/www/garfield-interior.jpg"

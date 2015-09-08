@@ -41,7 +41,7 @@ class EfectoresController extends Controller
      * @return json
      */
     public function listadoTabla(){
-    	$hospitals = Efector::with(['estado'])->take(20)->get();
+    	$hospitals = Efector::with(['estado'])->get();
         return Datatables::of($hospitals)
         	->addColumn('label_estado' , function($hospital){
         		return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
@@ -80,5 +80,18 @@ class EfectoresController extends Controller
     		'efector' => $efector
     	];
     	return view('efectores.detalle' , $data);
+    }
+
+    /**
+     * Devuelvo la vista para el alta de un efector nuevo
+     *
+     * @return null
+     */
+    public function alta(){
+        $data = [
+            'page_title' => 'Alta de nuevo efector'
+        ];
+
+        return view('efectores.alta' , $data);
     }
 }
