@@ -9,13 +9,13 @@
 }
 </style>
 <div class="row">
-	<div class="col-md-12">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Complete todos los campos</h2>
-			</div>
-			<div class="box-body">
-				<form>
+	<form id="alta-efector">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header">
+					<h2 class="box-title">Complete todos los campos</h2>
+				</div>
+				<div class="box-body">
 					<div id="rootwizard">
 						<div class="navbar navbar-static-top">
 							<div class="navbar-inner">
@@ -56,9 +56,14 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-		                      				<label for="siisa" class="col-sm-2 control-label">Tipo</label>
+		                      				<label for="tipo" class="col-sm-2 control-label">Tipo</label>
 		                  					<div class="col-sm-10">
-		                    					<input type="text" class="form-control" id="siisa" name="siisa" placeholder="99999999999999">
+		                    					<select class="form-control" id="tipo" name="tipo">
+		                    						<option value="">Seleccione ...</option>
+		                    						@foreach ($tipos as $tipo)
+		                    						<option value="{{ $tipo->id_tipo_efector }}"> {{$tipo->descripcion}} </option>
+		                    						@endforeach
+		                    					</select>
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -86,17 +91,22 @@
 						    	<div class="row">
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="" class="col-sm-5 control-label">Dependencia administrativa</label>
+		                      				<label for="dep_adm" class="col-sm-5 control-label">Dependencia administrativa</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                    					<select name="dep_adm" id="dep_adm" class="form-control">
+		                    						<option value="">Seleccione ...</option>
+		                    						@foreach($dependencias as $dependencia)
+		                    						<option value="{{ $dependencia->id_dependencia_administrativa }}"> {{ $dependencia->descripcion }} </option>
+		                    						@endforeach
+		                    					</select>
 		                  					</div>
 		                    			</div>
 						    		</div>
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="" class="col-sm-4 control-label">Dependencia sanitaria</label>
+		                      				<label for="dep_san" class="col-sm-4 control-label">Dependencia sanitaria</label>
 		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                    					<input type="text" class="form-control" id="dep_san" name="dep_san" placeholder="Ingrese la dependencia sanitaria">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -105,9 +115,9 @@
 						    	<div class="row">
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-4 control-label">CICS</label>
+							    			<label for="cics" class="col-sm-4 control-label">CICS</label>
 							    			<div class="col-sm-8">
-								    			<select name="integrante" class="form-control">
+								    			<select id="cics" name="cics" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -116,9 +126,9 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-4 control-label">Rural</label>
+							    			<label for="rural" class="col-sm-4 control-label">Rural</label>
 							    			<div class="col-sm-8">
-								    			<select name="integrante" class="form-control">
+								    			<select id="rural" name="rural" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -127,9 +137,14 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-		                      				<label for="" class="col-sm-4 control-label">Categoría</label>
+		                      				<label for="categoria" class="col-sm-4 control-label">Categoría</label>
 		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                    					<select class="form-control" id="categoria" name="categoria">
+		                    						<option value="">Seleccione ...</option>
+		                    						@foreach($categorias as $categoria)
+		                    						<option value="{{ $categoria->id_categorizacion }}"> {{ $categoria->descripcion }} </option>
+		                    						@endforeach
+		                    					</select>
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -138,9 +153,9 @@
 						    	<div class="row">
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-4 control-label">Integrante</label>
+							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
-								    			<select name="integrante" class="form-control">
+								    			<select id="integrante" name="integrante" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -149,9 +164,9 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-4 control-label">Priorizado</label>
+							    			<label for="priorizado" class="col-sm-4 control-label">Priorizado</label>
 							    			<div class="col-sm-8">
-								    			<select name="integrante" class="form-control">
+								    			<select id="priorizado" name="priorizado" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -160,9 +175,9 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-7 control-label">Compromiso de gestión</label>
+							    			<label for="compromiso" class="col-sm-7 control-label">Compromiso de gestión</label>
 							    			<div class="col-sm-5">
-								    			<select name="integrante" class="form-control">
+								    			<select id="compromiso" name="compromiso" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -364,9 +379,17 @@
 						    </div>
 							<div class="tab-pane" id="telefono">
 								<div class="row">
-									<div class="col-md-12">
+									<div class="col-md-6">
 						    			<div class="form-group">
 		                      				<label for="" class="col-sm-5 control-label">Teléfono</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="" class="col-sm-5 control-label">Observaciones</label>
 		                  					<div class="col-sm-7">
 		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
 		                  					</div>
@@ -376,9 +399,17 @@
 						    </div>
 							<div class="tab-pane" id="email">
 						    	<div class="row">
-						    		<div class="col-md-12">
+						    		<div class="col-md-6">
 						    			<div class="form-group">
 		                      				<label for="" class="col-sm-5 control-label">Email</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="" class="col-sm-5 control-label">Observaciones</label>
 		                  					<div class="col-sm-7">
 		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
 		                  					</div>
@@ -399,25 +430,39 @@
 								</div>
 						    </div>
 							<ul class="pager wizard">
-								<li class="previous first" style="display:none;"><a href="#">Primero</a></li>
-								<li class="previous"><a href="#">Anterior</a></li>
-								<li class="next last" style="display:none;"><a href="#">Último</a></li>
-							  	<li class="next"><a href="#">Siguiente</a></li>
+								<li class="previous first"><a href="javascript:;">Primero</a></li>
+								<li class="previous"><a href="javascript:;">Anterior</a></li>
+								<li class="next last"><a href="javascript:;">Ultimo</a></li>
+							  	<li class="next"><a href="javascript:;">Siguiente</a></li>
 							</ul>
 						</div>	
 					</div>
-				</form>
-			</div>
-			<div class="box-footer">
-				<div class="btn-group " role="group">
-				 	<button type="button" class="back btn btn-info">Cancelar alta</button>
+				</div>
+				<div class="box-footer">
+					<div class="btn-group " role="group">
+					 	<button class="back btn btn-info">Cancelar alta</button>
+					 	<button class="finish btn btn-warning">Solicitar alta</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+	$('.finish').hide();
+
+	
+	var $validator = $('form').validate({
+		rules : {
+			cuie : {
+				required : true,
+				minlength : 8,
+				maxlength : 8
+			}
+		}
+	});
+	
 
 	$('.back').click(function(){
 		$('form').trigger('reset');
@@ -429,9 +474,23 @@ $(document).ready(function() {
 			var $current = index+1;
 			var $percent = ($current/$total) * 100;
 			$('.progress-bar').css({width:$percent+'%'});
+
+			if($current >= $total) {
+				$('.finish').show()
+			} else {
+				$('.finish').hide()
+			}
+
 		},
 		onTabClick : function(tab, navigation, index){
 			return false;
+		},
+		onNext : function(tab, navigation, index){
+			var $valid = $('form').valid();
+	  			if(!$valid) {
+	  				$validator.focusInvalid();
+	  				return false;
+	  			}
 		}
 		
 	});

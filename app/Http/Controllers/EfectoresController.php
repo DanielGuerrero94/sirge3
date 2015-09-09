@@ -11,6 +11,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Efector;
+use App\Models\Efectores\Tipo;
+use App\Models\Efectores\DependenciaAdministrativa;
+use App\Models\Efectores\Categoria;
 
 class EfectoresController extends Controller
 {
@@ -88,8 +91,14 @@ class EfectoresController extends Controller
      * @return null
      */
     public function alta(){
+        $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
+        $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
+        $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
         $data = [
-            'page_title' => 'Alta de nuevo efector'
+            'page_title' => 'Alta de nuevo efector',
+            'tipos' => $tipos,
+            'dependencias' => $dependencias,
+            'categorias' => $categorias
         ];
 
         return view('efectores.alta' , $data);
