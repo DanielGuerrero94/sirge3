@@ -26,5 +26,15 @@ class Localidad extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * Nombre de la localidad
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getNombreLocalidadAttribute($value){
+        return (mb_strtoupper($value));
+    }
 }
 

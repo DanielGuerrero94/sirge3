@@ -21,8 +21,8 @@
 							<div class="navbar-inner">
 						    	<div class="container navi">
 									<ul>
-						  				<li><a href="#generales" data-toggle="tab">Generales</a></li>
 										<li><a href="#domicilio" data-toggle="tab">Domicilio</a></li>
+						  				<li><a href="#generales" data-toggle="tab">Generales</a></li>
 										<li><a href="#gestion" data-toggle="tab">Gestión</a></li>
 										<li><a href="#convenio" data-toggle="tab">Convenio</a></li>
 										<li><a href="#telefono" data-toggle="tab">Teléfono</a></li>
@@ -211,7 +211,7 @@
 								    			<select id="provincia" name="provincia" class="form-control">
 								    				<option value="">Seleccione ...</option>
 								    				@foreach($provincias as $provincia)
-								    				<option value=" {{ $provincia->id_provincia }} ">{{ $provincia->descripcion }}</option>
+								    				<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
 								    				@endforeach
 								    			</select>
 							    			</div>
@@ -229,11 +229,10 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-4 control-label">Localidad</label>
+							    			<label for="localidad" class="col-sm-4 control-label">Localidad</label>
 							    			<div class="col-sm-8">
-								    			<select name="integrante" class="form-control">
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    			<select name="localidad" id="localidad" class="form-control">
+								    				<option value="">Seleccione ...</option>
 								    			</select>
 							    			</div>
 						    			</div>
@@ -521,8 +520,32 @@ $(document).ready(function() {
 
 	$('#provincia').change(function(){
 		var provincia = $(this).val();
-		$.get('departamentos')
+		var html = '';
+			html += '<option value="">Seleccione ...</option>';
+		$.get('departamentos/' + provincia , function(data){
+			$.each(data , function(key , value){
+				html += '<option id-dto="' + value.id_departamento + '"  value="' + value.id + '">';
+				html += value.nombre_departamento;
+				html += '</option>';
+			});
+			$('#departamento').html(html);
+		});
 	});
+
+	$('#departamento').change(function(){
+		var provincia = $('#provincia').val();
+		var departamento = $('option:selected' , this).attr('id-dto');
+		var html = '';
+			html += '<option value="">Seleccione ...</option>';
+		$.get('localidades/' + provincia + '/' + departamento , function(data){
+			$.each(data , function(key , value){
+				html += '<option value="' + value.id + '">';
+				html += value.nombre_localidad;
+				html += '</option>';
+			});
+			$('#localidad').html(html);
+		});
+	})
 
   	$('#rootwizard').bootstrapWizard({
   		onTabShow: function(tab, navigation, index) {

@@ -26,4 +26,14 @@ class Departamento extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * Nombre del departamento
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getNombreDepartamentoAttribute($value){
+        return (mb_strtoupper($value));
+    }
 }

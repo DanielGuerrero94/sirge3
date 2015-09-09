@@ -159,7 +159,8 @@ Route::post('new-operador' , 'OperadoresController@postNew');
 /********************************************************************************
  *							 	   MISC ROUTES 									*
  ********************************************************************************/
-Route::get('departamentos' , 'GeoController@departamentos');
+Route::get('departamentos/{provincia}' , 'GeoController@departamentos');
+Route::get('localidades/{provincia}/{departamento}' , 'GeoController@localidades');
 
 /********************************************************************************
  *								 	WS ROUTES 									*
