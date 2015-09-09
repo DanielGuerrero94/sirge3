@@ -48,8 +48,8 @@
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-		                      				<label for="siisa" class="col-sm-2 control-label">SIISA</label>
-		                  					<div class="col-sm-10">
+		                      				<label for="siisa" class="col-sm-3 control-label"><a href="efector-siisa" data-toggle="tooltip" data-placement="bottom" title="Haga click aquí si desea generar un código SIISA interno" ><u>SIISA</u></a></label>
+		                  					<div class="col-sm-9">
 		                    					<input type="text" class="form-control" id="siisa" name="siisa" placeholder="99999999999999">
 		                  					</div>
 		                    			</div>
@@ -118,6 +118,7 @@
 							    			<label for="cics" class="col-sm-4 control-label">CICS</label>
 							    			<div class="col-sm-8">
 								    			<select id="cics" name="cics" class="form-control">
+								    				<option value="">Seleccione...</option>
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -129,6 +130,7 @@
 							    			<label for="rural" class="col-sm-4 control-label">Rural</label>
 							    			<div class="col-sm-8">
 								    			<select id="rural" name="rural" class="form-control">
+								    				<option value="">Seleccione...</option>
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -156,6 +158,7 @@
 							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
 								    			<select id="integrante" name="integrante" class="form-control">
+								    				<option value="">Seleccione...</option>
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -167,6 +170,7 @@
 							    			<label for="priorizado" class="col-sm-4 control-label">Priorizado</label>
 							    			<div class="col-sm-8">
 								    			<select id="priorizado" name="priorizado" class="form-control">
+								    				<option value="">Seleccione...</option>
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -178,6 +182,7 @@
 							    			<label for="compromiso" class="col-sm-7 control-label">Compromiso de gestión</label>
 							    			<div class="col-sm-5">
 								    			<select id="compromiso" name="compromiso" class="form-control">
+								    				<option value="">Seleccione...</option>
 								    				<option value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			</select>
@@ -190,9 +195,9 @@
 						    	<div class="row">
 						    		<div class="col-md-12">
 						    			<div class="form-group">
-		                      				<label for="" class="col-sm-1 control-label">Dirección</label>
+		                      				<label for="direccion" class="col-sm-1 control-label">Dirección</label>
 		                  					<div class="col-sm-11">
-		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                    					<input type="text" class="form-control" id="direccion" name="direccion" placeholder="999999">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -201,22 +206,23 @@
 						    	<div class="row">
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-3 control-label">Provincia</label>
+							    			<label for="provincia" class="col-sm-3 control-label">Provincia</label>
 							    			<div class="col-sm-9">
-								    			<select name="integrante" class="form-control">
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    			<select id="provincia" name="provincia" class="form-control">
+								    				<option value="">Seleccione ...</option>
+								    				@foreach($provincias as $provincia)
+								    				<option value=" {{ $provincia->id_provincia }} ">{{ $provincia->descripcion }}</option>
+								    				@endforeach
 								    			</select>
 							    			</div>
 						    			</div>
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="" class="col-sm-4 control-label">Departamento</label>
+							    			<label for="departamento" class="col-sm-4 control-label">Departamento</label>
 							    			<div class="col-sm-8">
-								    			<select name="integrante" class="form-control">
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    			<select name="departamento" id="departamento" class="form-control">
+								    				<option value="">Seleccione ...</option>
 								    			</select>
 							    			</div>
 						    			</div>
@@ -430,9 +436,7 @@
 								</div>
 						    </div>
 							<ul class="pager wizard">
-								<li class="previous first"><a href="javascript:;">Primero</a></li>
 								<li class="previous"><a href="javascript:;">Anterior</a></li>
-								<li class="next last"><a href="javascript:;">Ultimo</a></li>
 							  	<li class="next"><a href="javascript:;">Siguiente</a></li>
 							</ul>
 						</div>	
@@ -457,15 +461,67 @@ $(document).ready(function() {
 		rules : {
 			cuie : {
 				required : true,
-				minlength : 8,
-				maxlength : 8
+				minlength : 6,
+				maxlength : 6
+			},
+			siisa : {
+				required : true,
+				digits : true,
+				minlength : 14,
+				maxlength : 14
+			},
+			tipo : {
+				required : true
+			},
+			nombre : {
+				required : true,
+				minlength : 10,
+				maxlength : 200
+			},
+			dep_adm : {
+				required : true
+			},
+			cics : {
+				required : true
+			},
+			rural : {
+				required : true
+			},
+			categoria : {
+				required : true
+			},
+			integrante : {
+				required : true
+			},
+			priorizado : {
+				required : true
+			},
+			compromiso : {
+				required : true
+			},
+			direccion : {
+				required : true,
+				minlength : 15,
+				maxlength : 500
+			},
+			provincia : {
+				required : true
+			},
+			departamento : {
+				required : true
 			}
+
 		}
 	});
 	
 
 	$('.back').click(function(){
 		$('form').trigger('reset');
+	});
+
+	$('#provincia').change(function(){
+		var provincia = $(this).val();
+		$.get('departamentos')
 	});
 
   	$('#rootwizard').bootstrapWizard({
@@ -487,12 +543,11 @@ $(document).ready(function() {
 		},
 		onNext : function(tab, navigation, index){
 			var $valid = $('form').valid();
-	  			if(!$valid) {
-	  				$validator.focusInvalid();
-	  				return false;
-	  			}
+  			if(!$valid) {
+  				$validator.focusInvalid();
+  				return false;
+  			}
 		}
-		
 	});
 });
 </script>

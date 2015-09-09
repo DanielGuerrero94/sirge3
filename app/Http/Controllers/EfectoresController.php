@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Geo\Provincia;
+
 use App\Models\Efector;
 use App\Models\Efectores\Tipo;
 use App\Models\Efectores\DependenciaAdministrativa;
@@ -94,11 +96,13 @@ class EfectoresController extends Controller
         $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
         $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
         $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
+        $provincias = Provincia::all();
         $data = [
             'page_title' => 'Alta de nuevo efector',
             'tipos' => $tipos,
             'dependencias' => $dependencias,
-            'categorias' => $categorias
+            'categorias' => $categorias,
+            'provincias' => $provincias
         ];
 
         return view('efectores.alta' , $data);

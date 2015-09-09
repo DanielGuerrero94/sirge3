@@ -157,6 +157,11 @@ Route::get('new-operador' , 'OperadoresController@getNew');
 Route::post('new-operador' , 'OperadoresController@postNew');
 
 /********************************************************************************
+ *							 	   MISC ROUTES 									*
+ ********************************************************************************/
+Route::get('departamentos' , 'GeoController@departamentos');
+
+/********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/
 Route::resource('prestaciones' , 'Ws\SIISAController' , [
