@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Efector extends Model
 {
     /**
-	 * The table associated with the model.
+	 * The table associated with the model
 	 *
 	 * @var string
 	 */
