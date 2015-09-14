@@ -92,7 +92,7 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function alta(){
+    public function getAlta(){
         $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
         $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
         $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
@@ -106,5 +106,15 @@ class EfectoresController extends Controller
         ];
 
         return view('efectores.alta' , $data);
+    }
+
+    /**
+     * Da de alta el efector
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function postAlta(Request $r){
+        
     }
 }

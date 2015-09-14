@@ -34,7 +34,7 @@ class Localidad extends Model
      * @return string
      */
     public function getNombreLocalidadAttribute($value){
-        return (mb_strtoupper($value));
+        return mb_strtoupper(html_entity_decode($value));
     }
 }
 

@@ -34,6 +34,6 @@ class Departamento extends Model
      * @return string
      */
     public function getNombreDepartamentoAttribute($value){
-        return (mb_strtoupper($value));
+        return mb_strtoupper(html_entity_decode($value));
     }
 }
