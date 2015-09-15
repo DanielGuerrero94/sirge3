@@ -117,6 +117,116 @@ class EfectoresController extends Controller
      * @return string
      */
     public function postAlta(NuevoEfectorRequest $r){
+        return 'ok';
+    }
 
+    /**
+     * Devuelvo la primer letra del cuie dependiendo de la provincia
+     * @param $provincia char
+     *
+     * @return char
+     */
+
+    protected function getLetra($provincia){
+        switch ($provincia) {
+            case '01':
+                $l = 'C';
+                break;
+            case '02':
+                $l = 'B';
+                break;
+            case '03':
+                $l = 'K';
+                break;
+            case '04':
+                $l = 'X';
+                break;
+            case '05':
+                $l = 'W';
+                break;
+            case '06':
+                $l = 'E';
+                break;
+            case '07':
+                $l = 'Y';
+                break;
+            case '08':
+                $l = 'F';
+                break;
+            case '09':
+                $l = 'M';
+                break;
+            case '10':
+                $l = 'A';
+                break;
+            case '11':
+                $l = 'J';
+                break;
+            case '12':
+                $l = 'D';
+                break;
+            case '13':
+                $l = 'S';
+                break;
+            case '14':
+                $l = 'G';
+                break;
+            case '15':
+                $l = 'T';
+                break;
+            case '16':
+                $l = 'H';
+                break;
+            case '17':
+                $l = 'U';
+                break;
+            case '18':
+                $l = 'P';
+                break;
+            case '19':
+                $l = 'L';
+                break;
+            case '20':
+                $l = 'N';
+                break;
+            case '21':
+                $l = 'Q';
+                break;
+            case '22':
+                $l = 'R';
+                break;
+            case '23':
+                $l = 'Z';
+                break;
+            case '24':
+                $l = 'V';
+                break;
+            
+            default:
+                $l = 'UEC';
+                break;
+        }
+        return $l;
+    }
+
+    /**
+     * Devuelve un cuie disponible
+     *
+     * @return string
+     */
+    public function getCuie(){
+        $disponible = false;
+        $letra = $this->getLetra(Auth::user()->id_provincia);
+        $numero = 1;
+
+        while (! $disponible){
+            $cuie =  $letra . str_pad ($numero , 5 , '0' , STR_PAD_LEFT);
+            if (! (Efector::where('cuie' , $cuie)->count())) {
+                $disponible = true;
+            } else {
+                $numero ++;
+            }
+        }
+        return $cuie;
     }
 }

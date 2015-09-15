@@ -25,27 +25,6 @@ class NuevoEfectorRequest extends Request
     {
 
 /*
-legal:
-dep_adm:
-dep_san:
-cics:
-rural:
-categoria:
-integrante:
-priorizado:
-compromiso:
-direccion:
-provincia:
-departamento:
-localidad:
-codigo_postal:
-ciudad:
-numero_compromiso:
-firmante_compromiso:
-indirecto:
-compromiso_fsus:
-compromiso_fini:
-compromiso_ffin:
 convenio_numero:
 convenio_firmante:
 convenio_fsus:
@@ -63,7 +42,30 @@ refer:
             'siisa' => 'required|digits:14',
             'tipo' => 'required',
             'nombre' => 'required|between:10,200',
-
+            'dep_adm' => 'required',
+            'cics' => 'required',
+            'rural' => 'required',
+            'categoria' => 'required',
+            'integrante' => 'required',
+            'priorizado' => 'required',
+            'compromiso' => 'required',
+            'direccion' => 'required|between:15,500',
+            'provincia' => 'required',
+            'departamento' => 'required',
+            'localidad' => 'required',
+            'numero_compromiso' => 'required_if:compromiso,S|min:3',
+            'firmante_compromiso' => 'required_if:compromiso,S|min:8',
+            'compromiso_fsus' => 'required_if:compromiso,S|date_format:d/m/Y',
+            'compromiso_fini' => 'required_if:compromiso,S|date_format:d/m/Y',
+            'compromiso_ffin' => 'required_if:compromiso,S|date_format:d/m/Y',
+            'indirecto' => 'required_if:compromiso,S',
+            'convenio_numero' => 'required_if:indirecto,S|min:3',
+            'convenio_firmante' => 'required_if:indirecto,S|min:3',
+            'convenio_fsus' => 'required_if:indirecto,S|date_format:d/m/Y',
+            'convenio_fini' => 'required_if:indirecto,S|date_format:d/m/Y',
+            'convenio_ffin' => 'required_if:indirecto,S|date_format:d/m/Y',
+            'correo' => 'email',
+            'refer' => 'between:8,200'
         ];
     }
 }

@@ -590,8 +590,22 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler : function(form){
-			$.post('efectores-alta' , $(form).serialize() , function(data){
-				console.log(data);
+			$.ajax({
+				method : 'post',
+				url : 'efectores-alta',
+				data : $(form).serialize(),
+				success : function(data){
+					console.log(data);
+				},
+				error : function(data){
+					var html = '';
+					var e = JSON.parse(data.responseText);
+					$.each(e , function (key , value){
+						html += '<li>' + value[0] + '</li>';
+					});
+					$('#errores-form').html(html);
+					$('#errores-div').show();
+				}
 			})
 		}
 	});

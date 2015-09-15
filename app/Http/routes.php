@@ -88,6 +88,7 @@ Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
 Route::get('efectores-detalle/{id}' , 'EfectoresController@detalle');
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
 Route::post('efectores-alta' , 'EfectoresController@postAlta');
+Route::get('new-cuie' , 'EfectoresController@getCuie');
 
 
 /**
