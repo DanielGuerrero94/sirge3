@@ -16,18 +16,20 @@
 					<h2 class="box-title">Complete todos los campos</h2>
 				</div>
 				<div class="box-body">
+					<div class="alert alert-danger" id="errores-div">
+				        <ul id="errores-form">
+				        </ul>
+				    </div>
 					<div id="rootwizard">
 						<div class="navbar navbar-static-top">
 							<div class="navbar-inner">
 						    	<div class="container navi">
 									<ul>
-										<!--
 						  				<li><a href="#generales" data-toggle="tab">Generales</a></li>
 										<li><a href="#domicilio" data-toggle="tab">Domicilio</a></li>
 										<li><a href="#gestion" data-toggle="tab">Compromiso</a></li>
 										<li><a href="#convenio" data-toggle="tab">Convenio</a></li>
 										<li><a href="#telefono" data-toggle="tab">Teléfono</a></li>
-										-->
 										<li><a href="#email" data-toggle="tab">Email</a></li>
 										<li><a href="#referente" data-toggle="tab">Referente</a></li>
 									</ul>
@@ -458,6 +460,7 @@
 $(document).ready(function() {
 	
 	$('.finish').hide();
+	$('#errores-div').hide();
 	
 	$('#tel').inputmask('(999) 9999 9999')
 
@@ -540,6 +543,10 @@ $(document).ready(function() {
 			},
 			localidad : {
 				required : true
+			},
+			codigo_postal : {
+				minlength : 4,
+				maxlength : 8
 			},
 			numero_compromiso : {
 				required : true,

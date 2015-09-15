@@ -8,6 +8,8 @@ use Datatables;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Requests\NuevoEfectorRequest;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\Geo\Provincia;
@@ -114,7 +116,7 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function postAlta(Request $r){
-        
+    public function postAlta(NuevoEfectorRequest $r){
+
     }
 }

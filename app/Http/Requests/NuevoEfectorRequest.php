@@ -13,7 +13,7 @@ class NuevoEfectorRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,47 @@ class NuevoEfectorRequest extends Request
      */
     public function rules()
     {
+
+/*
+legal:
+dep_adm:
+dep_san:
+cics:
+rural:
+categoria:
+integrante:
+priorizado:
+compromiso:
+direccion:
+provincia:
+departamento:
+localidad:
+codigo_postal:
+ciudad:
+numero_compromiso:
+firmante_compromiso:
+indirecto:
+compromiso_fsus:
+compromiso_fini:
+compromiso_ffin:
+convenio_numero:
+convenio_firmante:
+convenio_fsus:
+convenio_fini:
+convenio_ffin:
+cuie_admin:
+nombre_admin:
+tel:
+obs_tel:
+correo:
+refer:
+*/
         return [
-            //
+            'cuie' => 'required|between:6,6',
+            'siisa' => 'required|digits:14',
+            'tipo' => 'required',
+            'nombre' => 'required|between:10,200',
+
         ];
     }
 }
