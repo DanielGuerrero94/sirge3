@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Datatables;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -117,7 +118,7 @@ class EfectoresController extends Controller
      * @return string
      */
     public function postAlta(NuevoEfectorRequest $r){
-        return 'ok';
+        $e = new Efector;
     }
 
     /**
@@ -201,22 +202,19 @@ class EfectoresController extends Controller
             case '24':
                 $l = 'V';
                 break;
-            
-            default:
-                $l = 'UEC';
-                break;
         }
         return $l;
     }
 
     /**
      * Devuelve un cuie disponible
+     * @param char $provincia
      *
      * @return string
      */
-    public function getCuie(){
+    public function getCuie($provincia){
         $disponible = false;
-        $letra = $this->getLetra(Auth::user()->id_provincia);
+        $letra = $this->getLetra($provincia);
         $numero = 1;
 
         while (! $disponible){
@@ -228,5 +226,27 @@ class EfectoresController extends Controller
             }
         }
         return $cuie;
+    }
+
+    /**
+     * Devuelve un código siisa trucho
+     * @param char $provincia
+     *
+     * @return bigint
+     */
+    public function getSiisa ($provincia){
+        $sql = "
+        select '99999999' || '{$provincia}' || lpad ((max (substring (siisa from 11 for 4)) :: numeric + 1 ) :: varchar , 4 , '0') as siisa
+        from
+          efectores.efectores
+        where
+          substring (siisa from 1 for 8) = '99999999'
+          and substring (siisa from 9 for 2) = ?";
+        $siisa = DB::select($sql , [$provincia]);
+        if (($siisa[0]->siisa)){
+            return $siisa[0]->siisa;
+        } else {
+            return '99999999' . $provincia . '0001';
+        }
     }
 }

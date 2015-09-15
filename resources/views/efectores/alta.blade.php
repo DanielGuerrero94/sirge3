@@ -46,13 +46,13 @@
 										<div class="form-group">
 		                      				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="cuie" name="cuie" placeholder="999999">
+		                    					<input type="text" readonly="readonly" class="form-control" id="cuie" name="cuie" placeholder="999999" data-toggle="tooltip" data-placement="bottom" title="El CUIE se autocompletará una vez seleccionada la provincia. Dicho CUIE utilizará un código disponible." >
 		                  					</div>
 		                    			</div>
 						    		</div>
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-		                      				<label for="siisa" class="col-sm-3 control-label"><a href="efector-siisa" data-toggle="tooltip" data-placement="bottom" title="Haga click aquí si desea generar un código SIISA interno" ><u>SIISA</u></a></label>
+		                      				<label for="siisa" class="col-sm-3 control-label"><a class="siisa" href="siisa-nuevo" data-toggle="tooltip" data-placement="bottom" title="Haga click aquí si desea generar un código SIISA interno" ><u>SIISA</u></a></label>
 		                  					<div class="col-sm-9">
 		                    					<input type="text" class="form-control" id="siisa" name="siisa" placeholder="99999999999999">
 		                  					</div>
@@ -215,7 +215,11 @@
 								    			<select id="provincia" name="provincia" class="form-control">
 								    				<option value="">Seleccione ...</option>
 								    				@foreach($provincias as $provincia)
-								    				<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    					@if (Auth::user()->id_provincia == $provincia->id_provincia)
+								    						<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    					@else
+								    						<option disabled="disabled" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    					@endif
 								    				@endforeach
 								    			</select>
 							    			</div>
@@ -456,6 +460,22 @@
 		</div>
 	</form>
 </div>
+<div class="modal fade modal-info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    			<h4 class="modal-title">Atención!</h4>
+      		</div>
+  			<div class="modal-body">
+  				<p id="modal-text"></p>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
 $(document).ready(function() {
 	
@@ -490,11 +510,6 @@ $(document).ready(function() {
 
 	var $validator = $('form').validate({
 		rules : {
-			cuie : {
-				required : true,
-				minlength : 6,
-				maxlength : 6
-			},
 			siisa : {
 				required : true,
 				digits : true,
@@ -615,10 +630,19 @@ $(document).ready(function() {
 		$('form').trigger('reset');
 	});
 
+	$('.siisa').click(function(event){
+		event.preventDefault();
+		$.get('siisa-nuevo/{{ Auth::user()->id_provincia }}' , function(data){
+			$('#siisa').val(data);
+		});
+	});
+
 	$('#provincia').change(function(){
+
 		var provincia = $(this).val();
 		var html = '';
 			html += '<option value="">Seleccione ...</option>';
+
 		$.get('departamentos/' + provincia , function(data){
 			$.each(data , function(key , value){
 				html += '<option id-dto="' + value.id_departamento + '"  value="' + value.id + '">';
@@ -626,6 +650,12 @@ $(document).ready(function() {
 				html += '</option>';
 			});
 			$('#departamento').html(html);
+		});
+
+		$.get('cuie-nuevo/' + provincia , function(data){
+			$('#cuie').val(data);
+			$('#modal-text').html('Se ha generado el CUIE ' + data + ' para dar de alta este efector.');
+			$('.modal').modal();
 		});
 	});
 
