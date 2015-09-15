@@ -28,6 +28,61 @@ class Efector extends Model
 	public $timestamps = true;
 
 	/**
+     * Guardar el nombre del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setNombreAttribute($value)
+    {
+        $this->attributes['nombre'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Guardar el domicilio del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setDomicilioAttribute($value)
+    {
+        $this->attributes['domicilio'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Guardar el codigo postal del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setCodigoPostalAttribute($value)
+    {
+        $this->attributes['codigo_postal'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Guardar la denominación legal del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setDenominacionLegalAttribute($value)
+    {
+        $this->attributes['denominacion_legal'] = mb_strtoupper($value);
+    }
+
+    /**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setDependenciaSanitariaAttribute($value)
+    {
+        $this->attributes['dependencia_sanitaria'] = mb_strtoupper($value);
+    }
+
+	/**
 	 * Devuelvo el estado del efector
 	 */
 	public function estado(){

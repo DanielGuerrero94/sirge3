@@ -26,4 +26,11 @@ class Descentralizacion extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['internet','factura_descentralizada','factura_on_line'];
 }

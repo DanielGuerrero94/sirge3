@@ -16,9 +16,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Geo\Provincia;
 
 use App\Models\Efector;
-use App\Models\Efectores\Tipo;
-use App\Models\Efectores\DependenciaAdministrativa;
 use App\Models\Efectores\Categoria;
+use App\Models\Efectores\Convenio;
+use App\Models\Efectores\DependenciaAdministrativa;
+use App\Models\Efectores\Descentralizacion;
+use App\Models\Efectores\Email;
+use App\Models\Efectores\Estado;
+use App\Models\Efectores\Geografico;
+use App\Models\Efectores\Gestion;
+use App\Models\Efectores\Referente;
+use App\Models\Efectores\Telefono;
+use App\Models\Efectores\Tipo;
 
 class EfectoresController extends Controller
 {
@@ -118,7 +126,51 @@ class EfectoresController extends Controller
      * @return string
      */
     public function postAlta(NuevoEfectorRequest $r){
-        $e = new Efector;
+        $ef = new Efector;
+        $ge = new Geografico;
+        $cg = new Gestion;
+        $ca = new Convenio;
+        $te = new Telefono;
+        $em = new Email;
+        $re = new Referente;
+        $de = new Descentralizacion([
+            'internet' => 'N',
+            'factura_descentralizada' => 'N',
+            'factura_on_line' => 'N'
+            ]);
+
+        $ef->cuie = $r->cuie;
+        $ef->siisa = $r->siisa;
+        $ef->nombre = $r->nombre;
+        $ef->domicilio = $r->direccion;
+        $ef->codigo_postal = $r->codigo_postal;
+        $ef->denominacion_legal = $r->legal;
+        $ef->id_tipo_efector = $r->tipo;
+        $ef->rural = $r->rural;
+        $ef->cics = $r->cics;
+        $ef->id_categorizacion = $r->categoria;
+        $ef->id_dependencia_administrativa = $r->dep_adm;
+        $ef->dependencia_sanitaria = $r->dep_san;
+        $ef->integrante = $r->integrante;
+        $ef->compromiso_gestion = $r->compromiso;
+        $ef->priorizado = $r->priorizado;
+        $ef->id_estado = 2;
+        if($ef->save()){
+
+            /*
+            $ge->id_efector = $ef->id_efector;
+            $ge->id_provincia = $r->provincia;
+            $ge->id_departamento = $r->departamento;
+            $ge->id_localidad = $r->localidad;
+            $ge->ciudad = $r->ciudad;
+            $ge->save();
+            */
+            $ef->internet()->save($de);
+
+
+        }
+
+        //$dom = new Efectores\Geografico;
     }
 
     /**
