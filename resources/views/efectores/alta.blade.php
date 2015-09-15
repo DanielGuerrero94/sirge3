@@ -423,9 +423,9 @@
 						    		</div>
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="" class="col-sm-5 control-label">Observaciones</label>
+		                      				<label for="obs_correo" class="col-sm-5 control-label">Observaciones</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="" name="" placeholder="999999">
+		                    					<input type="text" class="form-control" id="obs_correo" name="obs_correo" placeholder="Observaciones ...">
 		                  					</div>
 		                    			</div>
 						    		</div>

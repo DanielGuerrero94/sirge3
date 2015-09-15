@@ -26,4 +26,11 @@ class Referente extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['nombre'];
 }

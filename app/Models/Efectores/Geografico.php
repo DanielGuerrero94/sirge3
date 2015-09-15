@@ -28,6 +28,13 @@ class Geografico extends Model
 	public $timestamps = false;
 
 	/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['id_provincia','id_departamento','id_localidad','ciudad'];
+
+	/**
 	 * Devuelve la provincia
 	 */
 	public function provincia(){

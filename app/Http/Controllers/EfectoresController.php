@@ -127,17 +127,31 @@ class EfectoresController extends Controller
      */
     public function postAlta(NuevoEfectorRequest $r){
         $ef = new Efector;
-        $ge = new Geografico;
-        $cg = new Gestion;
-        $ca = new Convenio;
-        $te = new Telefono;
-        $em = new Email;
-        $re = new Referente;
+        $ge = new Geografico([
+            'id_provincia' => $r->provincia,
+            'id_departamento' => $r->departamento,
+            'id_localidad' => $r->localidad,
+            'ciudad' => $r->ciudad
+            ]);
+        $te = new Telefono([
+            'numero_telefono' => $r->tel,
+            'id_tipo_telefono' => 1,
+            'observaciones' => $r->obs_tel
+            ]);
+        $em = new Email([
+            'email' => $r->email,
+            'observaciones' => $r->obs_correo
+            ]);
+        $re = new Referente([
+            'nombre' => $r->refer
+            ]);
         $de = new Descentralizacion([
             'internet' => 'N',
             'factura_descentralizada' => 'N',
             'factura_on_line' => 'N'
             ]);
+        $cg = new Gestion;
+        $ca = new Convenio;
 
         $ef->cuie = $r->cuie;
         $ef->siisa = $r->siisa;
@@ -156,15 +170,9 @@ class EfectoresController extends Controller
         $ef->priorizado = $r->priorizado;
         $ef->id_estado = 2;
         if($ef->save()){
-
-            /*
-            $ge->id_efector = $ef->id_efector;
-            $ge->id_provincia = $r->provincia;
-            $ge->id_departamento = $r->departamento;
-            $ge->id_localidad = $r->localidad;
-            $ge->ciudad = $r->ciudad;
-            $ge->save();
-            */
+            $ef->telefonos()->save($te);
+            $ef->emails()->save($em);
+            $ef->referentes->save($re);
             $ef->internet()->save($de);
 
 
