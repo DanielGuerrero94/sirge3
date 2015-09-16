@@ -27,6 +27,13 @@ class Gestion extends Model
 	 */
 	public $timestamps = false;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['numero_compromiso','firmante','fecha_suscripcion','fecha_inicio','fecha_fin','pago_indirecto'];
+
 	/**
      * Devuelve la fecha formateada
      *
@@ -59,4 +66,16 @@ class Gestion extends Model
     {
         return date('d/m/Y' , strtotime($value));
     }
+
+    /**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setFirmanteAttribute($value)
+    {
+        $this->attributes['firmante'] = mb_strtoupper($value);
+    }
+
 }

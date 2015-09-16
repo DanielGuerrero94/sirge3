@@ -55,4 +55,15 @@ class Geografico extends Model
 		return $this->hasOne('App\Models\Geo\Localidad' , 'id' , 'id_localidad');
 	}
 
+	/**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setCiudadAttribute($value)
+    {
+        $this->attributes['ciudad'] = mb_strtoupper($value);
+    }
+
 }

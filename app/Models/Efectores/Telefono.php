@@ -33,4 +33,15 @@ class Telefono extends Model
      * @var array
      */
     protected $fillable = ['numero_telefono','id_tipo_telefono','observaciones'];
+
+    /**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setObservacionesAttribute($value)
+    {
+        $this->attributes['observaciones'] = mb_strtoupper($value);
+    }
 }

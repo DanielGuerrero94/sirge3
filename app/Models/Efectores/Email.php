@@ -33,4 +33,26 @@ class Email extends Model
      * @var array
      */
     protected $fillable = ['email','observaciones'];
+
+    /**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = mb_strtolower($value);
+    }
+
+    /**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setObservacionesAttribute($value)
+    {
+        $this->attributes['observaciones'] = mb_strtoupper($value);
+    }
 }

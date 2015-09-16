@@ -33,4 +33,15 @@ class Referente extends Model
      * @var array
      */
     protected $fillable = ['nombre'];
+
+    /**
+     * Guardar la dependencia sanitaria del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setNombreAttribute($value)
+    {
+        $this->attributes['nombre'] = mb_strtoupper($value);
+    }
 }

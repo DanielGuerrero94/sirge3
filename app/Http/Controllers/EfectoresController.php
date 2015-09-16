@@ -126,7 +126,6 @@ class EfectoresController extends Controller
      * @return string
      */
     public function postAlta(NuevoEfectorRequest $r){
-        $ef = new Efector;
         $ge = new Geografico([
             'id_provincia' => $r->provincia,
             'id_departamento' => $r->departamento,
@@ -139,7 +138,7 @@ class EfectoresController extends Controller
             'observaciones' => $r->obs_tel
             ]);
         $em = new Email([
-            'email' => $r->email,
+            'email' => $r->correo,
             'observaciones' => $r->obs_correo
             ]);
         $re = new Referente([
@@ -150,9 +149,25 @@ class EfectoresController extends Controller
             'factura_descentralizada' => 'N',
             'factura_on_line' => 'N'
             ]);
-        $cg = new Gestion;
-        $ca = new Convenio;
-
+        $cg = new Gestion([
+            'numero_compromiso' => $r->numero_compromiso,
+            'firmante' => $r->firmante_compromiso,
+            'fecha_suscripcion' => $r->compromiso_fsus,
+            'fecha_inicio' => $r->compromiso_fini,
+            'fecha_fin' => $r->compromiso_ffin,
+            'pago_indirecto' => $r->indirecto
+            ]);
+        $ca = new Convenio([
+            'numero_compromiso' => $r->numero_compromiso,
+            'numero_convenio' => $r->convenio_numero,
+            'firmante' => $r->convenio_firmante,
+            'nombre_tercer_administrador' => $r->nombre_admin,
+            'codigo_tercer_administrador' => $r->cuie_admin,
+            'fecha_suscripcion' => $r->convenio_fsus,
+            'fecha_inicio' => $r->convenio_fini,
+            'fecha_fin' => $r->convenio_ffin
+            ]);
+        $ef = new Efector;
         $ef->cuie = $r->cuie;
         $ef->siisa = $r->siisa;
         $ef->nombre = $r->nombre;
@@ -169,16 +184,23 @@ class EfectoresController extends Controller
         $ef->compromiso_gestion = $r->compromiso;
         $ef->priorizado = $r->priorizado;
         $ef->id_estado = 2;
-        if($ef->save()){
+        
+        DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
+            $ef->save();
             $ef->telefonos()->save($te);
             $ef->emails()->save($em);
-            $ef->referentes->save($re);
+            $ef->referentes()->save($re);
             $ef->internet()->save($de);
-
-
-        }
-
-        //$dom = new Efectores\Geografico;
+            $ef->geo()->save($ge);
+            if ($r->compromiso == 'S'){
+                if ($r->indirecto == 'S'){
+                    $ef->compromisos()->save($cg);
+                    $ef->convenios()->save($ca);
+                } else {
+                    $ef->compromisos()->save($cg);
+                }
+            }
+        });
     }
 
     /**

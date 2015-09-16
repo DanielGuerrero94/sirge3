@@ -118,21 +118,18 @@ class Efector extends Model
 	}
 
 	/**
-	 * Devuelvo el compromiso
+	 * Devuelvo el o los compromisos
 	 */
 	public function compromisos(){
 		return $this->hasMany('App\Models\Efectores\Gestion' , 'id_efector' , 'id_efector');
 	}
 
 	/**
-	 
-
-
-		VER QUE ONDA CON EL CONVENIO ADMINISTRATIVO
-
-
-
+	 * Devuelvo el o los convenios
 	 */
+	public function convenios(){
+		return $this->hasMany('App\Models\Efectores\Convenio' , 'id_efector' , 'id_efector');
+	}
 
 	/**
 	 * Devuelvo los teléfonos
