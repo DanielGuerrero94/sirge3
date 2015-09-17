@@ -368,7 +368,7 @@
 	$(document).ready(function(){
 
 		$('.back').click(function(){
-			$.get('efectores-listado' , function(data){
+			$.get('{{ $back }}' , function(data){
 				$('.content-wrapper').html(data);
 			});
 		});

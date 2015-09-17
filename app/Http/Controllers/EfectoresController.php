@@ -74,7 +74,7 @@ class EfectoresController extends Controller
      * 
      * @return null
      */
-    public function detalle($id){
+    public function detalle($id , $back){
     	$efector = Efector::with([
                 'estado' , 
                 'tipo' , 
@@ -93,7 +93,8 @@ class EfectoresController extends Controller
 
     	$data = [
     		'page_title' => $efector->nombre,
-    		'efector' => $efector
+    		'efector' => $efector,
+            'back' => $back
     	];
     	return view('efectores.detalle' , $data);
     }
@@ -200,6 +201,8 @@ class EfectoresController extends Controller
                     $ef->compromisos()->save($cg);
                 }
             }
+
+            return 'Se ha solicitado el alta con el CUIE: ' . $r->cuie;
         });
     }
 
@@ -330,5 +333,82 @@ class EfectoresController extends Controller
         } else {
             return '99999999' . $provincia . '0001';
         }
+    }
+
+    /**
+     * Devuelve la vista para solicitar la baja del efector
+     *
+     * @return null
+     */
+    public function getBaja(){
+        $data = [
+            'page_title' => 'Solicitar baja de efector'
+        ];
+
+        return view('efectores.baja' , $data);
+    }
+
+    /**
+     * Devuelve una sugerencia con CUIEs
+     * @param string $cuie
+     *
+     * @return json
+     */
+    public function findCuie($cuie){
+        $data = Efector::select('cuie')->where('cuie' , 'ilike' , $cuie . '%')->orderBy('cuie')->take(10)->lists('cuie');
+        return response()->json($data);
+    }
+
+    /**
+     * Solicita la baja de un efector
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function postBaja(Request $r){
+        $e = Efector::where('cuie' , $r->cuie)->get()[0];
+        $e->id_estado = 3;
+        if ($e->save()){
+            return 'Se ha solicitado la baja del efector ' . $r->cuie;
+        }
+    }
+
+    /**
+     * Devuelve la vista para la revisión de solicitudes
+     * 
+     * @return null
+     */
+    public function getRevision(){
+        $data = [
+            'page_title' => 'Revisión de solicitudes'
+        ];
+        return view('efectores.revision' , $data);
+    }
+
+    /**
+     * Devuelve un json para la datatable
+     *
+     * @return json
+     */
+    public function getRevisionTabla(){
+        $hospitals = Efector::with(['estado'])->whereIn('id_estado' , [2,3])->get();
+        return Datatables::of($hospitals)
+            ->addColumn('label_estado' , function($hospital){
+                return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
+            })
+            ->addColumn('action' , function($hospital){
+                return '<button id-efector="'. $hospital->id_efector .'" class="ver-efector btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+            })
+            ->addColumn('action_2' , function($hospital){
+                if ($hospital->id_estado == 2){
+                    return '<button id-efector="'. $hospital->id_efector .'" class="alta btn btn-success btn-xs"><i class="fa fa-pencil-square-o"></i> Aceptar alta</button>';
+                } else {
+                    return '<button id-efector="'. $hospital->id_efector .'" class="baja btn btn-danger btn-xs"><i class="fa fa-pencil-square-o"></i> Aceptar baja</button>';
+                }  
+            })
+            ->addColumn('action_3' , function($hospital){
+                return '<button id-efector="'. $hospital->id_efector .'" class="rechazar btn btn-warning btn-xs"><i class="fa fa-pencil-square-o"></i> Rechazar solicitud</button>';
+            })
+            ->make(true);
     }
 }

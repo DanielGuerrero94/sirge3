@@ -85,11 +85,19 @@ Route::get('listado' , 'BeneficiariosController@tabla');
  */
 Route::get('efectores-listado' , 'EfectoresController@listado');
 Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
-Route::get('efectores-detalle/{id}' , 'EfectoresController@detalle');
+Route::get('efectores-detalle/{id}/{back}' , 'EfectoresController@detalle');
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
 Route::post('efectores-alta' , 'EfectoresController@postAlta');
 Route::get('cuie-nuevo/{provincia}' , 'EfectoresController@getCuie');
 Route::get('siisa-nuevo/{provincia}' , 'EfectoresController@getSiisa');
+Route::get('efectores-baja' , 'EfectoresController@getBaja');
+Route::post('efectores-baja' , 'EfectoresController@postBaja');
+Route::get('cuie-busqueda/{cuie}' , 'EfectoresController@findCuie');
+Route::get('efectores-revision' , 'EfectoresController@getRevision');
+Route::get('efectores-revision-table' , 'EfectoresController@getRevisionTabla');
+Route::post('alta-efector' , 'EfectoresController@alta');
+Route::post('baja-efector' , 'EfectoresController@baja');
+Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 
 
 /**

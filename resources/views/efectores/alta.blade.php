@@ -610,7 +610,9 @@ $(document).ready(function() {
 				url : 'efectores-alta',
 				data : $(form).serialize(),
 				success : function(data){
-					console.log(data);
+					$('#modal-text').html(data);
+					$('.modal').modal();
+					$('form').trigger('reset');
 				},
 				error : function(data){
 					var html = '';
