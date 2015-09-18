@@ -64,6 +64,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}" ></script>
 <!-- Highcharts -->
 <script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/highcharts.js") }}" ></script>
+<!-- Highcharts more -->
+<script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/highcharts-more.js") }}" ></script>
+<!-- Highcharts more -->
+<script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/modules/heatmap.js") }}" ></script>
+<!-- Highcharts more -->
+<script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/modules/treemap.js") }}" ></script>
 <!-- Highcharts exporting server -->
 <script type="text/javascript" src="{{ asset ("/plugins/highcharts/js/modules/exporting.js") }}" ></script>
 <!-- Highmaps -->

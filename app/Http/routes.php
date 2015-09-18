@@ -101,6 +101,12 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 
 
 /**
+ * ESTADISTICAS
+ */
+Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
+Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
+
+/**
  * USUARIO
  */
 Route::get('perfil' , 'UserController@getProfile');
