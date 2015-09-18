@@ -24,10 +24,26 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade modal-info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    			<h4 class="modal-title">Atención!</h4>
+      		</div>
+  			<div class="modal-body">
+  				<p id="modal-text"></p>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		$('#efectores-table').DataTable({
+		var dt = $('#efectores-table').DataTable({
             processing: true,
             serverSide: true,
             ajax : 'efectores-revision-table',
@@ -49,22 +65,34 @@
         	});
         });
 
-        $('.alta').click(function(){
+        $('#efectores-table').on('click' , '.alta' , function(){
         	$.post('alta-efector' , 'id=' + $(this).attr('id-efector') , function(data){
-
-        	})
+        		$('#modal-text').html(data);
+        		$('.modal').modal();
+        		$('.modal').on('hidden.bs.modal', function (e) {
+                    dt.ajax.reload( null, false );
+                });
+        	});
         });
 
-        $('.baja').click(function(){
+        $('#efectores-table').on('click' , '.baja' , function(){
         	$.post('baja-efector' , 'id=' + $(this).attr('id-efector') , function(data){
-
-        	})
+        		$('#modal-text').html(data);
+        		$('.modal').modal();
+        		$('.modal').on('hidden.bs.modal', function (e) {
+                    dt.ajax.reload( null, false );
+                });
+        	});
         });
 
-        $('.rechazar').click(function(){
+        $('#efectores-table').on('click' , '.rechazo' , function(){
         	$.post('rechazo-efector' , 'id=' + $(this).attr('id-efector') , function(data){
-
-        	})
+        		$('#modal-text').html(data);
+        		$('.modal').modal();
+        		$('.modal').on('hidden.bs.modal', function (e) {
+                    dt.ajax.reload( null, false );
+                });
+        	});
         });
 
 	})

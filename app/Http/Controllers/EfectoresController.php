@@ -407,8 +407,54 @@ class EfectoresController extends Controller
                 }  
             })
             ->addColumn('action_3' , function($hospital){
-                return '<button id-efector="'. $hospital->id_efector .'" class="rechazar btn btn-warning btn-xs"><i class="fa fa-pencil-square-o"></i> Rechazar solicitud</button>';
+                return '<button id-efector="'. $hospital->id_efector .'" class="rechazo btn btn-warning btn-xs"><i class="fa fa-pencil-square-o"></i> Rechazar solicitud</button>';
             })
             ->make(true);
+    }
+
+    /**
+     * Alta definitiva del efector
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function alta(Request $r){
+        $e = Efector::find($r->id);
+        $e->id_estado = 1;
+        if ($e->save()){
+            return 'Se ha dado el alta definitiva del efector : ' . $e->nombre;
+        }
+    }
+
+    /**
+     * Baja definitiva del efector
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function baja(Request $r){
+        $e = Efector::find($r->id);
+        $e->id_estado = 4;
+        if ($e->save()){
+            return 'Se ha dado la baja definitiva del efector : ' . $e->nombre;
+        }
+    }
+
+    /**
+     * Rechaza la solicitud
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function rechazo(Request $r){
+        $e = Efector::find($r->id);
+        if ($e->id_estado == 2){
+            $e->id_estado = 5;
+        } else if ($e->id_estado == 3){
+            $e->id_estado = 1;
+        }
+        if ($e->save()){
+            return 'Se ha reveertido la operación del efector : ' . $e->nombre;
+        }
     }
 }
