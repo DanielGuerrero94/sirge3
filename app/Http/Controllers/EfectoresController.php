@@ -457,4 +457,6 @@ class EfectoresController extends Controller
             return 'Se ha reveertido la operación del efector : ' . $e->nombre;
         }
     }
+
+    
 }
