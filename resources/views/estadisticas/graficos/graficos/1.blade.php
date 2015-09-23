@@ -954,6 +954,7 @@
             region_i = region_i + 1;
         }
     }
+
     $('#container').highcharts({
         series: [{
             type: "treemap",

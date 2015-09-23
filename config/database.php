@@ -75,6 +75,17 @@ return [
             'schema'   => 'public',
         ],
 
+        'datawarehouse' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST_DW', 'localhost'),
+            'database' => env('DB_DATABASE_DW', 'forge'),
+            'username' => env('DB_USERNAME_DW', 'forge'),
+            'password' => env('DB_PASSWORD_DW', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'public',
+        ],
+
         'sqlsrv' => [
             'driver'   => 'sqlsrv',
             'host'     => env('DB_HOST', 'localhost'),

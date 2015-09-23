@@ -1,4 +1,7 @@
 <?php
+
+use App\Models\Dw\Ceb001;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -106,6 +109,8 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
 
+Route::get('grafico-2' , 'EstadisticasController@getGafico2');
+
 /**
  * USUARIO
  */
@@ -187,6 +192,15 @@ Route::resource('prestaciones' , 'Ws\SIISAController' , [
 
 Route::get('php-info' , function(){
 	phpinfo();
+});
+
+/********************************************************************************
+ *								 	TEST ROUTES 								*
+ ********************************************************************************/
+
+Route::get('test' , function(){
+	$p = Ceb001::take(5)->get();
+	print_r($p);
 });
 
 Route::get('prestaciones/34142469' , function(){
