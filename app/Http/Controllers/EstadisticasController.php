@@ -79,19 +79,40 @@ class EstadisticasController extends Controller
      * @return json
      */
     public function getGafico2(){
-        $filas = Ceb001::where('periodo' , 201501)
+        $i = 0;
+        $regiones = Ceb001::where('periodo' , 201501)
                         ->join('sistema.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')
                         ->join('sistema.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
                         ->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad_facturada) as cantidad'))
                         ->groupBy('r.id_region')
                         ->groupBy('r.nombre')
                         ->get();
-        foreach ($filas as $key => $fila){
-            $data[$key]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
-            $data[$key]['id'] = (string)$key;
-            $data[$key]['name'] = $fila->nombre;
-            $data[$key]['value'] = (int)$fila->cantidad;
+        foreach ($regiones as $key => $region){
+            $data[$i]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
+            $data[$i]['id'] = (string)$key;
+            $data[$i]['name'] = $region->nombre;
+            $data[$i]['value'] = (int)$region->cantidad;
+            $i++;
         }
+
+        $provincias = Ceb001::where('periodo' , 201501)
+                        ->where('r.id_region' , 1)
+                        ->join('sistema.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')
+                        ->join('sistema.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                        ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad_facturada) as cantidad'))
+                        ->groupBy('r.id_region')
+                        ->groupBy('p.id_provincia')
+                        ->groupBy('p.nombre')
+                        ->get();
+        foreach ($provincias as $key => $provincia){
+            $data[$i]['id'] = "1_" . (string)$key;
+            $data[$i]['name'] = $provincia->nombre;
+            $data[$i]['parent'] = 1;
+            $data[$i]['value'] = (int)$provincia->cantidad;
+            $i++;
+        }
+
+
         return response()->json($data);
     }
 
