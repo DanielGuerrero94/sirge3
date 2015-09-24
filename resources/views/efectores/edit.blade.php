@@ -182,9 +182,13 @@
 							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
 								    			<select id="integrante" name="integrante" class="form-control">
-								    				<option value="">Seleccione...</option>
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    				@if ($efector->integrante == 'S')
+								    					<option selected="selected" value="S">SI</option>
+								    					<option value="N">NO</option>
+								    				@else
+								    					<option value="S">SI</option>
+								    					<option selected="selected" value="N">NO</option>
+								    				@endif
 								    			</select>
 							    			</div>
 						    			</div>
@@ -194,9 +198,13 @@
 							    			<label for="priorizado" class="col-sm-4 control-label">Priorizado</label>
 							    			<div class="col-sm-8">
 								    			<select id="priorizado" name="priorizado" class="form-control">
-								    				<option value="">Seleccione...</option>
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    				@if ($efector->priorizado == 'S')
+								    					<option selected="selected" value="S">SI</option>
+								    					<option value="N">NO</option>
+								    				@else
+								    					<option value="S">SI</option>
+								    					<option selected="selected" value="N">NO</option>
+								    				@endif
 								    			</select>
 							    			</div>
 						    			</div>
@@ -206,9 +214,13 @@
 							    			<label for="compromiso" class="col-sm-4 control-label">Compromiso</label>
 							    			<div class="col-sm-8">
 								    			<select id="compromiso" name="compromiso" class="form-control">
-								    				<option value="">Seleccione...</option>
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    				@if ($efector->compromiso_gestion == 'S')
+								    					<option selected="selected" value="S">SI</option>
+								    					<option value="N">NO</option>
+								    				@else
+								    					<option value="S">SI</option>
+								    					<option selected="selected" value="N">NO</option>
+								    				@endif
 								    			</select>
 							    			</div>
 						    			</div>
