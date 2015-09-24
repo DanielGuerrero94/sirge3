@@ -458,5 +458,16 @@ class EfectoresController extends Controller
         }
     }
 
+    public function getEdit(){
+      $data = [
+        'page_title' => 'Modificación de efectores'
+      ];
+      return view('efectores.edit' , $data);
+    }
     
+    public function getEditForm($cuie){
+      $efector = Efector::where('cuie' , $cuie)->get();
+      
+    }
+
 }

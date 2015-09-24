@@ -2,18 +2,18 @@
 @section('content')
 <div class="row">
 	<form id="baja-efector">
-		<div class="col-md-10">
+		<div class="col-md-10 col-md-offset-1">
 			<div class="box box-danger">
 				<div class="box-header">
 					<h2 class="box-title">Ingrese el CUIE del efector a dar de baja</h2>
 				</div>
 				<div class="box-body">
-						<div class="form-group">
-	          				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
-	      					<div class="col-sm-9">
-	        					<input type="text" class="form-control" id="cuie" name="cuie" placeholder="999999">
-	      					</div>
-	        			</div>
+					<div class="form-group">
+          				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
+      					<div class="col-sm-9">
+        					<input type="text" class="form-control" id="cuie" name="cuie" placeholder="999999">
+      					</div>
+        			</div>
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
@@ -73,7 +73,7 @@
 						$('form').trigger('reset');
 					});
 				}
-			})
+			});
 		});
 	});
 </script>

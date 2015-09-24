@@ -68,9 +68,31 @@ class EstadisticasController extends Controller
     public function getGrafico($id){
         $g = Grafico::find($id);
     	$data = [
-    		'page_title' => $g->titulo
+    		'page_title' => $g->titulo,
+            'data' => $g
     	];
-    	return view('estadisticas.graficos.graficos.' . $id , $data);
+
+        if (is_null($g->form)) {
+        	return view('estadisticas.graficos.graficos.' . $id , $data);
+        } else {
+            return view('estadisticas.graficos.graficos.' . $g->form , $data);
+        }
+    }
+
+    /**
+     * Devuelve la vista del gráfico con los parámetros para realizar las llamadas en Ajax
+     * @param int $id
+     * @param int $periodo
+     *
+     * @return null
+     */
+    public function getGraficoPeriodo($id , $periodo){
+        $grafico = Grafico::find($id);
+        $data = [
+            'page_title' => $grafico->titulo,
+            'periodo' => $periodo
+        ];
+        return view('estadisticas.graficos.graficos.' . $id , $data);
     }
 
     /**
@@ -78,9 +100,10 @@ class EstadisticasController extends Controller
      *
      * @return json
      */
-    public function getGafico2(){
+    public function getGafico2($periodo){
+        $periodo = str_replace("-", '', $periodo);
         $i = 0;
-        $regiones = Ceb001::where('periodo' , 201501)
+        $regiones = Ceb001::where('periodo' , $periodo)
                         ->join('geo.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')
                         ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
                         ->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad_facturada) as cantidad'))
@@ -96,7 +119,7 @@ class EstadisticasController extends Controller
         }
 
         for ($j = 0 ; $j <= 5 ; $j ++){
-            $provincias = Ceb001::where('periodo' , 201501)
+            $provincias = Ceb001::where('periodo' , $periodo)
                             ->where('r.id_region' , $j)
                             ->join('geo.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')
                             ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
@@ -116,7 +139,7 @@ class EstadisticasController extends Controller
 
         for ($k = 1 ; $k <= 24 ; $k ++){
             $matriz_aux = [];
-            $codigos = Ceb001::where('periodo' , 201501)
+            $codigos = Ceb001::where('periodo' , $periodo)
                             ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
                             ->join('geo.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')
                             ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
@@ -137,7 +160,7 @@ class EstadisticasController extends Controller
             }
 
             for ($l = 0 ; $l < count($matriz_aux) ; $l ++){
-                $grupos = Ceb001::where('periodo' , 201501)
+                $grupos = Ceb001::where('periodo' , $periodo)
                                 ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
                                 ->where('codigo_prestacion' , $matriz_aux[$l])
                                 ->join('geo.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')

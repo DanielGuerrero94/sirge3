@@ -1,7 +1,4 @@
 <?php
-
-use App\Models\Dw\Ceb001;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -86,18 +83,27 @@ Route::get('listado' , 'BeneficiariosController@tabla');
 /**
  * EFECTORES
  */
+# LISTADO
 Route::get('efectores-listado' , 'EfectoresController@listado');
 Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
-Route::get('efectores-detalle/{id}/{back}' , 'EfectoresController@detalle');
+# ALTA
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
 Route::post('efectores-alta' , 'EfectoresController@postAlta');
-Route::get('cuie-nuevo/{provincia}' , 'EfectoresController@getCuie');
-Route::get('siisa-nuevo/{provincia}' , 'EfectoresController@getSiisa');
+# BAJA
 Route::get('efectores-baja' , 'EfectoresController@getBaja');
 Route::post('efectores-baja' , 'EfectoresController@postBaja');
-Route::get('cuie-busqueda/{cuie}' , 'EfectoresController@findCuie');
+#MODIFICACION
+Route::get('efectores-modificacion' , 'EfectoresController@getEdit');
+Route::get('efectores-modificacion/{cuie}' , 'EfectoresController@getEditForm');
+#REVISION
 Route::get('efectores-revision' , 'EfectoresController@getRevision');
 Route::get('efectores-revision-table' , 'EfectoresController@getRevisionTabla');
+# COMMON
+Route::get('cuie-nuevo/{provincia}' , 'EfectoresController@getCuie');
+Route::get('siisa-nuevo/{provincia}' , 'EfectoresController@getSiisa');
+Route::get('cuie-busqueda/{cuie}' , 'EfectoresController@findCuie');
+Route::get('efectores-detalle/{id}/{back}' , 'EfectoresController@detalle');
+# OPERACIONES FINALES
 Route::post('alta-efector' , 'EfectoresController@alta');
 Route::post('baja-efector' , 'EfectoresController@baja');
 Route::post('rechazo-efector' , 'EfectoresController@rechazo');
@@ -108,8 +114,9 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
  */
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
+Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getGraficoPeriodo');
 
-Route::get('grafico-2' , 'EstadisticasController@getGafico2');
+Route::get('grafico-2/{periodo}' , 'EstadisticasController@getGafico2');
 
 /**
  * USUARIO
@@ -190,18 +197,13 @@ Route::get('localidades/{provincia}/{departamento}' , 'GeoController@localidades
 Route::resource('prestaciones' , 'Ws\SIISAController' , [
 	'only' => ['index']]);
 
-Route::get('php-info' , function(){
+Route::get('phpinfo' , function(){
 	phpinfo();
 });
 
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-
-Route::get('test' , function(){
-	$p = Ceb001::take(5)->get();
-	print_r($p);
-});
 
 Route::get('prestaciones/34142469' , function(){
 	$json = 

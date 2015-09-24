@@ -4,7 +4,7 @@
 	<div class="col-md-12">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Tasa de ARIS+ Global 2012, por 100 000 habitantes</h2>
+				<h2 class="box-title">Distribución de facturación C.E.B. - TOP 15</h2>
 			</div>
 			<div class="box-body">
 				<div id="container"></div>
@@ -18,13 +18,14 @@
 	</div>
 </div>
 <script type="text/javascript">
-	$('.back').click(function(){
+	
+    $('.back').click(function(){
 		$.get('estadisticas-graficos' , function(data){
 			$('.content-wrapper').html(data);
 		});
 	});
 
-    $.get('grafico-2' , function(data){
+    $.get('grafico-2/{{ $periodo }}' , function(data){
         $('#container').highcharts({
             series: [{
                 type: "treemap",
