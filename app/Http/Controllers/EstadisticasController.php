@@ -53,7 +53,7 @@ class EstadisticasController extends Controller
      */
     public function getGraficos(){
     	$data = [
-    		'page_title' => 'Gráficos',
+    		'page_title' => 'Gráficos para el análisis de información',
             'graficos' => Grafico::all()
     	];
     	return view('estadisticas.graficos.main' , $data);

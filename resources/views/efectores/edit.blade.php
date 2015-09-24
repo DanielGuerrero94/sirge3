@@ -9,59 +9,496 @@
 }
 </style>
 <div class="row">
-	<form id="baja-efector">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="box box-warning">
+	<form id="alta-efector">
+		<div class="col-md-12">
+			<div class="box box-info">
 				<div class="box-header">
-					<h2 class="box-title">Ingrese el CUIE del efector a editar</h2>
+					<h2 class="box-title">Complete todos los campos</h2>
 				</div>
 				<div class="box-body">
-						<div class="form-group">
-	          				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
-	      					<div class="col-sm-9">
-	        					<input type="text" class="form-control" id="cuie" name="cuie" placeholder="999999">
-	      					</div>
-	        			</div>
+					<div class="alert alert-danger" id="errores-div">
+				        <ul id="errores-form">
+				        </ul>
+				    </div>
+					<div id="rootwizard">
+						<div class="navbar navbar-static-top">
+							<div class="navbar-inner">
+						    	<div class="container navi">
+									<ul>
+						  				<li><a href="#generales" data-toggle="tab">Generales</a></li>
+										<li><a href="#domicilio" data-toggle="tab">Domicilio</a></li>
+										<li><a href="#gestion" data-toggle="tab">Compromiso</a></li>
+										<li><a href="#convenio" data-toggle="tab">Convenio</a></li>
+										<li><a href="#telefono" data-toggle="tab">Teléfono</a></li>
+										<li><a href="#email" data-toggle="tab">Email</a></li>
+										<li><a href="#referente" data-toggle="tab">Referente</a></li>
+									</ul>
+						 		</div>
+						  	</div>
+						</div>
+						<div class="progress progress-xxs">
+							<div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+						<div class="tab-content">
+						    <div class="tab-pane" id="generales">
+						    	<div class="row">
+						    		<div class="col-md-4">
+										<div class="form-group">
+		                      				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" readonly="readonly" class="form-control" id="cuie" name="cuie" value="{{ $efector->cuie }}" >
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="siisa" class="col-sm-3 control-label"><a class="siisa" href="siisa-nuevo" data-toggle="tooltip" data-placement="bottom" title="Haga click aquí si desea generar un código SIISA interno" ><u>SIISA</u></a></label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="siisa" name="siisa" value="{{ $efector->siisa }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="tipo" class="col-sm-2 control-label">Tipo</label>
+		                  					<div class="col-sm-10">
+		                    					<select class="form-control" id="tipo" name="tipo">
+		                    						<option value="">Seleccione ...</option>
+		                    						@foreach ($tipos as $tipo)
+		                    							@if ($efector->id_tipo_efector == $tipo->id_tipo_efector)
+		                    								<option selected="selected" value="{{ $tipo->id_tipo_efector }}"> {{ $tipo->descripcion }} </option>
+		                    							@else
+		                    								<option value="{{ $tipo->id_tipo_efector }}"> {{ $tipo->descripcion }} </option>
+		                    							@endif
+		                    						@endforeach
+		                    					</select>
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="nombre" class="col-sm-2 control-label">Nombre</label>
+		                  					<div class="col-sm-10">
+		                    					<input type="text" class="form-control" id="nombre" name="nombre" value="{{ $efector->nombre }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="legal" class="col-sm-4 control-label">Denominación legal</label>
+		                  					<div class="col-sm-8">
+		                    					<input type="text" class="form-control" id="legal" name="legal" value="{{ $efector->denominacion_legal }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="dep_adm" class="col-sm-5 control-label">Dependencia administrativa</label>
+		                  					<div class="col-sm-7">
+		                    					<select name="dep_adm" id="dep_adm" class="form-control">
+		                    						<option value="">Seleccione ...</option>
+		                    						@foreach($dependencias as $dependencia)
+		                    							@if ($efector->id_dependencia_administrativa == $dependencia->id_dependencia_administrativa)
+		                    								<option selected="selected" value="{{ $dependencia->id_dependencia_administrativa }}"> {{ $dependencia->descripcion }} </option>
+		                    							@else
+		                    								<option value="{{ $dependencia->id_dependencia_administrativa }}"> {{ $dependencia->descripcion }} </option>
+		                    							@endif
+		                    						@endforeach
+		                    					</select>
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="dep_san" class="col-sm-4 control-label">Dependencia sanitaria</label>
+		                  					<div class="col-sm-8">
+		                    					<input type="text" class="form-control" id="dep_san" name="dep_san" value="{{ $efector->dependencia_sanitaria }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="cics" class="col-sm-4 control-label">CICS</label>
+							    			<div class="col-sm-8">
+								    			<select id="cics" name="cics" class="form-control">
+								    				@if ($efector->cics == 'S')
+								    					<option selected="selected" value="S">SI</option>
+								    					<option value="N">NO</option>
+								    				@else
+								    					<option value="S">SI</option>
+								    					<option selected="selected" value="N">NO</option>
+								    				@endif
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="rural" class="col-sm-4 control-label">Rural</label>
+							    			<div class="col-sm-8">
+								    			<select id="rural" name="rural" class="form-control">
+								    				@if ($efector->rural == 'S')
+								    					<option selected="selected" value="S">SI</option>
+								    					<option value="N">NO</option>
+								    				@else
+								    					<option value="S">SI</option>
+								    					<option selected="selected" value="N">NO</option>
+								    				@endif
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="categoria" class="col-sm-4 control-label">Categoría</label>
+		                  					<div class="col-sm-8">
+		                    					<select class="form-control" id="categoria" name="categoria">
+		                    						<option value="">Seleccione...</option>
+		                    						@foreach($categorias as $categoria)
+		                    							@if ($efector->id_categorizacion == $categoria->id_categorizacion)
+		                    								<option selected="selected" value="{{ $categoria->id_categorizacion }}"> {{ $categoria->descripcion }} </option>
+		                    							@else
+		                    								<option value="{{ $categoria->id_categorizacion }}"> {{ $categoria->descripcion }} </option>
+		                    							@endif
+		                    						@endforeach
+		                    					</select>
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
+							    			<div class="col-sm-8">
+								    			<select id="integrante" name="integrante" class="form-control">
+								    				<option value="">Seleccione...</option>
+								    				<option value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="priorizado" class="col-sm-4 control-label">Priorizado</label>
+							    			<div class="col-sm-8">
+								    			<select id="priorizado" name="priorizado" class="form-control">
+								    				<option value="">Seleccione...</option>
+								    				<option value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="compromiso" class="col-sm-4 control-label">Compromiso</label>
+							    			<div class="col-sm-8">
+								    			<select id="compromiso" name="compromiso" class="form-control">
+								    				<option value="">Seleccione...</option>
+								    				<option value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+						    <div class="tab-pane" id="domicilio">
+						    	<div class="row">
+						    		<div class="col-md-12">
+						    			<div class="form-group">
+		                      				<label for="direccion" class="col-sm-1 control-label">Dirección</label>
+		                  					<div class="col-sm-11">
+		                    					<input type="text" class="form-control" id="direccion" name="direccion" placeholder="Ingrese la dirección del efector ...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="provincia" class="col-sm-3 control-label">Provincia</label>
+							    			<div class="col-sm-9">
+								    			<select id="provincia" name="provincia" class="form-control">
+								    				<option value="">Seleccione ...</option>
+								    				@foreach($provincias as $provincia)
+								    					@if (Auth::user()->id_provincia == $provincia->id_provincia)
+								    						<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    					@else
+								    						<option disabled="disabled" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    					@endif
+								    				@endforeach
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="departamento" class="col-sm-4 control-label">Departamento</label>
+							    			<div class="col-sm-8">
+								    			<select name="departamento" id="departamento" class="form-control">
+								    				<option value="">Seleccione ...</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="localidad" class="col-sm-4 control-label">Localidad</label>
+							    			<div class="col-sm-8">
+								    			<select name="localidad" id="localidad" class="form-control">
+								    				<option value="">Seleccione ...</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="codigo_postal" class="col-sm-3 control-label">C.P.</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="codigo_postal" name="codigo_postal" placeholder="XXX9999X">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-8">
+						    			<div class="form-group">
+		                      				<label for="ciudad" class="col-sm-2 control-label">Ciudad</label>
+		                  					<div class="col-sm-10">
+		                    					<input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+							<div class="tab-pane" id="gestion">
+								<div class="row">
+									<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="numero_compromiso" class="col-sm-3 control-label">Número</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" placeholder="999999">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="firmante_compromiso" class="col-sm-3 control-label">Firmante</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="firmante_compromiso" name="firmante_compromiso" placeholder="Ingrese firmante ...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="indirecto" class="col-sm-6 control-label">Pago indirecto</label>
+							    			<div class="col-sm-6">
+								    			<select id="indirecto" name="indirecto" class="form-control">
+								    				<option value="">Seleccione...</option>
+								    				<option value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+								</div>
+								<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="compromiso_fsus" class="col-sm-3 control-label">Suscripción</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="date" class="form-control" id="compromiso_fsus" name="compromiso_fsus" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="compromiso_fini" class="col-sm-3 control-label">Inicio</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="date" class="form-control" id="compromiso_fini" name="compromiso_fini" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="compromiso_ffin" class="col-sm-3 control-label">Fin</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="date" class="form-control" id="compromiso_ffin" name="compromiso_ffin" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+							<div class="tab-pane" id="convenio">
+								<div class="row">
+									<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="convenio_numero" class="col-sm-3 control-label">Número</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="convenio_numero" name="convenio_numero" placeholder="999999">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="convenio_firmante" class="col-sm-3 control-label">Firmante</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="convenio_firmante" name="convenio_firmante" placeholder="Ingrese firmante ...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+								</div>
+								<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="convenio_fsus" class="col-sm-3 control-label">Suscripción</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="date" class="form-control" id="convenio_fsus" name="convenio_fsus" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="convenio_fini" class="col-sm-3 control-label">Inicio</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="date" class="form-control" id="convenio_fini" name="convenio_fini" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="convenio_ffin" class="col-sm-3 control-label">Fin</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="date" class="form-control" id="convenio_ffin" name="convenio_ffin" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="cuie_admin" class="col-sm-5 control-label">Código 3er. administrador</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="cuie_admin" name="cuie_admin" placeholder="999999">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="nombre_admin" class="col-sm-5 control-label">Nombre 3er. administrador</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="nombre_admin" name="nombre_admin" placeholder="...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+							<div class="tab-pane" id="telefono">
+								<div class="row">
+									<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="tel" class="col-sm-5 control-label">Teléfono</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="tel" name="tel" >
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="obs_tel" class="col-sm-5 control-label">Observaciones</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="obs_tel" name="obs_tel" placeholder="Observaciones ...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+								</div>
+						    </div>
+							<div class="tab-pane" id="email">
+						    	<div class="row">
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="correo" class="col-sm-5 control-label">Email</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="email" class="form-control" id="correo" name="correo" placeholder="efector@sirgeweb.com.ar">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="obs_correo" class="col-sm-5 control-label">Observaciones</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="obs_correo" name="obs_correo" placeholder="Observaciones ...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+							<div class="tab-pane" id="referente">
+								<div class="row">
+									<div class="col-md-12">
+						    			<div class="form-group">
+		                      				<label for="refer" class="col-sm-5 control-label">Referente</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="refer" name="refer" placeholder="Ingrese un contacto con el efector ...">
+		                  					</div>
+		                    			</div>
+						    		</div>
+								</div>
+						    </div>
+							<ul class="pager wizard">
+								<li class="previous"><a href="javascript:;">Anterior</a></li>
+							  	<li class="next"><a href="javascript:;">Siguiente</a></li>
+							</ul>
+						</div>	
+					</div>
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
-						<button class="search btn btn-warning">Buscar</button>
+					 	<button class="back btn btn-info">Cancelar alta</button>
+					 	<button type="submit" class="finish btn btn-warning">Solicitar alta</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</form>
 </div>
+<div class="modal fade modal-info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    			<h4 class="modal-title">Atención!</h4>
+      		</div>
+  			<div class="modal-body">
+  				<p id="modal-text"></p>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
 $(document).ready(function() {
-
-	$('#cuie').typeahead({
-  		source : function (query , process) {
-  			$.get('cuie-busqueda/' + query , function(data){
-				process (data);
-  			})
-		} ,
-		minLength : 2
-	});
 	
-	$('#cuie').inputmask({
-		mask : 'a99999',
-		placeholder : ''
-	});
-
-	$('.search').click(function(){
-		$('#baja-efector').validate({
-			rules : {
-				cuie : {
-					required : true
-				}
-			},
-			submitHandler : function(form){
-				$.get('')
-			}
-		})
-	});
-
 	$('.finish').hide();
 	$('#errores-div').hide();
 	

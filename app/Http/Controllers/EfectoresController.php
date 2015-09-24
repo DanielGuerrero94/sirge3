@@ -94,7 +94,7 @@ class EfectoresController extends Controller
     	$data = [
     		'page_title' => $efector->nombre,
     		'efector' => $efector,
-            'back' => $back
+        'back' => $back
     	];
     	return view('efectores.detalle' , $data);
     }
@@ -462,11 +462,24 @@ class EfectoresController extends Controller
       $data = [
         'page_title' => 'Modificación de efectores'
       ];
-      return view('efectores.edit' , $data);
+      return view('efectores.edit-find' , $data);
     }
     
     public function getEditForm($cuie){
-      $efector = Efector::where('cuie' , $cuie)->get();
+      $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
+      $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
+      $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
+      $provincias = Provincia::all();
+      $efector = Efector::where('cuie' , $cuie)->get()[0];
+      $data = [
+        'page_title' => 'Modificación de efector: ' . $efector->nombre,
+        'tipos' => $tipos,
+        'dependencias' => $dependencias,
+        'categorias' => $categorias,
+        'provincias' => $provincias,
+        'efector' => $efector
+      ];
+      return view('efectores.edit' , $data);
       
     }
 
