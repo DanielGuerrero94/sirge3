@@ -3,17 +3,18 @@
 <style type="text/css">
 .navi li{
     text-align: center;
+    font-size: 10px;
     padding: 2px;
-    width: 150px;
+    width: 108px;
     display:inline-block;
 }
 </style>
 <div class="row">
 	<form id="alta-efector">
 		<div class="col-md-12">
-			<div class="box box-info">
+			<div class="box box-warning">
 				<div class="box-header">
-					<h2 class="box-title">Complete todos los campos</h2>
+					<h2 class="box-title">Edite los campos que desea modificar</h2>
 				</div>
 				<div class="box-body">
 					<div class="alert alert-danger" id="errores-div">
@@ -32,6 +33,9 @@
 										<li><a href="#telefono" data-toggle="tab">Teléfono</a></li>
 										<li><a href="#email" data-toggle="tab">Email</a></li>
 										<li><a href="#referente" data-toggle="tab">Referente</a></li>
+										<li><a href="#ppac" data-toggle="tab">PPAC</a></li>
+										<li><a href="#internet" data-toggle="tab">Descentralización</a></li>
+										<li><a href="#addendas" data-toggle="tab">Addendas</a></li>
 									</ul>
 						 		</div>
 						  	</div>
@@ -233,7 +237,7 @@
 						    			<div class="form-group">
 		                      				<label for="direccion" class="col-sm-1 control-label">Dirección</label>
 		                  					<div class="col-sm-11">
-		                    					<input type="text" class="form-control" id="direccion" name="direccion" placeholder="Ingrese la dirección del efector ...">
+		                    					<input type="text" class="form-control" id="direccion" name="direccion" value="{{ $efector->domicilio }}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -245,12 +249,19 @@
 							    			<label for="provincia" class="col-sm-3 control-label">Provincia</label>
 							    			<div class="col-sm-9">
 								    			<select id="provincia" name="provincia" class="form-control">
-								    				<option value="">Seleccione ...</option>
 								    				@foreach($provincias as $provincia)
-								    					@if (Auth::user()->id_provincia == $provincia->id_provincia)
-								    						<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    					@if (Auth::user()->id_entidad == 1)
+									    					@if ($efector->geo->provincia->id_provincia == $provincia->id_provincia)
+									    						<option selected="selected" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+									    					@else
+									    						<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+									    					@endif
 								    					@else
-								    						<option disabled="disabled" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    						@if (Auth::user()->id_provincia == $provincia->id_provincia)
+								    							<option selected="selected" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    						@else
+								    							<option disabled="disabled" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+								    						@endif
 								    					@endif
 								    				@endforeach
 								    			</select>
@@ -671,41 +682,44 @@ $(document).ready(function() {
 		});
 	});
 
-	$('#provincia').change(function(){
 
-		var provincia = $(this).val();
+	function fillDepartamentos(provincia){
 		var html = '';
-			html += '<option value="">Seleccione ...</option>';
-
 		$.get('departamentos/' + provincia , function(data){
 			$.each(data , function(key , value){
-				html += '<option id-dto="' + value.id_departamento + '"  value="' + value.id + '">';
+				if ('{{ $efector->geo->departamento->id_departamento }}' == value.id_departamento)
+					html += '<option selected="selected" id-dto="' + value.id_departamento + '"  value="' + value.id + '">';
+				else
+					html += '<option id-dto="' + value.id_departamento + '"  value="' + value.id + '">';
 				html += value.nombre_departamento;
 				html += '</option>';
 			});
 			$('#departamento').html(html);
 		});
+	}
 
-		$.get('cuie-nuevo/' + provincia , function(data){
-			$('#cuie').val(data);
-			$('#modal-text').html('Se ha generado el CUIE ' + data + ' para dar de alta este efector.');
-			$('.modal').modal();
-		});
-	});
-
-	$('#departamento').change(function(){
-		var provincia = $('#provincia').val();
-		var departamento = $('option:selected' , this).attr('id-dto');
+	function fillLocalidades(provincia , departamento){
 		var html = '';
-			html += '<option value="">Seleccione ...</option>';
 		$.get('localidades/' + provincia + '/' + departamento , function(data){
 			$.each(data , function(key , value){
-				html += '<option value="' + value.id + '">';
+				if ('{{ $efector->geo->localidad->id_localidad }}' == value.id_localidad)
+					html += '<option selected="selected" value="' + value.id + '">';
+				else
+					html += '<option value="' + value.id + '">';
 				html += value.nombre_localidad;
 				html += '</option>';
 			});
 			$('#localidad').html(html);
 		});
+	}
+
+	fillDepartamentos('{{ $efector->geo->provincia->id_provincia }}');
+	fillLocalidades('{{ $efector->geo->provincia->id_provincia }}' , '{{ $efector->geo->departamento->id_departamento }}');
+
+	$('#provincia').change(function(){
+	});
+
+	$('#departamento').change(function(){
 	})
 
   	$('#rootwizard').bootstrapWizard({

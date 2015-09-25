@@ -23,20 +23,6 @@ class NuevoEfectorRequest extends Request
      */
     public function rules()
     {
-
-/*
-convenio_numero:
-convenio_firmante:
-convenio_fsus:
-convenio_fini:
-convenio_ffin:
-cuie_admin:
-nombre_admin:
-tel:
-obs_tel:
-correo:
-refer:
-*/
         return [
             'cuie' => 'required|between:6,6',
             'siisa' => 'required|digits:14',

@@ -164,11 +164,12 @@
 							</div>
 						</div>
 					</div>
+
 					@if ($efector->compromiso_gestion == 'N')
-					<div class="callout callout-danger">
-                		<h4>Atención!</h4>
-                		<p>Este efector no posee compromiso de gestión firmado</p>
-              		</div>
+						<div class="callout callout-danger">
+	                		<h4>Atención!</h4>
+	                		<p>Este efector no posee compromiso de gestión firmado</p>
+	              		</div>
 					@else
 						<h4>Compromiso de gestión</h4>
 						@foreach ($efector->compromisos as $c)
@@ -316,37 +317,35 @@
 					@endif
 					@if (count($efector->internet))
 					<h4>Descentralización</h4>
-						@foreach ($efector->internet as $i)
-							<div class="row">
-								<div class="col-md-4">
-									<!-- INTERNET -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">Internet</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $i->internet }}</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<!-- FC -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">Descentralizado</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $i->factura_descentralizada }}</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<!-- INTERNET -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">On Line</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $i->factura_on_line }}</p>
-										</div>
+						<div class="row">
+							<div class="col-md-4">
+								<!-- INTERNET -->
+								<div class="form-group">
+									<label class="col-md-3 control-label">Internet</label>
+									<div class="col-md-6">
+										<p class="form-control-static">{{ $efector->internet->internet }}</p>
 									</div>
 								</div>
 							</div>
-						@endforeach
+							<div class="col-md-4">
+								<!-- FC -->
+								<div class="form-group">
+									<label class="col-md-4 control-label">Descentralizado</label>
+									<div class="col-md-5">
+										<p class="form-control-static">{{ $efector->internet->factura_descentralizada }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<!-- INTERNET -->
+								<div class="form-group">
+									<label class="col-md-3 control-label">On Line</label>
+									<div class="col-md-6">
+										<p class="form-control-static">{{ $efector->internet->factura_on_line }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
 					@else
 					<div class="callout callout-danger">
                 		<h4>Atención!</h4>

@@ -28,6 +28,9 @@ use App\Models\Efectores\Referente;
 use App\Models\Efectores\Telefono;
 use App\Models\Efectores\Tipo;
 
+use App\Models\Geo\Departamento;
+use App\Models\Geo\Localidad;
+
 class EfectoresController extends Controller
 {
     /**
@@ -89,7 +92,7 @@ class EfectoresController extends Controller
                 'referentes',
                 'internet'
                 ])
-        ->where('id_efector' , $id)->find($id);
+        ->find($id);
 
     	$data = [
     		'page_title' => $efector->nombre,
@@ -470,7 +473,30 @@ class EfectoresController extends Controller
       $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
       $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
       $provincias = Provincia::all();
-      $efector = Efector::where('cuie' , $cuie)->get()[0];
+      $departamentos = Departamento::all();
+      $localidades = Localidad::all();
+      $efector = Efector::with([
+                'estado' , 
+                'tipo' , 
+                'categoria' ,
+                'geo' => function($q){ 
+                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                },
+                'dependencia',
+                'compromisos',
+                'emails',
+                'telefonos',
+                'referentes',
+                'internet'
+                ])
+        ->where('cuie' , $cuie)->firstOrFail();
+
+      if (Auth::user()->id_entidad != 1){
+        if (Auth::user()->id_provincia != $efector->geo->provincia->id_provincia){
+          return response('Está tratando de editar un efector que no pertenece a su jurisdicción' , 422);
+        }
+      }
+
       $data = [
         'page_title' => 'Modificación de efector: ' . $efector->nombre,
         'tipos' => $tipos,

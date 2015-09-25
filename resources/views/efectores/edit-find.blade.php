@@ -16,12 +16,14 @@
 					<h2 class="box-title">Ingrese el CUIE del efector a editar</h2>
 				</div>
 				<div class="box-body">
-						<div class="form-group">
-	          				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
-	      					<div class="col-sm-9">
-	        					<input type="text" class="form-control" id="cuie" name="cuie" placeholder="999999">
-	      					</div>
-	        			</div>
+					<div class="alert alert-danger" id="errores-div">
+				    </div>
+					<div class="form-group">
+          				<label for="cuie" class="col-sm-3 control-label">CUIE</label>
+      					<div class="col-sm-9">
+        					<input type="text" class="form-control" id="cuie" name="cuie" placeholder="999999">
+      					</div>
+        			</div>
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
@@ -49,6 +51,8 @@ $(document).ready(function() {
 		placeholder : ''
 	});
 
+	$('#errores-div').hide();
+
 	$('.search').click(function(){
 		$('#baja-efector').validate({
 			rules : {
@@ -57,9 +61,16 @@ $(document).ready(function() {
 				}
 			},
 			submitHandler : function(form){
-				$.get('efectores-modificacion/' + $('#cuie').val() , function(data){
-					$('.content-wrapper').html(data);
-				})
+				$.ajax({
+					url : 'efectores-modificacion/' + $('#cuie').val(),
+					success : function(data){
+						$('.content-wrapper').html(data);
+					},
+					error : function(data){
+						$('#errores-div').html(data.responseText);
+						$('#errores-div').show();
+					}
+				});
 			}
 		})
 	});
