@@ -120,15 +120,15 @@ class Efector extends Model
 	/**
 	 * Devuelvo el o los compromisos
 	 */
-	public function compromisos(){
-		return $this->hasMany('App\Models\Efectores\Gestion' , 'id_efector' , 'id_efector');
+	public function compromiso(){
+		return $this->hasOne('App\Models\Efectores\Gestion' , 'id_efector' , 'id_efector');
 	}
 
 	/**
 	 * Devuelvo el o los convenios
 	 */
-	public function convenios(){
-		return $this->hasMany('App\Models\Efectores\Convenio' , 'id_efector' , 'id_efector');
+	public function convenio(){
+		return $this->hasOne('App\Models\Efectores\Convenio' , 'id_efector' , 'id_efector');
 	}
 
 	/**

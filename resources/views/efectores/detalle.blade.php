@@ -172,14 +172,13 @@
 	              		</div>
 					@else
 						<h4>Compromiso de gestión</h4>
-						@foreach ($efector->compromisos as $c)
 						<div class="row">
 							<div class="col-md-4">
 								<!-- NUMERO -->
 								<div class="form-group">
 									<label class="col-md-6 control-label">Número</label>
 									<div class="col-md-6">
-										<p class="form-control-static">{{ $c->numero_compromiso }}</p>
+										<p class="form-control-static">{{ $efector->compromiso->numero_compromiso }}</p>
 									</div>
 								</div>
 							</div>
@@ -188,7 +187,7 @@
 								<div class="form-group">
 									<label class="col-md-6 control-label">Firmante</label>
 									<div class="col-md-6">
-										<p class="form-control-static">{{ $c->firmante }}</p>
+										<p class="form-control-static">{{ $efector->compromiso->firmante }}</p>
 									</div>
 								</div>
 							</div>
@@ -198,7 +197,7 @@
 									<label class="col-md-6 control-label">Pago indirecto</label>
 									<div class="col-md-6">
 										<p class="form-control-static">
-										@if ($c->pago_indirecto == 'S')
+										@if ($efector->compromiso->pago_indirecto == 'S')
 										<span class="label label-success">SI</span>
 										@else
 										<span class="label label-warning">NO</span>
@@ -214,7 +213,7 @@
 								<div class="form-group">
 									<label class="col-md-6 control-label">Suscripción</label>
 									<div class="col-md-6">
-										<p class="form-control-static">{{ $c->fecha_suscripcion }}</p>
+										<p class="form-control-static">{{ $efector->compromiso->fecha_suscripcion }}</p>
 									</div>
 								</div>
 							</div>
@@ -223,7 +222,7 @@
 								<div class="form-group">
 									<label class="col-md-6 control-label">Inicio</label>
 									<div class="col-md-6">
-										<p class="form-control-static">{{ $c->fecha_inicio }}</p>
+										<p class="form-control-static">{{ $efector->compromiso->fecha_inicio }}</p>
 									</div>
 								</div>
 							</div>
@@ -232,12 +231,11 @@
 								<div class="form-group">
 									<label class="col-md-6 control-label">Fin</label>
 									<div class="col-md-6">
-										<p class="form-control-static">{{ $c->fecha_fin }}</p>
+										<p class="form-control-static">{{ $efector->compromiso->fecha_fin }}</p>
 									</div>
 								</div>
 							</div>
 						</div>
-						@endforeach
 					@endif
 					@if (count($efector->emails))
 					<h4>Direcciónes de correo electrónico</h4>

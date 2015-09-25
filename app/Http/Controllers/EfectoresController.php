@@ -86,11 +86,12 @@ class EfectoresController extends Controller
                     $q->with(['provincia' , 'departamento' , 'localidad']); 
                 },
                 'dependencia',
-                'compromisos',
+                'compromiso',
                 'emails',
                 'telefonos',
                 'referentes',
-                'internet'
+                'internet',
+                'convenio'
                 ])
         ->find($id);
 
@@ -189,7 +190,7 @@ class EfectoresController extends Controller
         $ef->priorizado = $r->priorizado;
         $ef->id_estado = 2;
         
-        DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
+        $result = DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
             $ef->save();
             $ef->telefonos()->save($te);
             $ef->emails()->save($em);
@@ -198,15 +199,18 @@ class EfectoresController extends Controller
             $ef->geo()->save($ge);
             if ($r->compromiso == 'S'){
                 if ($r->indirecto == 'S'){
-                    $ef->compromisos()->save($cg);
-                    $ef->convenios()->save($ca);
+                    $ef->compromiso()->save($cg);
+                    $ef->convenio()->save($ca);
                 } else {
-                    $ef->compromisos()->save($cg);
+                    $ef->compromiso()->save($cg);
                 }
             }
-
-            return 'Se ha solicitado el alta con el CUIE: ' . $r->cuie;
         });
+        if (is_null($result)){
+          return 'Se ha solicitado el alta del efector ' . $ef->nombre;
+        } else {
+          return 'Ha ocurrido un error';
+        }
     }
 
     /**
@@ -483,11 +487,12 @@ class EfectoresController extends Controller
                     $q->with(['provincia' , 'departamento' , 'localidad']); 
                 },
                 'dependencia',
-                'compromisos',
+                'compromiso',
                 'emails',
                 'telefonos',
                 'referentes',
-                'internet'
+                'internet',
+                'convenio'
                 ])
         ->where('cuie' , $cuie)->firstOrFail();
 

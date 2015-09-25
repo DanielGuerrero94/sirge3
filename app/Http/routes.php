@@ -94,6 +94,7 @@ Route::get('efectores-baja' , 'EfectoresController@getBaja');
 Route::post('efectores-baja' , 'EfectoresController@postBaja');
 #MODIFICACION
 Route::get('efectores-modificacion' , 'EfectoresController@getEdit');
+Route::post('efectores-modificacion' , 'EfectoresController@postEdit');
 Route::get('efectores-modificacion/{cuie}' , 'EfectoresController@getEditForm');
 #REVISION
 Route::get('efectores-revision' , 'EfectoresController@getRevision');

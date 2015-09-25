@@ -310,12 +310,75 @@
 						    	</div>
 						    </div>
 							<div class="tab-pane" id="gestion">
-								<div class="row">
+						    @if (count($efector->compromiso))
+					    		<div class="row">
 									<div class="col-md-4">
 						    			<div class="form-group">
 		                      				<label for="numero_compromiso" class="col-sm-3 control-label">Número</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" placeholder="999999">
+		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" value="{{ $efector->compromiso->numero_compromiso}}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="firmante_compromiso" class="col-sm-3 control-label">Firmante</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="firmante_compromiso" name="firmante_compromiso" value="{{ $efector->compromiso->firmante}}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+							    			<label for="indirecto" class="col-sm-6 control-label">Pago indirecto</label>
+							    			<div class="col-sm-6">
+								    			<select id="indirecto" name="indirecto" class="form-control">
+								    				@if($efector->compromiso->pago_indirecto == 'S')
+									    				<option selected="selected" value="S">SI</option>
+									    				<option value="N">NO</option>
+									    			@else
+									    				<option value="S">SI</option>
+									    				<option selected="selected" value="N">NO</option>
+									    			@endif
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+								</div>
+								<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="compromiso_fsus" class="col-sm-3 control-label">Suscripción</label>
+		                  					<div class="col-sm-9">
+		                    					<input class="form-control" id="compromiso_fsus" name="compromiso_fsus" value="{{ $efector->compromiso->fecha_suscripcion }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="compromiso_fini" class="col-sm-3 control-label">Inicio</label>
+		                  					<div class="col-sm-9">
+		                    					<input class="form-control" id="compromiso_fini" name="compromiso_fini" value="{{ $efector->compromiso->fecha_inicio }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="compromiso_ffin" class="col-sm-3 control-label">Fin</label>
+		                  					<div class="col-sm-9">
+		                    					<input class="form-control" id="compromiso_ffin" name="compromiso_ffin" value="{{ $efector->compromiso->fecha_fin }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    @else
+								<div class="row" id="campos-compromiso">
+									<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="numero_compromiso" class="col-sm-3 control-label">Número</label>
+		                  					<div class="col-sm-9">
+		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" value="{{ $efector->compromiso->numero_compromiso or '' }}" placeholder="999999">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -346,7 +409,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_fsus" class="col-sm-3 control-label">Suscripción</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="compromiso_fsus" name="compromiso_fsus" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_fsus" name="compromiso_fsus" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -354,7 +417,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_fini" class="col-sm-3 control-label">Inicio</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="compromiso_fini" name="compromiso_fini" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_fini" name="compromiso_fini" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -362,11 +425,12 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_ffin" class="col-sm-3 control-label">Fin</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="compromiso_ffin" name="compromiso_ffin" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_ffin" name="compromiso_ffin" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
 						    	</div>
+						    @endif
 						    </div>
 							<div class="tab-pane" id="convenio">
 								<div class="row">
@@ -525,7 +589,16 @@ $(document).ready(function() {
 	$('.finish').hide();
 	$('#errores-div').hide();
 	
-	$('#tel').inputmask('(999) 9999 9999')
+	$('#tel').inputmask('(999) 9999 9999');
+	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus').inputmask('99/99/9999');
+
+	function checkCompromiso(integrante , compromiso){
+		if (integrante == 'N' && compromiso == 'N'){
+			$('#compromiso').val('N').attr('readonly' , 'readonly');
+			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
+			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
+		}
+	}
 
 	$('#integrante').change(function(){
 		var estado = $(this).val();
@@ -650,7 +723,7 @@ $(document).ready(function() {
 		submitHandler : function(form){
 			$.ajax({
 				method : 'post',
-				url : 'efectores-alta',
+				url : 'efectores-modificacion',
 				data : $(form).serialize(),
 				success : function(data){
 					$('#modal-text').html(data);
@@ -717,9 +790,11 @@ $(document).ready(function() {
 	fillLocalidades('{{ $efector->geo->provincia->id_provincia }}' , '{{ $efector->geo->departamento->id_departamento }}');
 
 	$('#provincia').change(function(){
+		fillDepartamentos($(this).val())
 	});
 
 	$('#departamento').change(function(){
+		fillLocalidades( $('#provincia').val() , $('option:selected' , this).attr('id-dto'))
 	})
 
   	$('#rootwizard').bootstrapWizard({
