@@ -135,21 +135,21 @@ class Efector extends Model
 	 * Devuelvo los teléfonos
 	 */
 	public function telefonos(){
-		return $this->hasMany('App\Models\Efectores\Telefono' , 'id_efector' , 'id_efector');
+		return $this->hasOne('App\Models\Efectores\Telefono' , 'id_efector' , 'id_efector');
 	}
 
 	/**
 	 * Devuelvo los emails
 	 */
 	public function emails(){
-		return $this->hasMany('App\Models\Efectores\Email' , 'id_efector' , 'id_efector');
+		return $this->hasOne('App\Models\Efectores\Email' , 'id_efector' , 'id_efector');
 	}
 
 	/**
 	 * Devuelvo los referentes
 	 */
 	public function referentes(){
-		return $this->hasMany('App\Models\Efectores\Referente' , 'id_efector' , 'id_efector');
+		return $this->hasOne('App\Models\Efectores\Referente' , 'id_efector' , 'id_efector');
 	}
 
 	/**

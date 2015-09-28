@@ -137,23 +137,28 @@ class EfectoresController extends Controller
             'id_localidad' => $r->localidad,
             'ciudad' => $r->ciudad
             ]);
+
         $te = new Telefono([
             'numero_telefono' => $r->tel,
             'id_tipo_telefono' => 1,
             'observaciones' => $r->obs_tel
             ]);
+
         $em = new Email([
             'email' => $r->correo,
             'observaciones' => $r->obs_correo
             ]);
+
         $re = new Referente([
             'nombre' => $r->refer
             ]);
+
         $de = new Descentralizacion([
             'internet' => 'N',
             'factura_descentralizada' => 'N',
             'factura_on_line' => 'N'
             ]);
+
         $cg = new Gestion([
             'numero_compromiso' => $r->numero_compromiso,
             'firmante' => $r->firmante_compromiso,
@@ -162,6 +167,7 @@ class EfectoresController extends Controller
             'fecha_fin' => $r->compromiso_ffin,
             'pago_indirecto' => $r->indirecto
             ]);
+
         $ca = new Convenio([
             'numero_compromiso' => $r->numero_compromiso,
             'numero_convenio' => $r->convenio_numero,
@@ -172,6 +178,7 @@ class EfectoresController extends Controller
             'fecha_inicio' => $r->convenio_fini,
             'fecha_fin' => $r->convenio_ffin
             ]);
+
         $ef = new Efector;
         $ef->cuie = $r->cuie;
         $ef->siisa = $r->siisa;
@@ -192,8 +199,10 @@ class EfectoresController extends Controller
         
         $result = DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
             $ef->save();
-            $ef->telefonos()->save($te);
-            $ef->emails()->save($em);
+            if (strlen($r->tel))
+              $ef->telefonos()->save($te);
+            if (strlen($r->correo))
+              $ef->emails()->save($em);
             $ef->referentes()->save($re);
             $ef->internet()->save($de);
             $ef->geo()->save($ge);

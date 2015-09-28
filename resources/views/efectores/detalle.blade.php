@@ -264,28 +264,26 @@
 					@endif
 					@if (count($efector->telefonos))
 					<h4>Números de teléfono</h4>
-						@foreach ($efector->telefonos as $tel)
-							<div class="row">
-								<div class="col-md-6">
-									<!-- EMAIL -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">Número</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $tel->numero_telefono }}</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<!-- EMAIL -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">Observaciones</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $tel->observaciones }}</p>
-										</div>
+						<div class="row">
+							<div class="col-md-6">
+								<!-- EMAIL -->
+								<div class="form-group">
+									<label class="col-md-3 control-label">Número</label>
+									<div class="col-md-6">
+										<p class="form-control-static">{{ $efector->telefonos->numero_telefono }}</p>
 									</div>
 								</div>
 							</div>
-						@endforeach
+							<div class="col-md-6">
+								<!-- EMAIL -->
+								<div class="form-group">
+									<label class="col-md-3 control-label">Observaciones</label>
+									<div class="col-md-6">
+										<p class="form-control-static">{{ $efector->telefonos->observaciones }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
 					@else
 					<div class="callout callout-warning">
                 		<h4>Atención!</h4>

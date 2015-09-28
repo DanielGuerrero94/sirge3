@@ -33,8 +33,8 @@
 										<li><a href="#telefono" data-toggle="tab">Teléfono</a></li>
 										<li><a href="#email" data-toggle="tab">Email</a></li>
 										<li><a href="#referente" data-toggle="tab">Referente</a></li>
-										<li><a href="#ppac" data-toggle="tab">PPAC</a></li>
 										<li><a href="#internet" data-toggle="tab">Descentralización</a></li>
+										<li><a href="#ppac" data-toggle="tab">PPAC</a></li>
 										<li><a href="#addendas" data-toggle="tab">Addendas</a></li>
 									</ul>
 						 		</div>
@@ -218,6 +218,7 @@
 							    			<label for="compromiso" class="col-sm-4 control-label">Compromiso</label>
 							    			<div class="col-sm-8">
 								    			<select id="compromiso" name="compromiso" class="form-control">
+								    				<option value="">Seleccione ...</option>
 								    				@if ($efector->compromiso_gestion == 'S')
 								    					<option selected="selected" value="S">SI</option>
 								    					<option value="N">NO</option>
@@ -310,13 +311,12 @@
 						    	</div>
 						    </div>
 							<div class="tab-pane" id="gestion">
-						    @if (count($efector->compromiso))
 					    		<div class="row">
 									<div class="col-md-4">
 						    			<div class="form-group">
 		                      				<label for="numero_compromiso" class="col-sm-3 control-label">Número</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" value="{{ $efector->compromiso->numero_compromiso}}">
+		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" value="{{ $efector->compromiso->numero_compromiso or ''}}" placeholder="999999">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -324,69 +324,7 @@
 						    			<div class="form-group">
 		                      				<label for="firmante_compromiso" class="col-sm-3 control-label">Firmante</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="firmante_compromiso" name="firmante_compromiso" value="{{ $efector->compromiso->firmante}}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-							    			<label for="indirecto" class="col-sm-6 control-label">Pago indirecto</label>
-							    			<div class="col-sm-6">
-								    			<select id="indirecto" name="indirecto" class="form-control">
-								    				@if($efector->compromiso->pago_indirecto == 'S')
-									    				<option selected="selected" value="S">SI</option>
-									    				<option value="N">NO</option>
-									    			@else
-									    				<option value="S">SI</option>
-									    				<option selected="selected" value="N">NO</option>
-									    			@endif
-								    			</select>
-							    			</div>
-						    			</div>
-						    		</div>
-								</div>
-								<br />
-						    	<div class="row">
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="compromiso_fsus" class="col-sm-3 control-label">Suscripción</label>
-		                  					<div class="col-sm-9">
-		                    					<input class="form-control" id="compromiso_fsus" name="compromiso_fsus" value="{{ $efector->compromiso->fecha_suscripcion }}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="compromiso_fini" class="col-sm-3 control-label">Inicio</label>
-		                  					<div class="col-sm-9">
-		                    					<input class="form-control" id="compromiso_fini" name="compromiso_fini" value="{{ $efector->compromiso->fecha_inicio }}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="compromiso_ffin" class="col-sm-3 control-label">Fin</label>
-		                  					<div class="col-sm-9">
-		                    					<input class="form-control" id="compromiso_ffin" name="compromiso_ffin" value="{{ $efector->compromiso->fecha_fin }}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    	</div>
-						    @else
-								<div class="row" id="campos-compromiso">
-									<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="numero_compromiso" class="col-sm-3 control-label">Número</label>
-		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="numero_compromiso" name="numero_compromiso" value="{{ $efector->compromiso->numero_compromiso or '' }}" placeholder="999999">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="firmante_compromiso" class="col-sm-3 control-label">Firmante</label>
-		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="firmante_compromiso" name="firmante_compromiso" placeholder="Ingrese firmante ...">
+		                    					<input type="text" class="form-control" id="firmante_compromiso" name="firmante_compromiso" value="{{ $efector->compromiso->firmante or ''}}" placeholder="Ingrese firmante ...">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -396,8 +334,15 @@
 							    			<div class="col-sm-6">
 								    			<select id="indirecto" name="indirecto" class="form-control">
 								    				<option value="">Seleccione...</option>
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
+								    			@if (isset($efector->compromiso))
+								    				@if($efector->compromiso->pago_indirecto == 'S')
+									    				<option selected="selected" value="S">SI</option>
+									    				<option value="N">NO</option>
+									    			@else
+									    				<option value="S">SI</option>
+									    				<option selected="selected" value="N">NO</option>
+									    			@endif
+									    		@endif
 								    			</select>
 							    			</div>
 						    			</div>
@@ -409,7 +354,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_fsus" class="col-sm-3 control-label">Suscripción</label>
 		                  					<div class="col-sm-9">
-		                    					<input class="form-control" id="compromiso_fsus" name="compromiso_fsus" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_fsus" name="compromiso_fsus" value="{{ $efector->compromiso->fecha_suscripcion or ''}}" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -417,7 +362,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_fini" class="col-sm-3 control-label">Inicio</label>
 		                  					<div class="col-sm-9">
-		                    					<input class="form-control" id="compromiso_fini" name="compromiso_fini" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_fini" name="compromiso_fini" value="{{ $efector->compromiso->fecha_inicio or '' }}" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -425,12 +370,11 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_ffin" class="col-sm-3 control-label">Fin</label>
 		                  					<div class="col-sm-9">
-		                    					<input class="form-control" id="compromiso_ffin" name="compromiso_ffin" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_ffin" name="compromiso_ffin" value="{{ $efector->compromiso->fecha_fin or '' }}" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
 						    	</div>
-						    @endif
 						    </div>
 							<div class="tab-pane" id="convenio">
 								<div class="row">
@@ -438,7 +382,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_numero" class="col-sm-3 control-label">Número</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="convenio_numero" name="convenio_numero" placeholder="999999">
+		                    					<input type="text" class="form-control" id="convenio_numero" name="convenio_numero" placeholder="999999" value="{{ $efector->convenio->numero_convenio or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -446,7 +390,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_firmante" class="col-sm-3 control-label">Firmante</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="convenio_firmante" name="convenio_firmante" placeholder="Ingrese firmante ...">
+		                    					<input type="text" class="form-control" id="convenio_firmante" name="convenio_firmante" placeholder="Ingrese firmante ..." value="{{ $efector->convenio->firmante or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -457,7 +401,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_fsus" class="col-sm-3 control-label">Suscripción</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="convenio_fsus" name="convenio_fsus" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="convenio_fsus" name="convenio_fsus" placeholder="dd/mm/aaaa" value="{{ $efector->convenio->fecha_suscripcion or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -465,7 +409,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_fini" class="col-sm-3 control-label">Inicio</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="convenio_fini" name="convenio_fini" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="convenio_fini" name="convenio_fini" placeholder="dd/mm/aaaa" value="{{ $efector->convenio->fecha_inicio or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -473,7 +417,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_ffin" class="col-sm-3 control-label">Fin</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="convenio_ffin" name="convenio_ffin" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="convenio_ffin" name="convenio_ffin" placeholder="dd/mm/aaaa" value="{{ $efector->convenio->fecha_fin or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -484,7 +428,7 @@
 						    			<div class="form-group">
 		                      				<label for="cuie_admin" class="col-sm-5 control-label">Código 3er. administrador</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="cuie_admin" name="cuie_admin" placeholder="999999">
+		                    					<input type="text" class="form-control" id="cuie_admin" name="cuie_admin" placeholder="999999" value="{{ $efector->convenio->nombre_tercer_administrador or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -492,7 +436,7 @@
 						    			<div class="form-group">
 		                      				<label for="nombre_admin" class="col-sm-5 control-label">Nombre 3er. administrador</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="nombre_admin" name="nombre_admin" placeholder="...">
+		                    					<input type="text" class="form-control" id="nombre_admin" name="nombre_admin" placeholder="..." value="{{ $efector->convenio->codigo_tercer_administrador or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -504,7 +448,7 @@
 						    			<div class="form-group">
 		                      				<label for="tel" class="col-sm-5 control-label">Teléfono</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="tel" name="tel" >
+		                    					<input type="text" class="form-control" id="tel" name="tel" value="{{ $efector->telefonos->numero_telefono or '' }}" >
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -512,7 +456,7 @@
 						    			<div class="form-group">
 		                      				<label for="obs_tel" class="col-sm-5 control-label">Observaciones</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="obs_tel" name="obs_tel" placeholder="Observaciones ...">
+		                    					<input type="text" class="form-control" id="obs_tel" name="obs_tel" value="{{ $efector->telefonos->observaciones or '' }}" placeholder="Observaciones ...">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -524,7 +468,7 @@
 						    			<div class="form-group">
 		                      				<label for="correo" class="col-sm-5 control-label">Email</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="email" class="form-control" id="correo" name="correo" placeholder="efector@sirgeweb.com.ar">
+		                    					<input type="email" class="form-control" id="correo" name="correo" placeholder="efector@sirgeweb.com.ar" value="{{ $efector->emails->email or '' }}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -532,7 +476,7 @@
 						    			<div class="form-group">
 		                      				<label for="obs_correo" class="col-sm-5 control-label">Observaciones</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="obs_correo" name="obs_correo" placeholder="Observaciones ...">
+		                    					<input type="text" class="form-control" id="obs_correo" name="obs_correo" placeholder="Observaciones ..." value="{{ $efector->emails->observaciones or '' }}" >
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -544,11 +488,83 @@
 						    			<div class="form-group">
 		                      				<label for="refer" class="col-sm-5 control-label">Referente</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="refer" name="refer" placeholder="Ingrese un contacto con el efector ...">
+		                    					<input type="text" class="form-control" id="refer" name="refer" placeholder="Ingrese un contacto con el efector ..." value="{{ $efector->referente->nombre or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
 								</div>
+						    </div>
+						    <div class="tab-pane" id="internet">
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<label for="internet-efector" class="col-sm-6 control-label">Internet</label>
+						    			<div class="col-sm-6">
+							    			<select id="internet-efector" name="internet-efector" class="form-control">
+							    			@if (isset($efector->internet))
+							    				@if($efector->internet->internet == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    			@endif
+								    		@endif
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<label for="factura_descentralizada" class="col-sm-7 control-label">Factura descentralizada</label>
+						    			<div class="col-sm-5">
+							    			<select id="factura_descentralizada" name="factura_descentralizada" class="form-control">
+							    			@if (isset($efector->internet))
+							    				@if($efector->internet->factura_descentralizada == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    			@endif
+								    		@endif
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<label for="factura_on_line" class="col-sm-6 control-label">Factura Online</label>
+						    			<div class="col-sm-6">
+							    			<select id="factura_on_line" name="factura_on_line" class="form-control">
+							    			@if (isset($efector->internet))
+							    				@if($efector->internet->factura_on_line == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    			@endif
+								    		@endif
+							    			</select>
+						    			</div>
+						    		</div>
+						    	</div>
+						    </div>
+						    <div class="tab-pane" id="ppac">
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<label for="internet-efector" class="col-sm-6 control-label">Internet</label>
+						    			<div class="col-sm-6">
+							    			<select id="internet-efector" name="internet-efector" class="form-control">
+							    			@if (isset($efector->internet))
+							    				@if($efector->internet->internet == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    			@endif
+								    		@endif
+							    			</select>
+						    			</div>
+						    		</div>
+						    	</div>
 						    </div>
 							<ul class="pager wizard">
 								<li class="previous"><a href="javascript:;">Anterior</a></li>
@@ -590,15 +606,24 @@ $(document).ready(function() {
 	$('#errores-div').hide();
 	
 	$('#tel').inputmask('(999) 9999 9999');
-	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus').inputmask('99/99/9999');
+	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin').inputmask('99/99/9999');
 
 	function checkCompromiso(integrante , compromiso){
-		if (integrante == 'N' && compromiso == 'N'){
+		if (integrante == 'N' || compromiso == 'N'){
 			$('#compromiso').val('N').attr('readonly' , 'readonly');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
 		}
 	}
+
+	function checkConvenio(integrante , compromiso , convenio){
+		if (integrante == 'N' || compromiso == 'N' || convenio == 'N'){
+			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');	
+		}
+	}
+
+	checkCompromiso($('#integrante').val() , $('#compromiso').val());
+	checkConvenio($('#integrante').val() , $('#compromiso').val() , $('#indirecto').val());
 
 	$('#integrante').change(function(){
 		var estado = $(this).val();
@@ -622,7 +647,16 @@ $(document).ready(function() {
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').removeAttr('disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').removeAttr('disabled');
 		}
-	})
+	});
+
+	$('#indirecto').change(function(){
+		var estado = $(this).val();
+		if (estado == 'N'){
+			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
+		} else {
+			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').removeAttr('disabled');	
+		}
+	});
 
 	var $validator = $('form').validate({
 		rules : {
