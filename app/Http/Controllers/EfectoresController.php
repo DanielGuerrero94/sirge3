@@ -27,6 +27,8 @@ use App\Models\Efectores\Gestion;
 use App\Models\Efectores\Referente;
 use App\Models\Efectores\Telefono;
 use App\Models\Efectores\Tipo;
+use App\Models\Efectores\Addenda;
+use App\Models\Efectores\Addendas\Tipo as TipoAddenda;
 
 use App\Models\Geo\Departamento;
 use App\Models\Geo\Localidad;
@@ -482,12 +484,16 @@ class EfectoresController extends Controller
     }
     
     public function getEditForm($cuie){
+      $e = Efector::where('cuie' , $cuie)->firstOrFail();
+      $add_firmadas = Addenda::where('id_efector' , $e->id_efector)->lists('id_addenda');
+
       $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
       $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
       $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
       $provincias = Provincia::all();
       $departamentos = Departamento::all();
       $localidades = Localidad::all();
+      $addendas = TipoAddenda::whereNotIn('id' , $add_firmadas)->get();
       $efector = Efector::with([
                 'estado' , 
                 'tipo' , 
@@ -499,9 +505,13 @@ class EfectoresController extends Controller
                 'compromiso',
                 'emails',
                 'telefonos',
-                'referentes',
+                'referente',
                 'internet',
-                'convenio'
+                'convenio',
+                'ppac',
+                'addendas' => function($q){
+                  $q->with(['tipo']);
+                }
                 ])
         ->where('cuie' , $cuie)->firstOrFail();
 
@@ -517,10 +527,21 @@ class EfectoresController extends Controller
         'dependencias' => $dependencias,
         'categorias' => $categorias,
         'provincias' => $provincias,
-        'efector' => $efector
+        'efector' => $efector,
+        'addendas' => $addendas
       ];
       return view('efectores.edit' , $data);
       
+    }
+
+    /**
+     * Actualiza la información del efector
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function postEdit(Request $r){
+      echo 'ok';
     }
 
 }

@@ -547,24 +547,125 @@
 						    	</div>
 						    </div>
 						    <div class="tab-pane" id="ppac">
+						    @if(isset($efector->ppac))
 						    	<div class="row">
 						    		<div class="col-md-4">
-						    			<label for="internet-efector" class="col-sm-6 control-label">Internet</label>
+						    			<label for="addenda_perinatal" class="col-sm-6 control-label">Addenda Perinatal</label>
+						    			<div class="col-sm-6">
+							    			<select id="addenda_perinatal" name="addenda_perinatal" class="form-control">
+						    				@if($efector->ppac->addenda_perinatal == 'S')
+							    				<option selected="selected" value="S">SI</option>
+							    				<option value="N">NO</option>
+							    			@else
+							    				<option value="S">SI</option>
+							    				<option selected="selected" value="N">NO</option>
+							    			@endif
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->ppac->fecha_addenda_perinatal }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<label for="internet-efector" class="col-sm-6 control-label">Perinatal AC</label>
 						    			<div class="col-sm-6">
 							    			<select id="internet-efector" name="internet-efector" class="form-control">
-							    			@if (isset($efector->internet))
-							    				@if($efector->internet->internet == 'S')
-								    				<option selected="selected" value="S">SI</option>
-								    				<option value="N">NO</option>
-								    			@else
-								    				<option value="S">SI</option>
-								    				<option selected="selected" value="N">NO</option>
-								    			@endif
-								    		@endif
+						    				@if($efector->ppac->perinatal_ac == 'S')
+							    				<option selected="selected" value="S">SI</option>
+							    				<option value="N">NO</option>
+							    			@else
+							    				<option value="S">SI</option>
+							    				<option selected="selected" value="N">NO</option>
+							    			@endif
 							    			</select>
 						    			</div>
 						    		</div>
 						    	</div>
+						    @else
+						    	<div class="row">
+						    		<div class="col-md-4">
+						    			<label for="addenda_perinatal" class="col-sm-6 control-label">Addenda Perinatal</label>
+						    			<div class="col-sm-6">
+							    			<select id="addenda_perinatal" name="addenda_perinatal" class="form-control">
+							    				<option value="">Seleccione...</option>
+							    				<option value="S">SI</option>
+							    				<option value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<div class="form-group">
+		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<label for="perinatal_ac" class="col-sm-6 control-label">Perinatal AC</label>
+						    			<div class="col-sm-6">
+							    			<select id="perinatal_ac" name="perinatal_ac" class="form-control">
+							    				<option value="">Seleccione...</option>
+							    				<option value="S">SI</option>
+							    				<option value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+						    	</div>
+						    @endif
+						    </div>
+						    <div class="tab-pane" id="addendas">
+					    	@if (count($efector->addendas))
+					    		@foreach ($efector->addendas as $add)
+					    		<div class="row">
+					    			<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="nombre_add" class="col-sm-5 control-label">Addenda</label>
+		                  					<div class="col-sm-7">
+		                    					<input readonly="readonly" type="text" class="form-control" value="{{ $add->tipo->nombre }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="fecha_addenda" class="col-sm-5 control-label">Fecha firma</label>
+		                  					<div class="col-sm-7">
+		                    					<input readonly="readonly" type="text" class="form-control" value="{{ $add->fecha_addenda }}">
+		                  					</div>
+		                    			</div>
+						    		</div>
+						    	</div>
+						    	<br />
+					    		@endforeach
+					    	@endif
+					    	@if (count($addendas))
+					    		<div class="row">
+					    			<div class="col-md-6">
+					    				<label for="tipo_addenda" class="col-sm-5 control-label">Tipo Addenda</label>
+						    			<div class="col-sm-7">
+							    			<select id="tipo_addenda" name="tipo_addenda" class="form-control">
+							    				<option value="">Seleccione...</option>
+									    		@foreach ($addendas as $a)
+									    		<option value="{{ $a->id }}">{{ $a->nombre }}</option>
+									    		@endforeach
+							    			</select>
+						    			</div>
+					    			</div>
+					    			<div class="col-md-6">
+						    			<div class="form-group">
+		                      				<label for="fecha_firma" class="col-sm-5 control-label">Fecha firma</label>
+		                  					<div class="col-sm-7">
+		                    					<input type="text" name="fecha_firma" name="fecha_firma" type="text" class="form-control" placeholder="dd/mm/aaaa">
+		                  					</div>
+		                    			</div>
+						    		</div>
+					    		</div>
+					    	@endif
 						    </div>
 							<ul class="pager wizard">
 								<li class="previous"><a href="javascript:;">Anterior</a></li>
@@ -606,7 +707,7 @@ $(document).ready(function() {
 	$('#errores-div').hide();
 	
 	$('#tel').inputmask('(999) 9999 9999');
-	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin').inputmask('99/99/9999');
+	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , #fecha_firma').inputmask('99/99/9999');
 
 	function checkCompromiso(integrante , compromiso){
 		if (integrante == 'N' || compromiso == 'N'){

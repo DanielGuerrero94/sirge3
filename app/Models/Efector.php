@@ -148,7 +148,7 @@ class Efector extends Model
 	/**
 	 * Devuelvo los referentes
 	 */
-	public function referentes(){
+	public function referente(){
 		return $this->hasOne('App\Models\Efectores\Referente' , 'id_efector' , 'id_efector');
 	}
 
@@ -157,5 +157,19 @@ class Efector extends Model
 	 */
 	public function internet(){
 		return $this->hasOne('App\Models\Efectores\Descentralizacion' , 'id_efector' , 'id_efector');
+	}
+
+	/**
+	 * Devuelve los datos de PPAC
+	 */
+	public function ppac(){
+		return $this->hasOne('App\Models\Efectores\Ppac' , 'id_efector' , 'id_efector');
+	}
+
+	/**
+	 * Devuelve las addendas
+	 */
+	public function addendas(){
+		return $this->hasMany('App\Models\Efectores\Addenda' , 'id_efector' , 'id_efector');
 	}
 }
