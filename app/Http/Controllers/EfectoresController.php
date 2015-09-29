@@ -94,7 +94,7 @@ class EfectoresController extends Controller
                 'compromiso',
                 'emails',
                 'telefonos',
-                'referentes',
+                'referente',
                 'internet',
                 'convenio'
                 ])
@@ -204,7 +204,7 @@ class EfectoresController extends Controller
         
         $result = DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
             $ef->save();
-            $ef->referentes()->save($re);
+            $ef->referente()->save($re);
             $ef->internet()->save($de);
             $ef->geo()->save($ge);
 

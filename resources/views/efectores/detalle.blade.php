@@ -239,28 +239,26 @@
 					@endif
 					@if (count($efector->emails))
 					<h4>Direcciónes de correo electrónico</h4>
-						@foreach ($efector->emails as $email)
-							<div class="row">
-								<div class="col-md-6">
-									<!-- EMAIL -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">Correo</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $email->email }}</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<!-- EMAIL -->
-									<div class="form-group">
-										<label class="col-md-3 control-label">Observaciones</label>
-										<div class="col-md-6">
-											<p class="form-control-static">{{ $email->observaciones }}</p>
-										</div>
+						<div class="row">
+							<div class="col-md-6">
+								<!-- EMAIL -->
+								<div class="form-group">
+									<label class="col-md-3 control-label">Correo</label>
+									<div class="col-md-6">
+										<p class="form-control-static">{{ $efector->emails->email }}</p>
 									</div>
 								</div>
 							</div>
-						@endforeach
+							<div class="col-md-6">
+								<!-- EMAIL -->
+								<div class="form-group">
+									<label class="col-md-3 control-label">Observaciones</label>
+									<div class="col-md-6">
+										<p class="form-control-static">{{ $efector->emails->observaciones }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
 					@endif
 					@if (count($efector->telefonos))
 					<h4>Números de teléfono</h4>
