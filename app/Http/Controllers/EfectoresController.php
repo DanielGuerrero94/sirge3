@@ -204,13 +204,15 @@ class EfectoresController extends Controller
         
         $result = DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
             $ef->save();
+            $ef->referentes()->save($re);
+            $ef->internet()->save($de);
+            $ef->geo()->save($ge);
+
             if (strlen($r->tel))
               $ef->telefonos()->save($te);
             if (strlen($r->correo))
               $ef->emails()->save($em);
-            $ef->referentes()->save($re);
-            $ef->internet()->save($de);
-            $ef->geo()->save($ge);
+
             if ($r->compromiso == 'S'){
                 if ($r->indirecto == 'S'){
                     $ef->compromiso()->save($cg);
@@ -548,15 +550,6 @@ class EfectoresController extends Controller
      */
     public function postEdit(Request $r){
 
-      $ef = Efector::where('cuie' , $r->cuie)->firstOrFail();
-
-      try {
-        $pp = Ppac::findOrFail($ef->id_efector);
-      } catch (ModelNotFoundException $e){
-        return 'no existe el modelo en ppac';
-      }
-
-      /*
 
       $ef = Efector::where('cuie' , $r->cuie);
       
@@ -580,14 +573,6 @@ class EfectoresController extends Controller
       $ge->id_localidad = $r->localidad;
       $ge->ciudad = $r->ciudad;
 
-      $te = Telefono::find($ef->id_efector);
-      $te->numero_telefono = $r->tel;
-      $te->observaciones = $r->obs_tel;
-
-      $em = Email::find($ef->id_efector);
-      $em->email = $r->correo;
-      $em->observaciones = $r->obs_correo;
-
       $re = Referente::find($ef->id_efector);
       $re->nombre = $r->refer;
 
@@ -597,9 +582,70 @@ class EfectoresController extends Controller
       $de->factura_on_line = $r->factura_on_line;
 
       if (strlen($r->addenda_perinatal)){
-
+        try {
+          $pp = Ppac::findOrFail($ef->id_efector);
+        } catch (ModelNotFoundException $e){
+          $pp = new Ppac;
+          $pp->id_efector = $ef->id_efector;
+        }
+        $pp->addenda_perinatal = $r->addenda_perinatal;
+        $pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal;
+        $pp->perinatal_ac = $r->perinatal_ac;
       }
-      */
+
+      if (strlen($r->tel)){
+        try {
+          $te = Telefono::findOrFail($ef->id_efector);
+        } catch (ModelNotFoundException $e){
+          $te = new Telefono;
+          $te->id_efector = $ef->id_efector;
+        }
+        $te->numero_telefono = $r->tel;
+        $te->observaciones = $r->obs_tel;
+      }
+
+      if (strlen($r->correo)){
+        try {
+          $em = Email::findOrFail($ef->id_efector);
+        } catch (ModelNotFoundException $e){
+          $em = new Email;
+          $em->id_efector = $ef->id_efector;
+        }
+        $em->email = $r->correo;
+        $em->observaciones = $r->obs_correo;
+      }
+
+      if ($r->integrante == 'S' && $r->compromiso == 'S'){
+        try {
+          $cg = Gestion::findOrFail($ef->id_efector);
+        } catch (ModelNotFoundException $e){
+          $cg = new Gestion;
+          $cg->id_efector = $ef->id_efector;
+        }
+        $cg->numero_compromiso = $r->numero_compromiso;
+        $cg->firmante = $r->firmante_compromiso;
+        $cg->fecha_suscripcion = $r->compromiso_fsus;
+        $cg->fecha_inicio = $r->compromiso_fini;
+        $cg->fecha_fin = $r->compromiso_ffin;
+        $cg->pago_indirecto = $r->indirecto;
+      }
+
+      if ($r->indirecto == 'S'){
+        try {
+          $ca = Convenio::findOrFail($ef->id_efector);
+        } catch (ModelNotFoundException $e){
+          $ca = new Convenio;
+          $ca->id_efector = $ef->id_efector;
+        }
+        $ca->numero_convenio = $r->convenio_numero;
+        $ca->firmante = $r->convenio_firmante;
+        $ca->nombre_tercer_administrador = $r->nombre_admin;
+        $ca->codigo_tercer_administrador = $r->cuie_admin;
+        $ca->fecha_suscripcion = $r->convenio_fsus;
+        $ca->fecha_inicio = $r->convenio_fini;
+        $ca->fecha_fin = $r->convenio_ffin;
+        $ca->numero_compromiso = $r->numero_compromiso;
+      }
 
     }
 
