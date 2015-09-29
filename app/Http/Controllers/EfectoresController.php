@@ -29,9 +29,12 @@ use App\Models\Efectores\Telefono;
 use App\Models\Efectores\Tipo;
 use App\Models\Efectores\Addenda;
 use App\Models\Efectores\Addendas\Tipo as TipoAddenda;
+use App\Models\Efectores\Ppac;
 
 use App\Models\Geo\Departamento;
 use App\Models\Geo\Localidad;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EfectoresController extends Controller
 {
@@ -508,7 +511,7 @@ class EfectoresController extends Controller
                 'referente',
                 'internet',
                 'convenio',
-                'ppac',
+                'perinatal',
                 'addendas' => function($q){
                   $q->with(['tipo']);
                 }
@@ -538,10 +541,66 @@ class EfectoresController extends Controller
      * Actualiza la información del efector
      * @param Request $r
      *
+
+        TRATAR DE MEJORAR LA LÓGICA DE LA ACTUALIZACIÓN DE RELACIONES
+
      * @return string
      */
     public function postEdit(Request $r){
-      echo 'ok';
+
+      $ef = Efector::where('cuie' , $r->cuie)->firstOrFail();
+
+      try {
+        $pp = Ppac::findOrFail($ef->id_efector);
+      } catch (ModelNotFoundException $e){
+        return 'no existe el modelo en ppac';
+      }
+
+      /*
+
+      $ef = Efector::where('cuie' , $r->cuie);
+      
+      $ef->siisa = $r->siisa;
+      $ef->id_tipo_efector = $r->tipo;
+      $ef->nombre = $r->nombre;
+      $ef->denominacion_legal = $r->legal;
+      $ef->id_dependencia_administrativa = $r->dep_adm;
+      $ef->dependencia_sanitaria = $r->dep_san;
+      $ef->cics = $r->cics;
+      $ef->rural = $r->rural;
+      $ef->id_categorizacion = $r->categoria;
+      $ef->integrante = $r->integrante;
+      $ef->priorizado = $r->priorizado;
+      $ef->compromiso_gestion = $r->compromiso;
+      $ef->domicilio = $r->direccion;
+      $ef->codigo_postal = $r->codigo_postal;
+
+      $ge = Geografico::find($ef->id_efector);
+      $ge->id_departamento = $r->departamento;
+      $ge->id_localidad = $r->localidad;
+      $ge->ciudad = $r->ciudad;
+
+      $te = Telefono::find($ef->id_efector);
+      $te->numero_telefono = $r->tel;
+      $te->observaciones = $r->obs_tel;
+
+      $em = Email::find($ef->id_efector);
+      $em->email = $r->correo;
+      $em->observaciones = $r->obs_correo;
+
+      $re = Referente::find($ef->id_efector);
+      $re->nombre = $r->refer;
+
+      $de = Descentralizacion::find($ef->id_efector);
+      $de->internet = $r->internet_efector;
+      $de->factura_descentralizada = $r->factura_descentralizada;
+      $de->factura_on_line = $r->factura_on_line;
+
+      if (strlen($r->addenda_perinatal)){
+
+      }
+      */
+
     }
 
 }

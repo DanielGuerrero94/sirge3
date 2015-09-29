@@ -162,7 +162,7 @@ class Efector extends Model
 	/**
 	 * Devuelve los datos de PPAC
 	 */
-	public function ppac(){
+	public function perinatal(){
 		return $this->hasOne('App\Models\Efectores\Ppac' , 'id_efector' , 'id_efector');
 	}
 

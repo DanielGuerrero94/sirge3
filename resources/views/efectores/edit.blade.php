@@ -249,23 +249,7 @@
 						    			<div class="form-group">
 							    			<label for="provincia" class="col-sm-3 control-label">Provincia</label>
 							    			<div class="col-sm-9">
-								    			<select id="provincia" name="provincia" class="form-control">
-								    				@foreach($provincias as $provincia)
-								    					@if (Auth::user()->id_entidad == 1)
-									    					@if ($efector->geo->provincia->id_provincia == $provincia->id_provincia)
-									    						<option selected="selected" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
-									    					@else
-									    						<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
-									    					@endif
-								    					@else
-								    						@if (Auth::user()->id_provincia == $provincia->id_provincia)
-								    							<option selected="selected" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
-								    						@else
-								    							<option disabled="disabled" value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
-								    						@endif
-								    					@endif
-								    				@endforeach
-								    			</select>
+							    				<input type="text" readonly="readonly" class="form-control" id="provincia" name="provincia" value="{{ $efector->geo->provincia->descripcion }}">
 							    			</div>
 						    			</div>
 						    		</div>
@@ -499,7 +483,7 @@
 						    		<div class="col-md-4">
 						    			<label for="internet-efector" class="col-sm-6 control-label">Internet</label>
 						    			<div class="col-sm-6">
-							    			<select id="internet-efector" name="internet-efector" class="form-control">
+							    			<select id="internet-efector" name="internet_efector" class="form-control">
 							    			@if (isset($efector->internet))
 							    				@if($efector->internet->internet == 'S')
 								    				<option selected="selected" value="S">SI</option>
@@ -547,13 +531,13 @@
 						    	</div>
 						    </div>
 						    <div class="tab-pane" id="ppac">
-						    @if(isset($efector->ppac))
+						    @if(isset($efector->perinatal))
 						    	<div class="row">
 						    		<div class="col-md-4">
 						    			<label for="addenda_perinatal" class="col-sm-6 control-label">Addenda Perinatal</label>
 						    			<div class="col-sm-6">
 							    			<select id="addenda_perinatal" name="addenda_perinatal" class="form-control">
-						    				@if($efector->ppac->addenda_perinatal == 'S')
+						    				@if($efector->perinatal->addenda_perinatal == 'S')
 							    				<option selected="selected" value="S">SI</option>
 							    				<option value="N">NO</option>
 							    			@else
@@ -567,7 +551,7 @@
 						    			<div class="form-group">
 		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->ppac->fecha_addenda_perinatal }}">
+		                    					<input type="text" class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->perinatal->fecha_addenda_perinatal }}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -575,7 +559,7 @@
 						    			<label for="internet-efector" class="col-sm-6 control-label">Perinatal AC</label>
 						    			<div class="col-sm-6">
 							    			<select id="internet-efector" name="internet-efector" class="form-control">
-						    				@if($efector->ppac->perinatal_ac == 'S')
+						    				@if($efector->perinatal->perinatal_ac == 'S')
 							    				<option selected="selected" value="S">SI</option>
 							    				<option value="N">NO</option>
 							    			@else
@@ -676,8 +660,8 @@
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
-					 	<button class="back btn btn-info">Cancelar alta</button>
-					 	<button type="submit" class="finish btn btn-warning">Solicitar alta</button>
+					 	<button class="back btn btn-info">Atrás</button>
+					 	<button type="submit" class="finish btn btn-warning">Modificar</button>
 					</div>
 				</div>
 			</div>
@@ -798,7 +782,7 @@ $(document).ready(function() {
 			},
 			direccion : {
 				required : true,
-				minlength : 15,
+				minlength : 10,
 				maxlength : 500
 			},
 			provincia : {
@@ -880,7 +864,9 @@ $(document).ready(function() {
 	
 
 	$('.back').click(function(){
-		$('form').trigger('reset');
+		$.get('efectores-modificacion' , function(data){
+			$('.content-wrapper').html(data);
+		})
 	});
 
 	$('.siisa').click(function(event){
