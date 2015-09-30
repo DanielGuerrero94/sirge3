@@ -143,10 +143,12 @@ class EstadisticasController extends Controller
                             ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
                             ->join('geo.provincias as p' , 'c001.id_provincia' , '=' , 'p.id_provincia')
                             ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
-                            ->select('r.id_region' , 'p.id_provincia' , 'c001.codigo_prestacion' , DB::raw('sum(cantidad_facturada) as cantidad'))
+                            ->join('pss.codigos as cg' , 'c001.codigo_prestacion' , '=' , 'cg.codigo_prestacion')
+                            ->select('r.id_region' , 'p.id_provincia' , 'c001.codigo_prestacion' , 'cg.descripcion_grupal' , DB::raw('sum(cantidad_facturada) as cantidad'))
                             ->groupBy('r.id_region')
                             ->groupBy('p.id_provincia')
                             ->groupBy('c001.codigo_prestacion')
+                            ->groupBy('cg.descripcion_grupal')
                             ->orderBy(DB::raw('sum(cantidad_facturada)') , 'desc')
                             ->take(15)
                             ->get();
@@ -156,6 +158,8 @@ class EstadisticasController extends Controller
                 $data[$i]['name'] = $codigo->codigo_prestacion;
                 $data[$i]['parent'] = $codigo->id_region . "_" . $codigo->id_provincia;
                 $data[$i]['value'] = (int)$codigo->cantidad;
+                $data[$i]['texto_prestacion'] = $codigo->descripcion_grupal;
+                $data[$i]['codigo_prestacion'] = true;
                 $i++;   
             }
 

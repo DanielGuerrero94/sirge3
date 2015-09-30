@@ -44,12 +44,18 @@
                 }],
                 data : data,
                 tooltip: {
-                    pointFormat: "{point.value}"
+                    pointFormatter : function(){
+                        if (this.codigo_prestacion){
+                            return this.texto_prestacion + ' : ' + Highcharts.numberFormat(this.value , '0');
+                        } else {
+                            return Highcharts.numberFormat(this.value , '0');
+                        }
+                    }
                 },
                 turboThreshold : 5000
             }],
             subtitle: {
-                text: 'Fuente: <a href="http://apps.who.int/gho/data/node.main.12?lang=en">OMS</a>.'
+                text: 'Fuente: SIRGe Web.'
             },
             title : {
             	text : 'Facturación CEB'
