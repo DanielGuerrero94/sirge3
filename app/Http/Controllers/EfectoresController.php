@@ -489,7 +489,12 @@ class EfectoresController extends Controller
     }
     
     public function getEditForm($cuie){
-      $e = Efector::where('cuie' , $cuie)->firstOrFail();
+      try {
+        $e = Efector::where('cuie' , $cuie)->firstOrFail();
+      } catch (ModelNotFoundException $e){
+        return response('No se ha encontrado el efector solicitado' , 422);
+      }
+
       $add_firmadas = Addenda::where('id_efector' , $e->id_efector)->lists('id_addenda');
 
       $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();

@@ -57,9 +57,11 @@ $(document).ready(function(){
 				$.post('cerrar-solicitud/{{ $s->id }}' , $(form).serialize() , function(data){
 					$('#modal-text').html(data);
 					$('.modal').modal();
-					$.get('solicitudes-pendientes' , function(data){
-			            $('.content-wrapper').html(data);
-			        });
+					$('.modal').on('hidden.bs.modal', function (e) {
+						$.get('solicitudes-pendientes' , function(data){
+				            $('.content-wrapper').html(data);
+				        });
+					});
 				});
 			}
 		});

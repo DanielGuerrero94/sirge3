@@ -695,7 +695,12 @@ $(document).ready(function() {
 	$('.finish').hide();
 	$('#errores-div').hide();
 	
-	$('#tel').inputmask('(999) 9999 9999');
+	$('#tel').inputmask({
+		mask : '9999 9999 9999',
+		placeholder : '',
+		
+	});
+		
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
 
 	function checkCompromiso(integrante , compromiso){
@@ -852,7 +857,11 @@ $(document).ready(function() {
 				success : function(data){
 					$('#modal-text').html(data);
 					$('.modal').modal();
-					$('form').trigger('reset');
+					$('.modal').on('hidden.bs.modal', function (e) {
+						$.get('efectores-modificacion' , function(data){
+							$('.content-wrapper').html(data);
+						});
+					});
 				},
 				error : function(data){
 					var html = '';
