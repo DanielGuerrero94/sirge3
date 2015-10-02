@@ -57,7 +57,8 @@ $(document).ready(function() {
 		$('#baja-efector').validate({
 			rules : {
 				cuie : {
-					required : true
+					required : true,
+					minlength : 6
 				}
 			},
 			submitHandler : function(form){

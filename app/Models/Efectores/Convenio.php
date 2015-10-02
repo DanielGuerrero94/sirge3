@@ -18,7 +18,7 @@ class Convenio extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_convenio';
+	protected $primaryKey = 'id_efector';
 
 	/**
 	 * Indicates if the model should be timestamped.

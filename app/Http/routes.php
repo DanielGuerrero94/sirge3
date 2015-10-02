@@ -250,4 +250,14 @@ Route::get('prestaciones/34142469' , function(){
 	return '<pre>' . $json . '</pre>';
 });
 
+Route::get('json' , function(){
+	$data = [
+		1 => 'hola',
+		2 => 'como',
+		3 => 'estas',
+		4 => 'pussy?'
+	];
+	return json_encode($data , JSON_FORCE_OBJECT);
+});
+
 

@@ -249,7 +249,9 @@
 						    			<div class="form-group">
 							    			<label for="provincia" class="col-sm-3 control-label">Provincia</label>
 							    			<div class="col-sm-9">
-							    				<input type="text" readonly="readonly" class="form-control" id="provincia" name="provincia" value="{{ $efector->geo->provincia->descripcion }}">
+							    				<select id="provincia" name="provincia" class="form-control">
+							    					<option value="{{ $efector->geo->provincia->id_provincia }}">{{ $efector->geo->provincia->descripcion }}</option>
+							    				</select>
 							    			</div>
 						    			</div>
 						    		</div>
@@ -318,15 +320,18 @@
 							    			<div class="col-sm-6">
 								    			<select id="indirecto" name="indirecto" class="form-control">
 								    				<option value="">Seleccione...</option>
-								    			@if (isset($efector->compromiso))
-								    				@if($efector->compromiso->pago_indirecto == 'S')
-									    				<option selected="selected" value="S">SI</option>
-									    				<option value="N">NO</option>
-									    			@else
-									    				<option value="S">SI</option>
-									    				<option selected="selected" value="N">NO</option>
-									    			@endif
-									    		@endif
+									    			@if (isset($efector->compromiso))
+									    				@if($efector->compromiso->pago_indirecto == 'S')
+										    				<option selected="selected" value="S">SI</option>
+										    				<option value="N">NO</option>
+										    			@else
+										    				<option value="S">SI</option>
+										    				<option selected="selected" value="N">NO</option>
+										    			@endif
+										    		@else
+										    			<option value="S">SI</option>
+										    			<option value="N">NO</option>
+										    		@endif
 								    			</select>
 							    			</div>
 						    			</div>
@@ -644,7 +649,7 @@
 						    			<div class="form-group">
 		                      				<label for="fecha_firma" class="col-sm-5 control-label">Fecha firma</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" name="fecha_firma" name="fecha_firma" type="text" class="form-control" placeholder="dd/mm/aaaa">
+		                    					<input type="text" name="fecha_firma" type="text" class="form-control fecha_firma" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -660,7 +665,7 @@
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
-					 	<button class="back btn btn-info">Atrás</button>
+					 	<button type="button" class="back btn btn-info">Atrás</button>
 					 	<button type="submit" class="finish btn btn-warning">Modificar</button>
 					</div>
 				</div>
@@ -691,7 +696,7 @@ $(document).ready(function() {
 	$('#errores-div').hide();
 	
 	$('#tel').inputmask('(999) 9999 9999');
-	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , #fecha_firma').inputmask('99/99/9999');
+	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
 
 	function checkCompromiso(integrante , compromiso){
 		if (integrante == 'N' || compromiso == 'N'){
@@ -782,7 +787,7 @@ $(document).ready(function() {
 			},
 			direccion : {
 				required : true,
-				minlength : 10,
+				minlength : 8,
 				maxlength : 500
 			},
 			provincia : {

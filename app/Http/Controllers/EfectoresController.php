@@ -550,8 +550,8 @@ class EfectoresController extends Controller
      */
     public function postEdit(Request $r){
 
-
-      $ef = Efector::where('cuie' , $r->cuie);
+      $update = false;
+      $ef = Efector::where('cuie' , $r->cuie)->firstOrFail();
       
       $ef->siisa = $r->siisa;
       $ef->id_tipo_efector = $r->tipo;
@@ -567,19 +567,39 @@ class EfectoresController extends Controller
       $ef->compromiso_gestion = $r->compromiso;
       $ef->domicilio = $r->direccion;
       $ef->codigo_postal = $r->codigo_postal;
+      if ($ef->save()){
+        $update = true;
+      } else {
+        return 'Ha fallado la actualización de datos';
+      }
 
       $ge = Geografico::find($ef->id_efector);
       $ge->id_departamento = $r->departamento;
       $ge->id_localidad = $r->localidad;
       $ge->ciudad = $r->ciudad;
+      if ($ge->save()){
+        $update = true;
+      } else {
+        return 'Ha fallado la actualización de datos';
+      }
 
-      $re = Referente::find($ef->id_efector);
+      $re = Referente::where('id_efector' , $ef->id_efector)->firstOrFail();
       $re->nombre = $r->refer;
+      if ($re->save()){
+        $update = true;
+      } else {
+        return 'Ha fallado la actualización de datos';
+      }
 
       $de = Descentralizacion::find($ef->id_efector);
       $de->internet = $r->internet_efector;
       $de->factura_descentralizada = $r->factura_descentralizada;
       $de->factura_on_line = $r->factura_on_line;
+      if ($de->save()){
+        $update = true;
+      } else {
+        return 'Ha fallado la actualización de datos';
+      }
 
       if (strlen($r->addenda_perinatal)){
         try {
@@ -591,28 +611,43 @@ class EfectoresController extends Controller
         $pp->addenda_perinatal = $r->addenda_perinatal;
         $pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal;
         $pp->perinatal_ac = $r->perinatal_ac;
+        if ($pp->save()){
+          $update = true;
+        } else {
+          return 'Ha fallado la actualización de datos';
+        }
       }
 
       if (strlen($r->tel)){
         try {
-          $te = Telefono::findOrFail($ef->id_efector);
+          $te = Telefono::where('id_efector' , $ef->id_efector)->firstOrFail();
         } catch (ModelNotFoundException $e){
           $te = new Telefono;
           $te->id_efector = $ef->id_efector;
         }
         $te->numero_telefono = $r->tel;
         $te->observaciones = $r->obs_tel;
+        if ($te->save()){
+          $update = true;
+        } else {
+          return 'Ha fallado la actualización de datos';
+        }
       }
 
       if (strlen($r->correo)){
         try {
-          $em = Email::findOrFail($ef->id_efector);
+          $em = Email::where('id_efector' , $ef->id_efector)->firstOrFail();
         } catch (ModelNotFoundException $e){
           $em = new Email;
           $em->id_efector = $ef->id_efector;
         }
         $em->email = $r->correo;
         $em->observaciones = $r->obs_correo;
+        if ($em->save()){
+          $update = true;
+        } else {
+          return 'Ha fallado la actualización de datos';
+        }
       }
 
       if ($r->integrante == 'S' && $r->compromiso == 'S'){
@@ -628,6 +663,11 @@ class EfectoresController extends Controller
         $cg->fecha_inicio = $r->compromiso_fini;
         $cg->fecha_fin = $r->compromiso_ffin;
         $cg->pago_indirecto = $r->indirecto;
+        if ($cg->save()){
+          $update = true;
+        } else {
+          return 'Ha fallado la actualización de datos';
+        }
       }
 
       if ($r->indirecto == 'S'){
@@ -645,6 +685,25 @@ class EfectoresController extends Controller
         $ca->fecha_inicio = $r->convenio_fini;
         $ca->fecha_fin = $r->convenio_ffin;
         $ca->numero_compromiso = $r->numero_compromiso;
+        if ($ca->save()){
+          $update = true;
+        } else {
+          return 'Ha fallado la actualización de datos';
+        }
+      }
+
+      if (strlen($r->tipo_addenda)){
+        $ad = new Addenda;
+        $ad->id_efector = $ef->id_efector;
+        $ad->id_addenda = $r->tipo_addenda;
+        $ad->fecha_addenda = $r->fecha_firma;
+        if ($ad->save()){
+          $update = true;
+        }
+      }
+
+      if ($update) {
+        return 'Se ha actualizado la información del efector : ' . $ef->nombre;
       }
 
     }
