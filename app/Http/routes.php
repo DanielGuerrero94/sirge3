@@ -67,7 +67,10 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
 /**
  * PADRONES
  */
-Route::get('prestaciones' , 'PadronController@prestacion');
+
+/** PRESTACIONES **/
+Route::get('prestaciones' , 'PrestacionesController@prestacion');
+
 Route::get('comprobantes' , 'PadronController@comprobante');
 Route::get('fondos' , 'PadronController@fondo');
 Route::get('osp' , 'PadronController@osp');

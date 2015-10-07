@@ -697,8 +697,7 @@ $(document).ready(function() {
 	
 	$('#tel').inputmask({
 		mask : '9999 9999 9999',
-		placeholder : '',
-		
+		placeholder : ''
 	});
 		
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
