@@ -57,7 +57,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Procesar archivos</button>
+					<button class="btn btn-info">Informar lotes</button>
 				</div>
 			</div>
 		</div>
@@ -72,7 +72,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Procesar archivos</button>
+					<button class="btn btn-info">Ver DDJJ</button>
 				</div>
 			</div>
 		</div>
@@ -87,7 +87,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Procesar archivos</button>
+					<button class="btn btn-info">Ver diccionario</button>
 				</div>
 			</div>
 		</div>
