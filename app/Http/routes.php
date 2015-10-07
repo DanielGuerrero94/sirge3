@@ -69,7 +69,7 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
  */
 
 /** PRESTACIONES **/
-Route::get('prestaciones' , 'PrestacionesController@prestacion');
+Route::get('prestaciones' , 'PrestacionesController@getMain');
 
 Route::get('comprobantes' , 'PadronController@comprobante');
 Route::get('fondos' , 'PadronController@fondo');
@@ -195,15 +195,13 @@ Route::post('new-operador' , 'OperadoresController@postNew');
 Route::get('departamentos/{provincia}' , 'GeoController@departamentos');
 Route::get('localidades/{provincia}/{departamento}' , 'GeoController@localidades');
 
-/********************************************************************************
- *								 	WS ROUTES 									*
- ********************************************************************************/
-Route::resource('prestaciones' , 'Ws\SIISAController' , [
-	'only' => ['index']]);
-
 Route::get('phpinfo' , function(){
 	phpinfo();
 });
+
+/********************************************************************************
+ *								 	WS ROUTES 									*
+ ********************************************************************************/
 
 /********************************************************************************
  *								 	TEST ROUTES 								*
@@ -251,16 +249,6 @@ Route::get('prestaciones/34142469' , function(){
 		}
 	}";
 	return '<pre>' . $json . '</pre>';
-});
-
-Route::get('json' , function(){
-	$data = [
-		1 => 'hola',
-		2 => 'como',
-		3 => 'estas',
-		4 => 'pussy?'
-	];
-	return json_encode($data , JSON_FORCE_OBJECT);
 });
 
 
