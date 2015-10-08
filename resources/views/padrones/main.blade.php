@@ -1,6 +1,5 @@
 @extends('content')
 @section('content')
-<!-- Contact list -->
 <div class="row">
 	<div class="col-md-4">
 		<div class="box box-primary">
@@ -8,11 +7,11 @@
 				<h2 class="box-title">Cargar archivos</h2>
 			</div>
 			<div class="box-body">
-				<p>Desde esta opción usted podrá subir los archivos para la carga de prestaciones. Recuerde respetar la estructura de datos. Si tiene dudas consulte la opción "Diccionario"</p>
+				<p>Desde esta opción usted podrá subir los archivos para la carga de prestaciones. Recuerde respetar la estructura de datos. Si tiene dudas consulte la opción "Diccionario de Datos"</p>
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-primary">Cargar archivos</button>
+					<button href="subir-padron/{{ $id_padron }}" class="action btn btn-primary">Cargar archivos</button>
 				</div>
 			</div>
 		</div>
@@ -93,4 +92,12 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$('.action').click(function(){
+		var href = $(this).attr('href');
+		$.get(href , function(data){
+			$('.content-wrapper').html(data);
+		});
+	})
+</script>
 @endsection

@@ -64,12 +64,11 @@ Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
 Route::get('notificar-cierre/{id}' , 'SolicitudController@notificarCierre');
 Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicitud');
 
-/**
- * PADRONES
- */
+/** PADRONES **/
+Route::get('padron/{padron}/{id}' , 'PadronesController@getMain');
+Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
 
 /** PRESTACIONES **/
-Route::get('prestaciones' , 'PrestacionesController@getMain');
 
 Route::get('comprobantes' , 'PadronController@comprobante');
 Route::get('fondos' , 'PadronController@fondo');

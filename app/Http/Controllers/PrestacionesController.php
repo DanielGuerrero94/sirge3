@@ -18,16 +18,4 @@ class PrestacionesController extends Controller
 		$this->middleware('auth');
 	}
 
-	/**
-	 * Devuelve la vista principal
-	 *
-	 * @return null
-	 */
-	public function getMain(){
-		$data = [
-			'page_title' => 'Prestaciones'
-		];
-		return view('padrones.main' , $data);
-	}
-
 }
