@@ -23,6 +23,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/iCheck/square/red.css")}}"  />
     <!-- Theme style -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.css")}}"  />
+    <!-- Upload style -->
+    <link rel="stylesheet" type="text/css" href="{{ asset("/plugins/jquery-file-upload/css/jquery.fileupload.css")}}"  />
     <!-- Loading Modal -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/dist/css/loading-modal.css")}}" />
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -76,6 +78,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/plugins/highmaps/js/modules/map.js") }}"></script>
 <!-- JS Tree -->
 <script type="text/javascript" src="{{ asset ("/plugins/bootstrap-treeview-master/dist/bootstrap-treeview.min.js") }}" ></script>
+<!-- Upload plugin Jquery UI widget -->
+<script type="text/javascript" src="{{ asset ("/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js") }}"></script>
+<!-- Iframe Transport -->
+<script type="text/javascript" src="{{ asset ("/plugins/jquery-file-upload/js/jquery.iframe-transport.js") }}"></script>
+<!-- Jquery File Upload -->
+<script type="text/javascript" src="{{ asset ("/plugins/jquery-file-upload/js/jquery.fileupload.js") }}"></script>
 <!-- Highmaps Argentina -->
 <script type="text/javascript" src="http://code.highcharts.com/mapdata/countries/ar/ar-all.js" ></script>
 <!-- Jquery Sparkline -->
@@ -87,9 +95,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Google Calendar -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/gcal.js") }}" ></script>
 <!-- Datatables -->
-<script type="text/javascript" src="{{ asset("/bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js") }}"></script>
 <!-- Bootstrap Datatables -->
-<script type="text/javascript" src="{{ asset("/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.js") }}"></script>
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.js") }}"></script>
 <!-- iCheck -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/iCheck/icheck.min.js") }}"></script>
 <!-- jQuery validator -->

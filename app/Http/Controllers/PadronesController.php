@@ -45,4 +45,12 @@ class PadronesController extends Controller
 		];
 		return view('padrones.upload-files' , $data);
 	}
+
+
+	public function postUpload(Request $r){
+		print_r($r->file());
+		echo 'id padron : ' . print_r($r->id_padron);
+		//$r->file('file')->move($destino , $nombre);
+
+	}
 }

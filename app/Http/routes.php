@@ -67,6 +67,8 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
 /** PADRONES **/
 Route::get('padron/{padron}/{id}' , 'PadronesController@getMain');
 Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
+Route::post('subir-padron' , 'PadronesController@postUpload');
+
 
 /** PRESTACIONES **/
 
