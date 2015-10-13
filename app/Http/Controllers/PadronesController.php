@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+
+use App\Models\Subida;
+
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class PadronesController extends Controller
 {
@@ -56,7 +62,7 @@ class PadronesController extends Controller
 			default:
 				break;
 		}
-		return '/storage/uploads/' . $p;
+		return '../storage/uploads/' . $p;
 	}
 
 	/** 
@@ -79,18 +85,24 @@ class PadronesController extends Controller
 	 * @return json
 	 */
 	public function postUpload(Request $r){
+		$nombre_archivo = uniqid() . '.txt';
+		$destino = $this->getRoute($r->id_padron);
+		$s = new Subida;
 
+		$s->id_usuario = Auth::user()->id_usuario;
+		$s->id_padron = $r->id_padron;
+		$s->nombre_original = $r->file->getClientOriginalName();
+		$s->nombre_actual = $nombre_archivo;
+		$s->size = $r->file->getClientSize();
+		$s->id_estado = 1;
 
-		/**
-			- CREAR UN UNIQUEID PARA RENOMBRAR EL ARCHIVO
-			- GUARDAR EL REGISTRO EN LA BDD
-			- MOVER EL ARCHIVO A LA RUTA /storage/uploads/{getUpload}
-			- DEVOLVER UN JSON CON EL NOMBRE ORIGINAL DEL ARCHIVO SUBIDO
-		*/
-
-		print_r($r->file());
-		echo 'id padron : ' . print_r($r->id_padron);
-		//$r->file('file')->move($destino , $nombre);
-
+		try {
+			$r->file('file')->move($destino , $nombre_archivo);
+		} catch (FileException $e){
+			return response("Ha ocurrido un error" , 422);
+		}
+		if ($s->save()){
+			return response()->json(['file' => $r->file->getClientOriginalName()]); 
+		}
 	}
 }

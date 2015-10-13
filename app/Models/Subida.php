@@ -36,7 +36,7 @@ class Subida extends Model {
 	/**
 	 * Obtener el registro eliminado de la subida.
 	 */
-	public function aceptado(){
+	public function eliminado(){
 		return $this->hasOne('App\Models\SubidaEliminada', 'id_subida', 'id_subida');
 	}
 

@@ -7,9 +7,13 @@
 				<h2 class="box-title">Seleccione el archivo desde su ordenador</h2>
 			</div>
 			<div class="box-body">
+				<div class="alert alert-danger" id="errores-div">
+			        <ul id="errores-form">
+			        </ul>
+			    </div>
 				<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
-				<span>Select files...</span>
+				<span>Seleccionar archivo...</span>
 					<!-- The file input field used as target for the file upload widget -->
 					<input id="fileupload" type="file" name="file" multiple>
 				</span>
@@ -31,17 +35,47 @@
 	</div>
 </div>
 <script type="text/javascript">
+	$('.back').click(function(){
+		$.get('padron/prestaciones/1' , function(data){
+			$('.content-wrapper').html(data);
+		})
+	});
+
 	$(function () {
     'use strict';
-    
+    $('#errores-div').hide();
+
     $('#fileupload').fileupload({
         url: 'subir-padron',
         formData : { id_padron : '1' },
         dataType: 'json',
+        add: function(e, data) {
+        	$('#errores-div').hide();
+            var uploadErrors = [];
+            var acceptFileTypes = /^text\/plain$/i;
+        	
+            if(data.originalFiles[0]['size'] > 25 * 1024 * 1024) {
+				uploadErrors.push('Tamaño de archivo demasiado grande. Máximo : 25mb');
+            }
+
+            if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+                uploadErrors.push('Tipo de archivo no aceptado.');
+            }
+
+            if(uploadErrors.length > 0) {
+            	var html = '';
+				$.each(uploadErrors , function (key , value){
+					html += '<li>' + value + '</li>';
+				});
+				$('#errores-form').html(html);
+				$('#errores-div').show();
+            } else {
+                data.submit();
+            }
+        },
         done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo('#files');
-            });
+        	console.log(data);
+            $('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
         },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -49,7 +83,13 @@
                 'width',
                 progress + '%'
             );
+        }, 
+        fail : function (e, data){
+			var html = '<li>Ha ocurrido un error al subir el archivo</li>';
+			$('#errores-form').html(html);
+			$('#errores-div').show();
         }
+
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
 });

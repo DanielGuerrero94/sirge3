@@ -3,3 +3,5 @@
 .env
 .idea/
 /nbproject
+/storage/pdf
+/storage/uploads
