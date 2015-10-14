@@ -32,9 +32,13 @@ class PadronesController extends Controller
 	 * @return null
 	 */
 	public function getMain($padron , $id){
+
+		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
+
 		$data = [
 			'page_title' => ucwords($padron),
-			'id_padron' => $id
+			'id_padron' => $id,
+			'pendientes' => $archivos_pendientes
 		];
 		return view('padrones.main' , $data);
 	}

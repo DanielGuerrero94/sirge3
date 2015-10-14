@@ -20,6 +20,13 @@
 		<div class="box box-primary">
 			<div class="box-header">
 				<h2 class="box-title">Generar lotes</h2>
+				<div class="box-tools pull-right">
+					@if ($pendientes != 0)
+					<span class="label label-warning">{{ $pendientes }} archivo(s) sin procesar</span>
+					@else
+					<span class="label label-success">No hay archivos pendientes</span>
+					@endif
+				</div>
 			</div>
 			<div class="box-body">
 				<p>Desde esta opción usted podrá procesar aquellos archivos que ha subido y aceptarlos o no en caso que ud. lo desee. Recuerde revisar los errores informados una vez finalizado el proceso.</p>
