@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Datatables;
 
 use Illuminate\Http\Request;
 
@@ -31,14 +32,14 @@ class PadronesController extends Controller
 	 * 
 	 * @return null
 	 */
-	public function getMain($padron , $id){
+	public function getMain($id){
 
 		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
 
 		$data = [
-			'page_title' => ucwords($padron),
+			'page_title' => $this->getName($id),
 			'id_padron' => $id,
-			'pendientes' => $archivos_pendientes
+			'pendientes' => $archivos_pendientes,
 		];
 		return view('padrones.main' , $data);
 	}
@@ -49,7 +50,7 @@ class PadronesController extends Controller
 	 *
 	 * @return string
 	 */
-	protected function getRoute($id){
+	protected function getName($id , $route = FALSE){
 		switch ($id) {
 			case 1:
 				$p = 'prestaciones'; break;
@@ -66,7 +67,10 @@ class PadronesController extends Controller
 			default:
 				break;
 		}
-		return '../storage/uploads/' . $p;
+		if ($route)
+			return '../storage/uploads/' . $p;
+		else
+			return ucwords($p);
 	}
 
 	/** 
@@ -77,7 +81,8 @@ class PadronesController extends Controller
 	 */
 	public function getUpload($id){
 		$data = [
-			'page_title' => 'Subir archivos'
+			'page_title' => 'Subir archivos',
+			'id_padron' => $id
 		];
 		return view('padrones.upload-files' , $data);
 	}
@@ -90,7 +95,7 @@ class PadronesController extends Controller
 	 */
 	public function postUpload(Request $r){
 		$nombre_archivo = uniqid() . '.txt';
-		$destino = $this->getRoute($r->id_padron);
+		$destino = $this->getName($r->id_padron , TRUE);
 		$s = new Subida;
 
 		$s->id_usuario = Auth::user()->id_usuario;
@@ -108,5 +113,54 @@ class PadronesController extends Controller
 		if ($s->save()){
 			return response()->json(['file' => $r->file->getClientOriginalName()]); 
 		}
+	}
+
+	/**
+	 * Devuelve la vista para procesar archivos
+	 *
+	 * @return null
+	 */
+	public function listadoArchivos($id){
+		$data = [
+			'page_title' => 'Archivos subidos',
+			'id_padron' => $id,
+			'ruta_procesar' => 'procesar-' . strtolower($this->getName($id))
+		];
+		return view('padrones.process-files' , $data);
+	}
+
+
+	/**
+	 * Devuelve el listado de archivos subidos
+	 * @param int $id_padron
+	 *
+	 * @return json
+	 */
+	public function listadoArchivosTabla($id_padron){
+		$archivos = Subida::where('id_padron' , $id_padron)->where('id_estado' , 1)->get();
+		return Datatables::of($archivos)
+			->addColumn('action' , function($archivo){
+              return '
+              	<button id-subida="'. $archivo->id_subida .'" class="procesar btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Procesar</button>
+              	<button id-subida="'. $archivo->id_subida .'" class="eliminar btn btn-danger btn-xs"><i class="fa fa-pencil-square-o"></i> Eliminar</button>';
+          	})
+			->make(true);
+	}
+
+	/**
+	 * Elimina un archivo
+	 * @param int $id
+	 *
+	 * @return json
+	 */
+	public function eliminarArchivo($id){
+		$f = Subida::find($id);
+		$f->id_estado = 4;
+		if ($f->save()){
+			if (unlink ($this->getName($f->id_padron , TRUE) . '/' . $f->nombre_actual)){
+				return 'Se ha eliminado el archivo';
+			}
+		}
+
 	}
 }

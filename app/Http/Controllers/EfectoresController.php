@@ -70,10 +70,10 @@ class EfectoresController extends Controller
         	->addColumn('label_estado' , function($hospital){
         		return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
         	})
-            ->addColumn('action' , function($hospital){
-                return '<button id-efector="'. $hospital->id_efector .'" class="ver-efector btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
-            })
-            ->make(true);
+          ->addColumn('action' , function($hospital){
+              return '<button id-efector="'. $hospital->id_efector .'" class="ver-efector btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+          })
+          ->make(true);
     }
 
     /**

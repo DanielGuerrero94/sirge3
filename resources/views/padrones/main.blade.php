@@ -33,7 +33,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-primary">Procesar archivos</button>
+					<button href="listar-archivos/{{ $id_padron }}" class="action btn btn-primary">Procesar archivos</button>
 				</div>
 			</div>
 		</div>

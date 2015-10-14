@@ -10,26 +10,25 @@
 |
  */
 
-// Main route ...
+//	Main route ...
 Route::get('/' , 'HomeController@index');
 
-// Authentication routes ...
+//	Authentication routes ...
 Route::get('login' , 'Auth\AuthController@getLogin');
 Route::post('login' , 'AuthController@authenticate');
 Route::get('logout' , 'Auth\AuthController@getLogout');
 
-// Registration routes ...
+//	Registration routes ...
 Route::get('registrar' , 'RegistrationController@index');
 Route::post('registrar' , 'RegistrationController@register');
 Route::get('checkemail' , 'RegistrationController@email');
 
-// Password recovery routes ...
+//	Password recovery routes ...
 Route::get('password' , 'PasswordController@index');
 Route::post('password' , 'PasswordController@recover');
 Route::get('checkemail-exists' , 'PasswordController@email');
 
-
-//Inicio route ...
+//	Inicio route ...
 Route::get('inicio' , 'HomeController@inicio');
 
 /********************************************************************************
@@ -74,13 +73,24 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
 /** 
  * PADRONES
  */
-Route::get('padron/{padron}/{id}' , 'PadronesController@getMain');
+Route::get('padron/{id}' , 'PadronesController@getMain');
 Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
 Route::post('subir-padron' , 'PadronesController@postUpload');
+Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
+Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
+Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
 
 /** 
  * PRESTACIONES 
  */
+Route::get('procesar-prestaciones/{archivo}' , 'PrestacionesController@procesarArchivo');
+
+/**
+ * COMPROBANTES
+ */
+Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@postArchivo');
+Route::get('eliminar-comprobantes/{archivo}' , 'ComprobantesController@postArchivo');
+
 Route::get('comprobantes' , 'PadronController@comprobante');
 Route::get('fondos' , 'PadronController@fondo');
 Route::get('osp' , 'PadronController@osp');

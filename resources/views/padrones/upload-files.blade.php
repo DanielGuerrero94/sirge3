@@ -36,7 +36,7 @@
 </div>
 <script type="text/javascript">
 	$('.back').click(function(){
-		$.get('padron/prestaciones/1' , function(data){
+		$.get('padron/{{ $id_padron }}' , function(data){
 			$('.content-wrapper').html(data);
 		})
 	});
@@ -47,7 +47,7 @@
 
     $('#fileupload').fileupload({
         url: 'subir-padron',
-        formData : { id_padron : '1' },
+        formData : { id_padron : {{ $id_padron }} },
         dataType: 'json',
         add: function(e, data) {
         	$('#errores-div').hide();
