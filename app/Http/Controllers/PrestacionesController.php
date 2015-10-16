@@ -52,7 +52,7 @@ class PrestacionesController extends Controller
 			'datos_reportables'
 		],
 		$_errores,
-		$_nro_linea = 0;
+		$_nro_linea = 1;
 
 	/**
      * Create a new authentication controller instance.
@@ -83,7 +83,8 @@ class PrestacionesController extends Controller
 		while (! feof($fh)){
 
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-			
+			$this->_nro_linea++;
+
 			if (count($linea) != 1) {
 				$datos_reportables = [
 					$linea[11] => $linea[12],
@@ -116,8 +117,9 @@ class PrestacionesController extends Controller
 				$v = Validator::make($data , $this->_rules);
 
 				if ($v->fails()) {
-					echo json_encode($v->invalid()) . $v->errors() . json_encode($v->getFallbackMessages());
+					echo $v->errors() . 'en línea ' . $this->_nro_linea . '<br />';
 				}
+
 			}
 		}
 	}
