@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use ErrorException;
+use Illuminate\Database\QueryException;
 use Validator;
+use Auth;
 
 use Illuminate\Http\Request;
 
@@ -11,6 +13,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
+use App\Models\Lote;
+use App\Models\Prestacion;
 
 class PrestacionesController extends Controller
 {
@@ -28,7 +32,7 @@ class PrestacionesController extends Controller
 			'subcodigo_prestacion' => 'max:3',
 			'precio_unitario' => 'required|numeric',
 			'fecha_prestacion' => 'required|date_format:Y-m-d',
-			'clave_beneficiario' => 'required|size:16' ,
+			'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
 			'tipo_documento' => 'exists:sistema.tipo_documento,tipo_documento',
 			'clase_documento' => 'in:P,A',
 			'numero_documento' => 'max:8',
@@ -37,6 +41,7 @@ class PrestacionesController extends Controller
 		],
 		$_data = [
 			'operacion',
+			'id_provincia',
 			'estado',
 			'numero_comprobante',
 			'codigo_prestacion',
@@ -49,9 +54,19 @@ class PrestacionesController extends Controller
 			'numero_documento',
 			'orden',
 			'efector',
+			'lote',
 			'datos_reportables'
 		],
-		$_errores,
+		$_resumen = [
+			'insertados' => 0,
+			'rechazados' => 0,
+			'modificados' => 0
+		],
+		$_error = [
+			'lote' => '',
+			'registro' => '',
+			'error' => ''
+		],
 		$_nro_linea = 1;
 
 	/**
@@ -64,14 +79,38 @@ class PrestacionesController extends Controller
 	}
 
 	/**
+	 * Crea un nuevo lote
+	 * @param int $id_subida
+	 *
+	 * @return int
+	 */
+	protected function nuevoLote($id_subida){
+		$l = new Lote;
+		$l->id_subida = $id_subida;
+		$l->id_usuario = Auth::user()->id_usuario;
+		$l->id_provincia = Auth::user()->id_provincia;
+		$l->registros_in = 0;
+		$l->registros_out = 0;
+		$l->registros_mod = 0;
+		$l->id_estado = 1;
+		try {
+			$l->save();
+			return $l->lote;
+		} catch (ErrorExepction $e) {
+			return $e;
+		}
+	}
+
+	/**
 	 * Procesa el archivo de prestaciones
 	 * @param int $id
 	 *
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		
+		$prestaciones_ins = [];
 		$info = Subida::findOrFail($id);
+		$lote = $this->nuevoLote($id);
 
 		try {
 			$fh = fopen ('../storage/uploads/prestaciones/' . $info->nombre_actual , 'r');
@@ -95,6 +134,7 @@ class PrestacionesController extends Controller
 
 				$prestacion = [
 					$linea[0],
+					Auth::user()->id_provincia,
 					$linea[1],
 					$linea[2],
 					$linea[3],
@@ -107,20 +147,45 @@ class PrestacionesController extends Controller
 					$linea[10],
 					$linea[19],
 					$linea[20],
+					$lote,
 					json_encode($datos_reportables)
 				];
 
-				$data = array_combine($this->_data, $prestacion);
-
-				//echo '<pre>' , print_r($data) , '</pre>';
-				
-				$v = Validator::make($data , $this->_rules);
+				$prestacion_raw = array_combine($this->_data, $prestacion);
+				$v = Validator::make($prestacion_raw , $this->_rules);
 
 				if ($v->fails()) {
-					echo $v->errors() . 'en línea ' . $this->_nro_linea . '<br />';
+					$this->_resumen['rechazados'] ++;
+					$this->_error['lote'] = $lote;
+					$this->_error['registro'] = $prestacion_raw;
+					$this->_error['error'] = json_encode($v->errors());
+					// echo '<pre>' , print_r($this->_error) , '</pre>';
+				} else {
+					$operacion = array_shift($prestacion_raw);
+					switch ($operacion) {
+						case 'A':
+							try {
+								Prestacion::insert($prestacion_raw);
+								$this->_resumen['insertados'] ++;
+							} catch (QueryException $e) {
+								$this->_resumen['rechazados'] ++;
+								$this->_error['lote'] = $lote;
+								$this->_error['registro'] = json_encode($prestacion_raw);
+								if ($e->getCode() == 23505){
+									$this->_error['error'] = '{"pkey" : ["Registro ya informado"]}';
+								} else {
+									$this->_error['error'] = '{"' . $e->getCode() . '" : ["' . $e->getMessage() . '"]}';
+								}
+							}
+							break;
+						case 'M':
+							break;
+					}
 				}
-
 			}
 		}
+		// if (Prestacion::insert($prestaciones_ins)){
+		return '<pre>' . print_r($this->_resumen) . '</pre>';
+		// }
 	}
 }
