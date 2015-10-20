@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Subida;
 use App\Models\Lote;
 use App\Models\Prestacion;
+use App\Models\PrestacionRechazada;
 
 class PrestacionesController extends Controller
 {
@@ -32,7 +33,7 @@ class PrestacionesController extends Controller
 			'subcodigo_prestacion' => 'max:3',
 			'precio_unitario' => 'required|numeric',
 			'fecha_prestacion' => 'required|date_format:Y-m-d',
-			'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
+			//'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
 			'tipo_documento' => 'exists:sistema.tipo_documento,tipo_documento',
 			'clase_documento' => 'in:P,A',
 			'numero_documento' => 'max:8',
@@ -65,9 +66,8 @@ class PrestacionesController extends Controller
 		$_error = [
 			'lote' => '',
 			'registro' => '',
-			'error' => ''
-		],
-		$_nro_linea = 1;
+			'motivos' => ''
+		];
 
 	/**
      * Create a new authentication controller instance.
@@ -93,12 +93,87 @@ class PrestacionesController extends Controller
 		$l->registros_out = 0;
 		$l->registros_mod = 0;
 		$l->id_estado = 1;
+		$l->save();
+		return $l->lote;
+	}
+
+	/**
+	 * Actualiza el lote con los datos procesados
+	 * @param int $lote
+	 * @param array $resumen
+	 *
+	 * @return bool
+	 */
+	protected function actualizaLote($lote , $resumen) {
+		$l = Lote::findOrFail($lote);
+		$l->registros_in = $resumen['insertados'];
+		$l->registros_out = $resumen['rechazados'];
+		$l->registros_mod = $resumen['modificados'];
+		$l->fin = 'now';
+		return $l->save();
+	}
+
+	/**
+	 * Actualiza el archivo con los datos procesados
+	 * @param int $id
+	 *
+	 * @return bool
+	 */
+	protected function actualizaSubida($subida) {
+		$s = Subida::findOrFail($subida);
+		$s->id_estado = 2;
+		return $s->save();
+	}
+
+	/**
+	 * Arma el array de prestacion
+	 * @param array $linea
+	 *
+	 * @return array
+	 */
+	protected function armarArray($linea , $lote) {
+		$datos_reportables = [
+			$linea[11] => $linea[12],
+			$linea[13] => $linea[14],
+			$linea[15] => $linea[16],
+			$linea[17] => $linea[18]
+		];
+
+		$prestacion = [
+			$linea[0],
+			Auth::user()->id_provincia,
+			$linea[1],
+			$linea[2],
+			$linea[3],
+			$linea[4],
+			$linea[5],
+			$linea[6],
+			$linea[7],
+			$linea[8],
+			$linea[9],
+			$linea[10],
+			$linea[19],
+			$linea[20],
+			$lote,
+			json_encode($datos_reportables)
+		];
+		return $prestacion;
+	}
+
+	/**
+	 * Abre un archivo y devuelve un handler
+	 * @param int $id
+	 *
+	 * @return resource
+	 */
+	protected function abrirArchivo($id){
+		$info = Subida::findOrFail($id);
 		try {
-			$l->save();
-			return $l->lote;
-		} catch (ErrorExepction $e) {
-			return $e;
+			$fh = fopen ('../storage/uploads/prestaciones/' . $info->nombre_actual , 'r');
+		} catch (ErrorException $e) {
+			return false;
 		}
+		return $fh;
 	}
 
 	/**
@@ -108,58 +183,26 @@ class PrestacionesController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		$prestaciones_ins = [];
-		$info = Subida::findOrFail($id);
+		
 		$lote = $this->nuevoLote($id);
-
-		try {
-			$fh = fopen ('../storage/uploads/prestaciones/' . $info->nombre_actual , 'r');
-		} catch (ErrorException $e) {
-			return $e;
+		$fh = $this->abrirArchivo($id);
+		
+		if (!$fh){
+			return response('Error' , 422);
 		}
 
 		fgets($fh);
 		while (! feof($fh)){
-
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-			$this->_nro_linea++;
-
 			if (count($linea) != 1) {
-				$datos_reportables = [
-					$linea[11] => $linea[12],
-					$linea[13] => $linea[14],
-					$linea[15] => $linea[16],
-					$linea[17] => $linea[18]
-				];
-
-				$prestacion = [
-					$linea[0],
-					Auth::user()->id_provincia,
-					$linea[1],
-					$linea[2],
-					$linea[3],
-					$linea[4],
-					$linea[5],
-					$linea[6],
-					$linea[7],
-					$linea[8],
-					$linea[9],
-					$linea[10],
-					$linea[19],
-					$linea[20],
-					$lote,
-					json_encode($datos_reportables)
-				];
-
-				$prestacion_raw = array_combine($this->_data, $prestacion);
+				$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
 				$v = Validator::make($prestacion_raw , $this->_rules);
-
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;
 					$this->_error['lote'] = $lote;
-					$this->_error['registro'] = $prestacion_raw;
-					$this->_error['error'] = json_encode($v->errors());
-					// echo '<pre>' , print_r($this->_error) , '</pre>';
+					$this->_error['registro'] = json_encode($prestacion_raw);
+					$this->_error['motivos'] = json_encode($v->errors());
+					PrestacionRechazada::insert($this->_error);
 				} else {
 					$operacion = array_shift($prestacion_raw);
 					switch ($operacion) {
@@ -172,10 +215,11 @@ class PrestacionesController extends Controller
 								$this->_error['lote'] = $lote;
 								$this->_error['registro'] = json_encode($prestacion_raw);
 								if ($e->getCode() == 23505){
-									$this->_error['error'] = '{"pkey" : ["Registro ya informado"]}';
+									$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 								} else {
-									$this->_error['error'] = '{"' . $e->getCode() . '" : ["' . $e->getMessage() . '"]}';
+									$this->_error['motivos'] = '{"' . $e->getCode() . '" : ["' . $e->getMessage() . '"]}';
 								}
+								PrestacionRechazada::insert($this->_error);
 							}
 							break;
 						case 'M':
@@ -184,8 +228,10 @@ class PrestacionesController extends Controller
 				}
 			}
 		}
-		// if (Prestacion::insert($prestaciones_ins)){
-		return '<pre>' . print_r($this->_resumen) . '</pre>';
-		// }
+
+		// $this->actualizaLote($lote , $this->_resumen);
+		// $this->actualizaSubida($id);
+
+		
 	}
 }
