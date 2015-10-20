@@ -33,7 +33,7 @@ class PrestacionesController extends Controller
 			'subcodigo_prestacion' => 'max:3',
 			'precio_unitario' => 'required|numeric',
 			'fecha_prestacion' => 'required|date_format:Y-m-d',
-			//'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
+			'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
 			'tipo_documento' => 'exists:sistema.tipo_documento,tipo_documento',
 			'clase_documento' => 'in:P,A',
 			'numero_documento' => 'max:8',
