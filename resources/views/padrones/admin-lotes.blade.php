@@ -33,22 +33,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade modal-info">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Atención!</h4>
-            </div>
-            <div class="modal-body">
-                <p id="modal-text"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 

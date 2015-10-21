@@ -72,7 +72,7 @@ class LotesController extends Controller
 	 * @return null
 	 */
 	public function detalleLote($lote){
-		$lote = Lote::with(['estado' , 'archivo'])->findOrFail($lote);
+		$lote = Lote::with(['estado' , 'archivo' , 'usuario' , 'provincia'])->findOrFail($lote);
 		
 		$data = [
 			'page_title' => 'Detalle lote ' . $lote->lote,
@@ -80,5 +80,33 @@ class LotesController extends Controller
 		];
 
 		return view ('padrones.detail-lote' , $data);
+	}
+
+	/**
+	 * Marco el lote como aceptado
+	 * @param Request $r
+	 *
+	 * @return string
+	 */
+	public function aceptarLote(Request $r){
+		$l = Lote::findOrFail($r->lote);
+		$l->id_estado = 3;
+		if ($l->save()){
+			return 'Se ha aceptado el lote. Recuerde declararlo para imprimir la DDJJ.';
+		}
+	}
+
+	/**
+	 * Marco el lote como rechazado
+	 * @param Request $r
+	 *
+	 * @return string
+	 */
+	public function eliminarLote(Request $r){
+		$l = Lote::findOrFail($r->lote);
+		$l->id_estado = 4;
+		if ($l->save()){
+			return 'Se ha rechazado el lote.';
+		}
 	}
 }

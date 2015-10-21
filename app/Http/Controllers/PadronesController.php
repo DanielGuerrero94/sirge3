@@ -39,7 +39,8 @@ class PadronesController extends Controller
 		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
 		
 		$lotes_pendientes = Lote::join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
-							->where('id_padron' , $id);
+							->where('id_padron' , $id)
+							->where('sistema.lotes.id_estado' , 1);
 
 		if (Auth::user()->id_entidad == 2) {
 			$lotes_pendientes = $lotes_pendientes->where('id_provincia' , Auth::user()->id_provincia)->count();

@@ -75,4 +75,18 @@ class Lote extends Model
 	public function archivo(){
 		return $this->belongsTo('App\Models\Subida' , 'id_subida' , 'id_subida');
 	}
+
+	/**
+	 * Devuelve la información del usuario
+	 */
+	public function usuario(){
+		return $this->hasOne('App\Models\Usuario' , 'id_usuario' , 'id_usuario');
+	}
+
+	/**
+	 * Devuelve la información de la provincia
+	 */
+	public function provincia(){
+		return $this->hasOne('App\Models\Geo\Provincia' , 'id_provincia' , 'id_provincia');
+	}
 }
