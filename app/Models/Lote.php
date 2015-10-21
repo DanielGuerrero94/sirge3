@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Lote extends Model {
+class Lote extends Model 
+{
 	/**
 	 * The table associated with the model.
 	 *
@@ -27,6 +28,27 @@ class Lote extends Model {
 	public $timestamps = false;
 
 	/**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getInicioAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /* Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFinAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+	/**
 	 * Obtener el lote aceptado asociado al lote
 	 */
 	public function loteAceptado() {
@@ -34,16 +56,23 @@ class Lote extends Model {
 	}
 
 	/**
-	 * Obtener el archivo correspondiente al lote
-	 */
-	public function archivo(){
-		return $this->hasOne('App\Models\Subida' , 'id_subida' , 'id_subida');
-	}
-
-	/**
 	 * Devuelve el estado
 	 */
 	public function estado(){
 		return $this->hasOne('App\Models\Estado' , 'id_estado' , 'id_estado');
+	}
+
+	/**
+	 * Devuelve el listado de prestaciones rechazadas
+	 */
+	public function rechazos(){
+		return $this->hasMany('App\Models\Rechazo' , 'lote' , 'lote');
+	}
+
+	/**
+	 * Devuelve la información del archivo que generó el lote
+	 */
+	public function archivo(){
+		return $this->belongsTo('App\Models\Subida' , 'id_subida' , 'id_subida');
 	}
 }

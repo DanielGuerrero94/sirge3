@@ -44,9 +44,10 @@ class LotesController extends Controller
 	 * @return json
 	 */
 	public function listadoLotesTabla($id){
-		$lotes = Lote::with(['estado' , 'archivo' => function($q) use ($id){
-			$q->where('id_padron' , $id);
-		}]);
+		$lotes = Lote::with('estado')
+			->join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
+			->where('id_padron' , $id)
+			->select('sistema.lotes.*');
 
 		if (Auth::user()->id_entidad == 2) {
 			$lotes = $lotes->where('id_provincia' , Auth::user()->id_provincia)->get();
@@ -62,5 +63,22 @@ class LotesController extends Controller
 				return '<button lote="'. $lote->lote .'" class="view-lote btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver lote</button>';
 			})
 			->make(true);
+	}
+
+	/**
+	 * Devuelve el detalle del lote seleccionado
+	 * @param int $lote
+	 *
+	 * @return null
+	 */
+	public function detalleLote($lote){
+		$lote = Lote::with(['estado' , 'archivo'])->findOrFail($lote);
+		
+		$data = [
+			'page_title' => 'Detalle lote ' . $lote->lote,
+			'lote' => $lote
+		];
+
+		return view ('padrones.detail-lote' , $data);
 	}
 }

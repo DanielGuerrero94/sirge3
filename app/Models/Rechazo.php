@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PrestacionRechazada extends Model
+class Rechazo extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'prestaciones.rechazos';
+	protected $table = 'logs.rechazos';
 
 	/**
 	 * Primary key asociated with the table.
@@ -26,4 +26,5 @@ class PrestacionRechazada extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
 }

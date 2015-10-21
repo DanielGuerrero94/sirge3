@@ -12,6 +12,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
+use App\Models\Lote;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -36,11 +37,23 @@ class PadronesController extends Controller
 	public function getMain($id){
 
 		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
+		
+		$lotes_pendientes = Lote::join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
+							->where('id_padron' , $id);
+
+		if (Auth::user()->id_entidad == 2) {
+			$lotes_pendientes = $lotes_pendientes->where('id_provincia' , Auth::user()->id_provincia)->count();
+		} else {
+			$lotes_pendientes = $lotes_pendientes->count();
+		}
+
+		// return $lotes_pendientes;
 
 		$data = [
 			'page_title' => $this->getName($id),
 			'id_padron' => $id,
-			'pendientes' => $archivos_pendientes,
+			'archivos_pendientes' => $archivos_pendientes,
+			'lotes_pendientes' => $lotes_pendientes
 		];
 		return view('padrones.main' , $data);
 	}

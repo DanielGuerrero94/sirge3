@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Subida;
 use App\Models\Lote;
 use App\Models\Prestacion;
-use App\Models\PrestacionRechazada;
+use App\Models\Rechazo;
 
 class PrestacionesController extends Controller
 {
@@ -200,7 +200,7 @@ class PrestacionesController extends Controller
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($prestacion_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
-					PrestacionRechazada::insert($this->_error);
+					Rechazo::insert($this->_error);
 				} else {
 					$operacion = array_shift($prestacion_raw);
 					switch ($operacion) {
@@ -217,7 +217,7 @@ class PrestacionesController extends Controller
 								} else {
 									$this->_error['motivos'] = '{"' . $e->getCode() . '" : ["' . $e->getMessage() . '"]}';
 								}
-								PrestacionRechazada::insert($this->_error);
+								Rechazo::insert($this->_error);
 							}
 							break;
 						case 'M':

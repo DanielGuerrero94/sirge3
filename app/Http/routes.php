@@ -81,6 +81,7 @@ Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTab
 Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
 Route::get('listar-lotes/{id}' , 'LotesController@listadoLotes');
 Route::get('listar-lotes-table/{id}' , 'LotesController@listadoLotesTabla');
+Route::get('detalle-lote/{lote}' , 'LotesController@detalleLote');
 
 /** 
  * PRESTACIONES 

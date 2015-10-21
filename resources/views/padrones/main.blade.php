@@ -21,8 +21,8 @@
 			<div class="box-header">
 				<h2 class="box-title">Generar lotes</h2>
 				<div class="box-tools pull-right">
-					@if ($pendientes != 0)
-					<span class="label label-warning">{{ $pendientes }} archivo(s) sin procesar</span>
+					@if ($archivos_pendientes != 0)
+					<span class="label label-warning">{{ $archivos_pendientes }} archivo(s) sin procesar</span>
 					@else
 					<span class="label label-success">No hay archivos pendientes</span>
 					@endif
@@ -42,6 +42,13 @@
 		<div class="box box-primary">
 			<div class="box-header">
 				<h2 class="box-title">Administrar lotes</h2>
+				<div class="box-tools pull-right">
+					@if ($lotes_pendientes != 0)
+					<span class="label label-warning">{{ $lotes_pendientes }} lotes(s) pendientes</span>
+					@else
+					<span class="label label-success">No hay lotes pendientes</span>
+					@endif
+				</div>
 			</div>
 			<div class="box-body">
 				<p>Desde esta opción usted podrá administrar los lotes generados en el paso 2. Una vez que esté de acuerdo con el mismo se lo debe cerrar y posteriormente se generará una DDJJ.</p>
@@ -63,7 +70,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Informar lotes</button>
+					<button class="btn btn-info">Informar lote(s)</button>
 				</div>
 			</div>
 		</div>
@@ -71,7 +78,7 @@
 	<div class="col-md-4">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">DDJJ</h2>
+				<h2 class="box-title">DDJJs</h2>
 			</div>
 			<div class="box-body">
 				<p>Esta opción le permite imprimir las DDJJ correspondientes a los últimos lotes declarados y antiguos grupos.</p>

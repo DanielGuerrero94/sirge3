@@ -15,6 +15,7 @@
 	                <thead>
 	                  <tr>
 	                    <th>Lote</th>
+	                    <th>Fecha</th>
 	                    <th>Registros IN</th>
 	                    <th>Registros OUT</th>
 	                    <th>Registros MOD</th>
@@ -45,8 +46,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -65,6 +66,7 @@
             ajax : 'listar-lotes-table/{{ $id_padron }}',
             columns: [
                 { data: 'lote', name: 'lote' },
+                { data: 'inicio' , name: 'inicio'},
                 { data: 'registros_in'},
                 { data: 'registros_out'},
                 { data: 'registros_mod'},
@@ -74,6 +76,12 @@
             order : [[0,'desc']]
 		});
 
+		$('#lotes-table').on('click' , '.view-lote' , function(){
+			var lote = $(this).attr('lote');
+			$.get('detalle-lote/' + lote , function(data){
+				$('.content-wrapper').html(data);
+			});
+		});
 
 
 	});
