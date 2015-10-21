@@ -138,7 +138,10 @@ class PadronesController extends Controller
 	 * @return json
 	 */
 	public function listadoArchivosTabla($id_padron){
-		$archivos = Subida::where('id_padron' , $id_padron)->where('id_estado' , 1)->get();
+		$archivos = Subida::where('id_padron' , $id_padron)
+					->where('id_estado' , 1)
+					->where('id_usuario' , Auth::user()->id_usuario)
+					->get();
 		return Datatables::of($archivos)
 			->addColumn('action' , function($archivo){
               return '

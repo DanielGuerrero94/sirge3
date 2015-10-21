@@ -32,4 +32,18 @@ class Lote extends Model {
 	public function loteAceptado() {
 		return $this->hasOne('App\Models\LoteAceptado', 'lote', 'lote');
 	}
+
+	/**
+	 * Obtener el archivo correspondiente al lote
+	 */
+	public function archivo(){
+		return $this->hasOne('App\Models\Subida' , 'id_subida' , 'id_subida');
+	}
+
+	/**
+	 * Devuelve el estado
+	 */
+	public function estado(){
+		return $this->hasOne('App\Models\Estado' , 'id_estado' , 'id_estado');
+	}
 }

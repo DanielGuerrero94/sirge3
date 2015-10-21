@@ -42,7 +42,6 @@ class PrestacionesController extends Controller
 		],
 		$_data = [
 			'operacion',
-			'id_provincia',
 			'estado',
 			'numero_comprobante',
 			'codigo_prestacion',
@@ -141,7 +140,6 @@ class PrestacionesController extends Controller
 
 		$prestacion = [
 			$linea[0],
-			Auth::user()->id_provincia,
 			$linea[1],
 			$linea[2],
 			$linea[3],
@@ -231,6 +229,5 @@ class PrestacionesController extends Controller
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
 		return response()->json($this->_resumen);
-
 	}
 }

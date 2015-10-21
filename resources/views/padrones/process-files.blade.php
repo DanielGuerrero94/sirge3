@@ -88,7 +88,7 @@
 				success : function(data){
 					var info = '';
 					$.each(data , function (index , value){
-						info += 'REGISTROS' + index.toUpperCase() + ' : ' + value + '<br />';
+						info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';
 					});
 					$('#modal-text').html(info);
 	                $('.modal').modal();

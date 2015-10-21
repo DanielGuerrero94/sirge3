@@ -79,6 +79,8 @@ Route::post('subir-padron' , 'PadronesController@postUpload');
 Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
 Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
 Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
+Route::get('listar-lotes/{id}' , 'LotesController@listadoLotes');
+Route::get('listar-lotes-table/{id}' , 'LotesController@listadoLotesTabla');
 
 /** 
  * PRESTACIONES 
