@@ -86,7 +86,15 @@
 			$.ajax({
 				url : '{{ $ruta_procesar }}/' + id,
 				success : function(data){
-					alert(data);
+					var info = '';
+					$.each(data , function (index , value){
+						info += 'REGISTROS' + index.toUpperCase() + ' : ' + value + '<br />';
+					});
+					$('#modal-text').html(info);
+	                $('.modal').modal();
+	                $('.modal').on('hidden.bs.modal', function (e) {
+	                    dt.ajax.reload( null, false );
+	                });
 				},
 				error : function(data){
 					$('#errores-form').html('<li>No se pudo abrir el archivo</li>');

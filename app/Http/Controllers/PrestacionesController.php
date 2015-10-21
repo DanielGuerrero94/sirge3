@@ -228,10 +228,9 @@ class PrestacionesController extends Controller
 				}
 			}
 		}
+		$this->actualizaLote($lote , $this->_resumen);
+		$this->actualizaSubida($id);
+		return response()->json($this->_resumen);
 
-		// $this->actualizaLote($lote , $this->_resumen);
-		// $this->actualizaSubida($id);
-
-		
 	}
 }

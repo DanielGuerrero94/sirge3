@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Datatables;
+use ErrorException;
 
 use Illuminate\Http\Request;
 
@@ -157,10 +158,12 @@ class PadronesController extends Controller
 		$f = Subida::find($id);
 		$f->id_estado = 4;
 		if ($f->save()){
-			if (unlink ($this->getName($f->id_padron , TRUE) . '/' . $f->nombre_actual)){
+			try {
+				unlink ($this->getName($f->id_padron , TRUE) . '/' . $f->nombre_actual);
+				return 'Se ha eliminado el archivo';
+			} catch (ErrorException $e) {
 				return 'Se ha eliminado el archivo';
 			}
 		}
-
 	}
 }
