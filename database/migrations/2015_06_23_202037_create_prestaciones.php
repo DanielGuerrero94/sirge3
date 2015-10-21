@@ -30,7 +30,7 @@ class CreatePrestaciones extends Migration {
 			$table->integer('lote');
 			$table->jsonb('datos_reportables')->nullable();
 
-			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
+			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
 			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
 			$table->foreign('codigo_prestacion')->references('codigo_prestacion')->on('pss.codigos');
 			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios');

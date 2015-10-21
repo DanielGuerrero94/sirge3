@@ -13,8 +13,8 @@ class CreacionDeTablasEfectoresDatosGeograficos extends Migration {
 		Schema::create('efectores.datos_geograficos', function (Blueprint $table) {
 			$table->integer('id_efector')->primary();
 			$table->char('id_provincia', 2);
-			$table->integer('id_departamento');
-			$table->integer('id_localidad');
+			$table->char('id_departamento',3);
+			$table->char('id_localidad',3);
 			$table->string('ciudad', 200)->nullable();
 			//$table->float('latitud')->nullable();
 			//$table->float('longitud')->nullable();

@@ -23,8 +23,7 @@ class SistemaLotesRechazados extends Seeder {
 		AND id_estado = 3
 	);");
 		
-		\DB::statement(" INSERT INTO sistema.lotes_rechazados(id_usuario,fecha_rechazado) VALUES (191,now());")
+		//\DB::statement(" INSERT INTO sistema.lotes_rechazados(id_usuario,fecha_rechazado) VALUES (191,now());");
 
-");
 	}
 }

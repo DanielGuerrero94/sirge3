@@ -13,7 +13,7 @@ class EfectoresEfectores extends Seeder {
 (
 	SELECT *
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-	    'SELECT id_efector,cuie,siisa,nombre,domicilio,codigo_postal,denominacion_legal,id_tipo_efector,rural,cics,id_categorizacion,id_dependencia_administrativa,dependencia_sanitaria,integrante,compromiso_gestion,priorizado,coalesce(ppac,''N''),id_estado,now() as created_at, now() as updated_at
+	    'SELECT id_efector,cuie,siisa,nombre,domicilio,codigo_postal,denominacion_legal,id_tipo_efector,rural,cics,coalesce(id_categorizacion,10),id_dependencia_administrativa,dependencia_sanitaria,integrante,compromiso_gestion,priorizado,coalesce(ppac,''N''),id_estado,now() as created_at, now() as updated_at
 		    FROM efectores.efectores')
 	    AS migracion(id_efector integer,
   cuie character(6),

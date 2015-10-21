@@ -22,7 +22,7 @@ class CreateMobileUsuarios extends Migration {
 			$table->date('fecha_nacimiento');
 			$table->string('email', 254)->unique();
 			$table->string('pass', 32);
-			$table->string('celular')->nulleable();
+			$table->string('celular')->nullable();
 			$table->char('id_provincia', 2);
 			$table->string('domicilio')->default('NO REGISTRADO');
 			$table->char('validado')->default('N');

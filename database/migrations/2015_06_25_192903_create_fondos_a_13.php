@@ -13,8 +13,16 @@ class CreateFondosA13 extends Migration
     public function up()
     {
         Schema::create('fondos.a_13', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->string('efector', 14);
+            $table->date('fecha_gasto');
+            $table->integer('periodo');
+            $table->string('numero_comprobante', 50);
+            $table->tinyInteger('codigo_gasto');
+            $table->tinyInteger('subcodigo_gasto');
+            $table->string('efector_cesion')->nullable();
+            $table->decimal('monto',10,2);
+            $table->text('concepto')->nullable();
+            $table->integer('lote');
         });
     }
 

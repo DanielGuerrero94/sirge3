@@ -17,9 +17,9 @@ class CreateFondosA01 extends Migration {
 			$table->string('numero_comprobante', 50);
 			$table->tinyInteger('codigo_gasto');
 			$table->tinyInteger('subcodigo_gasto');
-			$table->string('efector_cesion')->nulleable();
-			$table->decimal('monto');
-			$table->text('concepto')->nulleable();
+			$table->string('efector_cesion')->nullable();
+			$table->decimal('monto',10,2);
+			$table->text('concepto')->nullable();
 			$table->integer('lote');
 		});
 	}

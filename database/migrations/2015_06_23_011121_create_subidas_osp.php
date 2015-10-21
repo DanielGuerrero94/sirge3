@@ -15,7 +15,9 @@ class CreateSubidasOsp extends Migration
         Schema::create('sistema.subidas_osp', function (Blueprint $table) {
             $table->integer('id_subida');
             $table->integer('codigo_osp');
-            $table->integer('id_archivo');
+            $table->integer('id_archivo')->nullable();
+            $table->string('nombre_backup',100)->nullable();
+
 
             $table->foreign('id_subida')->references('id_subida')->on('sistema.subidas');
         });

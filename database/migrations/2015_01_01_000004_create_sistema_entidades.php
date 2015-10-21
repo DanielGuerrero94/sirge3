@@ -14,7 +14,7 @@ class CreateSistemaEntidades extends Migration {
 			$table->char('id_entidad', 2)->primary();
 			$table->integer('id_tipo_entidad');
 			$table->integer('id_region');
-			$table->integer('descripcion');
+			$table->string('descripcion',50);
 			$table->foreign('id_tipo_entidad')->references('id_tipo_entidad')->on('sistema.tipo_entidad');
 		});
 	}

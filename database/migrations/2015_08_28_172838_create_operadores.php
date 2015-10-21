@@ -20,8 +20,8 @@ class CreateOperadores extends Migration
             $table->timestamps();
 
             $table->unique(['id_usuario','id_grupo']);
-            $table->foreign('id_usuario')->references('sistema.usuarios')->on('id_usuario');
-            $table->foreign('id_grupo')->references('solicitudes.grupos')->on('id');
+            $table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
+            $table->foreign('id_grupo')->references('id')->on('solicitudes.grupos');
         });
     }
 

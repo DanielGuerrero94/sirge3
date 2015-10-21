@@ -20,7 +20,7 @@ class CreatePucoProcesosObrasSociales extends Migration {
 			$table->integer('registros_in');
 			$table->integer('registros_out');
 			$table->primary(['id_provincia', 'codigo_osp', 'periodo', 'puco']);
-			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
+			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
 			$table->foreign('codigo_osp')->references('codigo_osp')->on('puco.obras_sociales');
 		});
 	}

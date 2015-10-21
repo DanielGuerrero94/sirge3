@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder {
 		// $this->call('UserTableSeeder');
 		//$this->call('ImportTableDepartamentosSchemaGeoSeeder');
 		//$this->call('ImportTableEntidadesSchemaGeoSeeder');
-		$this->call('SistemaProvinciasSeeder');
+		/*$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
 		$this->call('PssCodigosSeeder');
@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaTipoDocumento');
 		$this->call('BeneficiariosBeneficiarios');
 		$this->call('SistemaMenues');
+		$this->call('SistemaTipoEntidad');
+		$this->call('SistemaEntidades');		
 		$this->call('SistemaUsuarios');
 		$this->call('GeoDepartamentos');
 		$this->call('GeoEntidades');
@@ -62,6 +64,40 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
 		$this->call('SistemaLotesRechazados');
+		$this->call('PssLineasCuidado');
+		$this->call('PssModulosCCC');
+		$this->call('PssTipoPrestacion');
+		$this->call('PssCodigosAnexo');
+		$this->call('PssCodigosCatastroficos');
+		$this->call('PssCodigosCCC');
+		$this->call('PssCodigosCeb');
+		$this->call('PssCodigosEstrategicos');
+		$this->call('PssCodigosGrupos');
+		$this->call('PssCodigosOdp');
+		$this->call('PssCodigosPpac');
+		$this->call('PssCodigosPriorizadas');
+		$this->call('PssCodigosSumarNacer');
+		$this->call('TrazadorasFuncionRetribucion');
+		$this->call('TrazadorasTrazadoras');
+		$this->call('PssCodigosTrazadoras');
+		$this->call('PssGruposDiagnosticos');
+		$this->call('BeneficiariosBeneficiariosBajas');*/
+		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
+		$this->call('BeneficiariosBeneficiariosCeb');
+		$this->call('BeneficiariosBeneficiariosContacto');
+		$this->call('BeneficiariosBeneficiariosEmbarazos');
+		$this->call('BeneficiariosBeneficiariosGeografico');
+		$this->call('BeneficiariosBeneficiariosIndigenas');
+		$this->call('BeneficiariosBeneficiariosParientes');
+		$this->call('BeneficiariosBeneficiariosPeriodos');
+		$this->call('BeneficiariosBeneficiariosPeriodosYCeb2015');
+		$this->call('BeneficiariosBeneficiariosScore');
+		$this->call('BeneficiariosResumenBeneficiarios');
+		$this->call('PrestacionesP');
+		$this->call('ComprobantesC');
+		$this->call('FondosCodigosGasto');
+		$this->call('FondosA');
+
 
 		Model::reguard();
 	}

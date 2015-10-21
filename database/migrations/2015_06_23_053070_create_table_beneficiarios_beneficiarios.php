@@ -24,7 +24,7 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 			$table->date('fecha_alta_efectiva')->nullable();
 			$table->char('id_provincia_alta', 2)->nullable();
 			$table->char('discapacidad', 1)->nullable();
-			$table->string('observaciones', 200)->nullable();
+			$table->longText('observaciones')->nullable();
 			$table->smallInteger('grupo_actual')->nullable();
 			$table->char('grupo_alta', 1)->nullable();
 			$table->foreign('clase_documento')

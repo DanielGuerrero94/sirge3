@@ -9,6 +9,7 @@ class CreateEsquemas extends Migration {
 	 * @return void
 	 */
 	public function up() {
+
 		DB::statement('CREATE SCHEMA beneficiarios;');
 		DB::statement('CREATE SCHEMA comprobantes;');
 		DB::statement('CREATE SCHEMA compromiso_anual;');
@@ -31,6 +32,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('CREATE SCHEMA tmp;');
 		DB::statement('CREATE SCHEMA trazadoras;');
 		DB::statement('CREATE SCHEMA solicitudes;');
+		DB::statement('CREATE SCHEMA graficos;');
 	}
 
 	/**
@@ -61,6 +63,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('DROP SCHEMA tmp;');
 		DB::statement('DROP SCHEMA trazadoras;');
 		DB::statement('DROP SCHEMA solicitudes;');
+		DB::statement('DROP SCHEMA graficos;');
 
 	}
 }

@@ -27,6 +27,6 @@ class CreateGraficosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('graficos');
+        Schema::drop('graficos.graficos');
     }
 }

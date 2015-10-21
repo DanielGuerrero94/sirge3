@@ -61,10 +61,10 @@ class SistemaSubidas extends Seeder {
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT o.id_carga,codigo_os,id_archivo_sss,nombre_backup
 	 			FROM sistema.cargas_archivos l
-	 			INNER JOIN sistema.cargas_archivos_osp o on o.id_carga = l.id_carga AND id_padron = 6)
+	 			INNER JOIN sistema.cargas_archivos_osp o on o.id_carga = l.id_carga AND id_padron = 6 ')
 		    AS migracion(id_subida integer,
 				 codigo_osp integer,
-				 id_archivo character(1),
+				 id_archivo smallint,
 				 nombre_backup character varying(100)
 				 )
 	);");

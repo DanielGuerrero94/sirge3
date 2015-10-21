@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTablePssTiposPrestacion extends Migration {
+class CreateTablePssTipoPrestacion extends Migration {
 	/**
 	 * Run the migrations.
 	 *
