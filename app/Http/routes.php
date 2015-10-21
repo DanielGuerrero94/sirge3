@@ -10,26 +10,25 @@
 |
  */
 
-// Main route ...
+//	Main route ...
 Route::get('/' , 'HomeController@index');
 
-// Authentication routes ...
+//	Authentication routes ...
 Route::get('login' , 'Auth\AuthController@getLogin');
 Route::post('login' , 'AuthController@authenticate');
 Route::get('logout' , 'Auth\AuthController@getLogout');
 
-// Registration routes ...
+//	Registration routes ...
 Route::get('registrar' , 'RegistrationController@index');
 Route::post('registrar' , 'RegistrationController@register');
 Route::get('checkemail' , 'RegistrationController@email');
 
-// Password recovery routes ...
+//	Password recovery routes ...
 Route::get('password' , 'PasswordController@index');
 Route::post('password' , 'PasswordController@recover');
 Route::get('checkemail-exists' , 'PasswordController@email');
 
-
-//Inicio route ...
+//	Inicio route ...
 Route::get('inicio' , 'HomeController@inicio');
 
 /********************************************************************************
@@ -45,18 +44,25 @@ Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
 /**
  * SOLICITUDES
  */
+#	INGRESO
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
 Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
+#	MIS SOLICITUDES
 Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
 Route::get('mis-solicitudes-table' , 'SolicitudController@myRequestsTable');
+#	ASIGNACION
 Route::get('asignacion-solicitud' , 'SolicitudController@getSolicitudesNoAsignadas');
 Route::get('asignacion-solicitud-table' , 'SolicitudController@asignacionSolicitudesTable');
+#	PENDIENTES
 Route::get('solicitudes-pendientes' , 'SolicitudController@getPendientes');
 Route::get('solicitudes-pendientes-table' , 'SolicitudController@solicitudesPendientesTable');
+#	CERRAR
 Route::get('cerrar-solicitud/{id}' , 'SolicitudController@getCerrar');
 Route::post('cerrar-solicitud/{id}' , 'SolicitudController@postCerrar');
+#	LISTADO COMPLETO
 Route::get('listado-solicitudes' , 'SolicitudController@listado');
 Route::get('listado-solicitudes-table' , 'SolicitudController@listadoTable');
+#	MISC
 Route::post('asignar-operador' , 'SolicitudController@postOperador');
 Route::get('ver-solicitud/{id}/{back}' , 'SolicitudController@getSolicitud');
 Route::get('tipo-solicitud/{id}' , 'SolicitudController@getTipos');
@@ -64,10 +70,27 @@ Route::get('operadores/{id}' , 'SolicitudController@getOperadores');
 Route::get('notificar-cierre/{id}' , 'SolicitudController@notificarCierre');
 Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicitud');
 
-/**
+/** 
  * PADRONES
  */
-Route::get('prestaciones' , 'PadronController@prestacion');
+Route::get('padron/{id}' , 'PadronesController@getMain');
+Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
+Route::post('subir-padron' , 'PadronesController@postUpload');
+Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
+Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
+Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
+
+/** 
+ * PRESTACIONES 
+ */
+Route::get('procesar-prestaciones/{archivo}' , 'PrestacionesController@procesarArchivo');
+
+/**
+ * COMPROBANTES
+ */
+Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@postArchivo');
+Route::get('eliminar-comprobantes/{archivo}' , 'ComprobantesController@postArchivo');
+
 Route::get('comprobantes' , 'PadronController@comprobante');
 Route::get('fondos' , 'PadronController@fondo');
 Route::get('osp' , 'PadronController@osp');
@@ -83,32 +106,31 @@ Route::get('listado' , 'BeneficiariosController@tabla');
 /**
  * EFECTORES
  */
-# LISTADO
+#	LISTADO
 Route::get('efectores-listado' , 'EfectoresController@listado');
 Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
-# ALTA
+#	ALTA
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
 Route::post('efectores-alta' , 'EfectoresController@postAlta');
-# BAJA
+#	BAJA
 Route::get('efectores-baja' , 'EfectoresController@getBaja');
 Route::post('efectores-baja' , 'EfectoresController@postBaja');
-#MODIFICACION
+#	MODIFICACION
 Route::get('efectores-modificacion' , 'EfectoresController@getEdit');
 Route::post('efectores-modificacion' , 'EfectoresController@postEdit');
 Route::get('efectores-modificacion/{cuie}' , 'EfectoresController@getEditForm');
-#REVISION
+#	REVISION
 Route::get('efectores-revision' , 'EfectoresController@getRevision');
 Route::get('efectores-revision-table' , 'EfectoresController@getRevisionTabla');
-# COMMON
+#	COMMON
 Route::get('cuie-nuevo/{provincia}' , 'EfectoresController@getCuie');
 Route::get('siisa-nuevo/{provincia}' , 'EfectoresController@getSiisa');
 Route::get('cuie-busqueda/{cuie}' , 'EfectoresController@findCuie');
 Route::get('efectores-detalle/{id}/{back}' , 'EfectoresController@detalle');
-# OPERACIONES FINALES
+#	OPERACIONES FINALES
 Route::post('alta-efector' , 'EfectoresController@alta');
 Route::post('baja-efector' , 'EfectoresController@baja');
 Route::post('rechazo-efector' , 'EfectoresController@rechazo');
-
 
 /**
  * ESTADISTICAS
@@ -192,15 +214,13 @@ Route::post('new-operador' , 'OperadoresController@postNew');
 Route::get('departamentos/{provincia}' , 'GeoController@departamentos');
 Route::get('localidades/{provincia}/{departamento}' , 'GeoController@localidades');
 
-/********************************************************************************
- *								 	WS ROUTES 									*
- ********************************************************************************/
-Route::resource('prestaciones' , 'Ws\SIISAController' , [
-	'only' => ['index']]);
-
 Route::get('phpinfo' , function(){
 	phpinfo();
 });
+
+/********************************************************************************
+ *								 	WS ROUTES 									*
+ ********************************************************************************/
 
 /********************************************************************************
  *								 	TEST ROUTES 								*

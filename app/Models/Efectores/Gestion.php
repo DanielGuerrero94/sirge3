@@ -18,7 +18,7 @@ class Gestion extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_compromiso';
+	protected $primaryKey = 'id_efector';
 
 	/**
 	 * Indicates if the model should be timestamped.

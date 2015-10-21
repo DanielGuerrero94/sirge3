@@ -482,7 +482,7 @@ $(document).ready(function() {
 	$('.finish').hide();
 	$('#errores-div').hide();
 	
-	$('#tel').inputmask('(999) 9999 9999')
+	$('#tel').inputmask('9999 9999 9999')
 
 	$('#integrante').change(function(){
 		var estado = $(this).val();

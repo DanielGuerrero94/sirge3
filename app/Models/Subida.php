@@ -27,6 +27,28 @@ class Subida extends Model {
 	public $timestamps = false;
 
 	/**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaSubidaAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getSizeAttribute($value)
+    {
+        return round(($value / 1024 / 1024) , 2) . ' mb';
+    }
+
+	/**
 	 * Obtener el registro aceptado de la subida.
 	 */
 	public function aceptado(){
@@ -36,7 +58,7 @@ class Subida extends Model {
 	/**
 	 * Obtener el registro eliminado de la subida.
 	 */
-	public function aceptado(){
+	public function eliminado(){
 		return $this->hasOne('App\Models\SubidaEliminada', 'id_subida', 'id_subida');
 	}
 

@@ -41,6 +41,9 @@ class Handler extends ExceptionHandler
         /*if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
             return response()->view('errors.404', array(), 404);
         }
+        if ($e instanceof FileException){
+            return response()->view('errors.404', array(), 404);
+        }
         */
         return parent::render($request, $e);
     }
