@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
 use App\Models\Lote;
+use App\Models\LoteAceptado;
+use App\Models\LoteRechazado;
 use App\Models\Rechazo;
 
 class LotesController extends Controller
@@ -93,7 +95,13 @@ class LotesController extends Controller
 		$l = Lote::findOrFail($r->lote);
 		$l->id_estado = 3;
 		if ($l->save()){
-			return 'Se ha aceptado el lote. Recuerde declararlo para imprimir la DDJJ.';
+			$la = new LoteAceptado;
+			$la->lote = $l->lote;
+			$la->id_usuario = Auth::user()->id_usuario;
+			$la->fecha_aceptado = 'now';
+			if ($la->save()){
+				return 'Se ha aceptado el lote. Recuerde declararlo para imprimir la DDJJ.';
+			}
 		}
 	}
 
@@ -107,7 +115,13 @@ class LotesController extends Controller
 		$l = Lote::findOrFail($r->lote);
 		$l->id_estado = 4;
 		if ($l->save()){
-			return 'Se ha rechazado el lote.';
+			$lr = new LoteRechazado;
+			$lr->lote = $l->lote;
+			$lr->id_usuario = Auth::user()->id_usuario;
+			$lr->fecha_rechazado = 'now';
+			if ($lr->save()){
+				return 'Se ha rechazado el lote.';
+			}
 		}
 	}
 

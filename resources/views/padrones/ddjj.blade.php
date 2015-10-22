@@ -11,11 +11,11 @@
 					<ul id="errores-form">
 					</ul>
 				</div>
-				<table class="table table table-hover" id="rechazos-table">
+				<table class="table table table-hover" id="lotes-table">
 	                <thead>
 	                  <tr>
-	                    <th>Registro</th>
-	                    <th>Motivos</th>
+	                    <th>Lote</th>
+	                    <th>Fecha cierre</th>
 	                  </tr>
 	                </thead>
 	            </table>
@@ -31,25 +31,24 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		$('#errores-div').hide();
-
 		$('.back').click(function(){
-			$.get('detalle-lote/{{ $lote }}' , function(data){
+			$.get('padron/{{ $padron }}' , function(data){
 				$('.content-wrapper').html(data);
 			})
 		});
 
-		var dt = $('#rechazos-table').DataTable({
+		var dt = $('#lotes-table').DataTable({
 			processing: true,
             serverSide: true,
-            ajax : 'rechazos-lote-table/{{ $lote }}',
+            ajax : 'listado-lotes-cerrados-table/{{ $padron }}',
             columns: [
-                { data: 'registro'},
-                { data: 'motivos'}
+                { data: 'lote' , name : 'lote'},
+                { data: 'fecha_aceptado' , name: 'fecha_aceptado'}
                 
             ],
             order : [[0,'desc']]
 		});
+
 	});
 </script>
 @endsection

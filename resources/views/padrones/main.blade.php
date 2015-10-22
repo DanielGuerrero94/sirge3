@@ -70,7 +70,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Informar lote(s)</button>
+					<button href="listado-lotes-cerrados/{{ $id_padron }}" class="action btn btn-info">Informar lote(s)</button>
 				</div>
 			</div>
 		</div>

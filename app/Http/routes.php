@@ -73,19 +73,37 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
 /** 
  * PADRONES
  */
+#	VISTA PRINCIPAL
 Route::get('padron/{id}' , 'PadronesController@getMain');
+#	SUBIDA DE ARCHIVOS
 Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
 Route::post('subir-padron' , 'PadronesController@postUpload');
+#	ACCIONES
 Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
 Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
 Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
+
+/**
+ * LOTES
+ */
+#	LISTADO
 Route::get('listar-lotes/{id}' , 'LotesController@listadoLotes');
 Route::get('listar-lotes-table/{id}' , 'LotesController@listadoLotesTabla');
+#	DETALLE
 Route::get('detalle-lote/{lote}' , 'LotesController@detalleLote');
+#	ACCIONES
 Route::post('aceptar-lote' , 'LotesController@aceptarLote');
 Route::post('eliminar-lote' , 'LotesController@eliminarLote');
+#	RECHAZOS
 Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
+
+/**
+ * DDJJ
+ */
+#	LOTES PENDIENTES
+Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
+Route::get('listado-lotes-cerrados-table/{padron}' , 'DdjjController@getListadoPendientesTabla');
 
 /** 
  * PRESTACIONES 
