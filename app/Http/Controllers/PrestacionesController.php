@@ -181,7 +181,7 @@ class PrestacionesController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		
+		$bulk = [];
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
 		
