@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
 use App\Models\Lote;
+use App\Models\Rechazo;
 
 class LotesController extends Controller
 {
@@ -108,5 +109,31 @@ class LotesController extends Controller
 		if ($l->save()){
 			return 'Se ha rechazado el lote.';
 		}
+	}
+
+	/**
+	 * Devuelve la vista de rechazos
+	 * @param int $lote
+	 *
+	 * @return null
+	 */
+	public function getRechazos($lote){
+		$data = [
+			'page_title' => 'Listado de rechazos lote : ' . $lote,
+			'lote' => $lote
+		];
+		return view('padrones.rechazos' , $data);
+	}
+
+	/**
+	 * Devuelve el json para armar la datatable
+	 * @param int $lote
+	 *
+	 * @return json
+	 */
+	public function getRechazosTabla($lote){
+		$rechazos = Rechazo::where('lote' , $lote)->get();
+		return Datatables::of($rechazos)
+			->make(true);
 	}
 }

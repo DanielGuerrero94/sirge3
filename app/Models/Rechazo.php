@@ -27,4 +27,14 @@ class Rechazo extends Model
 	 */
 	public $timestamps = false;
 
+	/**
+     * Devuelve el registro rechazado formateado
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getRegistroAttribute($value)
+    {
+        return implode(';' , json_decode($value , TRUE));
+    }
 }

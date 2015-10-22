@@ -84,6 +84,8 @@ Route::get('listar-lotes-table/{id}' , 'LotesController@listadoLotesTabla');
 Route::get('detalle-lote/{lote}' , 'LotesController@detalleLote');
 Route::post('aceptar-lote' , 'LotesController@aceptarLote');
 Route::post('eliminar-lote' , 'LotesController@eliminarLote');
+Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
+Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
 
 /** 
  * PRESTACIONES 
@@ -230,49 +232,3 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-
-Route::get('prestaciones/34142469' , function(){
-	$json = 
-	"{
-		'nombre' : 'Anakin',
-		'apellido' : 'Skywalker',
-		'dni' : 34142469,
-		'prestaciones' : {[
-			1 : {
-				'codigo' : 'CTC001A97',
-				'nombre' : 'Control periódico de salud',
-				'fecha' : 30/12/2013,
-				'lugar' : {
-					'nombre' : 'HOSPITAL POSADAS',
-					'SIISA' : '10065682000343'
-				},
-				'datos reportables' : {
-					'peso' : 69,
-					'talla' : 174,
-					'tensión arterial' : '70/120'
-				},
-				'observaciones' : 'Presenta quemaduras de 3er. grado'
-			},
-			2 : {
-				'codigo' : 'AP0003U89',
-				'nombre' : 'Internación',
-				'fecha' : 30/12/2013,
-				'lugar' : {
-					'nombre' : 'HOSPITAL POSADAS',
-					'SIISA' : '10065682000343'
-				},
-				'datos reportables' : {},
-				'observaciones' : 'Presenta fiebre extrema'
-			}
-		]},
-		'domicilio' : {
-			'calle' : 'Av. Nazca',
-			'altura' : '1450',
-			'piso' : '4',
-			'departamento' : 'F'
-		}
-	}";
-	return '<pre>' . $json . '</pre>';
-});
-
-

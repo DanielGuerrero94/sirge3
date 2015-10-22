@@ -7,7 +7,7 @@
 				<h2 class="box-title">Detalle lote {{ $lote->lote }}</h2>
 				<div class="box-tools pull-right">
 					@if ($lote->registros_out != 0)
-					<button class="btn btn-sm btn-warning"><i class="fa fa-pencil-square-o"></i> Ver rechazos</button>
+					<button lote="{{$lote->lote}}" class="view-rechazos btn btn-sm btn-warning"><i class="fa fa-pencil-square-o"></i> Ver rechazos</button>
 					@else
 					<span class="label label-success">No hay registros rechazados</span>
 					@endif
@@ -76,8 +76,10 @@
 			<div class="box-footer">
 				<div class="btn-group" role="group">
 					<button class="back btn btn-info">Atrás</button>
+					@if ($lote->id_estado == 1)
 					<button class="aceptar btn btn-success">Aceptar</button>
 					<button class="eliminar btn btn-danger">Rechazar</button>
+					@endif
 				</div>			
 			</div>
 		</div>
@@ -129,6 +131,13 @@
 						$('.content-wrapper').html(data);
 					});
                 });
+			});
+		});
+
+		$('.view-rechazos').click(function(){
+			var lote = $(this).attr('lote');
+			$.get('rechazos-lote/' + lote , function(data){
+				$('.content-wrapper').html(data);
 			});
 		});
 
