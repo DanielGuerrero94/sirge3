@@ -31,6 +31,8 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
+		$('#errores-div').hide();
+
 		$('.back').click(function(){
 			$.get('padron/{{ $padron }}' , function(data){
 				$('.content-wrapper').html(data);
