@@ -50,6 +50,7 @@ class LotesController extends Controller
 		$lotes = Lote::with('estado')
 			->join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
 			->where('id_padron' , $id)
+			->where('id_provincia' , Auth::user()->id_provincia)
 			->select('sistema.lotes.*');
 
 		if (Auth::user()->id_entidad == 2) {
