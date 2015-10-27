@@ -4,7 +4,10 @@
 	<div class="col-md-10 col-md-offset-1">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Registros rechazados</h2>
+				<h2 class="box-title">Declaración de lotes pendientes</h2>
+				<div class="box-tools pull-right">
+					<button class="declarar-lotes btn btn-warning"><i class="fa fa-flag"></i> Declarar</button>
+				</div>
 			</div>
 			<div class="box-body">
 				<div class="alert alert-danger" id="errores-div">
@@ -31,7 +34,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		$('#errores-div').hide();
+		$('#errores-div').hide();	
 
 		$('.back').click(function(){
 			$.get('padron/{{ $padron }}' , function(data){
@@ -45,10 +48,16 @@
             ajax : 'listado-lotes-cerrados-table/{{ $padron }}',
             columns: [
                 { data: 'lote' , name : 'lote'},
-                { data: 'fecha_aceptado' , name: 'fecha_aceptado'}
+                { data: 'fecha_format' , name: 'fecha_format'}
                 
             ],
             order : [[0,'desc']]
+		});
+
+		$('.declarar-lotes').click(function(){
+			$.post('declarar-lotes' , 'padron={{ $padron }}'  , function(data){
+				console.log(data);
+			});
 		});
 
 	});

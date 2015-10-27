@@ -45,26 +45,19 @@ class DdjjController extends Controller
 	 * @return json
 	 */
 	public function getListadoPendientesTabla($padron){
-		/*$lotes = DB::select('
-				select l.*, s.id_padron
-				from 
-					sistema.lotes l left join
-					sistema.subidas s on l.id_subida = s.id_subida
-				where 
-					lote not in (
-						select unnest (lote) 
-						from ddjj.sirge
-					)
-					and id_provincia = ?
-					and id_padron = ?' , 
-				[Auth::user()->id_provincia , $padron]);
-		*/
 		$lotes = DB::table('sistema.lotes as l')
 				->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
 				->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
+				->where('s.id_padron' , $padron)
+				->whereNotIn('l.lote' , function($q){
+					$q->select(DB::raw('unnest(lote)'))
+					->from('ddjj.sirge');
+				})
 				->select('l.*' , 'a.fecha_aceptado');
-		//return '<pre>'.print_r($lotes).'</pre>';
 
-		return Datatables::of($lotes)->make(true);
+		return Datatables::of($lotes)
+			->addColumn('fecha_format' , function($lote){
+				return date_format(date_create($lote->fecha_aceptado) , 'd/m/Y');
+			})->make(true);
 	}
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Datatables;
+use DB;
+use PDF;
 
 use Illuminate\Http\Request;
 
@@ -150,5 +152,39 @@ class LotesController extends Controller
 		$rechazos = Rechazo::where('lote' , $lote)->get();
 		return Datatables::of($rechazos)
 			->make(true);
+	}
+
+	/**
+	 * Marca los lotes como impresos
+	 * @param Request $r
+	 *
+	 * @return null
+	 */
+	public function declararLotes(Request $r){
+		$lotes_d = [];
+		$i = 0;
+		$lotes = DB::table('sistema.lotes as l')
+			->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
+			->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
+			->where('s.id_padron' , $r->padron)
+			->whereNotIn('l.lote' , function($q){
+					$q->select(DB::raw('unnest(lote)'))
+					->from('ddjj.sirge');
+				})
+			->get();
+
+		foreach ($lotes as $lote){
+			$lotes_d[$i] = $lote->lote;
+			$i++;
+		}
+
+		//return '<pre>'.print_r($lotes).'</pre>';
+
+		$param = '{' . implode (',' , $lotes_d) . '}';
+
+		if (DB::insert("insert into ddjj.sirge (lote) values (?)" , [ $param ])){
+			$pdf = PDF::loadView('pdf.ddjj.sirge');
+        	return $pdf->download('invoice.pdf');
+		}
 	}
 }

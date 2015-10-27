@@ -26,4 +26,15 @@ class Sirge extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaAceptadoAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
 }
