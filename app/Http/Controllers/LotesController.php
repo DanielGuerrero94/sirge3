@@ -6,6 +6,7 @@ use Auth;
 use Datatables;
 use DB;
 use PDF;
+use Mail;
 
 use Illuminate\Http\Request;
 
@@ -163,6 +164,9 @@ class LotesController extends Controller
 	public function declararLotes(Request $r){
 		$lotes_d = [];
 		$i = 0;
+		
+		$user = Auth::user();
+
 		$lotes = DB::table('sistema.lotes as l')
 			->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
 			->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
@@ -178,13 +182,20 @@ class LotesController extends Controller
 			$i++;
 		}
 
-		//return '<pre>'.print_r($lotes).'</pre>';
-
 		$param = '{' . implode (',' , $lotes_d) . '}';
+		DB::insert("insert into ddjj.sirge (lote) values (?)" , [ $param ]);
+		$id = DB::getPdo()->lastInsertId('ddjj.sirge_id_impresion_seq');
 
-		if (DB::insert("insert into ddjj.sirge (lote) values (?)" , [ $param ])){
+		if ($id){
+			$path = base_path() . '/storage/pdf/ddjj/sirge/' . $id . '.pdf';
 			$pdf = PDF::loadView('pdf.ddjj.sirge');
-        	return $pdf->download('invoice.pdf');
+        	$pdf->save($path);
+        	Mail::send('emails.ddjj-sirge', ['id' => $id , 'usuario' => $user], function ($m) use ($user , $path , $id) {
+	            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+	            $m->to($user->email);
+	            $m->subject('DDJJ Nº ' . $id);
+	            $m->attach($path);
+	        });
 		}
 	}
 }
