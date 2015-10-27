@@ -31,9 +31,20 @@ class DdjjController extends Controller
 	 * @return null
 	 */
 	public function getListadoPendientes($padron){
+		$pendientes = DB::table('sistema.lotes as l')
+				->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
+				->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
+				->where('s.id_padron' , $padron)
+				->whereNotIn('l.lote' , function($q){
+					$q->select(DB::raw('unnest(lote)'))
+					->from('ddjj.sirge');
+				})
+				->count();
+
 		$data = [
 			'page_title' => 'Declaración de lotes para DDJJ',
-			'padron' => $padron
+			'padron' => $padron,
+			'pendientes' => $pendientes
 		];
 		return view('padrones.ddjj' , $data);
 	}

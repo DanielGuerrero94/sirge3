@@ -197,5 +197,7 @@ class LotesController extends Controller
 	            $m->attach($path);
 	        });
 		}
+
+		return 'Se ha enviado la DDJJ a su casilla de correo electónico. (' . Auth::user()->email . ')';
 	}
 }

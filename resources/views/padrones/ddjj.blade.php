@@ -6,7 +6,9 @@
 			<div class="box-header">
 				<h2 class="box-title">Declaración de lotes pendientes</h2>
 				<div class="box-tools pull-right">
+				@if ($pendientes)
 					<button class="declarar-lotes btn btn-warning"><i class="fa fa-flag"></i> Declarar</button>
+				@endif
 				</div>
 			</div>
 			<div class="box-body">
@@ -30,6 +32,22 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal fade modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Atención!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -56,7 +74,12 @@
 
 		$('.declarar-lotes').click(function(){
 			$.post('declarar-lotes' , 'padron={{ $padron }}'  , function(data){
-				console.log(data);
+				$('#modal-text').html(data);
+                $('.modal').modal();
+                $('.modal').on('hidden.bs.modal', function (e) {
+                    dt.ajax.reload( null, false );
+                    $('.declarar-lotes').attr('disabled' , 'disabled');
+                });
 			});
 		});
 
