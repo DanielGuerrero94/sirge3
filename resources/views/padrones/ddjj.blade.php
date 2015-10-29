@@ -16,7 +16,7 @@
 					<ul id="errores-form">
 					</ul>
 				</div>
-				<table class="table table table-hover" id="lotes-table">
+				<table class="table table-hover" id="lotes-table">
 	                <thead>
 	                  <tr>
 	                    <th>Lote</th>
@@ -78,7 +78,7 @@
                 $('.modal').modal();
                 $('.modal').on('hidden.bs.modal', function (e) {
                     dt.ajax.reload( null, false );
-                    $('.declarar-lotes').attr('disabled' , 'disabled');
+                    //$('.declarar-lotes').attr('disabled' , 'disabled');
                 });
 			});
 		});

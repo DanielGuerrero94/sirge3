@@ -11,7 +11,7 @@
 					<ul id="errores-form">
 					</ul>
 				</div>
-				<table class="table table table-hover" id="lotes-table">
+				<table class="table table-hover" id="lotes-table">
 	                <thead>
 	                  <tr>
 	                    <th>Lote</th>
