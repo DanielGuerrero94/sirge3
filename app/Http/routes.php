@@ -105,6 +105,8 @@ Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
 Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
 Route::get('listado-lotes-cerrados-table/{padron}' , 'DdjjController@getListadoPendientesTabla');
 Route::post('declarar-lotes' , 'LotesController@declararLotes');
+Route::get('listado-ddjj/{padron}' , 'DdjjController@getListado');
+Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
 
 /** 
  * PRESTACIONES 

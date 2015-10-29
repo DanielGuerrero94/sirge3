@@ -85,7 +85,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Ver DDJJ</button>
+					<button href="listado-ddjj/{{ $id_padron }}" class="action btn btn-info">Ver DDJJ</button>
 				</div>
 			</div>
 		</div>

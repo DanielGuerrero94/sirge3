@@ -33,7 +33,7 @@ class Sirge extends Model
      * @param  string  $value
      * @return string
      */
-    public function getFechaAceptadoAttribute($value)
+    public function getFechaImpresionAttribute($value)
     {
         return date('d/m/Y' , strtotime($value));
     }

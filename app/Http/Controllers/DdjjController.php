@@ -71,4 +71,33 @@ class DdjjController extends Controller
 				return date_format(date_create($lote->fecha_aceptado) , 'd/m/Y');
 			})->make(true);
 	}
+
+	/**
+	 * Retorna la vista de las DDJJ por padrón
+	 * @param int $id
+	 *
+	 * @return null
+	 */
+	public function getListado($id){
+		$data = [
+			'page_title' => 'Histórico de declaraciones juradas',
+			'padron' => $id
+		];
+		return view('padrones.ddjj-historico' , $data);
+	}
+
+	/**
+	 * Retorna un JSON para la datatable
+	 * @param int $id
+	 *
+	 * @return json
+	 */
+	public function getListadoTabla($id){
+		$lotes = DDJJSirge::all();
+		return Datatables::of($lotes)
+			->addColumn('view' , function($lote){
+				return '<a href="local" id_impresion="'. $lote->id_impresion .'" class="view-ddjj btn btn-success btn-xs"> Ver DDJJ <i class="fa fa-search"></i></a>';
+			})
+			->make(true);
+	}
 }

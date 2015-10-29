@@ -18,6 +18,8 @@ use App\Models\Lote;
 use App\Models\LoteAceptado;
 use App\Models\LoteRechazado;
 use App\Models\Rechazo;
+use App\Models\DDJJ\Sirge as DDJJSirge;
+use App\Models\Geo\Provincia;
 
 class LotesController extends Controller
 {
@@ -156,6 +158,24 @@ class LotesController extends Controller
 	}
 
 	/**
+	 * Devuelve el nombre del padron correspondiente
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	protected function getNombrePadron($id){
+		switch ($id) {
+			case '1':	return 'PRESTACIONES';
+			case 2: return 'APLICACIÓN DE FONDOS';
+			case 3: return 'COMPROBANTES';
+			case 4: return 'OBRA SOCIAL PROVINCIAL';
+			case 5: return 'PROGRAMA FEDERAL DE SALUD';
+			case 6: return 'SUPERINTENDENCIA DE SERVICIOS DE SALUD';
+			default: break;
+		}
+	}
+
+	/**
 	 * Marca los lotes como impresos
 	 * @param Request $r
 	 *
@@ -163,6 +183,12 @@ class LotesController extends Controller
 	 */
 	public function declararLotes(Request $r){
 		$lotes_d = [];
+		$resumen = [
+			'in' => 0,
+			'out' => 0,
+			'mod' => 0
+		];
+
 		$user = Auth::user();
 		$lotes = DB::table('sistema.lotes as l')
 			->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
@@ -176,16 +202,23 @@ class LotesController extends Controller
 
 		foreach ($lotes as $key => $lote){
 			$lotes_d[$key] = $lote->lote;
+			$resumen['in'] += $lote->registros_in;
+			$resumen['out'] += $lote->registros_out;
+			$resumen['mod'] += $lote->registros_mod;
 		}
+		$param = '{' . implode (',' , $lotes_d) . '}';
+		
+		DB::insert("insert into ddjj.sirge (lote) values (?)" , [ $param ]);
+		$id = DB::getPdo()->lastInsertId('ddjj.sirge_id_impresion_seq');
 
 		$data = [
-			'lotes' => $lotes
+			'lotes' => $lotes,
+			'nombre_padron' => $this->getNombrePadron($r->padron),
+			'resumen' => $resumen,
+			'jurisdiccion' => Provincia::where('id_provincia' , $user->id_provincia)->firstOrFail(),
+			'ddjj' => DDJJSirge::findOrFail($id)
 		];
 
-		$param = '{' . implode (',' , $lotes_d) . '}';
-		//DB::insert("insert into ddjj.sirge (lote) values (?)" , [ $param ]);
-		//$id = DB::getPdo()->lastInsertId('ddjj.sirge_id_impresion_seq');
-		$id = 999;
 		if ($id){
 			$path = base_path() . '/storage/pdf/ddjj/sirge/' . $id . '.pdf';
 			$pdf = PDF::loadView('pdf.ddjj.sirge' , $data);
