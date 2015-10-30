@@ -109,6 +109,12 @@ Route::get('listado-ddjj/{padron}' , 'DdjjController@getListado');
 Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
 Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
 
+/**
+ * DICCIONARIO
+ */
+Route::get('diccionario/{id}' , 'DiccionariosController@getDatadic');
+Route::get('diccionario-table/{id}' , 'DiccionariosController@getDatadicTabla');
+
 /** 
  * PRESTACIONES 
  */

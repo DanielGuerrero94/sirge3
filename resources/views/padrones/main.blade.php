@@ -107,7 +107,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="btn btn-info">Ver diccionario</button>
+					<button href="diccionario/{{ $id_padron }}" class="action btn btn-info">Ver diccionario</button>
 				</div>
 			</div>
 		</div>

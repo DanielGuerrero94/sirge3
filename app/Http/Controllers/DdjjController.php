@@ -101,8 +101,12 @@ class DdjjController extends Controller
 			->groupBy('ddjj.sirge.id_impresion')
 			->groupBy('ddjj.sirge.lote')
 			->groupBy('sistema.subidas.id_padron')
-			->select('ddjj.sirge.*' , 'sistema.subidas.id_padron')
-			->get();
+			->select('ddjj.sirge.*' , 'sistema.subidas.id_padron');
+		if (Auth::user()->id_entidad == 2) {
+			$lotes->where('id_provincia' , Auth::user()->id_provincia);
+		}
+
+		$lotes = $lotes->get();
 		
 		return Datatables::of($lotes)
 			->addColumn('view' , function($lote){
