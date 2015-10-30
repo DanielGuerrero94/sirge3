@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Auth;
 use DB;
 use Datatables;
+use PDF;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Geo\Provincia;
 use App\Models\DDJJ\Sirge as DDJJSirge;
 
 class DdjjController extends Controller
@@ -93,11 +95,73 @@ class DdjjController extends Controller
 	 * @return json
 	 */
 	public function getListadoTabla($id){
-		$lotes = DDJJSirge::all();
+		$lotes = DDJJSirge::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , DB::raw('any(ddjj.sirge.lote)'))
+			->join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
+			->where('id_padron' , $id)
+			->groupBy('ddjj.sirge.id_impresion')
+			->groupBy('ddjj.sirge.lote')
+			->groupBy('sistema.subidas.id_padron')
+			->select('ddjj.sirge.*' , 'sistema.subidas.id_padron')
+			->get();
+		
 		return Datatables::of($lotes)
 			->addColumn('view' , function($lote){
-				return '<a href="local" id_impresion="'. $lote->id_impresion .'" class="view-ddjj btn btn-success btn-xs"> Ver DDJJ <i class="fa fa-search"></i></a>';
+				return '<a href="ddjj-sirge/' . $lote->id_padron . '/' . $lote->id_impresion . '" id_impresion="'. $lote->id_impresion .'" class="view-ddjj btn btn-success btn-xs"> Ver DDJJ <i class="fa fa-search"></i></a>';
 			})
 			->make(true);
 	}
+
+	/**
+	 * Devuelve el nombre del padron correspondiente
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	protected function getNombrePadron($id){
+		switch ($id) {
+			case '1':	return 'PRESTACIONES';
+			case 2: return 'APLICACIÓN DE FONDOS';
+			case 3: return 'COMPROBANTES';
+			case 4: return 'OBRA SOCIAL PROVINCIAL';
+			case 5: return 'PROGRAMA FEDERAL DE SALUD';
+			case 6: return 'SUPERINTENDENCIA DE SERVICIOS DE SALUD';
+			default: break;
+		}
+	}
+
+	/**
+	 * Devuelve la DDJJ Sirge elegida
+	 * @param int $id
+	 *
+	 * @return resource
+	 */
+	public function getDDJJSirge($padron , $id){
+		$resumen = [
+			'in' => 0,
+			'out' => 0,
+			'mod' => 0
+		];
+
+		$lotes = DDJJSirge::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , DB::raw('any(ddjj.sirge.lote)'))
+			->where('id_impresion' , $id)
+			->get();
+		
+		foreach ($lotes as $key => $lote){
+			$resumen['in'] += $lote->registros_in;
+			$resumen['out'] += $lote->registros_out;
+			$resumen['mod'] += $lote->registros_mod;
+		}
+
+		$data = [
+			'lotes' => $lotes,
+			'nombre_padron' => $this->getNombrePadron($padron),
+			'resumen' => $resumen,
+			'jurisdiccion' => Provincia::where('id_provincia' , Auth::user()->id_provincia)->firstOrFail(),
+			'ddjj' => DDJJSirge::findOrFail($id)
+		];
+
+		$pdf = PDF::loadView('pdf.ddjj.sirge' , $data);
+    	return $pdf->download("ddjj-sirge-$id.pdf");
+	}
+
 }

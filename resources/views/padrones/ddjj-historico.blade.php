@@ -14,6 +14,7 @@
 				<table class="table table-hover" id="lotes-table">
 	                <thead>
 	                  <tr>
+	                    <th>Nº DDJJ</th>
 	                    <th>Fecha impresión</th>
 	                    <th>Lotes</th>
 	                    <th></th>
@@ -61,6 +62,7 @@
             serverSide: true,
             ajax : 'listado-ddjj-table/{{ $padron }}',
             columns: [
+                { data: 'id_impresion' , name : 'id_impresion'},
                 { data: 'fecha_impresion' , name : 'fecha_impresion'},
                 { data: 'lote' , name: 'lote'},
                 { data: 'view'}

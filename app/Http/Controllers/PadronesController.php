@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Datatables;
 use ErrorException;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -41,6 +42,15 @@ class PadronesController extends Controller
 		$lotes_pendientes = Lote::join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
 							->where('id_padron' , $id)
 							->where('sistema.lotes.id_estado' , 1);
+		$lotes_no_declarados = DB::table('sistema.lotes as l')
+			->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
+			->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
+			->where('s.id_padron' , $id)
+			->whereNotIn('l.lote' , function($q){
+					$q->select(DB::raw('unnest(lote)'))
+					->from('ddjj.sirge');
+				})
+			->count();
 
 		if (Auth::user()->id_entidad == 2) {
 			$lotes_pendientes = $lotes_pendientes->where('id_provincia' , Auth::user()->id_provincia)->count();
@@ -54,7 +64,8 @@ class PadronesController extends Controller
 			'page_title' => $this->getName($id),
 			'id_padron' => $id,
 			'archivos_pendientes' => $archivos_pendientes,
-			'lotes_pendientes' => $lotes_pendientes
+			'lotes_pendientes' => $lotes_pendientes,
+			'lotes_no_declarados' => $lotes_no_declarados
 		];
 		return view('padrones.main' , $data);
 	}

@@ -64,6 +64,13 @@
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Declarar lotes cerrados</h2>
+				<div class="box-tools pull-right">
+					@if ($lotes_no_declarados != 0)
+					<span class="label label-warning">{{ $lotes_no_declarados }} lotes(s) a declarar</span>
+					@else
+					<span class="label label-success">No hay DDJJ pendientes</span>
+					@endif
+				</div>
 			</div>
 			<div class="box-body">
 				<p>Desde aquí ud. podrá declarar la cantidad de lotes que desee, de los que haya cerrado, para luego generar una DDJJ.</p>

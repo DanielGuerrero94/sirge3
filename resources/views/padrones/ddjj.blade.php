@@ -78,7 +78,7 @@
                 $('.modal').modal();
                 $('.modal').on('hidden.bs.modal', function (e) {
                     dt.ajax.reload( null, false );
-                    //$('.declarar-lotes').attr('disabled' , 'disabled');
+                    $('.declarar-lotes').attr('disabled' , 'disabled');
                 });
 			});
 		});
