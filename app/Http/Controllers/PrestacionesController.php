@@ -19,11 +19,6 @@ use App\Models\Rechazo;
 
 class PrestacionesController extends Controller
 {
-
-	/**
-	 * Defino las reglas para la validación de prestaciones
-	 */
-
 	private 
 		$_rules = [
 			'operacion' => 'required|in:A,M',
@@ -221,6 +216,7 @@ class PrestacionesController extends Controller
 							}
 							break;
 						case 'M':
+							//$prestacion = Prestacion::where()
 							break;
 					}
 				}

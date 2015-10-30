@@ -123,14 +123,8 @@ Route::get('procesar-prestaciones/{archivo}' , 'PrestacionesController@procesarA
 /**
  * COMPROBANTES
  */
-Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@postArchivo');
-Route::get('eliminar-comprobantes/{archivo}' , 'ComprobantesController@postArchivo');
+Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@procesarArchivo');
 
-Route::get('comprobantes' , 'PadronController@comprobante');
-Route::get('fondos' , 'PadronController@fondo');
-Route::get('osp' , 'PadronController@osp');
-Route::get('profe' , 'PadronController@profe');
-Route::get('sss' , 'PadronController@sss');
 
 /**
  * BENEFICIARIOS
