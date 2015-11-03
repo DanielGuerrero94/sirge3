@@ -125,6 +125,11 @@ Route::get('procesar-prestaciones/{archivo}' , 'PrestacionesController@procesarA
  */
 Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@procesarArchivo');
 
+/**
+ * FONDOS
+ */
+Route::get('procesar-fondos/{archivo}' , 'FondosController@procesarArchivo');
+
 
 /**
  * BENEFICIARIOS

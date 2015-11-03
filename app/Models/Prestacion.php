@@ -18,7 +18,7 @@ class Prestacion extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_prestacion';
+	protected $primaryKey = 'id';
 
 	/**
 	 * Indicates if the model should be timestamped.

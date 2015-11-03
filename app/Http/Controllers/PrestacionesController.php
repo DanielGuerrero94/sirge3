@@ -14,8 +14,8 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
 use App\Models\Lote;
-use App\Models\Prestacion;
 use App\Models\Rechazo;
+use App\Models\Prestacion;
 
 class PrestacionesController extends Controller
 {
@@ -176,7 +176,6 @@ class PrestacionesController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		$bulk = [];
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
 		
@@ -185,7 +184,7 @@ class PrestacionesController extends Controller
 		}
 
 		fgets($fh);
-		while (! feof($fh)){
+		while (!feof($fh)){
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
 			if (count($linea) != 1) {
 				$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
@@ -216,7 +215,26 @@ class PrestacionesController extends Controller
 							}
 							break;
 						case 'M':
-							//$prestacion = Prestacion::where()
+							$prestacion = Prestacion::where('numero_comprobante' , $prestacion_raw['numero_comprobante'])
+													->where('codigo_prestacion' , $prestacion_raw['codigo_prestacion'])
+													->where('subcodigo_prestacion' , $prestacion_raw['subcodigo_prestacion'])
+													->where('fecha_prestacion' , $prestacion_raw['fecha_prestacion'])
+													->where('clave_beneficiario' , $prestacion_raw['clave_beneficiario'])
+													->where('orden' , $prestacion_raw['orden']);
+							
+							if ($prestacion->count()){
+								$prestacion = $prestacion->firstOrFail();
+								$prestacion->estado = 'D';
+								if ($prestacion->save()){
+									$this->_resumen['modificados'] ++;
+								}
+							} else {
+								$this->_resumen['rechazados'] ++;
+								$this->_error['lote'] = $lote;
+								$this->_error['registro'] = json_encode($prestacion_raw);
+								$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
+								Rechazo::insert($this->_error);
+							}
 							break;
 					}
 				}

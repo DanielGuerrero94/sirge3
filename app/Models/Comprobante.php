@@ -18,12 +18,12 @@ class Comprobante extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_area';
+	protected $primaryKey = 'id';
 
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
 }
