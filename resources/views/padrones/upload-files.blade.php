@@ -54,7 +54,7 @@
             var uploadErrors = [];
             var acceptFileTypes = /^text\/plain$/i;
         	
-            if(data.originalFiles[0]['size'] > 25 * 1024 * 1024) {
+            if(data.originalFiles[0]['size'] > 1024 * 1024 * 1024) {
 				uploadErrors.push('Tamaño de archivo demasiado grande. Máximo : 25mb');
             }
 

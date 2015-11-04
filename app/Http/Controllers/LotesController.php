@@ -20,6 +20,9 @@ use App\Models\LoteRechazado;
 use App\Models\Rechazo;
 use App\Models\DDJJ\Sirge as DDJJSirge;
 use App\Models\Geo\Provincia;
+use App\Models\Prestacion;
+use App\Models\Comprobante;
+use App\Models\Fondo;
 
 class LotesController extends Controller
 {
@@ -111,6 +114,27 @@ class LotesController extends Controller
 	}
 
 	/**
+	 * Devuelve la tabla para quitar los registros
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	protected function eliminarRegistros($id , $lote){
+		switch ($id){
+			case 1 :
+				Prestacion::where('lote' , $lote)->delete();
+				break;
+			case 2 : 
+				Fondo::where('lote' , $lote)->delete();
+				break;
+			case 3 : 
+				Comprobante::where('lote' , $lote)->delete();
+				break;
+			default : return null;
+		}
+	}
+
+	/**
 	 * Marco el lote como rechazado
 	 * @param Request $r
 	 *
@@ -119,6 +143,10 @@ class LotesController extends Controller
 	public function eliminarLote(Request $r){
 		$l = Lote::findOrFail($r->lote);
 		$l->id_estado = 4;
+
+		$s = Subida::findOrFail($l->id_subida);
+		$this->eliminarRegistros($s->id_padron , $r->lote);
+
 		if ($l->save()){
 			$lr = new LoteRechazado;
 			$lr->lote = $l->lote;
@@ -164,7 +192,7 @@ class LotesController extends Controller
 	 */
 	protected function getNombrePadron($id){
 		switch ($id) {
-			case '1':	return 'PRESTACIONES';
+			case 1:	return 'PRESTACIONES';
 			case 2: return 'APLICACIÓN DE FONDOS';
 			case 3: return 'COMPROBANTES';
 			case 4: return 'OBRA SOCIAL PROVINCIAL';

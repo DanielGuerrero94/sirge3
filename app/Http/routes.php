@@ -130,6 +130,21 @@ Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@procesarA
  */
 Route::get('procesar-fondos/{archivo}' , 'FondosController@procesarArchivo');
 
+/**
+ * OBRA SOCIAL PROVINCIAL
+ */
+Route::get('procesar-osp/{archivo}' , 'OspController@procesarArchivo');
+
+/**
+ * PROGRAMA FEDERAL DE SALUD
+ */
+Route::get('procesar-profe/{archivo}' , 'ProfeController@procesarArchivo');
+
+/**
+ * SUPERINTENDENCIA DE SERVICIOS DE SALUD
+ */
+Route::get('procesar-sss/{archivo}' , 'SuperController@procesarArchivo');
+
 
 /**
  * BENEFICIARIOS
