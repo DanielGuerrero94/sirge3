@@ -188,7 +188,7 @@ class SuperController extends Controller
 					if ($limite_inferior >= $periodo_reportado || (int)$sss_raw['codigo_os'] == 500807){
 						$this->_resumen['insertados'] ++;
 						$bulk[] = $sss_raw;
-						if (sizeof($bulk) % 100000 == 0){
+						if (sizeof($bulk) % 4000 == 0){
 							Super::insert($bulk);
 							unset($bulk);
 							$bulk = [];

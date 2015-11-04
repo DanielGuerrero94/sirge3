@@ -23,6 +23,9 @@ use App\Models\Geo\Provincia;
 use App\Models\Prestacion;
 use App\Models\Comprobante;
 use App\Models\Fondo;
+use App\Models\Super;
+use App\Models\Profe;
+use App\Models\Osp;
 
 class LotesController extends Controller
 {
@@ -114,10 +117,10 @@ class LotesController extends Controller
 	}
 
 	/**
-	 * Devuelve la tabla para quitar los registros
+	 * Elimina los registros de las tablas
 	 * @param int $id
 	 *
-	 * @return string
+	 * @return null
 	 */
 	protected function eliminarRegistros($id , $lote){
 		switch ($id){
@@ -130,8 +133,27 @@ class LotesController extends Controller
 			case 3 : 
 				Comprobante::where('lote' , $lote)->delete();
 				break;
+			case 4 :
+				Osp::where('lote' , $lote)->delete();
+				break;
+			case 5 :
+				Profe::where('lote' , $lote)->delete();
+				break;
+			case 6 :
+				Super::where('lote' , $lote)->delete();
+				break;
 			default : return null;
 		}
+	}
+
+	/**
+	 * Elimina los registros rechazados del lote
+	 * @param int $id
+	 *
+	 * @return null
+	 */
+	protected function eliminarRegistrosRechazados($lote){
+		Rechazo::where('lote' , $lote)->delete();
 	}
 
 	/**
@@ -146,7 +168,8 @@ class LotesController extends Controller
 
 		$s = Subida::findOrFail($l->id_subida);
 		$this->eliminarRegistros($s->id_padron , $r->lote);
-
+		$this->eliminarRegistrosRechazados($r->lote);
+		
 		if ($l->save()){
 			$lr = new LoteRechazado;
 			$lr->lote = $l->lote;
