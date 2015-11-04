@@ -224,6 +224,20 @@
     </div>
 </div>
 
+<div class="row">
+	<div class="col-md-6">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Noticias</h2>
+			</div>
+			<div class="box-body">
+			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="300" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script type="text/javascript">
 	
 	$('#map-container').highcharts('Map', {
