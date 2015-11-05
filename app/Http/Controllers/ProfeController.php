@@ -143,6 +143,16 @@ class ProfeController extends Controller
 	}
 
 	/**
+	 * Limpia el nombre y apellido
+	 * @param string $data
+	 *
+	 * @return string
+	 */
+	protected function sanitizeNombreApellido($data){
+		return utf8_encode($data);
+	}
+
+	/**
 	 * Procesa el archivo de prestaciones
 	 * @param int $id
 	 *
@@ -172,6 +182,7 @@ class ProfeController extends Controller
 				} else {
 					$this->_resumen['insertados'] ++;
 					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
+					$profe_raw['nombre_apellido'] = $this->sanitizeTipoDoc($profe_raw['nombre_apellido']);
 					Profe::insert($profe_raw);
 					
 					/*
