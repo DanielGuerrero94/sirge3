@@ -194,7 +194,7 @@ class ProfeController extends Controller
 					if (sizeof($bulk) % 4000 == 0){
 						Profe::insert($bulk);
 						unset($bulk);
-						$bulk[];
+						$bulk = [];
 					}
 				}
 			} else {
