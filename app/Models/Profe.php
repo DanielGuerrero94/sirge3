@@ -26,14 +26,4 @@ class Profe extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
-
-	/**
-     * Ingresar el nombre del beneficiario
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function setNombreApellidoAttribute($value){
-        $this->attributes['nombre_apellido'] = utf8_encode($value);
-    }
 }

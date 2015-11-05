@@ -149,7 +149,7 @@ class ProfeController extends Controller
 	 * @return string
 	 */
 	protected function sanitizeNombreApellido($data){
-		return utf8_encode($data);
+		return mb_convert_encoding($data , 'UTF-8');
 	}
 
 	/**
