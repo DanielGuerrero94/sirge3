@@ -17,7 +17,7 @@ use App\Models\Lote;
 use App\Models\Subida;
 use App\Models\Profe;
 
-class SuperController extends Controller
+class ProfeController extends Controller
 {
     private 
 		$_rules = [
