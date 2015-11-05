@@ -21,8 +21,8 @@ class ProfeController extends Controller
 {
     private 
 		$_rules = [
-			'tipo_documento' => 'required|in:DU,LE,LI,LC',
-			'numero_documento' => 'required|min:6',
+			'tipo_documento' => 'required|in:DU,LE,LI,LC,CI',
+			'numero_documento' => 'required|min:5',
 			'nombre_apellido' => 'required|max:255',
 			'sexo' => 'required|in:F,M',
 			'id_beneficiario_profe' => 'numeric',
@@ -149,7 +149,7 @@ class ProfeController extends Controller
 	 * @return string
 	 */
 	protected function sanitizeNombreApellido($data){
-		return iconv(mb_detect_encoding($data, mb_detect_order(), true), "UTF-8", $data);
+		return mb_convert_encoding($data , 'UTF-8' , "ISO-8859-15");
 	}
 
 	/**
