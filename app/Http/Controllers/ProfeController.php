@@ -118,12 +118,15 @@ class ProfeController extends Controller
 	 */
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
+		/*
 		try {
 			$fh = fopen ('../storage/uploads/profe/' . $info->nombre_actual , 'r');
 		} catch (ErrorException $e) {
 			return false;
 		}
 		return $fh;
+		*/
+		return file('../storage/uploads/profe/' . $info->nombre_actual);
 	}
 
 	/**
@@ -161,11 +164,17 @@ class ProfeController extends Controller
 	public function procesarArchivo($id){
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
-		$bulk = [];
 		
 		if (!$fh){
 			return response('Error' , 422);
 		}
+
+
+
+		/*
+
+		$bulk = [];
+		
 
 		while (!feof($fh)){
 			$linea = explode ("\t" , trim(fgets($fh) , "\r\n"));
@@ -185,13 +194,6 @@ class ProfeController extends Controller
 					$profe_raw['nombre_apellido'] = $this->sanitizeNombreApellido($profe_raw['nombre_apellido']);
 					Profe::insert($profe_raw);
 					
-					/*
-					$bulk[] = $profe_raw;
-					if (sizeof($bulk) % 4000 == 0){
-						unset($bulk);
-						$bulk = [];
-					}
-					*/
 				 }
 			} else {
 				$this->_resumen['rechazados'] ++;
@@ -207,6 +209,7 @@ class ProfeController extends Controller
 			unset($bulk);
 			$bulk = [];
 		}
+		*/
 
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
