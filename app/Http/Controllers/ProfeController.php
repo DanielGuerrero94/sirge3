@@ -240,7 +240,7 @@ class ProfeController extends Controller
 		*/
 
 		if (sizeof($bulk)){
-			Super::insert($bulk);
+			Profe::insert($bulk);
 		}
 
 		$this->actualizaLote($lote , $this->_resumen);
