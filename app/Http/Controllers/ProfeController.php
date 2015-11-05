@@ -25,8 +25,6 @@ class ProfeController extends Controller
 			'numero_documento' => 'required|min:6',
 			'nombre_apellido' => 'required|max:255',
 			'sexo' => 'required|in:F,M',
-			'fecha_nacimiento' => 'date_format:Y-m-d',
-			'fecha_alta' => 'date_format:Y-m-d',
 			'id_beneficiario_profe' => 'numeric',
 			'id_parentezco' => 'numeric'
 		],
