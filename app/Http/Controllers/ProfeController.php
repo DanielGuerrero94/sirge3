@@ -176,7 +176,7 @@ class SuperController extends Controller
 					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($sss_raw['tipo_documento']);
 					$bulk[] = $profe_raw;
 					if (sizeof($bulk) % 4000 == 0){
-						Super::insert($bulk);
+						Profe::insert($bulk);
 						unset($bulk);
 						$bulk = [];
 					}
