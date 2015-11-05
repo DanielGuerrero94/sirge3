@@ -272,9 +272,15 @@ Route::get('phpinfo' , function(){
  *								 	TEST ROUTES 								*
  ********************************************************************************/
 Route::get('test' , function(){
-	$data = file('../storage/uploads/test.txt');
-	//return '<pre>'.print_r($data).'</pre>';
-	return sizeof($data);
+	$registros = file('../storage/uploads/test.txt');
+	
+	foreach ($registros as $key => $registro) {
+		$datos = explode("\t" , $registro);
+		foreach ($datos as $key => $dato) {
+			echo $dato , '<br />';
+		}
+	}
+
 });
 /********************************************************************************
  *								 	WS ROUTES 									*

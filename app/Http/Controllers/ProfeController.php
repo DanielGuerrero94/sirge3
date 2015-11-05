@@ -163,13 +163,42 @@ class ProfeController extends Controller
 	 */
 	public function procesarArchivo($id){
 		$lote = $this->nuevoLote($id);
+
+		$registros = $this->abrirArchivo($id);
+		/*
 		$fh = $this->abrirArchivo($id);
 		
 		if (!$fh){
 			return response('Error' , 422);
 		}
+		*/
 
-
+		foreach ($registros as $key => $registro) {
+			$linea = explode("\t" , trim($registro , "\r\n"));
+			if (count($linea) == 12){
+				array_push($linea, $lote);
+				$profe_raw = array_combine($this->_data, $linea);
+				$v = Validator::make($profe_raw , $this->_rules);
+				if ($v->fails()) {
+					$this->_resumen['rechazados'] ++;
+					$this->_error['lote'] = $lote;
+					$this->_error['registro'] = json_encode($profe_raw);
+					$this->_error['motivos'] = json_encode($v->errors());
+					Rechazo::insert($this->_error);
+				} else {
+					$this->_resumen['insertados'] ++;
+					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
+					$profe_raw['nombre_apellido'] = $this->sanitizeNombreApellido($profe_raw['nombre_apellido']);
+					Profe::insert($profe_raw);
+				}
+			} else {
+				$this->_resumen['rechazados'] ++;
+				$this->_error['lote'] = $lote;
+				$this->_error['registro'] = json_encode($linea);
+				$this->_error['motivos'] = '{"registro invalido" : ["El número de campos es incorrecto"]}';
+				Rechazo::insert($this->_error);
+			}
+		}
 
 		/*
 
