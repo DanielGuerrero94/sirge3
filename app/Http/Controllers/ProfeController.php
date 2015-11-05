@@ -21,7 +21,7 @@ class ProfeController extends Controller
 {
     private 
 		$_rules = [
-			'tipo_documento' => 'required|in:DU,LE,LI',
+			'tipo_documento' => 'required|in:DU,LE,LI,LC',
 			'numero_documento' => 'required|min:6',
 			'nombre_apellido' => 'required|max:255',
 			'sexo' => 'required|in:F,M',
@@ -172,12 +172,15 @@ class ProfeController extends Controller
 				} else {
 					$this->_resumen['insertados'] ++;
 					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
+					Profe::insert($profe_raw);
+					
+					/*
 					$bulk[] = $profe_raw;
 					if (sizeof($bulk) % 4000 == 0){
-						Profe::insert($bulk);
 						unset($bulk);
 						$bulk = [];
 					}
+					*/
 				 }
 			} else {
 				$this->_resumen['rechazados'] ++;
