@@ -171,7 +171,7 @@ class ProfeController extends Controller
 					Rechazo::insert($this->_error);
 				} else {
 					$this->_resumen['insertados'] ++;
-					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($sss_raw['tipo_documento']);
+					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
 					$bulk[] = $profe_raw;
 					if (sizeof($bulk) % 4000 == 0){
 						Profe::insert($bulk);
