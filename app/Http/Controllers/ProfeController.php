@@ -162,8 +162,8 @@ class ProfeController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
+		$bulk = [];
 		$lote = $this->nuevoLote($id);
-
 		$registros = $this->abrirArchivo($id);
 		/*
 		$fh = $this->abrirArchivo($id);
@@ -189,7 +189,13 @@ class ProfeController extends Controller
 					$this->_resumen['insertados'] ++;
 					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
 					$profe_raw['nombre_apellido'] = $this->sanitizeNombreApellido($profe_raw['nombre_apellido']);
-					Profe::insert($profe_raw);
+					$bulk[] = $profe_raw;
+					//Profe::insert($profe_raw);
+					if (sizeof($bulk) % 4000 == 0){
+						Profe::insert($bulk);
+						unset($bulk);
+						$bulk[];
+					}
 				}
 			} else {
 				$this->_resumen['rechazados'] ++;
@@ -202,7 +208,6 @@ class ProfeController extends Controller
 
 		/*
 
-		$bulk = [];
 		
 
 		while (!feof($fh)){
@@ -232,13 +237,13 @@ class ProfeController extends Controller
 				Rechazo::insert($this->_error);
 			}
 		}
+		*/
 
 		if (sizeof($bulk)){
 			Super::insert($bulk);
 			unset($bulk);
 			$bulk = [];
 		}
-		*/
 
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
