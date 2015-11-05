@@ -161,7 +161,7 @@ class ProfeController extends Controller
 
 		while (!feof($fh)){
 			$linea = explode ("\t" , trim(fgets($fh) , "\r\n"));
-			if (count($linea) == 15) {
+			if (count($linea) == 12) {
 				array_push($linea, $lote);
 				$profe_raw = array_combine($this->_data, $linea);
 				$v = Validator::make($profe_raw , $this->_rules);
