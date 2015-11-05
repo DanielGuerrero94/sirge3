@@ -182,7 +182,7 @@ class ProfeController extends Controller
 				} else {
 					$this->_resumen['insertados'] ++;
 					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
-					$profe_raw['nombre_apellido'] = $this->sanitizeTipoDoc($profe_raw['nombre_apellido']);
+					$profe_raw['nombre_apellido'] = $this->sanitizeNombreApellido($profe_raw['nombre_apellido']);
 					Profe::insert($profe_raw);
 					
 					/*
