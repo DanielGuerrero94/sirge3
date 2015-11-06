@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Osp extends Model
+class ProcesoPuco extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'puco.osp';
+	protected $table = 'puco.procesos_obras_sociales';
 
 	/**
 	 * Primary key asociated with the table.

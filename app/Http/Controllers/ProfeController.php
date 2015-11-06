@@ -118,14 +118,6 @@ class ProfeController extends Controller
 	 */
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
-		/*
-		try {
-			$fh = fopen ('../storage/uploads/profe/' . $info->nombre_actual , 'r');
-		} catch (ErrorException $e) {
-			return false;
-		}
-		return $fh;
-		*/
 		return file('../storage/uploads/profe/' . $info->nombre_actual);
 	}
 
