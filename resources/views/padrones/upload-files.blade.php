@@ -14,7 +14,11 @@
 			    @if ($id_padron == 4)
 			    	<select id="codigo_osp" class="form-control">
 			    		@foreach ($obras as $obra)
-			    		<option value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
+			    			@if ($obra->id_provincia == Auth::user()->id_provincia || Auth::user()->id_entidad == 1)
+			    				<option value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
+			    			@else
+			    				<option disabled="disabled" value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
+			    			@endif
 			    		@endforeach
 			    	</select>
 			    @endif
