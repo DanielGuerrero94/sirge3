@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rechazo;
 use App\Models\Lote;
 use App\Models\Subida;
-use App\Models\Profe;
+use App\Models\PUCO\Super;
 
 class SuperController extends Controller
 {

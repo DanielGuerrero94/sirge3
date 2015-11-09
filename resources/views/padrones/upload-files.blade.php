@@ -11,6 +11,14 @@
 			        <ul id="errores-form">
 			        </ul>
 			    </div>
+			    @if ($id_padron == 4)
+			    	<select id="codigo_osp" class="form-control">
+			    		@foreach ($obras as $obra)
+			    		<option value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
+			    		@endforeach
+			    	</select>
+			    @endif
+			    <br />
 				<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
 				<span>Seleccionar archivo...</span>
@@ -47,7 +55,10 @@
 
     $('#fileupload').fileupload({
         url: 'subir-padron',
-        formData : { id_padron : {{ $id_padron }} },
+        formData : { 
+        		id_padron : {{ $id_padron }} ,
+        		codigo_osp : $('#codigo_osp').val()
+    	},
         dataType: 'json',
         add: function(e, data) {
         	$('#errores-div').hide();

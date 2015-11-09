@@ -23,9 +23,9 @@ use App\Models\Geo\Provincia;
 use App\Models\Prestacion;
 use App\Models\Comprobante;
 use App\Models\Fondo;
-use App\Models\Super;
-use App\Models\Profe;
-use App\Models\Osp;
+use App\Models\PUCO\Super;
+use App\Models\PUCO\Profe;
+use App\Models\PUCO\Osp;
 
 class LotesController extends Controller
 {

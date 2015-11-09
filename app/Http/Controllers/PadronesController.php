@@ -13,7 +13,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
+use App\Models\SubidaOsp;
 use App\Models\Lote;
+use App\Models\PUCO\Provincia as Osp;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -110,6 +112,11 @@ class PadronesController extends Controller
 			'page_title' => 'Subir archivos',
 			'id_padron' => $id
 		];
+
+		if ($id == 4) {
+			$osp = Osp::with('descripcion')->get();
+			$data['obras'] = $osp;
+		}
 		return view('padrones.upload-files' , $data);
 	}
 
@@ -131,12 +138,20 @@ class PadronesController extends Controller
 		$s->size = $r->file->getClientSize();
 		$s->id_estado = 1;
 
+
 		try {
 			$r->file('file')->move($destino , $nombre_archivo);
 		} catch (FileException $e){
 			return response("Ha ocurrido un error" , 422);
 		}
 		if ($s->save()){
+			if ($r->has('codigo_osp')){
+				$so = new SubidaOsp;
+				$so->id_subida = $s->id_subida;
+				$so->codigo_osp = $r->codigo_osp;
+				$so->id_archivo = 1;
+				$so->save();
+			}
 			return response()->json(['file' => $r->file->getClientOriginalName()]); 
 		}
 	}

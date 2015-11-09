@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\PUCO;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Osp extends Model
+class Profe extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'puco.osp';
+	protected $table = 'puco.profe';
 
 	/**
 	 * Primary key asociated with the table.

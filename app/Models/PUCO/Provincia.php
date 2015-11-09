@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\PUCO;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SubidaAceptada extends Model {
-	/**
+class Provincia extends Model
+{
+    /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'sistema.subidas_aceptadas';
+	protected $table = 'puco.obras_sociales_provinciales';
 
 	/**
 	 * Primary key asociated with the table.
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_subida';
+	protected $primaryKey = 'codigo_osp';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -27,9 +28,9 @@ class SubidaAceptada extends Model {
 	public $timestamps = false;
 
 	/**
-	 * Obtener el registro de subida
+	 * Devuelve el nombre de la OSP
 	 */
-	public function subida() {
-		return $this->belongsTo('App\Models\Subida', 'id_subida', 'id_subida');
+	public function descripcion(){
+		return $this->hasOne('App\Models\PUCO\ObraSocial' , 'codigo_osp' , 'codigo_osp');
 	}
 }

@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rechazo;
 use App\Models\Lote;
 use App\Models\Subida;
-use App\Models\Osp;
+use App\Models\PUCO\Osp;
 use App\Models\ProcesoPuco as Puco;
 
 class OspController extends Controller
@@ -25,9 +25,9 @@ class OspController extends Controller
 			'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
 			'numero_documento' => 'required|numeric',
 			'nombre_apellido' => 'required|max:255',
-			'sexo' => 'required|in:F,M',
+			// 'sexo' => 'required|in:F,M',
 			'tipo_afiliado' => 'required|in:T,A',
-			'codigo_os' => 'required|numeric',
+			'codigo_os' => 'required|exists:puco.obras_sociales,codigo_osp',
 		],
 		$_data = [
 			'tipo_documento',
@@ -145,6 +145,19 @@ class OspController extends Controller
 	}
 
 	/**
+	 * Actualiza el proceso
+	 * @param int $lote
+	 *
+	 * @return bool
+	 */
+	protected function actualizarProceso($lote) {
+		$p = Puco::findOrNew($lote);
+		$p->lote = $lote;
+		$p->periodo = date('Ym');
+		return $p->save();
+	}
+
+	/**
 	 * Procesa el archivo de prestaciones
 	 * @param int $id
 	 *
@@ -162,7 +175,7 @@ class OspController extends Controller
 				$osp_raw = array_combine($this->_data, $linea);
 				$osp_raw['tipo_documento'] = $this->sanitizeTipoDoc($osp_raw['tipo_documento']);
 				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido($osp_raw['nombre_apellido']);
-				$codigo_osp = $osp_raw['codigo_os'];
+
 				$v = Validator::make($osp_raw , $this->_rules);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;
@@ -194,7 +207,7 @@ class OspController extends Controller
 
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
-		$registro = Puco::where('codigo_osp' , );
+		$this->actualizarProceso($lote);
 		return response()->json($this->_resumen);
 	}
 }
