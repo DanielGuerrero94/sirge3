@@ -6,6 +6,7 @@ use ErrorException;
 use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -127,6 +128,7 @@ class SuperController extends Controller
 		$info = Subida::findOrFail($id);
 		try {
 			$fh = fopen ('../storage/uploads/sss/' . $info->nombre_actual , 'r');
+			//DB::statement("select puco.procesar_osp('../storage/uploads/sss/" . $info->nombre_actual . "')");
 		} catch (ErrorException $e) {
 			return false;
 		}
@@ -211,6 +213,7 @@ class SuperController extends Controller
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
 		$bulk = [];
+		$nro_linea;
 		
 		if (!$fh){
 			return response('Error' , 422);
@@ -267,7 +270,7 @@ class SuperController extends Controller
 			unset($bulk);
 			$bulk = [];
 		}
-
+		
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
 		$this->actualizarProceso($lote , $this->getCodigoOsp($id) , $this->getIdArchivo($id));
