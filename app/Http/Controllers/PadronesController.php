@@ -15,7 +15,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Subida;
 use App\Models\SubidaOsp;
 use App\Models\Lote;
-use App\Models\PUCO\Provincia as Osp;
+use App\Models\PUCO\Provincia as OspProvincias;
+use App\Models\PUCO\Osp;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -114,7 +115,7 @@ class PadronesController extends Controller
 		];
 
 		if ($id == 4) {
-			$osp = Osp::with('descripcion')->get();
+			$osp = OspProvincias::with('descripcion')->get();
 			$data['obras'] = $osp;
 		}
 		return view('padrones.upload-files' , $data);
@@ -138,19 +139,25 @@ class PadronesController extends Controller
 		$s->size = $r->file->getClientSize();
 		$s->id_estado = 1;
 
-
 		try {
 			$r->file('file')->move($destino , $nombre_archivo);
 		} catch (FileException $e){
+			$s->delete();
 			return response("Ha ocurrido un error" , 422);
 		}
 		if ($s->save()){
-			if ($r->has('codigo_osp')){
+			if ($r->id_padron == 4) {
+				if ($r->codigo_osp == 0){
+					$s->delete();
+					unlink($destino . '/' . $nombre_archivo);
+					return response("Debe elegir la Obra Social a reportar" , 422);
+				}
 				$so = new SubidaOsp;
 				$so->id_subida = $s->id_subida;
 				$so->codigo_osp = $r->codigo_osp;
 				$so->id_archivo = 1;
 				$so->save();
+				Osp::where('codigo_os' , $r->codigo_osp)->delete();
 			}
 			return response()->json(['file' => $r->file->getClientOriginalName()]); 
 		}

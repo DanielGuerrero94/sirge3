@@ -12,12 +12,12 @@
 			        </ul>
 			    </div>
 			    @if ($id_padron == 4)
-			    	<select id="codigo_osp" class="form-control">
+			    	<select name="codigos" id="codigo_osp" class="form-control">
 			    		@foreach ($obras as $obra)
 			    			@if ($obra->id_provincia == Auth::user()->id_provincia || Auth::user()->id_entidad == 1)
 			    				<option value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
 			    			@else
-			    				<option disabled="disabled" value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
+			    				<option value="{{ $obra->codigo_osp }}" disabled="disabled">{{ $obra->descripcion->nombre }}</option>
 			    			@endif
 			    		@endforeach
 			    	</select>
@@ -60,8 +60,8 @@
     $('#fileupload').fileupload({
         url: 'subir-padron',
         formData : { 
-        		id_padron : {{ $id_padron }} ,
-        		codigo_osp : $('#codigo_osp').val()
+    		id_padron : {{ $id_padron }} ,
+    		codigo_osp : $('#codigo_osp').val()
     	},
         dataType: 'json',
         add: function(e, data) {

@@ -11,7 +11,7 @@ class Osp extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'puco.osp';
+	protected $table = 'puco.beneficiarios_osp';
 
 	/**
 	 * Primary key asociated with the table.

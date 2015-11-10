@@ -18,7 +18,7 @@ class ProcesoPuco extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id';
+	protected $primaryKey = 'lote';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -26,4 +26,11 @@ class ProcesoPuco extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+	 * Retorna el lote asociado
+	 */
+	public function lotes(){
+		return $this->hasOne('App\Models\Lote' , 'lote' , 'lote');
+	}
 }

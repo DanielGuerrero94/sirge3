@@ -62,4 +62,11 @@ class Subida extends Model {
 		return $this->hasOne('App\Models\SubidaEliminada', 'id_subida', 'id_subida');
 	}
 
+	/**
+	 * Obtener el registro osp de la subida.
+	 */
+	public function obras(){
+		return $this->hasOne('App\Models\SubidaOsp', 'id_subida', 'id_subida');
+	}
+
 }

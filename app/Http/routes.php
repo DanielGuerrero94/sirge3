@@ -134,6 +134,7 @@ Route::get('procesar-fondos/{archivo}' , 'FondosController@procesarArchivo');
  * OBRA SOCIAL PROVINCIAL
  */
 Route::get('procesar-osp/{archivo}' , 'OspController@procesarArchivo');
+Route::get('check-periodo/{codigo}' , 'OspController@checkPeriodo');
 
 /**
  * PROGRAMA FEDERAL DE SALUD
@@ -271,17 +272,7 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('test' , function(){
-	$registros = file('../storage/uploads/test.txt');
-	
-	foreach ($registros as $key => $registro) {
-		$datos = explode("\t" , $registro);
-		foreach ($datos as $key => $dato) {
-			echo $dato , '<br />';
-		}
-	}
-
-});
+Route::get('test/{lote}/{codigo}' , 'OspController@actualizarProceso');
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/

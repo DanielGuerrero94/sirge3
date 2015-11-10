@@ -11,7 +11,7 @@ class Super extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'puco.sss';
+	protected $table = 'puco.beneficiarios_sss';
 
 	/**
 	 * Primary key asociated with the table.
