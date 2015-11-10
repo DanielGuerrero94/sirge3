@@ -57,12 +57,22 @@
     'use strict';
     $('#errores-div').hide();
 
+    $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+		// The example input, doesn't have to be part of the upload form:
+		/*
+		var input = $('#input');
+		data.formData = {example: input.val()};
+		if (!data.formData.example) {
+			data.context.find('button').prop('disabled', false);
+			input.focus();
+			return false;
+		}
+		*/
+		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }}}
+	});
+
     $('#fileupload').fileupload({
         url: 'subir-padron',
-        formData : { 
-    		id_padron : {{ $id_padron }} ,
-    		codigo_osp : $('#codigo_osp').val()
-    	},
         dataType: 'json',
         add: function(e, data) {
         	$('#errores-div').hide();
