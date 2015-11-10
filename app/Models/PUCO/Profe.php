@@ -11,7 +11,7 @@ class Profe extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'puco.beneficiario_profe';
+	protected $table = 'puco.beneficiarios_profe';
 
 	/**
 	 * Primary key asociated with the table.

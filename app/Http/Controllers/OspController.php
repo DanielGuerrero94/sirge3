@@ -249,6 +249,7 @@ class OspController extends Controller
 				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
 				 ->where('periodo' , date('Ym'))
 				 ->where('codigo_osp' , $codigo)
+				 ->where('sistema.lotes.id_estado' , '<>' , 4)
 				 ->get();
 		return $p->count();
 	}

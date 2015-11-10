@@ -15,7 +15,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Rechazo;
 use App\Models\Lote;
 use App\Models\Subida;
+use App\Models\SubidaOsp;
 use App\Models\PUCO\Super;
+use App\Models\PUCO\ProcesoPuco as Puco;
 
 class SuperController extends Controller
 {
@@ -151,6 +153,55 @@ class SuperController extends Controller
 	}
 
 	/**
+	 * Devuelve el código de la OSP a procesar
+	 * @param int $id
+	 *
+	 * @return int
+	 */
+	protected function getCodigoOsp($id) {
+		$s = SubidaOsp::select('codigo_osp')->where('id_subida' , $id)->firstOrFail();
+		return $s->codigo_osp;
+	}
+
+	/**
+	 * Devuelve el id de la OSP a procesar
+	 * @param int $id
+	 *
+	 * @return int
+	 */
+	protected function getIdArchivo($id) {
+		$s = SubidaOsp::select('id_archivo')->where('id_subida' , $id)->firstOrFail();
+		return $s->id_archivo;
+	}
+
+	/**
+	 * Actualiza el proceso
+	 * @param int $lote
+	 *
+	 * @return bool
+	 */
+	protected function actualizarProceso($lote , $codigo , $id) {
+		$p = Puco::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+				 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+				 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
+				 ->where('periodo' , date('Ym'))
+				 ->where('codigo_osp' , $codigo)
+				 ->where('id_archivo' , $id)
+				 ->get();
+		if ($p->count()){
+			$np = Puco::find($p[0]->lote);
+		} else {
+			$np = new Puco;
+		}
+
+		$np->lote = $lote;
+		$np->periodo = date('Ym');
+
+		return $np->save();
+	}
+
+	/**
 	 * Procesa el archivo de prestaciones
 	 * @param int $id
 	 *
@@ -179,7 +230,8 @@ class SuperController extends Controller
 					Rechazo::insert($this->_error);
 				} else {
 					$sss_raw['tipo_documento'] = $this->sanitizeTipoDoc($sss_raw['tipo_documento']);
-					$sss_raw['fecha_nacimiento'] = \DateTime::createFromFormat('dmY' , $sss_raw['fecha_nacimiento']);
+					$fnac = \DateTime::createFromFormat('dmY' , $sss_raw['fecha_nacimiento']);
+					$sss_raw['fecha_nacimiento'] = $fnac->format('Y-m-d');
 
 					$limite_inferior = new \DateTime();
 					$limite_inferior->modify('-4 months');
@@ -218,6 +270,7 @@ class SuperController extends Controller
 
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
+		$this->actualizarProceso($lote , $this->getCodigoOsp($id) , $this->getIdArchivo($id));
 		return response()->json($this->_resumen);
 	}
 }

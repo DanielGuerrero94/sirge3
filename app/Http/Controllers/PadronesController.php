@@ -64,7 +64,7 @@ class PadronesController extends Controller
 		// return $lotes_pendientes;
 
 		$data = [
-			'page_title' => $this->getName($id),
+			'page_title' => strtoupper($this->getName($id)),
 			'id_padron' => $id,
 			'archivos_pendientes' => $archivos_pendientes,
 			'lotes_pendientes' => $lotes_pendientes,
@@ -146,19 +146,43 @@ class PadronesController extends Controller
 			return response("Ha ocurrido un error" , 422);
 		}
 		if ($s->save()){
-			if ($r->id_padron == 4) {
-				if ($r->codigo_osp == 0){
-					$s->delete();
-					unlink($destino . '/' . $nombre_archivo);
-					return response("Debe elegir la Obra Social a reportar" , 422);
-				}
+			switch ($r->id_padron) {
+				case 4:
+					if ($r->codigo_osp == 0){
+						$s->delete();
+						unlink($destino . '/' . $nombre_archivo);
+						return response("Debe elegir la Obra Social a reportar" , 422);
+					} else {
+						$codigo_final = $r->codigo_osp;
+						$id_archivo = 1;
+						Osp::where('codigo_os' , $r->codigo_osp)->delete();
+					}
+					break;
+				case 5:
+					$id_archivo = 1;
+					$codigo_final = 997001;
+					break;
+				case 6:
+					if ($r->id_sss == 0){
+						$s->delete();
+						unlink($destino . '/' . $nombre_archivo);
+						return response("Debe elegir el ID del archivo de la SSS" , 422);
+					} else {
+						$id_archivo = $r->id_sss;
+						$codigo_final = 998001;
+					}
+
+					break;
+			}
+
+			if (isset($codigo_final)){
 				$so = new SubidaOsp;
 				$so->id_subida = $s->id_subida;
-				$so->codigo_osp = $r->codigo_osp;
-				$so->id_archivo = 1;
+				$so->codigo_osp = $codigo_final;
+				$so->id_archivo = $id_archivo;
 				$so->save();
-				Osp::where('codigo_os' , $r->codigo_osp)->delete();
 			}
+
 			return response()->json(['file' => $r->file->getClientOriginalName()]); 
 		}
 	}

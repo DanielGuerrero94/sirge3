@@ -6,6 +6,7 @@ use ErrorException;
 use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -15,7 +16,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Rechazo;
 use App\Models\Lote;
 use App\Models\Subida;
+use App\Models\SubidaOsp;
 use App\Models\PUCO\Profe;
+use App\Models\PUCO\ProcesoPuco as Puco;
 
 class ProfeController extends Controller
 {
@@ -148,12 +151,50 @@ class ProfeController extends Controller
 	}
 
 	/**
+	 * Actualiza el proceso
+	 * @param int $lote
+	 *
+	 * @return bool
+	 */
+	public function actualizarProceso($lote , $codigo) {
+		$p = Puco::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+				 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+				 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
+				 ->where('periodo' , date('Ym'))
+				 ->where('codigo_osp' , $codigo)
+				 ->get();
+		if ($p->count()){
+			$np = Puco::find($p[0]->lote);
+		} else {
+			$np = new Puco;
+		}
+
+		$np->lote = $lote;
+		$np->periodo = date('Ym');
+
+		return $np->save();
+	}
+
+	/**
+	 * Devuelve el código de la OSP a procesar
+	 * @param int $id
+	 *
+	 * @return int
+	 */
+	protected function getCodigoOsp($id) {
+		$s = SubidaOsp::select('codigo_osp')->where('id_subida' , $id)->firstOrFail();
+		return $s->codigo_osp;
+	}
+
+	/**
 	 * Procesa el archivo de prestaciones
 	 * @param int $id
 	 *
 	 * @return json
 	 */
 	public function procesarArchivo($id){
+		DB::statement('truncate table puco.beneficiarios_profe');
 		$bulk = [];
 		$lote = $this->nuevoLote($id);
 		$registros = $this->abrirArchivo($id);
@@ -196,6 +237,7 @@ class ProfeController extends Controller
 
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
+		$this->actualizarProceso($lote , $this->getCodigoOsp($id));
 		return response()->json($this->_resumen);
 	}
 }

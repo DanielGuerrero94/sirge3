@@ -12,16 +12,36 @@
 			        </ul>
 			    </div>
 			    @if ($id_padron == 4)
-			    	<select name="codigos" id="codigo_osp" class="form-control">
-			    		@foreach ($obras as $obra)
-			    			@if ($obra->id_provincia == Auth::user()->id_provincia || Auth::user()->id_entidad == 1)
-			    				<option value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
-			    			@else
-			    				<option value="{{ $obra->codigo_osp }}" disabled="disabled">{{ $obra->descripcion->nombre }}</option>
-			    			@endif
-			    		@endforeach
-			    	</select>
+			    <div class="form-group">
+			    	<label for="codigos" class="col-sm-2 control-label">Obra Social</label>
+			    	<div class="col-md-10">
+				    	<select name="codigos" id="codigo_osp" class="form-control">
+				    		<option value="0">Seleccione ...</option>
+				    		@foreach ($obras as $obra)
+				    			@if ($obra->id_provincia == Auth::user()->id_provincia || Auth::user()->id_entidad == 1)
+				    				<option value="{{ $obra->codigo_osp }}">{{ $obra->descripcion->nombre }}</option>
+				    			@else
+				    				<option value="{{ $obra->codigo_osp }}" disabled="disabled">{{ $obra->descripcion->nombre }}</option>
+				    			@endif
+				    		@endforeach
+				    	</select>
+			    	</div>
+			    </div>
+			    @elseif ($id_padron == 6)
+			    <div class="form-group">
+			    	<label for="id_sss" class="col-sm-2 control-label">Nº</label>
+			    	<div class="col-sm-10">
+			    		<select name="id_sss" id="id_sss" class="form-control">
+			    			<option value="0">Seleccione...</option>
+			    			<option value="1">Archivo #1</option>
+			    			<option value="2">Archivo #2</option>
+			    			<option value="3">Archivo #3</option>
+			    			<option value="4">Archivo #4</option>
+			    		</select>
+			    	</div>
+			    </div>
 			    @endif
+			    <br />
 			    <br />
 				<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
@@ -46,6 +66,22 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Atención!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
 	$('.back').click(function(){
 		$.get('padron/{{ $id_padron }}' , function(data){
@@ -53,22 +89,27 @@
 		})
 	});
 
+	$('#codigo_osp').change(function(){
+		
+		$('#fileupload').removeAttr('disabled');
+
+		$.get('check-periodo/' + $(this).val() , function(data){
+			if (parseInt(data) == 1){
+				$('#fileupload').attr('disabled' , 'disabled');
+				$('#modal-text').html('Usted ya reportó el padrón para este mes.');
+				$('.modal').modal();
+			} else {
+				$('#fileupload').removeAttr('disabled');
+			}
+		});
+	});
+
 	$(function () {
     'use strict';
     $('#errores-div').hide();
 
     $('#fileupload').bind('fileuploadsubmit', function (e, data) {
-		// The example input, doesn't have to be part of the upload form:
-		/*
-		var input = $('#input');
-		data.formData = {example: input.val()};
-		if (!data.formData.example) {
-			data.context.find('button').prop('disabled', false);
-			input.focus();
-			return false;
-		}
-		*/
-		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }}}
+		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }} , id_sss : $('#id_sss').val() }
 	});
 
     $('#fileupload').fileupload({

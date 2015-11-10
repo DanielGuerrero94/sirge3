@@ -272,7 +272,11 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('test/{lote}/{codigo}' , 'OspController@actualizarProceso');
+Route::get('test/{lote}/{codigo}' , 'ProfeController@actualizarProceso');
+Route::get('fecha' , function(){
+	$date = \DateTime::createFromFormat('dmY' , '01101988');
+	return $date->format('Y-m-d');
+});
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/
