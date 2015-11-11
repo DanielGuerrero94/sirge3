@@ -146,6 +146,10 @@ Route::get('procesar-profe/{archivo}' , 'ProfeController@procesarArchivo');
  */
 Route::get('procesar-sss/{archivo}' , 'SuperController@procesarArchivo');
 
+/**
+ * PUCO
+ */
+Route::get('puco-generar' , 'PucoController@getGenerar');
 
 /**
  * BENEFICIARIOS
