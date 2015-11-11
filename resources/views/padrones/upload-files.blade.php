@@ -90,10 +90,21 @@
 	});
 
 	$('#codigo_osp').change(function(){
-		
 		$('#fileupload').removeAttr('disabled');
-
 		$.get('check-periodo/' + $(this).val() , function(data){
+			if (parseInt(data) == 1){
+				$('#fileupload').attr('disabled' , 'disabled');
+				$('#modal-text').html('Usted ya reportó el padrón para este mes.');
+				$('.modal').modal();
+			} else {
+				$('#fileupload').removeAttr('disabled');
+			}
+		});
+	});
+
+	$('#id_sss').change(function(){
+		$('#fileupload').removeAttr('disabled');
+		$.get('check-sss/' + $(this).val() , function(data){
 			if (parseInt(data) == 1){
 				$('#fileupload').attr('disabled' , 'disabled');
 				$('#modal-text').html('Usted ya reportó el padrón para este mes.');

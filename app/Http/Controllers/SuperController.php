@@ -276,4 +276,23 @@ class SuperController extends Controller
 		$this->actualizarProceso($lote , $this->getCodigoOsp($id) , $this->getIdArchivo($id));
 		return response()->json($this->_resumen);
 	}
+
+	/**
+	 * Verifica si el padrón ya fue informado o no
+	 * @param int $id
+	 *
+	 * @return int
+	 */
+	public function checkId($id) {
+		$p = Puco::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+				 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+				 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
+				 ->where('periodo' , date('Ym'))
+				 ->where('codigo_osp' , 998001)
+				 ->where('sistema.lotes.id_estado' , '<>' , 4)
+				 ->where('id_archivo' , $id)
+				 ->get();
+		return $p->count();
+	}
 }

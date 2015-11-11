@@ -145,11 +145,14 @@ Route::get('procesar-profe/{archivo}' , 'ProfeController@procesarArchivo');
  * SUPERINTENDENCIA DE SERVICIOS DE SALUD
  */
 Route::get('procesar-sss/{archivo}' , 'SuperController@procesarArchivo');
+Route::get('check-sss/{archivo}' , 'SuperController@checkId');
 
 /**
  * PUCO
  */
 Route::get('puco-generar' , 'PucoController@getGenerar');
+Route::get('puco-estadisticas-table' , 'PucoController@estadisticasTabla');
+Route::get('puco-resumen-table' , 'PucoController@resumenTabla');
 
 /**
  * BENEFICIARIOS
