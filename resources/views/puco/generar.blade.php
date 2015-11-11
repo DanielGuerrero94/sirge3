@@ -21,7 +21,7 @@
 	<div class="col-md-7">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Estadísticas</h2>
+				<h2 class="box-title">Beneficiarios</h2>
 				<div class="box-tools pull-right">
 					@if ($puco_ready == 30)
 					<button class="generar-puco btn btn-warning"><i class="fa fa-flag"></i> Generar PUCO</button>
