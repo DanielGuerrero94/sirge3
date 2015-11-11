@@ -23,7 +23,11 @@
 			<div class="box-header">
 				<h2 class="box-title">Estadísticas</h2>
 				<div class="box-tools pull-right">
+					@if ($puco_ready == 30)
 					<button class="generar-puco btn btn-warning"><i class="fa fa-flag"></i> Generar PUCO</button>
+					@else
+					<button disabled="disabled" class="generar-puco btn btn-warning"><i class="fa fa-flag"></i> Generar PUCO</button>
+					@endif
 				</div>
 			</div>
 			<div class="box-body">
@@ -67,6 +71,12 @@ $(document).ready(function(){
             
         ],
         order : [[0,'desc']]
+	});
+
+	$('.generar-puco').click(function(){
+		$.post('puco-generar' , function(data){
+			alert(data);
+		});
 	});
 
 });

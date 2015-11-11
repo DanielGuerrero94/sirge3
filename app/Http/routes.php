@@ -153,6 +153,7 @@ Route::get('check-sss/{archivo}' , 'SuperController@checkId');
 Route::get('puco-generar' , 'PucoController@getGenerar');
 Route::get('puco-estadisticas-table' , 'PucoController@estadisticasTabla');
 Route::get('puco-resumen-table' , 'PucoController@resumenTabla');
+Route::post('puco-generar' , 'PucoController@generar');
 
 /**
  * BENEFICIARIOS
