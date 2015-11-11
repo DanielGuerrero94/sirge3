@@ -62,7 +62,8 @@ $(document).ready(function(){
         ajax : 'puco-resumen-table',
         columns: [
             { data: 'lote' , name: 'periodo'},
-            { data: 'codigo' , name: 'registros'}
+            { data: 'nombre' , name: 'nombre'},
+            { data: 'registros_in'}
             
         ],
         order : [[0,'desc']]

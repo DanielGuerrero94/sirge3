@@ -115,7 +115,7 @@ class PadronesController extends Controller
 		];
 
 		if ($id == 4) {
-			$osp = OspProvincias::with('descripcion')->get();
+			$osp = OspProvincias::where('codigo_osp' , '<' , 997001)->with('descripcion')->get();
 			$data['obras'] = $osp;
 		}
 		return view('padrones.upload-files' , $data);
