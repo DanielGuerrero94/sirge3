@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Datatables;
 use DB;
+use Storage;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -83,6 +84,9 @@ class PucoController extends Controller
 	 * @return string
 	 */
 	public function generar() {
+
+		Storage::append('file.log', 'Appended Text');
+		/*
 		DB::statement("
 			copy (
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || case when tipo_afiliado = 'T' then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_osp union all
@@ -90,5 +94,7 @@ class PucoController extends Controller
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || 'N' || rpad (nombre_apellido , 30 , ' ') from puco.beneficiarios_profe
 			)
 			");
+		*/
+		
 	}
 }

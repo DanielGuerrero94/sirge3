@@ -23,10 +23,8 @@
 			<div class="box-header">
 				<h2 class="box-title">Beneficiarios</h2>
 				<div class="box-tools pull-right">
-					@if ($puco_ready == 30)
+					@if ($puco_ready == 3)
 					<button class="generar-puco btn btn-warning"><i class="fa fa-flag"></i> Generar PUCO</button>
-					@else
-					<button disabled="disabled" class="generar-puco btn btn-warning"><i class="fa fa-flag"></i> Generar PUCO</button>
 					@endif
 				</div>
 			</div>
