@@ -49,6 +49,17 @@ class PucoController extends Controller
 		return Datatables::of($datos)->make(true);
 	}
 
+	/**
+	 * Genera una contraseña aleatoria
+	 *
+	 * @return string
+	 */
+	protected function password ($length = 6) {
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&.?";
+		$password = substr( str_shuffle( $chars ), 0, $length );
+		return $password;
+	}
+
 	/** 
 	 * Devuelve el JSON para la datatable
 	 *
@@ -85,16 +96,21 @@ class PucoController extends Controller
 	 */
 	public function generar() {
 
-		Storage::append('file.log', 'Appended Text');
-		/*
-		DB::statement("
+		$st = DB::statement("
 			copy (
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || case when tipo_afiliado = 'T' then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_osp union all
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || lpad (codigo_os :: text , 6 , '0') || case when codigo_parentesco :: int = 0 then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_sss union all
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || 'N' || rpad (nombre_apellido , 30 , ' ') from puco.beneficiarios_profe
-			)
+			) to '/var/www/sirge/export/puco/sirg3/puco/puco.txt' 
 			");
-		*/
+
+		$puco = Storage::get('sirg3/puco/puco.txt');
+		$puco = str_replace("\n", "\r\n", $puco);
+
+		$puco = explode("\r\n", $puco);
+
+		return '<pre>'.print_r($puco).'</pre>';
+		
 		
 	}
 }
