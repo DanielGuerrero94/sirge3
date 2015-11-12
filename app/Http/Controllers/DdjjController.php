@@ -187,7 +187,7 @@ class DdjjController extends Controller
 				   ->count();
 
 		$data = [
-			'page_title' => 'Formulario DDJJ Backup',
+			'page_title' => 'Formulario DDJJ DOIU Nº 9',
 			'numero' => $juris,
 			'porcentaje' => ($juris/24)*100
 		];
