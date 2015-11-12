@@ -12,6 +12,7 @@
 	                  <tr>
 	                    <th>Período</th>
 	                    <th>Beneficiarios</th>
+	                    <th>Clave</th>
 	                  </tr>
 	                </thead>
 	            </table>
@@ -23,7 +24,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Beneficiarios</h2>
 				<div class="box-tools pull-right">
-					@if ($puco_ready == 3)
+					@if ($puco_ready == 30)
 					<button class="generar-puco btn btn-warning"><i class="fa fa-flag"></i> Generar PUCO</button>
 					@endif
 				</div>
@@ -42,17 +43,34 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade modal-info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    			<h4 class="modal-title">Atención!</h4>
+      		</div>
+  			<div class="modal-body">
+  				<p id="modal-text"></p>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
 <script type="text/javascript">
 
 $(document).ready(function(){
 
-	var dt = $('#estadisticas-puco-table').DataTable({
+	var dt1 = $('#estadisticas-puco-table').DataTable({
 		processing: true,
         serverSide: true,
         ajax : 'puco-estadisticas-table',
         columns: [
             { data: 'periodo' , name: 'periodo'},
-            { data: 'registros' , name: 'registros'}
+            { data: 'registros' , name: 'registros'},
+            { data: 'clave'}
             
         ],
         order : [[0,'desc']]
@@ -72,8 +90,12 @@ $(document).ready(function(){
 	});
 
 	$('.generar-puco').click(function(){
-		$.post('puco-generar' , function(data){
-			alert(data);
+		$.post('puco-generar-archivo' , function(data){
+			$('#modal-text').html('Se ha generado el PUCO. Recibirá un mail con la contraseña');
+            $('.modal').modal();
+            $('.modal').one('hidden.bs.modal', function (e) {
+                dt1.ajax.reload( null, false );
+            });
 		});
 	});
 

@@ -153,7 +153,8 @@ Route::get('check-sss/{archivo}' , 'SuperController@checkId');
 Route::get('puco-generar' , 'PucoController@getGenerar');
 Route::get('puco-estadisticas-table' , 'PucoController@estadisticasTabla');
 Route::get('puco-resumen-table' , 'PucoController@resumenTabla');
-Route::get('puco-generar' , 'PucoController@generar');
+Route::post('puco-generar-archivo' , 'PucoController@generar');
+Route::get('puco-consultas' , 'PucoController@getConsulta');
 
 /**
  * BENEFICIARIOS
@@ -196,8 +197,15 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
 Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getGraficoPeriodo');
-
 Route::get('grafico-2/{periodo}' , 'EstadisticasController@getGafico2');
+
+/**
+ * DDJJ
+ */
+Route::get('ddjj-doiu-9' , 'DdjjController@getDoiu9');
+Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
+
+Route::get('ddjj-backup' , 'DdjjController@getBackup');
 
 /**
  * USUARIO
@@ -280,7 +288,7 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('test/{lote}/{codigo}' , 'ProfeController@actualizarProceso');
+Route::get('bene/{periodo}' , 'PucoController@getBeneficiarios');
 Route::get('fecha' , function(){
 	$date = \DateTime::createFromFormat('dmY' , '01101988');
 	return $date->format('Y-m-d');

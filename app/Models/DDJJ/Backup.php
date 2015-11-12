@@ -11,7 +11,7 @@ class Backup extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'ddjj.sirge';
+	protected $table = 'ddjj.backup';
 
 	/**
 	 * Primary key asociated with the table.

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Datatables;
 use DB;
 use Storage;
+use Mail;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PUCO\Puco;
 use App\Models\PUCO\ProcesoPuco as Proceso;
 use App\Models\PUCO\Provincia;
+use App\Models\Lote;
 
 class PucoController extends Controller
 {
@@ -86,7 +88,55 @@ class PucoController extends Controller
 	 * @return int
 	 */
 	protected function checkPuco(){
-		return Proceso::where('periodo' , date('Ym'))->count();
+		return Proceso::join('sistema.lotes' , 'puco.procesos_obras_sociales.lote' , '=' , 'sistema.lotes.lote')
+					->where('periodo' , date('Ym'))
+					->where('id_estado' , 3)
+					->count();
+	}
+
+	/**
+	 * Devuelve el nº de beneficiarios
+	 * 
+	 *
+	 * @return int
+	 */
+	public function getBeneficiarios($periodo){
+		$b = Proceso::join('sistema.lotes' , 'puco.procesos_obras_sociales.lote' , '=' , 'sistema.lotes.lote')
+					->where('periodo' , $periodo)
+					->where('id_estado' , 3)
+					->select('registros_in')
+					->sum('registros_in');
+		return $b;
+	}
+
+	/**
+	 * Guarda el resumen del PUCO
+	 * @param string $pass
+	 * @param int $beneficiarios
+	 *
+	 * @return bool
+	 */
+	protected function actualizarPuco($pass , $beneficiarios){
+		$np = Puco::findOrNew(date('Ym'));
+		$np->periodo = date('Ym');
+		$np->clave = $pass;
+		$np->registros = $beneficiarios;
+		return $np->save();
+	}
+
+	/**
+	 * Notifica por email
+	 *
+	 *
+	 */
+	protected function notificar($beneficiarios , $pass){
+		Mail::send('emails.noti-puco', ['mes' => date('F') , 'beneficiarios' => $beneficiarios , 'pass' => $pass], function ($m) {
+            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+            $m->to('sistemasuec@gmail.com');
+            $m->to('javier.minsky@gmail.com');
+            $m->to('gustavo.hekel@gmail.com');
+            $m->subject('PUCO ' . date('Ym'));
+        });
 	}
 
 	/**
@@ -95,7 +145,6 @@ class PucoController extends Controller
 	 * @return string
 	 */
 	public function generar() {
-
 		$password = $this->password();
 
 		DB::statement("
@@ -106,17 +155,31 @@ class PucoController extends Controller
 			) to '/var/www/sirge/export/puco/sirg3/puco/puco.txt' 
 			");
 
+		
 		$puco = Storage::get('sirg3/puco/puco.txt');
 		Storage::delete('sirg3/puco/puco.txt');
 		
 		$puco = str_replace("\n", "\r\n", $puco);
+		file_put_contents('../storage/swap/puco.txt', $puco);
 		
 		$sys = "cd ../storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip *";
 		exec($sys);
 
 		$zh = fopen("../storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
 		Storage::put("sirg3/puco/PUCO_" . date("Y-m") . ".zip" , $zh);
-		
-		return $password;
+		$this->actualizarPuco($password , $this->getBeneficiarios(date('Ym')));
+		$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
+	}
+
+	/**
+	 * Devuelve la vista de consultas
+	 *
+	 * @return null
+	 */
+	public function getConsulta(){
+		$data = [
+			'page_title' => 'Búsqueda de personas en PUCO'
+		];
+		return view('puco.consultas' , $data);
 	}
 }

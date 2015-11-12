@@ -18,7 +18,7 @@ class Puco extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_puco';
+	protected $primaryKey = 'periodo';
 
 	/**
 	 * Indicates if the model should be timestamped.

@@ -137,7 +137,7 @@ class LotesController extends Controller
 		$ruta = $this->getName($l->archivo->id_padron , TRUE);
 		$fh = fopen($ruta . '/' . $l->archivo->nombre_actual , 'r');
 		if (Storage::put('sirg3/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual , $fh)){
-			unlink('../storage/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual);
+			unlink('../storage/uploads/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual);
 		}
 	}
 

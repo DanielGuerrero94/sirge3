@@ -14,6 +14,8 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Geo\Provincia;
 use App\Models\DDJJ\Sirge as DDJJSirge;
+use App\Models\DDJJ\DOIU9 as D9;
+use App\Models\DDJJ\Backup;
 
 class DdjjController extends Controller
 {
@@ -168,4 +170,61 @@ class DdjjController extends Controller
     	return $pdf->download("ddjj-sirge-$id.pdf");
 	}
 
+	/** 
+	 * Devuelve la vista para la DOIU 9
+	 *
+	 * @return null
+	 */
+	public function getDoiu9(){
+
+		$dt = new \DateTime();
+		$dt->modify('-1 month');
+		$periodo = $dt->format('Y-m');
+
+		$juris = D9::where('periodo_reportado' , $periodo)
+				   ->where('version' , 1)
+				   ->select('id_provincia')
+				   ->count();
+
+		$data = [
+			'page_title' => 'Formulario DDJJ Backup',
+			'numero' => $juris,
+			'porcentaje' => ($juris/24)*100
+		];
+		return view('ddjj.doiu9' , $data);
+	}
+
+	/** 
+	 * Devuelve la vista para la DOIU 9
+	 *
+	 * @return null
+	 */
+	public function getBackup(){
+
+		$juris = Backup::where('periodo_reportado' , date('Y-m'))
+				   ->select('id_provincia')
+				   ->groupBy('id_provincia')
+				   ->count();
+
+		$data = [
+			'page_title' => 'Formulario DDJJ Backup',
+			'numero' => $juris,
+			'porcentaje' => ($juris/24)*100
+		];
+		return view('ddjj.backup' , $data);
+	}
+
+	/**
+	 * Devolver JSON para la datatables
+	 *
+	 * @return json
+	 */
+	public function getDoiu9Tabla() {
+		$djs = D9::all();
+		return Datatables::of($djs)
+				->addColumn('action' , function($dj){
+					return '<button impresion="'. $dj->id_impresion .'" class="download btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver ddjj</button>';
+				})
+				->make(true);
+	}
 }
