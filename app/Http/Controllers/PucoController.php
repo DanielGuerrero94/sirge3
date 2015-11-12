@@ -96,7 +96,9 @@ class PucoController extends Controller
 	 */
 	public function generar() {
 
-		$st = DB::statement("
+		$password = $this->password();
+
+		DB::statement("
 			copy (
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || case when tipo_afiliado = 'T' then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_osp union all
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || lpad (codigo_os :: text , 6 , '0') || case when codigo_parentesco :: int = 0 then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_sss union all
@@ -105,12 +107,16 @@ class PucoController extends Controller
 			");
 
 		$puco = Storage::get('sirg3/puco/puco.txt');
+		Storage::delete('sirg3/puco/puco.txt');
+		
 		$puco = str_replace("\n", "\r\n", $puco);
-
-		$puco = explode("\r\n", $puco);
-
-		return '<pre>'.print_r($puco).'</pre>';
 		
+		$sys = "cd ../storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip *";
+		exec($sys);
+
+		$zh = fopen("../storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
+		Storage::put("sirg3/puco/PUCO_" . date("Y-m") . ".zip" , $zh);
 		
+		return $password;
 	}
 }
