@@ -21,11 +21,6 @@
 	                </thead>
 	            </table>
 			</div>
-			<div class="box-footer">
-				<div class="btn-group" role="group">
-					<button href="" class="action btn btn-primary">Ingresar</button>
-				</div>
-			</div>
 		</div>
 	</div>
 	
@@ -60,7 +55,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button href="" class="action btn btn-primary">Ingresar</button>
+							<button class="periodo btn btn-primary">Ingresar</button>
 						</div>
 					</div>
 				</div>
@@ -104,6 +99,12 @@ $(document).ready(function(){
             
         ],
         order : [[1,'desc']]
+	});
+
+	$('.periodo').click(function(){
+		$.get('ddjj-periodo/doiu-9' , function(data){
+			$('.content-wrapper').html(data);
+		});
 	});
 
 });

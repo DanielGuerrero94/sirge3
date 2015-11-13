@@ -227,4 +227,55 @@ class DdjjController extends Controller
 				})
 				->make(true);
 	}
+
+	/**
+	 * Devuelve la vista para ingresar el periodo a reportar
+	 * 
+	 * @return null
+	 */
+	public function getPeriodo($tipo){
+
+		$data = [
+			'tipodj' => $tipo,
+			'page_title' => 'Verificación',
+			'ruta_back' => 'ddjj-' . $tipo
+		];
+		return view('ddjj.periodo' , $data);
+	}
+
+	/**
+	 * Verifica que la DDJJ no haya sido generada para ese período
+	 * @param periodo $string
+	 * @param tipo $tipo
+	 *
+	 * @return int
+	 */
+	public function checkPeriodo($tipo , $periodo){
+		switch ($tipo) {
+			case 'doiu-9':
+				$impreso = D9::where('periodo_reportado' , $periodo)
+						 ->where('id_provincia' , Auth::user()->id_provincia)
+						 ->count();
+				$titulo = 'Formulario de DDJJ Información Priorizada - DOIU Nº 9';
+				break;
+			case 'backup':
+				$impreso = Backup::where('periodo_reportado' , $periodo)
+						 ->where('id_provincia' , Auth::user()->id_provincia)
+						 ->count();
+				$titulo = 'Formulario de DDJJ Backup';
+				break;
+		}
+
+		$data = [
+			'page_title' => $titulo,
+			'tipodj' => $tipo,
+			'version' => $impreso
+		];
+
+		if (! $impreso) {
+			return view('ddjj.d9.main' , $data);
+		} else {
+			return view('ddjj.motivo-reimpresion' , $data);
+		}
+	}
 }

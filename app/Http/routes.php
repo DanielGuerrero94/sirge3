@@ -99,17 +99,6 @@ Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
 
 /**
- * DDJJ
- */
-#	LOTES PENDIENTES
-Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
-Route::get('listado-lotes-cerrados-table/{padron}' , 'DdjjController@getListadoPendientesTabla');
-Route::post('declarar-lotes' , 'LotesController@declararLotes');
-Route::get('listado-ddjj/{padron}' , 'DdjjController@getListado');
-Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
-Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
-
-/**
  * DICCIONARIO
  */
 Route::get('diccionario/{id}' , 'DiccionariosController@getDatadic');
@@ -202,10 +191,19 @@ Route::get('grafico-2/{periodo}' , 'EstadisticasController@getGafico2');
 /**
  * DDJJ
  */
+Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
+Route::get('listado-lotes-cerrados-table/{padron}' , 'DdjjController@getListadoPendientesTabla');
+Route::post('declarar-lotes' , 'LotesController@declararLotes');
+Route::get('listado-ddjj/{padron}' , 'DdjjController@getListado');
+Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
+Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
+
 Route::get('ddjj-doiu-9' , 'DdjjController@getDoiu9');
 Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
+Route::get('ddjj-periodo/{tipo}' , 'DdjjController@getPeriodo');
+Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
 /**
  * USUARIO
