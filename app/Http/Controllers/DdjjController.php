@@ -326,6 +326,18 @@ class DdjjController extends Controller
 		];
 
 		return view($page , $data);
-
 	}
+
+	/**
+	 * Genera la DDJJ
+	 * @param Request $r
+	 *
+	 * @return string
+	 */
+	public function postDoiu9(Request $r) {
+
+		
+		
+	}
+
 }

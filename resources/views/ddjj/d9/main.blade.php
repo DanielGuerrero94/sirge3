@@ -148,8 +148,8 @@
 				submitHandler : function(form) {
 					$.ajax({
 						method : 'post',
-						url : 'ddjj-doiu9',
-						data : $(form).serialize(),
+						url : 'ddjj-doiu-9',
+						data : $(form).serialize() + '&motivo={{ $motivo or '' }}',
 						success : function(data){
 							$('#modal-text').html(data);
 							$('.modal').modal();

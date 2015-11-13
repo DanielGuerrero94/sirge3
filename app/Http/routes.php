@@ -199,6 +199,7 @@ Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
 Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
 
 Route::get('ddjj-doiu-9' , 'DdjjController@getDoiu9');
+Route::post('ddjj-doiu-9' , 'DdjjController@postDoiu9');
 Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
