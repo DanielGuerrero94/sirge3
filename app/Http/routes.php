@@ -203,6 +203,7 @@ Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 Route::get('ddjj-periodo/{tipo}' , 'DdjjController@getPeriodo');
+Route::post('ddjj-reimpresion/{tipo}/{periodo}' , 'DdjjController@reimpresion');
 Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
 /**
@@ -288,8 +289,19 @@ Route::get('phpinfo' , function(){
  ********************************************************************************/
 Route::get('bene/{periodo}' , 'PucoController@getBeneficiarios');
 Route::get('fecha' , function(){
-	$date = \DateTime::createFromFormat('dmY' , '01101988');
-	return $date->format('Y-m-d');
+	$date = \DateTime::createFromFormat('Y-m' , '2015-09');
+	$min = \DateTime::createFromFormat('Ym' , '201501');
+	$max = new \DateTime;
+	$max->modify('-1 month');
+
+	echo $date->format('Ym') , '<br />';
+	echo $min->format('Ym') , '<br />';
+	echo $max->format('Ym');
+
+	if ($date < $min || $date > $max) {
+		return 'Periodo no permitido';
+	}
+
 });
 /********************************************************************************
  *								 	WS ROUTES 									*

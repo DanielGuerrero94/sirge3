@@ -8,6 +8,10 @@
 					<h2 class="box-title">Formulario DDJJ Información Priorizada</h2>
 				</div>
 				<div class="box-body">
+					<div class="alert alert-danger" id="errores-div">
+				        <ul id="errores-form">
+				        </ul>
+				    </div>
 					<div class="form-group">
 		  				<label for="periodo" class="col-sm-3 control-label">Período</label>
 						<div class="col-sm-9">
@@ -17,7 +21,7 @@
 				</div>
 				<div class="box-footer">
 					<div class="btn-group" role="group">
-						<button class="back btn btn-primary">Atrás</button>
+						<button type="button" class="back btn btn-primary">Atrás</button>
 						<button class="action btn btn-success">Ir a DDJJ</button>
 					</div>
 				</div>
@@ -27,6 +31,8 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
+
+		$('#errores-div').hide();
 
 		$('#periodo').inputmask({
 			mask : '9999-99',
@@ -49,9 +55,20 @@
 					}
 				},
 				submitHandler : function(form){
-					$.get('check-periodo/{{ $tipodj }}/' + $('#periodo').val() , function(data){
-						$('.content-wrapper').html(data);
+					$.ajax({
+						url : 'check-periodo/{{ $tipodj }}/' + $('#periodo').val(),
+						success : function(data){
+							$('.content-wrapper').html(data);	
+						},
+						error : function(data){
+							var html = '';
+							var e = data.responseText;
+							html += '<li>' + e + '</li>';
+							$('#errores-form').html(html);
+							$('#errores-div').show();
+						}
 					});
+
 				}
 			});
 		});

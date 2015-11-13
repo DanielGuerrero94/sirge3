@@ -73,7 +73,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button href="" class="action btn btn-primary">Ver</button>
+							<button class="action btn btn-primary">Ver</button>
 						</div>
 					</div>
 				</div>

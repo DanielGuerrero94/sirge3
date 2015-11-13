@@ -251,31 +251,81 @@ class DdjjController extends Controller
 	 * @return int
 	 */
 	public function checkPeriodo($tipo , $periodo){
+
+		$date = \DateTime::createFromFormat('Y-m' , $periodo);
+		$min = \DateTime::createFromFormat('Ym' , '201501');
+		$max = new \DateTime;
+		$max->modify('-1 month');
+
+		if ($date < $min || $date > $max) {
+			return response('Periodo no permitido' , 422);
+		}
+
 		switch ($tipo) {
 			case 'doiu-9':
 				$impreso = D9::where('periodo_reportado' , $periodo)
 						 ->where('id_provincia' , Auth::user()->id_provincia)
 						 ->count();
 				$titulo = 'Formulario de DDJJ Información Priorizada - DOIU Nº 9';
+				$page = 'ddjj.d9.main';
 				break;
 			case 'backup':
 				$impreso = Backup::where('periodo_reportado' , $periodo)
 						 ->where('id_provincia' , Auth::user()->id_provincia)
 						 ->count();
 				$titulo = 'Formulario de DDJJ Backup';
+				$page = 'ddjj.backup.main';
 				break;
 		}
 
 		$data = [
 			'page_title' => $titulo,
 			'tipodj' => $tipo,
-			'version' => $impreso
+			'version' => $impreso,
+			'periodo' => $periodo
 		];
 
 		if (! $impreso) {
-			return view('ddjj.d9.main' , $data);
+			$data['ruta_back'] = 'ddjj-' . $tipo;
+			return view($page , $data);
 		} else {
+			$data['ruta_back'] = 'ddjj-periodo/' . $tipo;
 			return view('ddjj.motivo-reimpresion' , $data);
 		}
+	}
+
+	/** 
+	 * Devuelve la vista para la reimpresión de la DDJJ
+	 * @param string $tipodj
+	 * @param string $periodo
+	 * @param Request $r
+	 *
+	 * @return null
+	 */
+	public function reimpresion($tipodj , $periodo , Request $r){
+		echo $tipodj;
+		echo $periodo;
+		echo $r->motivo;
+
+		switch ($tipo) {
+			case 'doiu-9':
+				$page = 'ddjj.d9.main';
+				$titulo = 'Formulario de DDJJ Información Priorizada - DOIU Nº 9';
+				break;
+			case 'backup':
+				$page = 'ddjj.backup.main';
+				$titulo = 'Formulario de DDJJ Backup';
+				break;
+		}
+
+		$data = [
+			'page_title' => $titulo,
+			'motivo' => $r->motivo,
+			'tipodj' => $tipodj,
+			'periodo' => $periodo
+		];
+
+		return view($page , $data);
+
 	}
 }
