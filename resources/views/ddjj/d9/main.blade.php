@@ -2,89 +2,89 @@
 @section('content')
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Conceptos adicionales</h2>
-			</div>
-			<div class="box-body">
+		<form id="form-doiu9" class="form-inline">
+			<div class="box box-info">
+				<div class="box-header">
+					<h2 class="box-title">Conceptos adicionales</h2>
+				</div>
+				<div class="box-body">
 
-				<div class="alert alert-danger" id="errores-div">
-			        <ul id="errores-form">
-			        </ul>
-			    </div>
-				
-				
-				<form class="form-inline">
-					Cantidad de efectores integrantes : <b>{cantidad_efectores_integrantes}</b>
-					<br />
-					Cantidad de efectores con convenio : <b>{cantidad_efectores_convenio}</b>
-					<br />
-					<br />
-					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
-							<p>
-								1. Se encuentra cargado y autorizado el Tablero de Control del Programa SUMAR con los datos correspondientes al per&iacute;do
-								<input type="text" name="periodo_tablero" id="periodo_tablero" class="periodo form-control"/>
-							</p>
+					<div class="alert alert-danger" id="errores-div">
+				        <ul id="errores-form">
+				        </ul>
+				    </div>
+					
+					
+						<ul>
+							<li>Cantidad de efectores integrantes : <b>{{$efectores_integrantes}}</b></li>
+							<li>Cantidad de efectores con convenio : <b>{{$efectores_convenio}}</b></li>
+						</ul>
+						<br />
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<p>
+									1. Se encuentra cargado y autorizado el Tablero de Control del Programa SUMAR con los datos correspondientes al per&iacute;do
+									<input type="text" name="periodo_tablero" id="periodo_tablero" class="periodo form-control"/>
+								</p>
+							</div>
 						</div>
-					</div>
-					<hr >
-					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
-							<p>
-								2. Con fecha <input type="text" name="fecha_cuenta_capitas" id="fecha_cuenta_capitas" class="fecha form-control" /> se remiti&oacute; al &Aacute;rea de Supervisi&oacute;n y Auditor&iacute;a de la 
-								Gesti&oacute;n Administrativa y Financiera de la UEC la Declaraci&oacute;n Jurada que incluye los ingresos y egresos de la 
-								Cuenta C&aacute;pitas Provincial del SPS durante el mes de <input type="text" name="periodo_cuenta_capitas" id="periodo_cuenta_capitas" class="periodo form-control" /> 
-								y la copia del extracto bancario de dicha cuenta correspondiente al mismo per&iacute;odo<br />
-							</p>
+						<hr >
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<p>
+									2. Con fecha <input type="text" name="fecha_cuenta_capitas" id="fecha_cuenta_capitas" class="fecha form-control" /> se remiti&oacute; al &Aacute;rea de Supervisi&oacute;n y Auditor&iacute;a de la 
+									Gesti&oacute;n Administrativa y Financiera de la UEC la Declaraci&oacute;n Jurada que incluye los ingresos y egresos de la 
+									Cuenta C&aacute;pitas Provincial del SPS durante el mes de <input type="text" name="periodo_cuenta_capitas" id="periodo_cuenta_capitas" class="periodo form-control" /> 
+									y la copia del extracto bancario de dicha cuenta correspondiente al mismo per&iacute;odo<br />
+								</p>
+							</div>
 						</div>
-					</div>
-					<hr >
-					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
-							<p>
-								3. Con fecha <input type="text" name="fecha_sirge" id="fecha_sirge" class="fecha form-control" /> se remiti&oacute; al &Aacute;rea Sistemas Inform&aacute;ticos de la UEC
-								la Declaraci&oacute;n Jurada de Prestaciones, Comprobantes y Uso de Fondos realizado por los efectores correspondientes al 
-								Sistema de reportes de Gesti&oacute;n (SIRGE), actualizando con los datos correspondientes al per&iacute;odo <input type="text" name="periodo_sirge" id="periodo_sirge" class="periodo form-control" /><br />
-							</p>
+						<hr >
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<p>
+									3. Con fecha <input type="text" name="fecha_sirge" id="fecha_sirge" class="fecha form-control" /> se remiti&oacute; al &Aacute;rea Sistemas Inform&aacute;ticos de la UEC
+									la Declaraci&oacute;n Jurada de Prestaciones, Comprobantes y Uso de Fondos realizado por los efectores correspondientes al 
+									Sistema de reportes de Gesti&oacute;n (SIRGE), actualizando con los datos correspondientes al per&iacute;odo <input type="text" name="periodo_sirge" id="periodo_sirge" class="periodo form-control" /><br />
+								</p>
+							</div>
 						</div>
-					</div>
-					<hr >
-					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
-							<p>
-								4. Con fecha <input type="text" name="fecha_reporte_bimestral" id="fecha_reporte_bimestral" class="fecha form-control" /> se remti&oacute; al &Aacute;rea Planificaci&oacute;n Estrat&eacute;gica de la 
-								UEC, el Reporte bimestral de Prestaciones del SPS del Programa SUMAR y el Reporte bimestral de Uso de Fondos del SPS del Programa
-								SUMAR correspondientes al bimestre 
-								<select name="bimestre" id="bimestre" class="form-control">
-									<option value="0">Seleccione bimestre</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-									<option value="6">6</option>
-								</select> 
-								del a&ntilde;o
-								<select name="anio_bimestre" id="anio_bimestre" class="form-control">
-									<option value="0">Seleccione a&ntilde;o</option>
-									<option value="2015">2015</option>
-									<option value="2015">2016</option>
-									<option value="2015">2017</option>
-								</select>
-							</p>
+						<hr >
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<p>
+									4. Con fecha <input type="text" name="fecha_reporte_bimestral" id="fecha_reporte_bimestral" class="fecha form-control" /> se remti&oacute; al &Aacute;rea Planificaci&oacute;n Estrat&eacute;gica de la 
+									UEC, el Reporte bimestral de Prestaciones del SPS del Programa SUMAR y el Reporte bimestral de Uso de Fondos del SPS del Programa
+									SUMAR correspondientes al bimestre 
+									<select name="bimestre" id="bimestre" class="form-control">
+										<option value="">Seleccione bimestre</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+									</select> 
+									del a&ntilde;o
+									<select name="anio_bimestre" id="anio_bimestre" class="form-control">
+										<option value="">Seleccione a&ntilde;o</option>
+										<option value="2015">2015</option>
+										<option value="2015">2016</option>
+										<option value="2015">2017</option>
+									</select>
+								</p>
+							</div>
 						</div>
-					</div>
-				</form>
 
+				</div>
+					
+			<div class="box-footer">
+				<div class="btn-group" role="group">
+					<button type="button" class="back btn btn-primary">Atrás</button>
+					<button class="action btn btn-warning">Generar</button>
+				</div>
 			</div>
-				
-		<div class="box-footer">
-			<div class="btn-group" role="group">
-				<button type="button" class="back btn btn-primary">Atrás</button>
-				<button class="action btn btn-danger">Generar</button>
-			</div>
-		</div>
+		</form>
 	</div>
 </div>
 <div class="modal fade modal-info">
@@ -118,7 +118,7 @@
 
 		$('.action').click(function(){
 
-			$('form').validate({
+			$('#form-doiu9').validate({
 				rules : {
 					periodo_tablero : {
 						required : true
@@ -129,7 +129,7 @@
 					periodo_cuenta_capitas : {
 						required : true
 					},
-					fecha_sirge {
+					fecha_sirge : {
 						required : true
 					},
 					periodo_sirge : {
@@ -149,11 +149,11 @@
 					$.ajax({
 						method : 'post',
 						url : 'ddjj-doiu-9',
-						data : $(form).serialize() + '&motivo={{ $motivo or '' }}',
+						data : $(form).serialize() + '&motivo={{ $motivo or '' }}&periodo={{ $periodo }}',
 						success : function(data){
 							$('#modal-text').html(data);
 							$('.modal').modal();
-							$('form').trigger('reset');
+							// $('form').trigger('reset');
 						},
 						error : function(data){
 							var html = '';

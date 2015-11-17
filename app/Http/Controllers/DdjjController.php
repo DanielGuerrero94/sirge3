@@ -10,12 +10,14 @@ use PDF;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Requests\DOIU9Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Geo\Provincia;
 use App\Models\DDJJ\Sirge as DDJJSirge;
 use App\Models\DDJJ\DOIU9 as D9;
 use App\Models\DDJJ\Backup;
+use App\Models\Efector;
 
 class DdjjController extends Controller
 {
@@ -244,6 +246,33 @@ class DdjjController extends Controller
 	}
 
 	/**
+	 * Devuelve el número de efectores integrantes
+	 *
+	 * @return int
+	 */
+	protected function getEfectoresIntegrantes(){
+		return Efector::join('efectores.datos_geograficos' , 'efectores.efectores.id_efector' , '=' , 'efectores.datos_geograficos.id_efector')
+				->where('id_provincia' , Auth::user()->id_provincia)
+				->where('id_estado' , 1)
+				->where('integrante' , 'S')
+				->count();
+	}
+
+	/**
+	 * Devuelve el número de efectores integrantes
+	 *
+	 * @return int
+	 */
+	protected function getEfectoresConvenio(){
+		return Efector::join('efectores.datos_geograficos' , 'efectores.efectores.id_efector' , '=' , 'efectores.datos_geograficos.id_efector')
+				->where('id_provincia' , Auth::user()->id_provincia)
+				->where('id_estado' , 1)
+				->where('integrante' , 'S')
+				->where('compromiso_gestion' , 'S')
+				->count();
+	}
+
+	/**
 	 * Verifica que la DDJJ no haya sido generada para ese período
 	 * @param periodo $string
 	 * @param tipo $tipo
@@ -287,6 +316,8 @@ class DdjjController extends Controller
 
 		if (! $impreso) {
 			$data['ruta_back'] = 'ddjj-' . $tipo;
+			$data['efectores_integrantes'] = $this->getEfectoresIntegrantes();
+			$data['efectores_convenio'] = $this->getEfectoresConvenio();
 			return view($page , $data);
 		} else {
 			$data['ruta_back'] = 'ddjj-periodo/' . $tipo;
@@ -303,9 +334,6 @@ class DdjjController extends Controller
 	 * @return null
 	 */
 	public function reimpresion($tipodj , $periodo , Request $r){
-		echo $tipodj;
-		echo $periodo;
-		echo $r->motivo;
 
 		switch ($tipo) {
 			case 'doiu-9':
@@ -334,10 +362,23 @@ class DdjjController extends Controller
 	 *
 	 * @return string
 	 */
-	public function postDoiu9(Request $r) {
+	public function postDoiu9(DOIU9Request $r) {
+		$d9 = new D9;
+		$d9->id_provincia = Auth::user()->id_provincia;
+		$d9->id_usuario = Auth::user()->id_usuario;
+		$d9->periodo_reportado = $r->periodo;
+		$d9->efectores_integrantes = $this->getEfectoresIntegrantes();
+		$d9->efectores_convenio = $this->getEfectoresConvenio();
+		$d9->periodo_tablero_control = $r->periodo_tablero;
+		$d9->fecha_cuenta_capitas = $r->fecha_cuenta_capitas;
+		$d9->periodo_cuenta_capitas = $r->periodo_cuenta_capitas;
+		$d9->fecha_sirge = $r->fecha_sirge;
+		$d9->periodo_sirge = $r->periodo_sirge;
+		$d9->fecha_reporte_bimestral = $r->fecha_reporte_bimestral;
+		$d9->bimestre = $r->bimestre;
+		$d9->anio_bimestre = $r->anio_bimestre;
+		$d9->version = $r->version;
+		$d9->motivo_reimpresion = $r->motivo;
 
-		
-		
 	}
-
 }
