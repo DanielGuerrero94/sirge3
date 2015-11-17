@@ -48,7 +48,7 @@
 					}
 				},
 				submitHandler : function(form){
-					$.post('ddjj-reimpresion/{{ $tipodj }}/{{ $periodo }}' , $(form).serialize() , function(data){
+					$.post('ddjj-reimpresion/{{ $tipodj }}/{{ $periodo }}/{{ $version }}' , $(form).serialize() , function(data){
 						$('.content-wrapper').html(data);
 					});
 				}

@@ -204,7 +204,7 @@ Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 Route::get('ddjj-periodo/{tipo}' , 'DdjjController@getPeriodo');
-Route::post('ddjj-reimpresion/{tipo}/{periodo}' , 'DdjjController@reimpresion');
+Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
 Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
 /**
@@ -290,20 +290,13 @@ Route::get('phpinfo' , function(){
  ********************************************************************************/
 Route::get('bene/{periodo}' , 'PucoController@getBeneficiarios');
 Route::get('fecha' , function(){
-	$date = \DateTime::createFromFormat('Y-m' , '2015-09');
-	$min = \DateTime::createFromFormat('Ym' , '201501');
-	$max = new \DateTime;
-	$max->modify('-1 month');
-
-	echo $date->format('Ym') , '<br />';
-	echo $min->format('Ym') , '<br />';
-	echo $max->format('Ym');
-
-	if ($date < $min || $date > $max) {
-		return 'Periodo no permitido';
-	}
+	
+	setlocale(LC_TIME, 'es_ES.UTF-8');
+	echo strftime("%B %Y");
 
 });
+
+Route::get('pdf' , 'DdjjController@getPdfDoiu9');
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/

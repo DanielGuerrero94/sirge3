@@ -149,7 +149,7 @@
 					$.ajax({
 						method : 'post',
 						url : 'ddjj-doiu-9',
-						data : $(form).serialize() + '&motivo={{ $motivo or '' }}&periodo={{ $periodo }}',
+						data : $(form).serialize() + '&motivo={{ $motivo or '' }}&periodo={{ $periodo }}&version={{ $version }}',
 						success : function(data){
 							$('#modal-text').html(data);
 							$('.modal').modal();

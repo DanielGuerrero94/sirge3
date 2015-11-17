@@ -37,7 +37,8 @@
 							<div class="progress-bar" style="width: {{ $porcentaje }}%"></div>
 						</div>
 						<span class="progress-description">
-							{{ date('F Y') }}
+							<?php setlocale(LC_TIME, 'es_ES.UTF-8'); ?>
+							{{ ucwords(strftime("%B %Y")) }}
 						</span>
 					</div>
 				</div>

@@ -18,6 +18,7 @@ use App\Models\DDJJ\Sirge as DDJJSirge;
 use App\Models\DDJJ\DOIU9 as D9;
 use App\Models\DDJJ\Backup;
 use App\Models\Efector;
+use App\Models\Parametro;
 
 class DdjjController extends Controller
 {
@@ -333,7 +334,7 @@ class DdjjController extends Controller
 	 *
 	 * @return null
 	 */
-	public function reimpresion($tipodj , $periodo , Request $r){
+	public function reimpresion($tipodj , $periodo , $version , Request $r){
 
 		switch ($tipo) {
 			case 'doiu-9':
@@ -350,6 +351,7 @@ class DdjjController extends Controller
 			'page_title' => $titulo,
 			'motivo' => $r->motivo,
 			'tipodj' => $tipodj,
+			'version' => $version,
 			'periodo' => $periodo
 		];
 
@@ -363,6 +365,7 @@ class DdjjController extends Controller
 	 * @return string
 	 */
 	public function postDoiu9(DOIU9Request $r) {
+		
 		$d9 = new D9;
 		$d9->id_provincia = Auth::user()->id_provincia;
 		$d9->id_usuario = Auth::user()->id_usuario;
@@ -379,6 +382,24 @@ class DdjjController extends Controller
 		$d9->anio_bimestre = $r->anio_bimestre;
 		$d9->version = $r->version;
 		$d9->motivo_reimpresion = $r->motivo;
+		if ($d9->save()){
+			return 'Se ha enviado la DDJJ de información priorizada a su casilla de correo';
+		}
+	}
 
+	/**
+	 * Devuelve el PDF con la DDJJ DOIU9
+	 * @param int $id
+	 *
+	 * @return null
+	 */
+	public function getPdfDoiu9(){
+		$d = D9::find(639);
+		$data = [
+			'ddjj' => $d,
+			'mensaje' => Parametro::find(2)
+		];
+		$pdf = PDF::loadView('pdf.ddjj.doiu9' , $data);
+		return $pdf->stream();
 	}
 }

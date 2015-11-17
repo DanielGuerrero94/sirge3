@@ -37,4 +37,38 @@ class DOIU9 extends Model
     {
         return date('d/m/Y' , strtotime($value));
     }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaCuentaCapitasAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaSirgeAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaReporteBimestralAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
 }

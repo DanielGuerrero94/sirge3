@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap 3.3.2 -->
+    <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}"  />
+    <!-- Theme style -->
+    <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.css")}}"  />
+    <style type="text/css">
+    	tbody:before, tbody:after { display: none; }
+      	.footer { position: fixed; bottom: 60px; }
+      	.page {  margin-left: 49%; }
+      	.pagenum:before { content: counter(page); }
+      	.resumen , .lugar-dia-hora { text-align: right;}
+      	td { text-align: center;  border: solid 2px black; height: 40px; font-weight: bold;}
+	</style>
+</head>
+<body>
+	<img src="{{ asset("/dist/img/header-sumar.png") }}" style="width: 100%;">
+	<div style="text-align: right">
+		<i>{{ $mensaje->valor }}</i>
+	</div>
+	<hr />
+	<table style="width: 100%">
+		<tr>
+			<td>FORMULARIO DE ENVÍO DE INFORMACIÓN PRIORIZADA DEL PROGRAMA SUMAR</td>
+			<td>Nº 09/2013-11</td>
+		</tr>
+	</table>
+	<p class="lugar-dia-hora"><b>{{ $ddjj->id_provincia }} , {{ $ddjj->fecha_impresion }}</b></p>
+	<p style="font-weight: bold">
+		SEÑOR <br/>
+		COORDINADOR NACIONAL DEL PROGRAMA SUMAR <br />
+		DR. MARTIN SABIGNOSO
+	</p>
+	<p>
+		De mi mayor consideración:
+	</p>
+	<p style="text-indent: 2em;">
+		Por medio de la presente se informa que se encuentra actualizada en el SIRGe Web la Tabla de Efectores correspondiente al mes de XXXXX de XXXX
+	</p>
+	<p style="text-indent: 2em;">
+		De acuerdo con dichos elementos, el número de Efectores Integrantes ascienda a {{ $ddjj->efectores_integrantes }}. Asimismo, el número de Efectores 
+		con Compromiso de Gestión firmado en la provincia asciende a {{ $ddjj->efectores_convenio }}.
+	</p>
+	<p>
+		Por otra parte dejo constancia que:
+		<ol>
+			<li>
+				Se encuentra cargado y autorizado el Tablero de Control del Programa SUMAR con los datos correspondientes al período {{ $ddjj->periodo_tablero_control }}.
+			</li>
+			<li>
+				Con fecha {{ $ddjj->fecha_cuenta_capitas }} se remitió al Área de Supervisión y Auditoría de la Gestión Administrativa y Financiera de la UEC
+				 la Declaración Jurada que incluye los ingresos y egresos de la Cuenta Cápitas Provincial del SPS durante el mes de XXXX de XXXX, 
+				 y la copia del extracto bancario de dicha cuenta correspondiente al mismo período.
+			</li>
+			<li>
+				Con fecha {{ $ddjj->fecha_sirge }} se remitió al Área Sistemas Informáticos de la UEC la Declaración Jurada de Prestaciones, Comprobantes y Uso de Fondos 
+				realizado por los efectores correspondientes al Sistema de Reportes de Gestión (SIRGE), actualizando con los datos correspondientes al período {{ $ddjj->periodo_sirge }}.
+			</li>
+			<li>
+				Con fecha {{ $ddjj->fecha_reporte_bimestral }} se remitió al Área Planificación Estratégica de la UEC, el Reporte bimestral de Prestaciones del SPS del Programa SUMAR y 
+				el Reporte bimestral de Uso de Fonos del SPS del Programa SUMAR correspondientes al bimestre Nº {{ $ddjj->bimestre }} del año {{ $ddjj->anio_bimestre }}.
+			</li>
+		</ol>
+	</p>
+	<p style="text-indent: 2em;">
+		Dejo constancia bajo juramento que la información referida en la presente nota y los soportes ópticos acompañados, han sido elaborados siguiendo todos los procedimientos 
+		razonables para garantizar la mayor exactitud posible en los mismos
+	</p>
+	<div class="footer">
+		<div style="margin-left:60%; width: 40%; text-align: left;">
+			<p style="border-top: 1px solid; text-align: center;">Firma y sello del Coordinador Ejecutivo</p>
+		</div>
+		<hr />
+		<div class="page">
+			Página: <span class="pagenum"></span>
+		</div>
+	</div>
+</body>
+</html>
