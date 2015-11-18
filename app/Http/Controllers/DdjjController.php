@@ -6,6 +6,7 @@ use Auth;
 use DB;
 use Datatables;
 use PDF;
+use Mail;
 
 use Illuminate\Http\Request;
 
@@ -226,7 +227,7 @@ class DdjjController extends Controller
 		$djs = D9::all();
 		return Datatables::of($djs)
 				->addColumn('action' , function($dj){
-					return '<button impresion="'. $dj->id_impresion .'" class="download btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver ddjj</button>';
+					return '<a href="ddjj-doiu9-reimprimir/' . $dj->id_impresion . '" class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver ddjj</a>';
 				})
 				->make(true);
 	}
@@ -336,7 +337,7 @@ class DdjjController extends Controller
 	 */
 	public function reimpresion($tipodj , $periodo , $version , Request $r){
 
-		switch ($tipo) {
+		switch ($tipodj) {
 			case 'doiu-9':
 				$page = 'ddjj.d9.main';
 				$titulo = 'Formulario de DDJJ Información Priorizada - DOIU Nº 9';
@@ -352,7 +353,9 @@ class DdjjController extends Controller
 			'motivo' => $r->motivo,
 			'tipodj' => $tipodj,
 			'version' => $version,
-			'periodo' => $periodo
+			'periodo' => $periodo,
+			'efectores_integrantes' => $this->getEfectoresIntegrantes(),
+			'efectores_convenio' => $this->getEfectoresConvenio()
 		];
 
 		return view($page , $data);
@@ -383,6 +386,21 @@ class DdjjController extends Controller
 		$d9->version = $r->version;
 		$d9->motivo_reimpresion = $r->motivo;
 		if ($d9->save()){
+
+			$id = $d9->id_impresion;
+			$path = base_path() . '/storage/pdf/ddjj/d9/' . $id . '.pdf';
+			$user = Auth::user();
+
+			$pdf = $this->getPdfDoiu9($id);
+			$pdf->save($path);
+
+			Mail::send('emails.ddjj-sirge', ['usuario' => $user , 'id' => $d9->id_impresion], function ($m) use ($user , $path , $id) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to($user->email);
+                $m->subject('DDJJ DOIU Nº 9 - Información Priorizada Nº ' . $id);
+                $m->attach($path);
+            });
+
 			return 'Se ha enviado la DDJJ de información priorizada a su casilla de correo';
 		}
 	}
@@ -391,15 +409,37 @@ class DdjjController extends Controller
 	 * Devuelve el PDF con la DDJJ DOIU9
 	 * @param int $id
 	 *
-	 * @return null
+	 * @return object
 	 */
-	public function getPdfDoiu9(){
-		$d = D9::find(639);
+	protected function getPdfDoiu9($id){
+		
+		setlocale(LC_TIME, 'es_ES.UTF-8');
+
+		$d = D9::with('provincia')->find($id);
+
+		$d_pr = \DateTime::createFromFormat('Y-m' , $d->periodo_reportado);
+		$d_fi = \DateTime::createFromFormat('d/m/Y' , $d->fecha_impresion);
+		$d_cc = \DateTime::createFromFormat('Y-m' , $d->periodo_cuenta_capitas);
+		
 		$data = [
 			'ddjj' => $d,
-			'mensaje' => Parametro::find(2)
+			'mensaje' => Parametro::find(2),
+			'fecha_impresion' => strftime("%d de %B de %Y" , $d_fi->getTimeStamp()),
+			'fecha_tabla_efectores' => strftime("%B de %Y" , $d_pr->getTimeStamp()),
+			'fecha_cc' => strftime("%B de %Y" , $d_cc->getTimeStamp()),
 		];
 		$pdf = PDF::loadView('pdf.ddjj.doiu9' , $data);
-		return $pdf->stream();
+		return $pdf;
+	}
+
+	/**
+	 * Devuelve un archivo
+	 * @param int $id
+	 *
+	 * @return stream
+	 */
+	public function getD9($id){
+		$pdf = $this->getPdfDoiu9($id);
+		return $pdf->download($id . '.pdf');
 	}
 }

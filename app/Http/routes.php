@@ -201,8 +201,10 @@ Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
 Route::get('ddjj-doiu-9' , 'DdjjController@getDoiu9');
 Route::post('ddjj-doiu-9' , 'DdjjController@postDoiu9');
 Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
+Route::get('ddjj-doiu9-reimprimir/{id}' , 'DdjjController@getD9');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
+
 Route::get('ddjj-periodo/{tipo}' , 'DdjjController@getPeriodo');
 Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
 Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
@@ -288,15 +290,7 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('bene/{periodo}' , 'PucoController@getBeneficiarios');
-Route::get('fecha' , function(){
-	
-	setlocale(LC_TIME, 'es_ES.UTF-8');
-	echo strftime("%B %Y");
 
-});
-
-Route::get('pdf' , 'DdjjController@getPdfDoiu9');
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/

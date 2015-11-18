@@ -71,4 +71,11 @@ class DOIU9 extends Model
         return date('d/m/Y' , strtotime($value));
     }
 
+    /**
+     * Devuelve la provincia
+     */
+    public function provincia(){
+        return $this->hasOne('App\Models\Geo\Provincia' , 'id_provincia' , 'id_provincia');
+    }
+
 }

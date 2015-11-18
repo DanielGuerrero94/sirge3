@@ -12,7 +12,9 @@
       	.page {  margin-left: 49%; }
       	.pagenum:before { content: counter(page); }
       	.resumen , .lugar-dia-hora { text-align: right;}
-      	td { text-align: center;  border: solid 2px black; height: 40px; font-weight: bold;}
+      	td { text-align: center;  border: solid 1px black; height: 40px; font-weight: bold;}
+      	p , li { line-height: 1.5em }
+      	body { font-size: 13px}
 	</style>
 </head>
 <body>
@@ -24,10 +26,10 @@
 	<table style="width: 100%">
 		<tr>
 			<td>FORMULARIO DE ENVÍO DE INFORMACIÓN PRIORIZADA DEL PROGRAMA SUMAR</td>
-			<td>Nº 09/2013-11</td>
+			<td>Nº {{ $ddjj->id_provincia}}/{{ $ddjj->periodo_reportado}}</td>
 		</tr>
 	</table>
-	<p class="lugar-dia-hora"><b>{{ $ddjj->id_provincia }} , {{ $ddjj->fecha_impresion }}</b></p>
+	<p class="lugar-dia-hora"><b>{{ ucwords(strtolower($ddjj->provincia->descripcion)) }} , {{ $fecha_impresion }}</b></p>
 	<p style="font-weight: bold">
 		SEÑOR <br/>
 		COORDINADOR NACIONAL DEL PROGRAMA SUMAR <br />
@@ -37,7 +39,8 @@
 		De mi mayor consideración:
 	</p>
 	<p style="text-indent: 2em;">
-		Por medio de la presente se informa que se encuentra actualizada en el SIRGe Web la Tabla de Efectores correspondiente al mes de XXXXX de XXXX
+		Por medio de la presente se informa que se encuentra actualizada en el SIRGe Web la Tabla de Efectores correspondiente al mes de
+		{{ $fecha_tabla_efectores }}
 	</p>
 	<p style="text-indent: 2em;">
 		De acuerdo con dichos elementos, el número de Efectores Integrantes ascienda a {{ $ddjj->efectores_integrantes }}. Asimismo, el número de Efectores 
@@ -51,7 +54,7 @@
 			</li>
 			<li>
 				Con fecha {{ $ddjj->fecha_cuenta_capitas }} se remitió al Área de Supervisión y Auditoría de la Gestión Administrativa y Financiera de la UEC
-				 la Declaración Jurada que incluye los ingresos y egresos de la Cuenta Cápitas Provincial del SPS durante el mes de XXXX de XXXX, 
+				 la Declaración Jurada que incluye los ingresos y egresos de la Cuenta Cápitas Provincial del SPS durante el mes de {{ $fecha_cc }}, 
 				 y la copia del extracto bancario de dicha cuenta correspondiente al mismo período.
 			</li>
 			<li>
@@ -67,6 +70,9 @@
 	<p style="text-indent: 2em;">
 		Dejo constancia bajo juramento que la información referida en la presente nota y los soportes ópticos acompañados, han sido elaborados siguiendo todos los procedimientos 
 		razonables para garantizar la mayor exactitud posible en los mismos
+	</p>
+	<p>
+		Sin otro particular, saludo a Ud. cordialmente
 	</p>
 	<div class="footer">
 		<div style="margin-left:60%; width: 40%; text-align: left;">

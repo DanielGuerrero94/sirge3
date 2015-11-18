@@ -106,6 +106,8 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		
+		$('#errores-div').hide();
+
 		$('.fecha').inputmask({
 			mask : '99/99/9999',
 			placeholder : 'dd/mm/aaaa'
