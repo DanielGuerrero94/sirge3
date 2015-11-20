@@ -30,7 +30,7 @@
 				text : ''
 			},
 			mapNavigation: {
-				enabled: true,
+				enabled: false,
 				buttonOptions: {
 					verticalAlign: 'bottom'
 				}
@@ -42,7 +42,7 @@
 				data : {!!$mes['data']!!},
 				mapData: Highcharts.maps['countries/ar/ar-all'],
 				joinBy: 'hc-key',
-				name: 'Población',
+				name: 'DOIU 9',
 				states: {
 					hover: {
 						color: '#BADA55'
@@ -50,7 +50,16 @@
 				},
 				dataLabels: {
 					enabled: false,
-					format: '{point.name}'
+					format: '{point.properties.postal}'
+				},
+				tooltip : {
+					pointFormatter: function(){
+						if (this.value){
+							return this.name + ' : REPORTADO';
+						} else {
+							return this.name + ' : PENDIENTE';
+						}
+					} 
 				},/*
 				point : {
 					events : {
