@@ -442,4 +442,13 @@ class DdjjController extends Controller
 		$pdf = $this->getPdfDoiu9($id);
 		return $pdf->download($id . '.pdf');
 	}
+
+	/**
+	 *
+	 * TEST
+	 *
+	 */
+	public function mid(){
+		return Auth::user()->id_entidad;
+	}
 }

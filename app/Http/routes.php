@@ -205,7 +205,10 @@ Route::get('ddjj-doiu9-reimprimir/{id}' , 'DdjjController@getD9');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 
-Route::get('ddjj-periodo/{tipo}' , 'DdjjController@getPeriodo');
+Route::get('ddjj-periodo/{tipo}' , [
+		'middleware' => 'uec' , 
+		'uses' => 'DdjjController@getPeriodo'
+	]);
 Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
 Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
@@ -290,6 +293,7 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
+Route::get('mid' , ['middleware' => 'uec' , 'uses' => 'DdjjController@mid']);
 
 /********************************************************************************
  *								 	WS ROUTES 									*
