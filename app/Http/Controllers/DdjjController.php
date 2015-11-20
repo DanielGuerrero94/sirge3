@@ -15,6 +15,7 @@ use App\Http\Requests\DOIU9Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Geo\Provincia;
+use App\Models\Geo\GeoJson;
 use App\Models\DDJJ\Sirge as DDJJSirge;
 use App\Models\DDJJ\DOIU9 as D9;
 use App\Models\DDJJ\Backup;
@@ -224,7 +225,7 @@ class DdjjController extends Controller
 	 * @return json
 	 */
 	public function getDoiu9Tabla() {
-		$djs = D9::all();
+		$djs = Auth::user()->id_entidad == 1 ? D9::with('provincia')->all() : D9::with('provincia')->where('id_provincia' , Auth::user()->id_provincia)->get();
 		return Datatables::of($djs)
 				->addColumn('action' , function($dj){
 					return '<a href="ddjj-doiu9-reimprimir/' . $dj->id_impresion . '" class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver ddjj</a>';
@@ -444,11 +445,33 @@ class DdjjController extends Controller
 	}
 
 	/**
+	 * Consolidado DOIU 9
 	 *
-	 * TEST
-	 *
+	 * @return null
 	 */
-	public function mid(){
-		return Auth::user()->id_entidad;
+	public function D9Consolidado(){
+
+		$dt = new \DateTime();
+
+		$djs = GeoJson::select('geo.geojson.*' , DB::raw('case when version is not null then 1 else 0 end as existe'))
+					->leftJoin('ddjj.doiu9' , function($j){
+						$j->on('geo.geojson.id_provincia' , '=' , 'ddjj.doiu9.id_provincia')
+						  ->where('periodo_reportado' , '=' , '2015-10');
+					})
+					->get();
+		
+		foreach ($djs as $key => $dj) {
+			$meses[$key]['mes'] = 'Octubre';
+			$meses[$key]['value'] = $dj->existe;
+			$meses[$key]['hc-key'] = $dj->geojson_provincia;
+		}
+
+		$data = [
+			'page_title' => 'Consolidado DOIU 9',
+			'meses' => json_decode(json_encode($meses), FALSE),
+			'geo' => json_encode($meses)
+		];
+
+		return view('ddjj.d9.consolidado' , $data);
 	}
 }

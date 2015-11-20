@@ -74,7 +74,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button class="action btn btn-primary">Ver</button>
+							<button class="consolidado btn btn-primary">Ver</button>
 						</div>
 					</div>
 				</div>
@@ -91,7 +91,7 @@ $(document).ready(function(){
         serverSide: true,
         ajax : 'ddjj-doiu9-table',
         columns: [
-            { data: 'id_provincia' , name: 'id_provincia'},
+            { data: 'provincia.descripcion' , name: 'id_provincia'},
             { data: 'periodo_reportado' , name: 'periodo_reportado'},
             { data: 'version'},
             { data: 'motivo_reimpresion'},
@@ -104,6 +104,12 @@ $(document).ready(function(){
 
 	$('.periodo').click(function(){
 		$.get('ddjj-periodo/doiu-9' , function(data){
+			$('.content-wrapper').html(data);
+		});
+	});
+
+	$('.consolidado').click(function(){
+		$.get('ddjj-doiu9-consolidado' , function(data){
 			$('.content-wrapper').html(data);
 		});
 	});

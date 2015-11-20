@@ -202,6 +202,7 @@ Route::get('ddjj-doiu-9' , 'DdjjController@getDoiu9');
 Route::post('ddjj-doiu-9' , 'DdjjController@postDoiu9');
 Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
 Route::get('ddjj-doiu9-reimprimir/{id}' , 'DdjjController@getD9');
+Route::get('ddjj-doiu9-consolidado' , 'DdjjController@D9Consolidado');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 
