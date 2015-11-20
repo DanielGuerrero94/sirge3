@@ -453,23 +453,33 @@ class DdjjController extends Controller
 
 		$dt = new \DateTime();
 
-		$djs = GeoJson::select('geo.geojson.*' , DB::raw('case when version is not null then 1 else 0 end as existe'))
-					->leftJoin('ddjj.doiu9' , function($j){
-						$j->on('geo.geojson.id_provincia' , '=' , 'ddjj.doiu9.id_provincia')
-						  ->where('periodo_reportado' , '=' , '2015-10');
-					})
-					->get();
-		
-		foreach ($djs as $key => $dj) {
-			$meses[$key]['mes'] = 'Octubre';
-			$meses[$key]['value'] = $dj->existe;
-			$meses[$key]['hc-key'] = $dj->geojson_provincia;
+		for ($i = 0 ; $i < 6 ; $i++){
+			
+			$dt->modify('-1 month');
+			$p = $dt->format('Y-m');
+
+			$meses[$i]['periodo'] = $p;
+			$meses[$i]['class'] = $i;
+
+			$djs = GeoJson::select('geo.geojson.*' , DB::raw('case when version is not null then 1 else 0 end as existe'))
+						->leftJoin('ddjj.doiu9' , function($j) use ($p){
+							$j->on('geo.geojson.id_provincia' , '=' , 'ddjj.doiu9.id_provincia')
+							  ->where('periodo_reportado' , '=' , $p);
+						})
+						->get();
+			
+			foreach ($djs as $key => $dj) {
+				$meses[$i]['data'][$key]['value'] = $dj->existe;
+				$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+			}
+
+			$meses[$i]['data'] = json_encode($meses[$i]['data']);
+						
 		}
 
 		$data = [
 			'page_title' => 'Consolidado DOIU 9',
-			'meses' => json_decode(json_encode($meses), FALSE),
-			'geo' => json_encode($meses)
+			'meses' => $meses
 		];
 
 		return view('ddjj.d9.consolidado' , $data);

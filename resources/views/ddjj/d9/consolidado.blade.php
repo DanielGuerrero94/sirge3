@@ -1,76 +1,31 @@
 @extends('content')
 @section('content')
 
-{{print_r($geo)}}
-
 <div class="row">
+
+@foreach($meses as $mes)
+	
 	<div class="col-md-4">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Período : Ene 2015</h2>
+				<h2 class="box-title">Período : {{ $mes['periodo'] }}</h2>
 			</div>
 			<div class="box-body">
-				<div class="map-ene"></div>
+				<div class="{{ $mes['class'] }}"></div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Período : Ene 2015</h2>
-			</div>
-			<div class="box-body">
-				<div class="map-ene"></div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Período : Ene 2015</h2>
-			</div>
-			<div class="box-body">
-				<div class="map-ene"></div>
-			</div>
-		</div>
-	</div>
+
+@endforeach
+	
 </div>
 
-<div class="row">
-	<div class="col-md-4">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Período : Ene 2015</h2>
-			</div>
-			<div class="box-body">
-				<div class="map-ene"></div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Período : Ene 2015</h2>
-			</div>
-			<div class="box-body">
-				<div class="map-ene"></div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Período : Ene 2015</h2>
-			</div>
-			<div class="box-body">
-				<div class="map-ene"></div>
-			</div>
-		</div>
-	</div>
-</div>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('.map-ene').highcharts('Map', {
+
+		@foreach($meses as $mes)
+
+		$('.{{$mes['class']}}').highcharts('Map', {
 			title : {
 				text : ''
 			},
@@ -84,7 +39,7 @@
 				min: 0
 			},
 			series : [{
-				data : {!!$geo!!},
+				data : {!!$mes['data']!!},
 				mapData: Highcharts.maps['countries/ar/ar-all'],
 				joinBy: 'hc-key',
 				name: 'Población',
@@ -105,6 +60,9 @@
 				cursor : 'pointer'
 			}]
 		});
+
+		@endforeach
+
 	});
 </script>
 @endsection
