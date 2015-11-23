@@ -613,7 +613,7 @@ function smartProperty(obj, name) { // get a camel-cased/namespaced property of 
 /* Date Utilities
 ----------------------------------------------------------------------------------------------------------------------*/
 
-var dayIDs = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
+var dayIDs = [ 'dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab' ];
 var intervalUnits = [ 'year', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond' ];
 
 

@@ -37,7 +37,7 @@ class Uec
         if ($this->auth->user()->id_entidad == 2){
             return $next($request);
         } else {
-            return view('errors.403');
+            return redirect('ddjj-doiu-9')->with('status' , 'Permiso denegado');
         }
     }
 }

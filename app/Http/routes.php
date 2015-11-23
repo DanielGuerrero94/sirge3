@@ -211,6 +211,11 @@ Route::get('ddjj-periodo/{tipo}' , [
 		'uses' => 'DdjjController@getPeriodo'
 	]);
 Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
+
+Route::post('backup' , 'DdjjController@postBackup');
+Route::get('ddjj-backup-table' , 'DdjjController@getBackupTabla');
+Route::get('ddjj-backup-consolidado' , 'DdjjController@backupConsolidado');
+
 Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
 /**

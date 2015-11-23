@@ -13,8 +13,6 @@
 				        <ul id="errores-form">
 				        </ul>
 				    </div>
-					
-					
 						<ul>
 							<li>Cantidad de efectores integrantes : <b>{{$efectores_integrantes}}</b></li>
 							<li>Cantidad de efectores con convenio : <b>{{$efectores_convenio}}</b></li>
@@ -108,6 +106,12 @@
 		
 		$('#errores-div').hide();
 
+		$('.back').click(function(){
+			$.get('{{$ruta_back}}' , function(data){
+				$('.content-wrapper').html(data);
+			});
+		});
+
 		$('.fecha').inputmask({
 			mask : '99/99/9999',
 			placeholder : 'dd/mm/aaaa'
@@ -155,7 +159,7 @@
 						success : function(data){
 							$('#modal-text').html(data);
 							$('.modal').modal();
-							// $('form').trigger('reset');
+							$('form').trigger('reset');
 						},
 						error : function(data){
 							var html = '';

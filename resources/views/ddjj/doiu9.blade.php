@@ -52,6 +52,11 @@
 						<h2 class="box-title">Generar</h2>
 					</div>
 					<div class="box-body">
+						@if (session('status'))
+						    <div class="alert alert-danger">
+						        {{ session('status') }}
+						    </div>
+						@endif
 						Desde esta opción usted podrá generar la DDJJ correspondiente a la DOIU Nº 9 de información priorizada.
 					</div>
 					<div class="box-footer">

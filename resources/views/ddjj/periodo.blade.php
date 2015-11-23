@@ -5,7 +5,7 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="box box-info">
 				<div class="box-header">
-					<h2 class="box-title">Formulario DDJJ Información Priorizada</h2>
+					<h2 class="box-title">Ingrese el período a reportar</h2>
 				</div>
 				<div class="box-body">
 					<div class="alert alert-danger" id="errores-div">

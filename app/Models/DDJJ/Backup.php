@@ -26,4 +26,33 @@ class Backup extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaImpresionAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+
+    /**
+     * Devuelve la fecha formateada
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFechaBackupAttribute($value)
+    {
+        return date('d/m/Y' , strtotime($value));
+    }
+	
+	/**
+     * Devuelve la provincia
+     */
+    public function provincia(){
+        return $this->hasOne('App\Models\Geo\Provincia' , 'id_provincia' , 'id_provincia');
+    }
 }

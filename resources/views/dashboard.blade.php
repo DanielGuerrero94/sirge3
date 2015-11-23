@@ -164,7 +164,34 @@
 <!-- FIN INDICADORES DE PROGRESO -->
 
 <div class="row">
-    <div class="col-md-4">
+    
+    <div class="col-md-6">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Noticias</h2>
+			</div>
+			<div class="box-body">
+			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="320" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
+			</div>
+		</div>
+	</div>
+
+    <div class="col-md-6">
+    	<div class="box box-warning">
+    		 <div class="box-header with-border">
+		      <h3 class="box-title">Calendario</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+		    	<div id="calendar"></div>	
+		    </div>
+    	</div>
+    </div>
+</div>
+
+<div class="row">
+	
+
+	<div class="col-md-4">
       <!-- USERS LIST -->
       <div class="box box-info">
         <div class="box-header with-border">
@@ -212,29 +239,7 @@
         </div><!-- /.box-footer -->
       </div><!--/.box -->
     </div><!-- /.col -->
-    <div class="col-md-8">
-    	<div class="box box-warning">
-    		 <div class="box-header with-border">
-		      <h3 class="box-title">Calendario</h3>
-		    </div><!-- /.box-header -->
-		    <div class="box-body no-padding">
-		    	<div id="calendar"></div>	
-		    </div>
-    	</div>
-    </div>
-</div>
 
-<div class="row">
-	<div class="col-md-6">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Noticias</h2>
-			</div>
-			<div class="box-body">
-			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="300" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
-			</div>
-		</div>
-	</div>
 </div>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -287,6 +292,7 @@
 
 	$('#calendar').fullCalendar({
 		height: 340,
+		lang: 'es',
 		googleCalendarApiKey : 'AIzaSyAY1AZ5aKTuMen9SBQcXmc9xtnXZkxYep8',
 		events : {
 			googleCalendarId : 'sirgeweb@gmail.com'
