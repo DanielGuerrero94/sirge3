@@ -207,7 +207,7 @@
 				<h2 class="box-title">Facturación</h2>
 			</div>
 			<div class="box-body">
-				
+				<div class="g2" style="height: 300px;"></div>
 			</div>
 		</div>
     </div><!-- /.col -->
@@ -254,7 +254,37 @@
             verticalAlign: 'bottom',
             borderWidth: 0
         },
-        series: {!! $series !!}
+        series: {!! $grafico_ceb !!}
+    	
+	});
+
+	$('.g2').highcharts({
+		title: {
+            text: '',
+        },
+        xAxis: {
+            categories: {!! $meses !!}
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }],
+            labels : {
+            	enabled : false
+            }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+        },
+        series: {!! $grafico_fc !!}
     	
 	});
 	

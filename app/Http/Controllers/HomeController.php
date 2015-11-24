@@ -13,7 +13,9 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuloMenu;
 use App\Models\Modulo;
 use App\Models\Usuario;
+
 use App\Models\Dw\Ceb002;
+use App\Models\Dw\Fc001;
 
 class HomeController extends Controller
 {
@@ -97,42 +99,102 @@ class HomeController extends Controller
     }
 
     /**
+     * Devuelve el rango de periodos a filtrar
+     *
+     * @return array
+     */
+    protected function getDateInterval(){
+
+        $dt = new \DateTime();
+        $dt->modify('-1 month');
+        $interval['max'] = $dt->format('Ym');
+        $dt->modify('-6 months');
+        $interval['min'] = $dt->format('Ym');
+
+        return $interval;
+    }
+
+    /**
+     * Devuelve la info para generar un gráfico
+     * 
+     * @return json
+     */
+    protected function getProgresoCeb(){
+
+        $interval = $this->getDateInterval();
+
+        $periodos = Ceb002::select('periodo' , DB::raw('sum(beneficiarios) as b') , DB::raw('sum(beneficiarios_ceb) as c'))
+                    ->whereBetween('periodo',[$interval['min'],$interval['max']])
+                    ->groupBy('periodo')
+                    ->orderBy('periodo')
+                    ->get();
+
+        foreach($periodos as $key => $periodo){
+            $chart[0]['name'] = 'Benef. CEB';
+            $chart[0]['data'][$key] = $periodo->c;
+
+            $chart[1]['name'] = 'Benef. INS';
+            $chart[1]['data'][$key] = $periodo->b;
+        }
+        return json_encode($chart);
+    }
+
+    /**
+     * Devuelve la infor para generar un gráfico
+     * 
+     * @return json
+     */
+    protected function getProgresoFc(){
+
+        $interval = $this->getDateInterval();
+
+        $periodos = Fc001::select('periodo' , DB::raw('sum(cantidad) as cf') , DB::raw('sum(monto) as mf'))
+                        ->whereBetween('periodo' , [ $interval['min'] , $interval['max'] ])
+                        ->groupBy('periodo')
+                        ->orderBy('periodo')
+                        ->get();
+        foreach($periodos as $key => $periodo){
+            $chart[0]['name'] = 'Fact. total';
+            $chart[0]['data'][$key] = $periodo->cf;
+
+            $chart[1]['name'] = 'Monto. fact.';
+            $chart[1]['data'][$key] = (int)$periodo->mf;
+        }
+        return json_encode($chart);
+    }
+
+    /**
+     * Devuelve listado de 6 meses 
+     *
+     * @return json
+     */
+    protected function getMesesArray(){
+
+        $dt = new \DateTime();
+        $dt->modify('-7 month');
+        for ($i = 0 ; $i < 6 ; $i ++){
+        $dt->modify('+1 month');
+
+            $meses[$i] = strftime("%b" , $dt->getTimeStamp());
+        }
+        return json_encode($meses);
+    }
+
+    /**
      * Retorna vista dashboard
      *
      * @return null
      */
     public function dashboard(){
 
-        $periodos = Ceb002::select('periodo' , DB::raw('sum(beneficiarios) as b') , DB::raw('sum(beneficiarios_ceb) as c'))
-                    ->groupBy('periodo')
-                    ->orderBy('periodo')
-                    ->get();
-
-        foreach($periodos as $key => $periodo){
-            /*
-            $chart['bene_ceb']['name'] = 'Benef. CEB.';
-            $chart['bene_ceb']['data'][$key] = $periodo->c;
-
-            $chart['bene_ins']['name'] = 'Benef. INS.';
-            $chart['bene_ins']['data'][$key] = $periodo->b;
-            */
-
-            $dt = \DateTime::createFromFormat('Ym' , $periodo->periodo);
-
-            $meses[] = strftime("%b" , $dt->getTimeStamp());
-
-            $chart[0]['name'] = 'Benef. CEB';
-            $chart[0]['data'][$key] = $periodo->c;
-
-            $chart[1]['name'] = 'Benef. INS';
-            $chart[1]['data'][$key] = $periodo->b;
-
-        }
+        // return $this->getProgresoFc();
 
         $data = [
             'page_title' => 'Dashboard',
-            'series' => json_encode($chart),
-            'meses' => json_encode($meses)
+            'grafico_ceb' => $this->getProgresoCeb(),
+            'grafico_fc' => $this->getProgresoFc(),
+            'meses' => $this->getMesesArray()
+
         ];
         return view ('dashboard' , $data);
     }
