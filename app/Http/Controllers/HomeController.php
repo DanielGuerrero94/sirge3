@@ -16,6 +16,7 @@ use App\Models\Usuario;
 
 use App\Models\Dw\Ceb002;
 use App\Models\Dw\Fc001;
+use App\Models\Dw\AfRubro;
 
 class HomeController extends Controller
 {
@@ -140,7 +141,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Devuelve la infor para generar un gráfico
+     * Devuelve la info para generar un gráfico
      * 
      * @return json
      */
@@ -161,6 +162,21 @@ class HomeController extends Controller
             $chart[1]['data'][$key] = (int)$periodo->mf;
         }
         return json_encode($chart);
+    }
+
+    /**
+     * Devuelve la info para generar un gráfico
+     *
+     * @return json
+     */
+    protected function getFondosAll(){
+        
+        $fondos = AfRubro::join('estadisticas.af_001' , 'af_rubros.rubro' , '=' , 'estadisticas.af_001.rubro')
+                        ->select('af_rubros.nombre as name' , DB::raw('sum(monto)::int as y'))
+                        ->groupBy('af_rubros.nombre')
+                        ->get();
+
+        return json_encode($fondos);
     }
 
     /**
@@ -187,12 +203,11 @@ class HomeController extends Controller
      */
     public function dashboard(){
 
-        // return $this->getProgresoFc();
-
         $data = [
             'page_title' => 'Dashboard',
             'grafico_ceb' => $this->getProgresoCeb(),
             'grafico_fc' => $this->getProgresoFc(),
+            'grafico_af' => $this->getFondosAll(),
             'meses' => $this->getMesesArray()
 
         ];

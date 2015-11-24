@@ -164,31 +164,6 @@
 <!-- FIN INDICADORES DE PROGRESO -->
 
 <div class="row">
-    
-    <div class="col-md-6">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Noticias</h2>
-			</div>
-			<div class="box-body">
-			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="320" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
-			</div>
-		</div>
-	</div>
-
-    <div class="col-md-6">
-    	<div class="box box-warning">
-    		 <div class="box-header with-border">
-		      <h3 class="box-title">Calendario</h3>
-		    </div><!-- /.box-header -->
-		    <div class="box-body no-padding">
-		    	<div id="calendar"></div>	
-		    </div>
-    	</div>
-    </div>
-</div>
-
-<div class="row">
 
 	<div class="col-md-4">
 		<div class="box box-info">
@@ -218,15 +193,55 @@
 				<h2 class="box-title">Uso de Fondos</h2>
 			</div>
 			<div class="box-body">
-				
+				<div class="g3" style="height: 300px;"></div>
 			</div>
 		</div>
     </div><!-- /.col -->
 
 </div>
 
+<div class="row">
+    
+    <div class="col-md-6">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Noticias</h2>
+			</div>
+			<div class="box-body">
+			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="320" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
+			</div>
+		</div>
+	</div>
+
+    <div class="col-md-6">
+    	<div class="box box-warning">
+    		 <div class="box-header with-border">
+		      <h3 class="box-title">Calendario</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+		    	<div id="calendar"></div>	
+		    </div>
+    	</div>
+    </div>
+</div>
+
+
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script type="text/javascript">
+
+	// Make monochrome colors and set them as default for all pies
+    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+        var colors = [],
+            base = Highcharts.getOptions().colors[0],
+            i;
+
+        for (i = 0; i < 10; i += 1) {
+            // Start out with a darkened base color (negative brighten), and end
+            // up with a much brighter color
+            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+        }
+        return colors;
+    }());
 
 	$('.g1').highcharts({
 		title: {
@@ -285,8 +300,40 @@
             borderWidth: 0
         },
         series: {!! $grafico_fc !!}
-    	
 	});
+
+	$('.g3').highcharts({
+    	 chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>${point.y}</b> : {point.percentage:.1f} %'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Monto',
+            colorByPoint: true,
+            data: {!! $grafico_af !!}
+        }]
+    });
 	
 	$('#map-container').highcharts('Map', {
 		title : {
