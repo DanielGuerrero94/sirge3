@@ -189,61 +189,74 @@
 </div>
 
 <div class="row">
-	
 
 	<div class="col-md-4">
-      <!-- USERS LIST -->
-      <div class="box box-info">
-        <div class="box-header with-border">
-          <h3 class="box-title">Nuevos Usuarios</h3>
-          <div class="box-tools pull-right">
-            <span class="label label-info">8 Nuevos miembros</span>
-          </div>
-        </div><!-- /.box-header -->
-        <div class="box-body no-padding">
-          <ul class="users-list clearfix">
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user1-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Rodrigo Cadaval</a>
-              <span class="users-list-date">20 Oct. 2014</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user4-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Javier Minsky</a>
-              <span class="users-list-date">17 Oct. 2012</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user3-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user1-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user5-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user6-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-          </ul><!-- /.users-list -->
-        </div><!-- /.box-body -->
-        <div class="box-footer text-center">
-          <a href="usuarios" class="uppercase">Ver todos los usuarios</a>
-        </div><!-- /.box-footer -->
-      </div><!--/.box -->
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Beneficiarios</h2>
+			</div>
+			<div class="box-body">
+				<div class="g1" style="height: 300px;"></div>
+			</div>
+		</div>
+    </div><!-- /.col -->
+
+    <div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Facturación</h2>
+			</div>
+			<div class="box-body">
+				
+			</div>
+		</div>
+    </div><!-- /.col -->
+
+    <div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Uso de Fondos</h2>
+			</div>
+			<div class="box-body">
+				
+			</div>
+		</div>
     </div><!-- /.col -->
 
 </div>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script type="text/javascript">
+
+	$('.g1').highcharts({
+		title: {
+            text: '',
+        },
+        xAxis: {
+            categories: {!! $meses !!}
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }],
+            labels : {
+            	enabled : false
+            }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+        },
+        series: {!! $series !!}
+    	
+	});
 	
 	$('#map-container').highcharts('Map', {
 		title : {

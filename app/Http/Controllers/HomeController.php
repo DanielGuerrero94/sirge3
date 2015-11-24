@@ -1,14 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Auth;
 use Mail;
+use DB;
+
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+
 use App\Models\ModuloMenu;
 use App\Models\Modulo;
 use App\Models\Usuario;
+use App\Models\Dw\Ceb002;
 
 class HomeController extends Controller
 {
@@ -97,8 +102,37 @@ class HomeController extends Controller
      * @return null
      */
     public function dashboard(){
+
+        $periodos = Ceb002::select('periodo' , DB::raw('sum(beneficiarios) as b') , DB::raw('sum(beneficiarios_ceb) as c'))
+                    ->groupBy('periodo')
+                    ->orderBy('periodo')
+                    ->get();
+
+        foreach($periodos as $key => $periodo){
+            /*
+            $chart['bene_ceb']['name'] = 'Benef. CEB.';
+            $chart['bene_ceb']['data'][$key] = $periodo->c;
+
+            $chart['bene_ins']['name'] = 'Benef. INS.';
+            $chart['bene_ins']['data'][$key] = $periodo->b;
+            */
+
+            $dt = \DateTime::createFromFormat('Ym' , $periodo->periodo);
+
+            $meses[] = strftime("%b" , $dt->getTimeStamp());
+
+            $chart[0]['name'] = 'Benef. CEB';
+            $chart[0]['data'][$key] = $periodo->c;
+
+            $chart[1]['name'] = 'Benef. INS';
+            $chart[1]['data'][$key] = $periodo->b;
+
+        }
+
         $data = [
-            'page_title' => 'Dashboard'
+            'page_title' => 'Dashboard',
+            'series' => json_encode($chart),
+            'meses' => json_encode($meses)
         ];
         return view ('dashboard' , $data);
     }
