@@ -6,7 +6,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>53.2 M</h3>
+	      <h3>{{$total_prestaciones}}</h3>
 	      <p>PRESTACIONES</p>
 	    </div>
 	    <div class="icon">
@@ -21,7 +21,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>9076</h3>
+	      <h3>{{$total_efectores}}</h3>
 	      <p>EFECTORES</p>
 	    </div>
 	    <div class="icon">
@@ -36,7 +36,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>44</h3>
+	      <h3>{{$total_usuarios}}</h3>
 	      <p>USUARIOS</p>
 	    </div>
 	    <div class="icon">

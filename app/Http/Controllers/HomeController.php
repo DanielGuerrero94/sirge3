@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuloMenu;
 use App\Models\Modulo;
 use App\Models\Usuario;
+use App\Models\Efector;
 
 use App\Models\Dw\Ceb002;
 use App\Models\Dw\Fc001;
@@ -155,7 +156,7 @@ class HomeController extends Controller
                         ->orderBy('periodo')
                         ->get();
         foreach($periodos as $key => $periodo){
-            $chart[0]['name'] = 'Fact. total';
+            $chart[0]['name'] = 'Prest. fact.';
             $chart[0]['data'][$key] = $periodo->cf;
 
             $chart[1]['name'] = 'Monto. fact.';
@@ -197,6 +198,34 @@ class HomeController extends Controller
     }
 
     /**
+     * Devuelve la cantidad total de prestaciones facturadas
+     *
+     * @return string
+     */
+    protected function getPrestacionesFacturadas(){
+        $ps = Fc001::sum('cantidad');
+        return round($ps/1000000 , 2) . 'M';
+    }
+
+    /**
+     * Devuelve la cantidad de efectores activos
+     *
+     * @return int
+     */
+    protected function getEfectores(){
+        return Efector::where('id_estado' , 1)->count();
+    }
+
+    /**
+     * Devuelve el número de usuarios
+     *
+     * @return int
+     */
+    protected function getUsuarios(){
+        return Usuario::where('activo' , 'S')->count();
+    }
+
+    /**
      * Retorna vista dashboard
      *
      * @return null
@@ -208,7 +237,10 @@ class HomeController extends Controller
             'grafico_ceb' => $this->getProgresoCeb(),
             'grafico_fc' => $this->getProgresoFc(),
             'grafico_af' => $this->getFondosAll(),
-            'meses' => $this->getMesesArray()
+            'meses' => $this->getMesesArray(),
+            'total_prestaciones' => $this->getPrestacionesFacturadas(),
+            'total_efectores' => $this->getEfectores(),
+            'total_usuarios' => $this->getUsuarios()
 
         ];
         return view ('dashboard' , $data);
