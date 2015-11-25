@@ -19,6 +19,7 @@ use App\Models\Lote;
 use App\Models\Dw\Ceb002;
 use App\Models\Dw\Fc001;
 use App\Models\Dw\AfRubro;
+use App\Models\Dw\IndecPoblacionPais as Indec;
 
 class HomeController extends Controller
 {
@@ -300,7 +301,121 @@ class HomeController extends Controller
                     ->get();
             return round (sizeof($lotes) * 100 / 30 , 2);
         }
+    }
 
+    /**
+     * Devuelve las visitas
+     *
+     * @return array
+     */
+    protected function getVisitas(){
+        $array = [
+            'total' => 0,
+            'visitas' => []
+        ];
+
+        $visitas = DB::select("
+            select * from (
+                select
+                    extract (year from fecha_login) ::text || lpad (extract (month from fecha_login) :: text , 2 , '0') as c
+                    , count(*) as v
+                from logs.logins
+                group by
+                    extract (year from fecha_login) ::text || lpad (extract (month from fecha_login) :: text , 2 , '0')
+                order by 
+                    extract (year from fecha_login) ::text || lpad (extract (month from fecha_login) :: text , 2 , '0') 
+                limit 6
+            ) a order by c desc");
+        foreach ($visitas as $visita){
+            $array['visitas'][] = $visita->v;
+            $array['total'] += $visita->v;
+        }
+        return $array;
+    }
+
+    /**
+     * Devuelve efectores dados de alta
+     *
+     * @return array
+     */
+    protected function getAltasEfectores(){
+        $array = [
+            'total' => 0,
+            'altas' => []
+        ];
+
+        $altas = DB::select("
+            select * from (
+                select
+                    extract (year from created_at) ::text || lpad (extract (month from created_at) :: text , 2 , '0') as c
+                    , count(*) as v
+                from efectores.efectores
+                group by
+                    extract (year from created_at) ::text || lpad (extract (month from created_at) :: text , 2 , '0')
+                order by 
+                    extract (year from created_at) ::text || lpad (extract (month from created_at) :: text , 2 , '0') 
+                limit 6
+                ) a order by c desc");
+        foreach ($altas as $alta){
+            $array['altas'][] = $alta->v;
+            $array['total'] += $alta->v;
+        }
+        return $array;
+    }
+
+    /**
+     * Devuelve la cantidad de usuarios dados de alta
+     *
+     * @return array
+     */
+    protected function getAltasUsuarios(){
+        $array = [
+            'total' => 0,
+            'altas' => []
+        ];
+
+        $altas = DB::select("
+            select * from (
+                select
+                    extract (year from created_at) ::text || lpad (extract (month from created_at) :: text , 2 , '0') as c
+                    , count(*) as v
+                from sistema.usuarios
+                group by
+                    extract (year from created_at) ::text || lpad (extract (month from created_at) :: text , 2 , '0')
+                order by 
+                    extract (year from created_at) ::text || lpad (extract (month from created_at) :: text , 2 , '0') 
+                limit 6
+                ) a order by c desc");
+        foreach ($altas as $alta){
+            $array['altas'][] = $alta->v;
+            $array['total'] += $alta->v;
+        }
+        return $array;
+    }
+
+    /**
+     * Devuelve la info para poblar el mapa
+     *
+     * @return json
+     */
+    protected function getDataMap(){
+
+        $dt = new \DateTime();
+        $dt->modify('-1 month');
+        $periodo = $dt->format('Ym');
+
+        $provincias = Indec::leftJoin('geo.geojson' , 'indec.poblacion.id_provincia' , '=' , 'geo.geojson.id_provincia')
+                ->leftJoin('estadisticas.ceb_002' , function($q) use ($periodo){
+                    $q->on('geo.geojson.id_provincia' , '=' , 'estadisticas.ceb_002.id_provincia')
+                    ->where('periodo' , '=' , $periodo);
+                })->get();
+
+        foreach ($provincias as $key => $provincia){
+            $map[$key]['hc-key'] = $provincia->codigo;
+            $map[$key]['value'] = $provincia->habitantes;
+        }
+
+        return json_encode($map);
     }
 
     /**
@@ -309,7 +424,10 @@ class HomeController extends Controller
      * @return null
      */
     public function dashboard(){
-       // return $this->getPorcentajeIn(4);
+        $visitas = $this->getVisitas();
+        $efectores = $this->getAltasEfectores();
+        $usuarios = $this->getAltasUsuarios();
+
         $data = [
             'page_title' => 'Dashboard',
             'grafico_ceb' => $this->getProgresoCeb(),
@@ -328,7 +446,14 @@ class HomeController extends Controller
             'porcentaje_fondos' => $this->getPorcentajeIn(2),
             'mes_puco' => $this->getRegistrosIn(4),
             'porcentaje_puco' => $this->getPorcentajeIn(4),
-            'mes' => ucwords(strftime("%B %Y"))
+            'mes' => ucwords(strftime("%B %Y")),
+            'visitas' => implode(',' , $visitas['visitas']),
+            'visitas_total' => $visitas['total'],
+            'efectores' => implode(',' , $efectores['altas']),
+            'efectores_total' => $efectores['total'],
+            'usuarios' => implode(',' , $usuarios['altas']),
+            'usuarios_total' => $usuarios['total'],
+            'map' => $this->getDataMap()
         ];
         return view ('dashboard' , $data);
     }

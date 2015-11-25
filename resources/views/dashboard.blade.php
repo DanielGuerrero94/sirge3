@@ -81,23 +81,23 @@
 						<div class="pad box-pane-right bg-orange" style="min-height: 280px">
                         <div class="description-block margin-bottom">
                           <div class="sparkbar pad" data-color="#fff">
-                      		<span class="inlinesparkline">6,4,4,7,5,9,10</span>
+                      		<span class="inlinesparkline">{{$visitas}}</span>
 	                  	</div>
-						<h5 class="description-header">8390</h5>
+						<h5 class="description-header">{{$visitas_total}}</h5>
 						<span class="description-text">Visitas</span>
                         </div><!-- /.description-block -->
                         <div class="description-block margin-bottom">
                           <div class="sparkbar pad" data-color="#fff">
-                          	<span class="inlinesparkline">6,4,4,7,5,9,10</span>
+                          	<span class="inlinesparkline">{{$efectores}}</span>
                           </div>
-                          <h5 class="description-header">36</h5>
+                          <h5 class="description-header">{{$efectores_total}}</h5>
                           <span class="description-text">Efectores nuevos</span>
                         </div><!-- /.description-block -->
                         <div class="description-block">
                           <div class="sparkbar pad" data-color="#fff">
-                          	<span class="inlinesparkline">2,2,1,1,3,1,2</span>
+                          	<span class="inlinesparkline">{{$usuarios}}</span>
                           </div>
-                          <h5 class="description-header">12</h5>
+                          <h5 class="description-header">{{$usuarios_total}}</h5>
                           <span class="description-text">Usuarios nuevos</span>
                         </div><!-- /.description-block -->
                       </div>
@@ -349,7 +349,7 @@
 			min: 0
 		},
 		series : [{
-			//data : geo,
+			data : {!!$map!!},
 			mapData: Highcharts.maps['countries/ar/ar-all'],
 			joinBy: 'hc-key',
 			name: 'Población',
