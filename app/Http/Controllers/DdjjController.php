@@ -31,6 +31,7 @@ class DdjjController extends Controller
 	 */
 	public function __construct(){
 		$this->middleware('auth');
+		setlocale(LC_TIME, 'es_ES.UTF-8');
 	}
 
 	/**
@@ -433,8 +434,6 @@ class DdjjController extends Controller
 	 * @return object
 	 */
 	protected function getPdfDoiu9($id){
-		
-		setlocale(LC_TIME, 'es_ES.UTF-8');
 
 		$d = D9::with('provincia')->find($id);
 
@@ -461,8 +460,6 @@ class DdjjController extends Controller
 	 */
 	protected function getPdfBackup($id){
 		
-		setlocale(LC_TIME, 'es_ES.UTF-8');
-
 		$d = Backup::with('provincia')->find($id);
 
 		$d_pr = \DateTime::createFromFormat('Y-m' , $d->periodo_reportado);

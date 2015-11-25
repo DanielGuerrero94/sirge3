@@ -51,7 +51,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>13.5 M</h3>
+	      <h3>{{$total_beneficiarios}}</h3>
 	      <p>BENEFICIARIOS</p>
 	    </div>
 	    <div class="icon">
@@ -111,12 +111,12 @@
 	    <span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">PRESTACIONES</span>
-	      <span class="info-box-number">41,410</span>
+	      <span class="info-box-number">{{$mes_prestaciones}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 30%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_prestaciones}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -124,12 +124,12 @@
 	    <span class="info-box-icon"><i class="fa fa-file-text"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Comprobantes</span>
-	      <span class="info-box-number">340</span>
+	      <span class="info-box-number">{{$mes_comprobantes}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 70%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_comprobantes}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -137,12 +137,12 @@
 	    <span class="info-box-icon"><i class="fa fa-usd"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Uso de Fondos</span>
-	      <span class="info-box-number">9</span>
+	      <span class="info-box-number">{{$mes_fondos}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 100%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_fondos}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -150,12 +150,12 @@
 	    <span class="info-box-icon"><i class="fa fa-database"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Puco</span>
-	      <span class="info-box-number">13,341,232</span>
+	      <span class="info-box-number">{{$mes_puco}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 80%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_puco}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
