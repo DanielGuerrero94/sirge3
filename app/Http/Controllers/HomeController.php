@@ -413,6 +413,9 @@ class HomeController extends Controller
         foreach ($provincias as $key => $provincia){
             $map[$key]['hc-key'] = $provincia->codigo;
             $map[$key]['value'] = $provincia->habitantes;
+            $map[$key]['inscriptos'] = $provincia->beneficiarios_registrados;
+            $map[$key]['activos'] = $provincia->beneficiarios_activos;
+            $map[$key]['ceb'] = $provincia->beneficiarios_ceb;
         }
 
         return json_encode($map);

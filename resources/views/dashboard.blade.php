@@ -349,7 +349,7 @@
 			min: 0
 		},
 		series : [{
-			data : {!!$map!!},
+			data : {!! $map !!},
 			mapData: Highcharts.maps['countries/ar/ar-all'],
 			joinBy: 'hc-key',
 			name: 'Población',
@@ -361,7 +361,19 @@
 			dataLabels: {
 				enabled: false,
 				format: '{point.name}'
-			},/*
+			},
+			tooltip : {
+				pointFormatter : function(){
+					var html = '';
+						html += 'Poblacion : ' + Highcharts.numberFormat(this.value , 0) + '<br />';
+						html += 'Inscriptos : ' + Highcharts.numberFormat(this.inscriptos , 0) + '<br />';
+						html += 'Activos : ' + Highcharts.numberFormat(this.activos , 0) + '<br />';
+						html += 'C.E.B. : ' + Highcharts.numberFormat(this.ceb , 0) + '<br />';
+					return html;
+				}
+			},
+
+			/*
 			point : {
 				events : {
 					click : InfoProvincia
