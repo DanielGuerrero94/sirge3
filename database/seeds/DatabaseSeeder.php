@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
 		$this->call('PssGruposDiagnosticos');
-		$this->call('BeneficiariosBeneficiariosBajas');*/
+		$this->call('BeneficiariosBeneficiariosBajas');
 		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
 		$this->call('BeneficiariosBeneficiariosCeb');
 		$this->call('BeneficiariosBeneficiariosContacto');
@@ -90,14 +90,37 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosIndigenas');
 		$this->call('BeneficiariosBeneficiariosParientes');
 		$this->call('BeneficiariosBeneficiariosPeriodos');
-		$this->call('BeneficiariosBeneficiariosPeriodosYCeb2015');
+		//$this->call('BeneficiariosBeneficiariosPeriodosYCeb2015');
 		$this->call('BeneficiariosBeneficiariosScore');
-		$this->call('BeneficiariosResumenBeneficiarios');
+		$this->call('BeneficiariosResumenBeneficiarios');*/
 		$this->call('PrestacionesP');
-		$this->call('ComprobantesC');
+		/*$this->call('ComprobantesC');
 		$this->call('FondosCodigosGasto');
+		$this->call('FondosSubCodigosGasto');
 		$this->call('FondosA');
-
+		$this->call('PucoGruposObrasSociales');
+		$this->call('PucoObrasSociales');
+		$this->call('PucoProcesosObrasSociales');
+		$this->call('PucoResumenPuco');
+		$this->call('CompromisoAnualMetasCodigosValidos');
+		$this->call('CompromisoAnualMetasDescentralizacion');
+		$this->call('CompromisoAnualMetasFacturacion');
+		$this->call('DdjjBackup');
+		$this->call('DdjjDoiu9');
+		$this->call('DdjjSirge');
+		$this->call('IndecPoblacion');
+		$this->call('IndecPoblacionDepartamentos');
+		$this->call('IndicadoresIndicadoresDescripcion');
+		$this->call('IndicadoresIndicadoresMedica');
+		$this->call('IndicadoresIndicadoresMedicaRangos');
+		$this->call('IndicadoresIndicadoresPriorizados');
+		$this->call('IndicadoresMetasEfectoresPriorizados');
+		$this->call('IndicadoresProvincias');
+		$this->call('LogsLogins');
+		$this->call('LogsQueriesDinamicos');
+		$this->call('EfectoresAddendas');
+		%this->call('EfectoresEfectoresAddendas');*/
+		//$this->call('OspProvincias');
 
 		Model::reguard();
 	}
