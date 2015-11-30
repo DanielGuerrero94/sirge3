@@ -41,29 +41,29 @@ class CreateEsquemas extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		DB::statement('DROP SCHEMA beneficiarios;');
-		DB::statement('DROP SCHEMA comprobantes;');
-		DB::statement('DROP SCHEMA compromiso_anual;');
-		DB::statement('DROP SCHEMA consultas;');
-		DB::statement('DROP SCHEMA ddjj;');
-		DB::statement('DROP SCHEMA efectores;');
-		DB::statement('DROP SCHEMA fondos;');
-		DB::statement('DROP SCHEMA geo;');
-		DB::statement('DROP SCHEMA indec;');
-		DB::statement('DROP SCHEMA indicadores;');
-		DB::statement('DROP SCHEMA logs;');
-		DB::statement('DROP SCHEMA mobile;');
-		DB::statement('DROP SCHEMA osp;');
-		DB::statement('DROP SCHEMA prestaciones;');
-		DB::statement('DROP SCHEMA profe;');
-		DB::statement('DROP SCHEMA pss;');
-		DB::statement('DROP SCHEMA puco;');
-		DB::statement('DROP SCHEMA sistema;');
-		DB::statement('DROP SCHEMA sss;');
-		DB::statement('DROP SCHEMA tmp;');
-		DB::statement('DROP SCHEMA trazadoras;');
-		DB::statement('DROP SCHEMA solicitudes;');
-		DB::statement('DROP SCHEMA graficos;');
+		DB::statement('DROP SCHEMA beneficiarios CASCADE;');
+		DB::statement('DROP SCHEMA comprobantes CASCADE;');
+		DB::statement('DROP SCHEMA compromiso_anual  CASCADE;');
+		DB::statement('DROP SCHEMA consultas CASCADE;');
+		DB::statement('DROP SCHEMA ddjj CASCADE;');
+		DB::statement('DROP SCHEMA efectores CASCADE;');
+		DB::statement('DROP SCHEMA fondos CASCADE;');
+		DB::statement('DROP SCHEMA geo CASCADE;');
+		DB::statement('DROP SCHEMA indec CASCADE;');
+		DB::statement('DROP SCHEMA indicadores CASCADE;');
+		DB::statement('DROP SCHEMA logs CASCADE;');
+		DB::statement('DROP SCHEMA mobile CASCADE;');
+		DB::statement('DROP SCHEMA osp CASCADE;');
+		DB::statement('DROP SCHEMA prestaciones CASCADE;');
+		DB::statement('DROP SCHEMA profe CASCADE;');
+		DB::statement('DROP SCHEMA pss CASCADE;');
+		DB::statement('DROP SCHEMA puco CASCADE;');
+		DB::statement('DROP SCHEMA sistema CASCADE;');
+		DB::statement('DROP SCHEMA sss CASCADE;');
+		DB::statement('DROP SCHEMA tmp CASCADE;');
+		DB::statement('DROP SCHEMA trazadoras CASCADE;');
+		DB::statement('DROP SCHEMA solicitudes CASCADE;');
+		DB::statement('DROP SCHEMA graficos CASCADE;');
 
 	}
 }

@@ -14,11 +14,11 @@ class CreateTableBeneficiariosBeneficiariosParientes extends Migration {
 		Schema::create('beneficiarios.beneficiarios_parientes', function(Blueprint $table)
 		{
 			$table->string('clave_beneficiario', 16)->primary();
-			$table->string('madre_tipo_documento', 3);
+			$table->string('madre_tipo_documento', 5);
 			$table->string('madre_numero_documento', 14);
 			$table->string('madre_apellido', 100);
 			$table->string('madre_nombre', 100);
-			$table->string('padre_tipo_documento', 3);
+			$table->string('padre_tipo_documento', 5);
 			$table->string('padre_numero_documento', 14);
 			$table->string('padre_apellido', 100);
 			$table->string('padre_nombre', 100);

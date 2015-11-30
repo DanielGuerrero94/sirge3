@@ -13,8 +13,7 @@ class CreateTableDdjjSirge extends Migration {
 	{
 		Schema::create('ddjj.sirge', function(Blueprint $table)
 		{
-			$table->increments('id_impresion');
-			$table->char('id_provincia', 2)->nullable();
+			$table->increments('id_impresion');			
 		});
 
 		\DB::statement("ALTER TABLE ddjj.sirge ADD COLUMN fecha_impresion timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone, ADD COLUMN lote integer[];");

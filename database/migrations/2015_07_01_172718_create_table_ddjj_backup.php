@@ -20,7 +20,7 @@ class CreateTableDdjjBackup extends Migration {
 			$table->date('fecha_backup');
 			$table->text('nombre_backup');
 			$table->integer('version')->unsigned();
-			$table->text('motivo_reimpresion');
+			$table->text('motivo_reimpresion')->nullable();
 		});
 
 		\DB::statement("ALTER TABLE ddjj.backup ADD COLUMN fecha_impresion timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone;");

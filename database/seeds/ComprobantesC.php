@@ -23,7 +23,7 @@ class ComprobantesC extends Seeder
 				$prov = (string) $i;
 			}
 
-			\DB::statement(" INSERT INTO comprobantes.c_".$prov."(efector,numero_comprobante,tipo_comprobante,fecha_comprobante,fecha_recepcion,fecha_notificacion,fecha_liquidacion,fecha_debito_bancario,importe,importe_pagado,factura_debitada,concepto,lote)
+			\DB::statement(" INSERT INTO comprobantes.comprobantes(efector,numero_comprobante,tipo_comprobante,fecha_comprobante,fecha_recepcion,fecha_notificacion,fecha_liquidacion,fecha_debito_bancario,importe,importe_pagado,factura_debitada,concepto,lote)
 		(
 			SELECT *
 			FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

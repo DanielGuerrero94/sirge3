@@ -14,7 +14,7 @@ class CreatePrestaciones extends Migration {
 		Schema::create('prestaciones.prestaciones', function(Blueprint $table)
 		{
 			$table->increments('id_prestacion');
-			$table->char('id_provincia', 2);
+			//$table->char('id_provincia', 2);
 			$table->char('estado', 1);
 			$table->string('efector', 14);
 			$table->string('numero_comprobante', 50);
@@ -36,7 +36,7 @@ class CreatePrestaciones extends Migration {
 			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios');
 			$table->foreign('lote')->references('lote')->on('sistema.lotes');
 
-			$table->unique(['numero_comprobante', 'codigo_prestacion', 'subcodigo_prestacion', 'fecha_prestacion', 'clave_beneficiario', 'orden']);
+			$table->unique(['numero_comprobante', 'codigo_prestacion', 'subcodigo_prestacion', 'fecha_prestacion', 'clave_beneficiario', 'orden', 'efector']);
 		});
 	}
 

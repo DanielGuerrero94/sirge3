@@ -14,10 +14,10 @@ class CreateTableIndecPoblacionDepartamentos extends Migration {
 		Schema::create('indec.poblacion_departamentos', function(Blueprint $table)
 		{
 			$table->char('id_provincia', 2);
-			$table->char('id_departamentos', 3);
+			$table->char('id_departamento', 3);
 			$table->integer('habitantes')->unsigned();
 			$table->integer('habitantes_sumar')->unsigned();
-			$table->primary(['id_provincia', 'id_departamentos']);
+			$table->primary(['id_provincia', 'id_departamento']);
 		});
 	}
 

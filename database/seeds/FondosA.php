@@ -22,12 +22,12 @@ class FondosA extends Seeder
 				$prov = (string) $i;
 			}
 
-			\DB::statement(" INSERT INTO fondos.a_".$prov."(efector,fecha_gasto,periodo,numero_comprobante,codigo_gasto,subcodigo_gasto,efector_cesion,monto,concepto,lote)
+			\DB::statement(" INSERT INTO fondos.fondos(efector,fecha_gasto,periodo,numero_comprobante,codigo_gasto,subcodigo_gasto,efector_cesion,monto,concepto,lote)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT efector,fecha_gasto,regexp_replace(periodo, ''-'', '''')::integer,numero_comprobante,codigo_gasto,subcodigo_gasto,efector_cesion,monto,concepto,lote
-			    FROM aplicacion_fondos.a_".$prov." limit 100')
+			    FROM aplicacion_fondos.a_".$prov."')
 		    AS migracion(efector character varying(14),
 				  fecha_gasto date,
 				  periodo integer,

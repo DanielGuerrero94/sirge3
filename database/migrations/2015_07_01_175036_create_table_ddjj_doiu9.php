@@ -19,7 +19,7 @@ class CreateTableDdjjDoiu9 extends Migration {
 			$table->char('periodo_reportado', 7);
 			$table->integer('efectores_integrantes')->unsigned()->nullable();
 			$table->integer('efectores_convenio')->unsigned()->nullable();
-			$table->char('period_tablero_control', 7);
+			$table->char('periodo_tablero_control', 7);
 			$table->date('fecha_cuenta_capitas');
 			$table->char('periodo_cuenta_capitas', 7);
 			$table->date('fecha_sirge');
@@ -28,7 +28,7 @@ class CreateTableDdjjDoiu9 extends Migration {
 			$table->smallInteger('bimestre')->nullable();
 			$table->integer('anio_bimestre')->unsigned()->nullable();
 			$table->integer('version');
-			$table->text('motivo_reimpresion');
+			$table->text('motivo_reimpresion')->nullable();
 		});
 
 		\DB::statement("ALTER TABLE ddjj.doiu9 ADD COLUMN fecha_impresion timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone;");

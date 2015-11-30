@@ -14,7 +14,7 @@ class CreateComprobantesComprobantes extends Migration {
 		Schema::create('comprobantes.comprobantes', function(Blueprint $table)
 		{
 			$table->increments('id_comprobante');
-			$table->char('id_provincia', 2);
+			//$table->char('id_provincia', 2);
 			$table->string('efector', 14);
 			$table->string('numero_comprobante', 50);
 			$table->char('tipo_comprobante', 2);
