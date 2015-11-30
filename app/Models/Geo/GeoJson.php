@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Geo;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Super extends Model
+class GeoJson extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'puco.sss';
+	protected $table = 'geo.geojson';
 
 	/**
 	 * Primary key asociated with the table.
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id';
+	protected $primaryKey = 'id_provincia';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -26,4 +26,5 @@ class Super extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
 }

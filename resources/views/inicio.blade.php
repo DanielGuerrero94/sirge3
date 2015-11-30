@@ -92,6 +92,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/moment.js") }}" ></script>
 <!-- Fullcalendar -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/fullcalendar.min.js") }}" ></script>
+<!-- Fullcalendar Language-->
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/es.js") }}" ></script>
 <!-- Google Calendar -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/fullcalendar/gcal.js") }}" ></script>
 <!-- Datatables -->

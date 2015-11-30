@@ -1,4 +1,4 @@
-## Laravel PHP Framework
+## SIRG3 
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
@@ -14,9 +14,11 @@ Laravel is accessible, yet powerful, providing powerful tools needed for large, 
 
 Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-## Contributing
+## Desarrolladores
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+[Gustavo Damián Hekel](https://github.com/GustavoHekel)
+
+[Rodrigo Cadaval](https://github.com/rodricadaval)
 
 ## Security Vulnerabilities
 

@@ -1,4 +1,7 @@
 <?php
+
+use Excel;
+use App\Models\Usuario;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -99,17 +102,6 @@ Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
 
 /**
- * DDJJ
- */
-#	LOTES PENDIENTES
-Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
-Route::get('listado-lotes-cerrados-table/{padron}' , 'DdjjController@getListadoPendientesTabla');
-Route::post('declarar-lotes' , 'LotesController@declararLotes');
-Route::get('listado-ddjj/{padron}' , 'DdjjController@getListado');
-Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
-Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
-
-/**
  * DICCIONARIO
  */
 Route::get('diccionario/{id}' , 'DiccionariosController@getDatadic');
@@ -134,6 +126,7 @@ Route::get('procesar-fondos/{archivo}' , 'FondosController@procesarArchivo');
  * OBRA SOCIAL PROVINCIAL
  */
 Route::get('procesar-osp/{archivo}' , 'OspController@procesarArchivo');
+Route::get('check-periodo/{codigo}' , 'OspController@checkPeriodo');
 
 /**
  * PROGRAMA FEDERAL DE SALUD
@@ -144,7 +137,16 @@ Route::get('procesar-profe/{archivo}' , 'ProfeController@procesarArchivo');
  * SUPERINTENDENCIA DE SERVICIOS DE SALUD
  */
 Route::get('procesar-sss/{archivo}' , 'SuperController@procesarArchivo');
+Route::get('check-sss/{archivo}' , 'SuperController@checkId');
 
+/**
+ * PUCO
+ */
+Route::get('puco-generar' , 'PucoController@getGenerar');
+Route::get('puco-estadisticas-table' , 'PucoController@estadisticasTabla');
+Route::get('puco-resumen-table' , 'PucoController@resumenTabla');
+Route::post('puco-generar-archivo' , 'PucoController@generar');
+Route::get('puco-consultas' , 'PucoController@getConsulta');
 
 /**
  * BENEFICIARIOS
@@ -187,8 +189,37 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
 Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getGraficoPeriodo');
-
 Route::get('grafico-2/{periodo}' , 'EstadisticasController@getGafico2');
+
+/**
+ * DDJJ
+ */
+Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
+Route::get('listado-lotes-cerrados-table/{padron}' , 'DdjjController@getListadoPendientesTabla');
+Route::post('declarar-lotes' , 'LotesController@declararLotes');
+Route::get('listado-ddjj/{padron}' , 'DdjjController@getListado');
+Route::get('listado-ddjj-table/{padron}' , 'DdjjController@getListadoTabla');
+Route::get('ddjj-sirge/{padron}/{id}' , 'DdjjController@getDDJJSirge');
+
+Route::get('ddjj-doiu-9' , 'DdjjController@getDoiu9');
+Route::post('ddjj-doiu-9' , 'DdjjController@postDoiu9');
+Route::get('ddjj-doiu9-table' , 'DdjjController@getDoiu9Tabla');
+Route::get('ddjj-doiu9-reimprimir/{id}' , 'DdjjController@getD9');
+Route::get('ddjj-doiu9-consolidado' , 'DdjjController@D9Consolidado');
+
+Route::get('ddjj-backup' , 'DdjjController@getBackup');
+
+Route::get('ddjj-periodo/{tipo}' , [
+		'middleware' => 'uec' , 
+		'uses' => 'DdjjController@getPeriodo'
+	]);
+Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
+
+Route::post('backup' , 'DdjjController@postBackup');
+Route::get('ddjj-backup-table' , 'DdjjController@getBackupTabla');
+Route::get('ddjj-backup-consolidado' , 'DdjjController@backupConsolidado');
+
+Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
 /**
  * USUARIO
@@ -271,17 +302,30 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('test' , function(){
-	$registros = file('../storage/uploads/test.txt');
-	
-	foreach ($registros as $key => $registro) {
-		$datos = explode("\t" , $registro);
-		foreach ($datos as $key => $dato) {
-			echo $dato , '<br />';
-		}
-	}
+Route::get('excel' , function(){
+
+	// $u = Usuario::join('sistema.provincias' , 'sistema.usuarios.id_provincia' , '=' , 'sistema.provincias.id_provincia')->get();
+	$u = Usuario::with('menu')->get();
+
+	Excel::create('Filename', function($excel) use($u) {
+
+    $excel->sheet('Sheetname', function($sheet) use($u){
+
+        /*
+        $sheet->fromArray(array(
+            array('data1', 'data2'),
+            array('data3', 'data4')
+        ));
+        */
+    	$sheet->fromModel($u);
+    	// $sheet->fromArray($u);
+
+    });
+
+})->export('xlsx');
 
 });
+
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/

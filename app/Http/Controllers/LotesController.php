@@ -7,6 +7,7 @@ use Datatables;
 use DB;
 use PDF;
 use Mail;
+use Storage;
 
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ use App\Models\Geo\Provincia;
 use App\Models\Prestacion;
 use App\Models\Comprobante;
 use App\Models\Fondo;
-use App\Models\Super;
-use App\Models\Profe;
-use App\Models\Osp;
+use App\Models\PUCO\Super;
+use App\Models\PUCO\Profe;
+use App\Models\PUCO\Osp;
 
 class LotesController extends Controller
 {
@@ -97,6 +98,50 @@ class LotesController extends Controller
 	}
 
 	/**
+	 * Devuelve la ruta donde guardar el archivo
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	protected function getName($id , $route = FALSE){
+		switch ($id) {
+			case 1:
+				$p = 'prestaciones'; break;
+			case 2 :
+				$p = 'fondos'; break;
+			case 3 :
+				$p = 'comprobantes'; break;
+			case 4 : 
+				$p = 'osp'; break;
+			case 5 :
+				$p = 'profe'; break;
+			case 6 :
+				$p = 'sss'; break;
+			default:
+				break;
+		}
+		if ($route)
+			return '../storage/uploads/' . $p;
+		else
+			return $p;
+	}
+
+	/** 
+	 * Sube el archivo al FTP
+	 * @param int $lote
+	 *
+	 * @return bool
+	 */
+	protected function uploadFTP($lote) {
+		$l = Lote::with('archivo')->findOrFail($lote);
+		$ruta = $this->getName($l->archivo->id_padron , TRUE);
+		$fh = fopen($ruta . '/' . $l->archivo->nombre_actual , 'r');
+		if (Storage::put('sirg3/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual , $fh)){
+			unlink('../storage/uploads/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual);
+		}
+	}
+
+	/**
 	 * Marco el lote como aceptado
 	 * @param Request $r
 	 *
@@ -111,6 +156,7 @@ class LotesController extends Controller
 			$la->id_usuario = Auth::user()->id_usuario;
 			$la->fecha_aceptado = 'now';
 			if ($la->save()){
+				$this->uploadFTP($r->lote);
 				return 'Se ha aceptado el lote. Recuerde declararlo para imprimir la DDJJ.';
 			}
 		}

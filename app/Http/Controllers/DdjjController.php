@@ -6,14 +6,21 @@ use Auth;
 use DB;
 use Datatables;
 use PDF;
+use Mail;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Requests\DOIU9Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Geo\Provincia;
+use App\Models\Geo\GeoJson;
 use App\Models\DDJJ\Sirge as DDJJSirge;
+use App\Models\DDJJ\DOIU9 as D9;
+use App\Models\DDJJ\Backup;
+use App\Models\Efector;
+use App\Models\Parametro;
 
 class DdjjController extends Controller
 {
@@ -24,6 +31,7 @@ class DdjjController extends Controller
 	 */
 	public function __construct(){
 		$this->middleware('auth');
+		setlocale(LC_TIME, 'es_ES.UTF-8');
 	}
 
 	/**
@@ -168,4 +176,431 @@ class DdjjController extends Controller
     	return $pdf->download("ddjj-sirge-$id.pdf");
 	}
 
+	/** 
+	 * Devuelve la vista para la DOIU 9
+	 *
+	 * @return null
+	 */
+	public function getDoiu9(){
+
+		$dt = new \DateTime();
+		$dt->modify('-1 month');
+		$periodo = $dt->format('Y-m');
+
+		$juris = D9::where('periodo_reportado' , $periodo)
+				   ->where('version' , 1)
+				   ->select('id_provincia')
+				   ->count();
+
+		$data = [
+			'page_title' => 'Formulario DDJJ DOIU Nº 9',
+			'numero' => $juris,
+			'porcentaje' => ($juris/24)*100
+		];
+		return view('ddjj.doiu9' , $data);
+	}
+
+	/** 
+	 * Devuelve la vista para la DOIU 9
+	 *
+	 * @return null
+	 */
+	public function getBackup(){
+
+		$dt = new \DateTime();
+		$dt->modify('-1 months');
+		$periodo = $dt->format('Y-m');
+
+		$juris = Backup::where('periodo_reportado' , $periodo)
+				   ->where('version' , 1)
+				   ->select('id_provincia')
+				   ->count();
+
+
+		$data = [
+			'page_title' => 'Formulario DDJJ Backup',
+			'numero' => $juris,
+			'porcentaje' => ($juris/24)*100
+		];
+		return view('ddjj.backup' , $data);
+	}
+
+	/**
+	 * Devolver JSON para la datatables
+	 *
+	 * @return json
+	 */
+	public function getDoiu9Tabla() {
+		$djs = Auth::user()->id_entidad == 1 ? D9::with('provincia')->get() : D9::with('provincia')->where('id_provincia' , Auth::user()->id_provincia)->get();
+		return Datatables::of($djs)
+				->addColumn('action' , function($dj){
+					return '<a href="ddjj-doiu9-reimprimir/' . $dj->id_impresion . '" class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver ddjj</a>';
+				})
+				->make(true);
+	}
+
+	/**
+	 * Devolver JSON para la datatables
+	 *
+	 * @return json
+	 */
+	public function getBackupTabla() {
+		$djs = Auth::user()->id_entidad == 1 ? Backup::with('provincia')->get() : Backup::with('provincia')->where('id_provincia' , Auth::user()->id_provincia)->get();
+		return Datatables::of($djs)
+				->addColumn('action' , function($dj){
+					return '<a href="ddjj-backup-reimprimir/' . $dj->id_impresion . '" class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver ddjj</a>';
+				})
+				->make(true);
+	}
+
+	/**
+	 * Devuelve la vista para ingresar el periodo a reportar
+	 * 
+	 * @return null
+	 */
+	public function getPeriodo($tipo){
+
+		$data = [
+			'tipodj' => $tipo,
+			'page_title' => 'Verificación',
+			'ruta_back' => 'ddjj-' . $tipo
+		];
+		return view('ddjj.periodo' , $data);
+	}
+
+	/**
+	 * Devuelve el número de efectores integrantes
+	 *
+	 * @return int
+	 */
+	protected function getEfectoresIntegrantes(){
+		return Efector::join('efectores.datos_geograficos' , 'efectores.efectores.id_efector' , '=' , 'efectores.datos_geograficos.id_efector')
+				->where('id_provincia' , Auth::user()->id_provincia)
+				->where('id_estado' , 1)
+				->where('integrante' , 'S')
+				->count();
+	}
+
+	/**
+	 * Devuelve el número de efectores integrantes
+	 *
+	 * @return int
+	 */
+	protected function getEfectoresConvenio(){
+		return Efector::join('efectores.datos_geograficos' , 'efectores.efectores.id_efector' , '=' , 'efectores.datos_geograficos.id_efector')
+				->where('id_provincia' , Auth::user()->id_provincia)
+				->where('id_estado' , 1)
+				->where('integrante' , 'S')
+				->where('compromiso_gestion' , 'S')
+				->count();
+	}
+
+	/**
+	 * Verifica que la DDJJ no haya sido generada para ese período
+	 * @param periodo $string
+	 * @param tipo $tipo
+	 *
+	 * @return int
+	 */
+	public function checkPeriodo($tipo , $periodo){
+
+		$date = \DateTime::createFromFormat('Y-m' , $periodo);
+		$min = \DateTime::createFromFormat('Ym' , '201501');
+		$max = new \DateTime;
+		$max->modify('-1 month');
+
+		if ($date < $min || $date > $max) {
+			return response('Periodo no permitido' , 422);
+		}
+
+		switch ($tipo) {
+			case 'doiu-9':
+				$impreso = D9::where('periodo_reportado' , $periodo)
+						 ->where('id_provincia' , Auth::user()->id_provincia)
+						 ->count();
+				$titulo = 'Formulario de DDJJ Información Priorizada - DOIU Nº 9';
+				$page = 'ddjj.d9.main';
+				break;
+			case 'backup':
+				$impreso = Backup::where('periodo_reportado' , $periodo)
+						 ->where('id_provincia' , Auth::user()->id_provincia)
+						 ->count();
+				$titulo = 'Formulario de DDJJ Backup';
+				$page = 'ddjj.backup.main';
+				break;
+		}
+
+		$data = [
+			'page_title' => $titulo,
+			'tipodj' => $tipo,
+			'version' => $impreso,
+			'periodo' => $periodo
+		];
+
+		if (! $impreso) {
+			$data['ruta_back'] = 'ddjj-' . $tipo;
+			$data['efectores_integrantes'] = $this->getEfectoresIntegrantes();
+			$data['efectores_convenio'] = $this->getEfectoresConvenio();
+			return view($page , $data);
+		} else {
+			$data['ruta_back'] = 'ddjj-periodo/' . $tipo;
+			return view('ddjj.motivo-reimpresion' , $data);
+		}
+	}
+
+	/** 
+	 * Devuelve la vista para la reimpresión de la DDJJ
+	 * @param string $tipodj
+	 * @param string $periodo
+	 * @param Request $r
+	 *
+	 * @return null
+	 */
+	public function reimpresion($tipodj , $periodo , $version , Request $r){
+
+		switch ($tipodj) {
+			case 'doiu-9':
+				$page = 'ddjj.d9.main';
+				$titulo = 'Formulario de DDJJ Información Priorizada - DOIU Nº 9';
+				break;
+			case 'backup':
+				$page = 'ddjj.backup.main';
+				$titulo = 'Formulario de DDJJ Backup';
+				break;
+		}
+
+		$data = [
+			'ruta_back' => 'ddjj-' . $tipodj,
+			'page_title' => $titulo,
+			'motivo' => $r->motivo,
+			'tipodj' => $tipodj,
+			'version' => $version,
+			'periodo' => $periodo,
+			'efectores_integrantes' => $this->getEfectoresIntegrantes(),
+			'efectores_convenio' => $this->getEfectoresConvenio()
+		];
+
+		return view($page , $data);
+	}
+
+	/**
+	 * Genera la DDJJ
+	 * @param Request $r
+	 *
+	 * @return string
+	 */
+	public function postDoiu9(DOIU9Request $r) {
+		
+		$d9 = new D9;
+		$d9->id_provincia = Auth::user()->id_provincia;
+		$d9->id_usuario = Auth::user()->id_usuario;
+		$d9->periodo_reportado = $r->periodo;
+		$d9->efectores_integrantes = $this->getEfectoresIntegrantes();
+		$d9->efectores_convenio = $this->getEfectoresConvenio();
+		$d9->periodo_tablero_control = $r->periodo_tablero;
+		$d9->fecha_cuenta_capitas = $r->fecha_cuenta_capitas;
+		$d9->periodo_cuenta_capitas = $r->periodo_cuenta_capitas;
+		$d9->fecha_sirge = $r->fecha_sirge;
+		$d9->periodo_sirge = $r->periodo_sirge;
+		$d9->fecha_reporte_bimestral = $r->fecha_reporte_bimestral;
+		$d9->bimestre = $r->bimestre;
+		$d9->anio_bimestre = $r->anio_bimestre;
+		$d9->version = $r->version + 1;
+		$d9->motivo_reimpresion = $r->motivo;
+		if ($d9->save()){
+
+			$id = $d9->id_impresion;
+			$path = base_path() . '/storage/pdf/ddjj/d9/' . $id . '.pdf';
+			$user = Auth::user();
+
+			$pdf = $this->getPdfDoiu9($id);
+			$pdf->save($path);
+
+			Mail::send('emails.ddjj-sirge', ['usuario' => $user , 'id' => $d9->id_impresion], function ($m) use ($user , $path , $id) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to($user->email);
+                $m->subject('DDJJ DOIU Nº 9 - Información Priorizada Nº ' . $id);
+                $m->attach($path);
+            });
+
+			return 'Se ha enviado la DDJJ de información priorizada a su casilla de correo';
+		}
+	}
+
+	/**
+	 * Devuelve el PDF con la DDJJ DOIU9
+	 * @param int $id
+	 *
+	 * @return object
+	 */
+	protected function getPdfDoiu9($id){
+
+		$d = D9::with('provincia')->find($id);
+
+		$d_pr = \DateTime::createFromFormat('Y-m' , $d->periodo_reportado);
+		$d_fi = \DateTime::createFromFormat('d/m/Y' , $d->fecha_impresion);
+		$d_cc = \DateTime::createFromFormat('Y-m' , $d->periodo_cuenta_capitas);
+		
+		$data = [
+			'ddjj' => $d,
+			'mensaje' => Parametro::find(2),
+			'fecha_impresion' => strftime("%d de %B de %Y" , $d_fi->getTimeStamp()),
+			'fecha_tabla_efectores' => strftime("%B de %Y" , $d_pr->getTimeStamp()),
+			'fecha_cc' => strftime("%B de %Y" , $d_cc->getTimeStamp()),
+		];
+		$pdf = PDF::loadView('pdf.ddjj.doiu9' , $data);
+		return $pdf;
+	}
+
+	/**
+	 * Devuelve el PDF con la DDJJ backup
+	 * @param int $id
+	 *
+	 * @return object
+	 */
+	protected function getPdfBackup($id){
+		
+		$d = Backup::with('provincia')->find($id);
+
+		$d_pr = \DateTime::createFromFormat('Y-m' , $d->periodo_reportado);
+		$d_fi = \DateTime::createFromFormat('d/m/Y' , $d->fecha_impresion);
+		
+		$data = [
+			'ddjj' => $d,
+			'mensaje' => Parametro::find(2),
+			'fecha_impresion' => strftime("%d de %B de %Y" , $d_fi->getTimeStamp())
+		];
+		$pdf = PDF::loadView('pdf.ddjj.backup' , $data);
+		return $pdf;
+	}
+
+	/**
+	 * Devuelve un archivo
+	 * @param int $id
+	 *
+	 * @return stream
+	 */
+	public function getD9($id){
+		$pdf = $this->getPdfDoiu9($id);
+		return $pdf->download($id . '.pdf');
+	}
+
+	/**
+	 * Consolidado DOIU 9
+	 *
+	 * @return null
+	 */
+	public function D9Consolidado(){
+
+		$dt = new \DateTime();
+
+		for ($i = 0 ; $i < 6 ; $i++){
+			
+			$dt->modify('-1 month');
+			$p = $dt->format('Y-m');
+
+			$meses[$i]['periodo'] = $p;
+			$meses[$i]['class'] = $i;
+
+			$djs = GeoJson::select('geo.geojson.*' , DB::raw('case when version is not null then 1 else 0 end as existe'))
+						->leftJoin('ddjj.doiu9' , function($j) use ($p){
+							$j->on('geo.geojson.id_provincia' , '=' , 'ddjj.doiu9.id_provincia')
+							  ->where('periodo_reportado' , '=' , $p);
+						})
+						->get();
+			
+			foreach ($djs as $key => $dj) {
+				$meses[$i]['data'][$key]['value'] = $dj->existe;
+				$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+			}
+
+			$meses[$i]['data'] = json_encode($meses[$i]['data']);
+						
+		}
+
+		$data = [
+			'page_title' => 'Consolidado DOIU 9',
+			'meses' => $meses
+		];
+
+		return view('ddjj.d9.consolidado' , $data);
+	}
+
+	/**
+	 * Consolidado DOIU 9
+	 *
+	 * @return null
+	 */
+	public function backupConsolidado(){
+
+		$dt = new \DateTime();
+
+		for ($i = 0 ; $i < 6 ; $i++){
+			
+			$dt->modify('-1 month');
+			$p = $dt->format('Y-m');
+
+			$meses[$i]['periodo'] = $p;
+			$meses[$i]['class'] = $i;
+
+			$djs = GeoJson::select('geo.geojson.*' , DB::raw('case when version is not null then 1 else 0 end as existe'))
+						->leftJoin('ddjj.backup' , function($j) use ($p){
+							$j->on('geo.geojson.id_provincia' , '=' , 'ddjj.backup.id_provincia')
+							  ->where('periodo_reportado' , '=' , $p);
+						})
+						->get();
+			
+			foreach ($djs as $key => $dj) {
+				$meses[$i]['data'][$key]['value'] = $dj->existe;
+				$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+			}
+
+			$meses[$i]['data'] = json_encode($meses[$i]['data']);
+						
+		}
+
+		$data = [
+			'page_title' => 'Consolidado Backup',
+			'meses' => $meses
+		];
+
+		return view('ddjj.backup.consolidado' , $data);
+	}
+
+	/**
+	 * Genera la DDJJ
+	 * @param Request $r
+	 *
+	 * @return string
+	 */
+	public function postBackup(BackupRequest $r) {
+		
+		$b = new Backup;
+		$b->id_provincia = Auth::user()->id_provincia;
+		$b->id_usuario = Auth::user()->id_usuario;
+		$b->periodo_reportado = $r->periodo;
+		$b->fecha_backup = $r->fecha;
+		$b->version = $r->version + 1;
+		$b->nombre_backup = $r->file;
+		$b->motivo_reimpresion = $r->motivo;
+		
+		if ($b->save()){
+
+			$id = $b->id_impresion;
+			$path = base_path() . '/storage/pdf/ddjj/backup/' . $id . '.pdf';
+			$user = Auth::user();
+
+			$pdf = $this->getPdfBackup($id);
+			$pdf->save($path);
+
+			Mail::send('emails.ddjj-sirge', ['usuario' => $user , 'id' => $b->id_impresion], function ($m) use ($user , $path , $id) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to($user->email);
+                $m->subject('DDJJ BACKUP Nº ' . $id);
+                $m->attach($path);
+            });
+
+			return 'Se ha enviado la DDJJ BACKUP a su casilla de correo';
+		}
+	}
 }

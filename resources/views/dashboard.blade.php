@@ -6,7 +6,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>53.2 M</h3>
+	      <h3>{{$total_prestaciones}}</h3>
 	      <p>PRESTACIONES</p>
 	    </div>
 	    <div class="icon">
@@ -21,7 +21,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>9076</h3>
+	      <h3>{{$total_efectores}}</h3>
 	      <p>EFECTORES</p>
 	    </div>
 	    <div class="icon">
@@ -36,7 +36,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>44</h3>
+	      <h3>{{$total_usuarios}}</h3>
 	      <p>USUARIOS</p>
 	    </div>
 	    <div class="icon">
@@ -51,7 +51,7 @@
 	  <!-- small box -->
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
-	      <h3>13.5 M</h3>
+	      <h3>{{$total_beneficiarios}}</h3>
 	      <p>BENEFICIARIOS</p>
 	    </div>
 	    <div class="icon">
@@ -81,23 +81,23 @@
 						<div class="pad box-pane-right bg-orange" style="min-height: 280px">
                         <div class="description-block margin-bottom">
                           <div class="sparkbar pad" data-color="#fff">
-                      		<span class="inlinesparkline">6,4,4,7,5,9,10</span>
+                      		<span class="inlinesparkline">{{$visitas}}</span>
 	                  	</div>
-						<h5 class="description-header">8390</h5>
+						<h5 class="description-header">{{$visitas_total}}</h5>
 						<span class="description-text">Visitas</span>
                         </div><!-- /.description-block -->
                         <div class="description-block margin-bottom">
                           <div class="sparkbar pad" data-color="#fff">
-                          	<span class="inlinesparkline">6,4,4,7,5,9,10</span>
+                          	<span class="inlinesparkline">{{$efectores}}</span>
                           </div>
-                          <h5 class="description-header">36</h5>
+                          <h5 class="description-header">{{$efectores_total}}</h5>
                           <span class="description-text">Efectores nuevos</span>
                         </div><!-- /.description-block -->
                         <div class="description-block">
                           <div class="sparkbar pad" data-color="#fff">
-                          	<span class="inlinesparkline">2,2,1,1,3,1,2</span>
+                          	<span class="inlinesparkline">{{$usuarios}}</span>
                           </div>
-                          <h5 class="description-header">12</h5>
+                          <h5 class="description-header">{{$usuarios_total}}</h5>
                           <span class="description-text">Usuarios nuevos</span>
                         </div><!-- /.description-block -->
                       </div>
@@ -111,12 +111,12 @@
 	    <span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">PRESTACIONES</span>
-	      <span class="info-box-number">41,410</span>
+	      <span class="info-box-number">{{$mes_prestaciones}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 30%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_prestaciones}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -124,12 +124,12 @@
 	    <span class="info-box-icon"><i class="fa fa-file-text"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Comprobantes</span>
-	      <span class="info-box-number">340</span>
+	      <span class="info-box-number">{{$mes_comprobantes}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 70%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_comprobantes}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -137,12 +137,12 @@
 	    <span class="info-box-icon"><i class="fa fa-usd"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Uso de Fondos</span>
-	      <span class="info-box-number">9</span>
+	      <span class="info-box-number">{{$mes_fondos}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 100%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_fondos}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -150,12 +150,12 @@
 	    <span class="info-box-icon"><i class="fa fa-database"></i></span>
 	    <div class="info-box-content">
 	      <span class="info-box-text">Puco</span>
-	      <span class="info-box-number">13,341,232</span>
+	      <span class="info-box-number">{{$mes_puco}}</span>
 	      <div class="progress">
-	        <div class="progress-bar" style="width: 80%"></div>
+	        <div class="progress-bar" style="width: {{$porcentaje_puco}}%"></div>
 	      </div>
 	      <span class="progress-description">
-	        Enero 2015
+	        {{$mes}}
 	      </span>
 	    </div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
@@ -164,55 +164,56 @@
 <!-- FIN INDICADORES DE PROGRESO -->
 
 <div class="row">
-    <div class="col-md-4">
-      <!-- USERS LIST -->
-      <div class="box box-info">
-        <div class="box-header with-border">
-          <h3 class="box-title">Nuevos Usuarios</h3>
-          <div class="box-tools pull-right">
-            <span class="label label-info">8 Nuevos miembros</span>
-          </div>
-        </div><!-- /.box-header -->
-        <div class="box-body no-padding">
-          <ul class="users-list clearfix">
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user1-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Rodrigo Cadaval</a>
-              <span class="users-list-date">20 Oct. 2014</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user4-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Javier Minsky</a>
-              <span class="users-list-date">17 Oct. 2012</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user3-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user1-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user5-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-            <li>
-              <img src="{{ asset("/bower_components/admin-lte/dist/img/user6-128x128.jpg") }}" class="img-circle" alt="User Image" />
-              <a class="users-list-name" href="#">Ariel J.</a>
-              <span class="users-list-date">18 Abr. 1932</span>
-            </li>
-          </ul><!-- /.users-list -->
-        </div><!-- /.box-body -->
-        <div class="box-footer text-center">
-          <a href="usuarios" class="uppercase">Ver todos los usuarios</a>
-        </div><!-- /.box-footer -->
-      </div><!--/.box -->
+
+	<div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Beneficiarios</h2>
+			</div>
+			<div class="box-body">
+				<div class="g1" style="height: 300px;"></div>
+			</div>
+		</div>
     </div><!-- /.col -->
-    <div class="col-md-8">
+
+    <div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Facturación</h2>
+			</div>
+			<div class="box-body">
+				<div class="g2" style="height: 300px;"></div>
+			</div>
+		</div>
+    </div><!-- /.col -->
+
+    <div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Uso de Fondos</h2>
+			</div>
+			<div class="box-body">
+				<div class="g3" style="height: 300px;"></div>
+			</div>
+		</div>
+    </div><!-- /.col -->
+
+</div>
+
+<div class="row">
+    
+    <div class="col-md-6">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Noticias</h2>
+			</div>
+			<div class="box-body">
+			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="320" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
+			</div>
+		</div>
+	</div>
+
+    <div class="col-md-6">
     	<div class="box box-warning">
     		 <div class="box-header with-border">
 		      <h3 class="box-title">Calendario</h3>
@@ -224,21 +225,115 @@
     </div>
 </div>
 
-<div class="row">
-	<div class="col-md-6">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">Noticias</h2>
-			</div>
-			<div class="box-body">
-			<a class="twitter-timeline" data-chrome="noheader" lang="es" data-height="300" href="https://twitter.com/GustavoHeineken/lists/sirge" data-widget-id="661775470397100032">Tweets de https://twitter.com/GustavoHeineken/lists/sirge</a>
-			</div>
-		</div>
-	</div>
-</div>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script type="text/javascript">
+
+	// Make monochrome colors and set them as default for all pies
+    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+        var colors = [],
+            base = Highcharts.getOptions().colors[0],
+            i;
+
+        for (i = 0; i < 10; i += 1) {
+            // Start out with a darkened base color (negative brighten), and end
+            // up with a much brighter color
+            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+        }
+        return colors;
+    }());
+
+	$('.g1').highcharts({
+		title: {
+            text: '',
+        },
+        xAxis: {
+            categories: {!! $meses !!}
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }],
+            labels : {
+            	enabled : false
+            }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+        },
+        series: {!! $grafico_ceb !!}
+    	
+	});
+
+	$('.g2').highcharts({
+		title: {
+            text: '',
+        },
+        xAxis: {
+            categories: {!! $meses !!}
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }],
+            labels : {
+            	enabled : false
+            }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+        },
+        series: {!! $grafico_fc !!}
+	});
+
+	$('.g3').highcharts({
+    	 chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>${point.y}</b> : {point.percentage:.1f} %'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Monto',
+            colorByPoint: true,
+            data: {!! $grafico_af !!}
+        }]
+    });
 	
 	$('#map-container').highcharts('Map', {
 		title : {
@@ -254,7 +349,7 @@
 			min: 0
 		},
 		series : [{
-			//data : geo,
+			data : {!! $map !!},
 			mapData: Highcharts.maps['countries/ar/ar-all'],
 			joinBy: 'hc-key',
 			name: 'Población',
@@ -266,7 +361,19 @@
 			dataLabels: {
 				enabled: false,
 				format: '{point.name}'
-			},/*
+			},
+			tooltip : {
+				pointFormatter : function(){
+					var html = '';
+						html += 'Poblacion : ' + Highcharts.numberFormat(this.value , 0) + '<br />';
+						html += 'Inscriptos : ' + Highcharts.numberFormat(this.inscriptos , 0) + '<br />';
+						html += 'Activos : ' + Highcharts.numberFormat(this.activos , 0) + '<br />';
+						html += 'C.E.B. : ' + Highcharts.numberFormat(this.ceb , 0) + '<br />';
+					return html;
+				}
+			},
+
+			/*
 			point : {
 				events : {
 					click : InfoProvincia
@@ -287,6 +394,7 @@
 
 	$('#calendar').fullCalendar({
 		height: 340,
+		lang: 'es',
 		googleCalendarApiKey : 'AIzaSyAY1AZ5aKTuMen9SBQcXmc9xtnXZkxYep8',
 		events : {
 			googleCalendarId : 'sirgeweb@gmail.com'

@@ -74,7 +74,7 @@
 			$.get('eliminar-padron/' + id , function(data){
 				$('#modal-text').html(data);
                 $('.modal').modal();
-                $('.modal').on('hidden.bs.modal', function (e) {
+                $('.modal').one('hidden.bs.modal', function (e) {
                     dt.ajax.reload( null, false );
                 });
 			});
