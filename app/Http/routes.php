@@ -149,7 +149,7 @@ Route::get('puco-consultas' , 'PucoController@getConsulta');
  * BENEFICIARIOS
  */
 Route::get('listado-beneficiarios' , 'BeneficiariosController@index');
-Route::get('listado' , 'BeneficiariosController@tabla');
+Route::get('beneficiarios-listado-table' , 'BeneficiariosController@getListadoTabla');
 
 /**
  * PSS

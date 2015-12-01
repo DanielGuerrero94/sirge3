@@ -9,7 +9,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Usuario;
+use App\Models\Beneficiario;
+use App\Models\Beneficiarios\Bajas;
+use App\Models\Beneficiarios\CategoriasNacer;
+use App\Models\Beneficiarios\Ceb;
+use App\Models\Beneficiarios\Contacto;
+use App\Models\Beneficiarios\Embarazados;
+use App\Models\Beneficiarios\Geografico;
+use App\Models\Beneficiarios\Indigenas;
+use App\Models\Beneficiarios\Parientes;
+use App\Models\Beneficiarios\Periodos;
+use App\Models\Beneficiarios\Resumen;
+use App\Models\Beneficiarios\Score;
+
+use App\Models\Entidad;
+
 
 class BeneficiariosController extends Controller
 {
@@ -26,11 +40,16 @@ class BeneficiariosController extends Controller
     }
 
     /**
-     * Datos para crear la tabla
+     * Devuelve un json para la datatable
      *
-     * @return null
+     * @return json
      */
-    public function tabla(){
-    	
+    public function getListadoTabla(){
+    	$benefs = Beneficiario::with(['provincia'])->take(100)->skip(100)->get();
+        return Datatables::of($benefs)
+            ->addColumn('action' , function($benef){
+                return '<button id-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+            })
+            ->make(true);
     }
 }
