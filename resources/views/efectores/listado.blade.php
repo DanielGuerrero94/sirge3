@@ -5,6 +5,9 @@
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Efectores</h2>
+				<div class="box-tools pull-right">
+					<a class="btn btn-warning" href="efectores-descargar-tabla"><i class="fa fa-download"></i> Descargar tabla de efectores</a>					
+				</div>
 			</div>
 			<div class="box-body">
 				<table class="table table table-hover" id="efectores-table">

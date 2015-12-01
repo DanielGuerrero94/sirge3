@@ -172,4 +172,18 @@ class Efector extends Model
 	public function addendas(){
 		return $this->hasMany('App\Models\Efectores\Addenda' , 'id_efector' , 'id_efector');
 	}
+
+	/** 
+	 * Devuelve la categoria obstetrico
+	 */
+	public function obstetrico(){
+		return $this->hasOne('App\Models\Efectores\Obstetrico' , 'siisa' , 'siisa');
+	}
+
+	/** 
+	 * Devuelve la categoria neonatal
+	 */
+	public function neonatal(){
+		return $this->hasOne('App\Models\Efectores\Neonatal' , 'siisa' , 'siisa');
+	}
 }

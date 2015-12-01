@@ -1,7 +1,4 @@
 <?php
-
-use Excel;
-use App\Models\Usuario;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -160,6 +157,7 @@ Route::get('listado' , 'BeneficiariosController@tabla');
 #	LISTADO
 Route::get('efectores-listado' , 'EfectoresController@listado');
 Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
+Route::get('efectores-descargar-tabla' , 'EfectoresController@descargarTabla');
 #	ALTA
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
 Route::post('efectores-alta' , 'EfectoresController@postAlta');
@@ -302,29 +300,7 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('excel' , function(){
-
-	// $u = Usuario::join('sistema.provincias' , 'sistema.usuarios.id_provincia' , '=' , 'sistema.provincias.id_provincia')->get();
-	$u = Usuario::with('menu')->get();
-
-	Excel::create('Filename', function($excel) use($u) {
-
-    $excel->sheet('Sheetname', function($sheet) use($u){
-
-        /*
-        $sheet->fromArray(array(
-            array('data1', 'data2'),
-            array('data3', 'data4')
-        ));
-        */
-    	$sheet->fromModel($u);
-    	// $sheet->fromArray($u);
-
-    });
-
-})->export('xlsx');
-
-});
+Route::get('excel' , 'EfectoresController@descargarTabla');
 
 /********************************************************************************
  *								 	WS ROUTES 									*

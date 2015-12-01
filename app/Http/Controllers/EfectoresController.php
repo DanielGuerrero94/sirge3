@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Datatables;
 use DB;
+use Excel;
 
 use Illuminate\Http\Request;
 
@@ -12,8 +13,6 @@ use App\Http\Requests;
 use App\Http\Requests\NuevoEfectorRequest;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\Geo\Provincia;
 
 use App\Models\Efector;
 use App\Models\Efectores\Categoria;
@@ -30,7 +29,11 @@ use App\Models\Efectores\Tipo;
 use App\Models\Efectores\Addenda;
 use App\Models\Efectores\Addendas\Tipo as TipoAddenda;
 use App\Models\Efectores\Ppac;
+use App\Models\Efectores\Neonatal;
+use App\Models\Efectores\Obstetrico;
+use App\Models\Efectores\CategoriaPPAC;
 
+use App\Models\Geo\Provincia;
 use App\Models\Geo\Departamento;
 use App\Models\Geo\Localidad;
 
@@ -710,7 +713,55 @@ class EfectoresController extends Controller
       if ($update) {
         return 'Se ha actualizado la información del efector : ' . $ef->nombre;
       }
+    }
 
+    /**
+     * Descarga la tabla de efectores
+     *
+     * @return null
+     */
+    public function descargarTabla(){
+
+      $efectores = Efector::with([
+        'estado' , 
+        'tipo' , 
+        'categoria' ,
+        'geo' => function($q){ 
+            $q->with(['provincia' , 'departamento' , 'localidad']); 
+        },
+        'dependencia',
+        'compromiso',
+        'emails',
+        'telefonos',
+        'referente',
+        'internet',
+        'convenio',
+        'neonatal' => function($q){
+          $q->with('info');
+        },
+        'obstetrico' => function($q){
+          $q->with('info');
+        },
+        'addendas' => function($q){
+          $q->with('tipo');
+        }
+        ])
+        //->where('id_estado' , 1)
+        //->take(50)
+        ->orderBy('cuie' , 'asc')
+        ->get();
+      
+      $data = ['efectores' => $efectores];
+
+      Excel::create('Efectores_SUMAR' , function ($e) use ($data){
+        $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
+          
+          $s->setHeight(1, 20);
+          $s->loadView('efectores.tabla' , $data);
+          
+          //$s->fromModel($efectores);
+        });
+      })->store('xlsx');
     }
 
 }

@@ -113,7 +113,7 @@ class HomeController extends Controller
         $dt = new \DateTime();
         $dt->modify('-1 month');
         $interval['max'] = $dt->format('Ym');
-        $dt->modify('-6 months');
+        $dt->modify('-5 months');
         $interval['min'] = $dt->format('Ym');
 
         return $interval;
@@ -427,6 +427,7 @@ class HomeController extends Controller
      * @return null
      */
     public function dashboard(){
+
         $visitas = $this->getVisitas();
         $efectores = $this->getAltasEfectores();
         $usuarios = $this->getAltasUsuarios();
