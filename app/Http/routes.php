@@ -157,6 +157,7 @@ Route::get('listado' , 'BeneficiariosController@tabla');
 #	LISTADO
 Route::get('efectores-listado' , 'EfectoresController@listado');
 Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
+Route::get('efectores-descargar-tabla' , 'EfectoresController@descargarTabla');
 #	ALTA
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
 Route::post('efectores-alta' , 'EfectoresController@postAlta');

@@ -8,9 +8,10 @@
 		font-size: 10px; 
 		font-weight: bold; 
 		text-align: center;
+		background-color: #00c0ef;
 	}
 
-	.table-title {
+	.table-title , .title-sumar{
 		color: #ffffff;
 		font-size: 12px;
 		font-weight: bold;
@@ -22,7 +23,25 @@
 	}
 
 </style>
+
 <table class="table">
+	<tr>
+		<td class="title-sumar">PROGRAMA SUMAR</td>
+		<td class="title-sumar">Tabla de Efectores</td>
+	</tr>
+	<tr>
+		<td>Fecha de &uacute;ltima actualizaci&oacute;n: </td>
+		<td>{{date('d/m/Y')}} </td>
+	</tr>
+	<tr>
+		<td>Usuario solicitante: </td>
+		<td>{{Auth::user()->nombre}}</td>
+	</tr>
+	<tr>
+		<td>Origen de datos: </td>
+		<td>SIRGe Web V.3</td>
+	</tr>
+	<tr></tr>
 	<tr>
 		<td class="table-header">CUIE</th>
 		<td class="table-header">SIISA</th>
@@ -134,12 +153,12 @@
 			<td>{{$efector->estado->descripcion or '' }}</td>
 			@if (count ($efector->addendas))
 				@foreach($efector->addendas as $k => $ad)
-					{{--*/ $addendas[$k][] = $ad->tipo->nombre /*--}}
-					{{--*/ $addendas[$k][] = $ad->fecha_addenda /*--}}
+					{{--*/ $data_add[$k][] = $ad->tipo->nombre /*--}}
+					{{--*/ $data_add[$k][] = $ad->fecha_addenda /*--}}
 				@endforeach
-				<td>{{ json_encode($addendas , JSON_UNESCAPED_SLASHES)  or '' }}</td>
+				<td>{{ json_encode($data_add , JSON_UNESCAPED_SLASHES) }}</td>
 			@else
-			<td></td>
+				<td></td>
 			@endif
 		</tr>
 	@endforeach

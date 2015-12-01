@@ -746,26 +746,18 @@ class EfectoresController extends Controller
                   $q->with('tipo');
                 }
                 ])
-        //->where('id_efector' , '>=' , 10555)
-        //->skip(500)
-        //->take(250)
+        // ->where('id_efector' , '>=' , 10555)
         ->orderBy('id_efector' , 'asc')
         ->get();
       
       $data = ['efectores' => $efectores];
 
-      //return json_encode($efectores , JSON_PRETTY_PRINT);
-
       Excel::create('Efectores_SUMAR' , function ($e) use ($data){
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
           $s->setHeight(1, 20);
-          $s->freezeFirstRowAndColumn();
           $s->loadView('efectores.tabla' , $data);
         });
       })->export('xlsx');
-
-      //return view('efectores.tabla' , $data);
-
     }
 
 }
