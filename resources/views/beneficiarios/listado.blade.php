@@ -8,15 +8,16 @@
 				<h2 class="box-title">Listado completo de beneficiarios</h2>
 			</div>
 			<div class="box-body">
-				<table class="table table-bordered" id="beneficiarios-table">
+				<table class="table table-hover" id="beneficiarios-table">
 				    <thead>
 				        <tr>
 				            <th>Nombre</th>
-				            <th>Email</th>
+				            <th>Apellido</th>
 				            <th>Provincia</th>
-				            <th>Area</th>
-				            <th>Permisos</th>
-				            <th></th>
+				            <th>Fecha Nacimiento</th>
+				            <th>Sexo</th>
+				            <th>Clave Beneficiario</th>
+				            <th>Detalle</th>
 				        </tr>
 				    </thead>
 				</table>
@@ -33,14 +34,15 @@ $(function() {
     $('#beneficiarios-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax : 'listado',
+        ajax : 'beneficiarios-listado-table',
         columns: [
             { data: 'nombre', name: 'nombre' },
-            { data: 'email', name: 'email' },
+            { data: 'apellido', name: 'apellido' },
             { data: 'provincia.descripcion', name: 'provincia' },
-            { data: 'area.nombre', name: 'area' },
-            { data: 'menu.descripcion', name: 'menu' },
-            { data: 'action', name: 'action'}
+            { data: 'fecha_nacimiento', name: 'fecha_nacimiento' },
+            { data: 'sexo' , name: 'sexo' },
+            { data: 'clave_beneficiario', name: 'clave beneficiario'},
+            { data: 'action', name: 'detalle'},
         ]
     });
 

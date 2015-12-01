@@ -76,7 +76,7 @@ class Beneficiario extends Model
 	 */
 	public function documento()
 	{
-		return $this->hasOne('App\Models\TipoDocumento' , 'tipo_documento' , 'id_tipo_documento');
+		return $this->hasOne('App\Models\TipoDocumento' , 'id_tipo_documento' , 'tipo_documento');
 	}
 
 	/**
@@ -84,7 +84,7 @@ class Beneficiario extends Model
 	 */
 	public function provincia()
 	{
-		return $this->hasOne('App\Models\Entidad' , 'id_provincia_alta' , 'id_entidad');
+		return $this->hasOne('App\Models\Geo\Provincia' , 'id_provincia' , 'id_provincia_alta');
 	}
 
 	/**
