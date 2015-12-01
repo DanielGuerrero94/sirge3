@@ -18,7 +18,7 @@ class Salud extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_sexo';
+	protected $primaryKey = 'codigo_prestacion';
 
 	/**
 	 * Indicates if the model should be timestamped.

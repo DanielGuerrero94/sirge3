@@ -152,6 +152,12 @@ Route::get('listado-beneficiarios' , 'BeneficiariosController@index');
 Route::get('listado' , 'BeneficiariosController@tabla');
 
 /**
+ * PSS
+ */
+Route::get('pss-listado' , 'PssController@getListado');
+Route::get('pss-listado-table' , 'PssController@getListadoTabla');
+
+/**
  * EFECTORES
  */
 #	LISTADO
