@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 	
 	.row-even {
@@ -32,10 +33,6 @@
 	<tr>
 		<td>Fecha de &uacute;ltima actualizaci&oacute;n: </td>
 		<td>{{date('d/m/Y')}} </td>
-	</tr>
-	<tr>
-		<td>Usuario solicitante: </td>
-		<td>{{Auth::user()->nombre}}</td>
 	</tr>
 	<tr>
 		<td>Origen de datos: </td>

@@ -157,6 +157,7 @@ Route::get('beneficiarios-listado-table' , 'BeneficiariosController@getListadoTa
 #	LISTADO
 Route::get('efectores-listado' , 'EfectoresController@listado');
 Route::get('efectores-listado-table' , 'EfectoresController@listadoTabla');
+Route::get('efectores-generar-tabla' , 'EfectoresController@generarTabla');
 Route::get('efectores-descargar-tabla' , 'EfectoresController@descargarTabla');
 #	ALTA
 Route::get('efectores-alta' , 'EfectoresController@getAlta');
@@ -300,7 +301,7 @@ Route::get('phpinfo' , function(){
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
-Route::get('excel' , 'EfectoresController@descargarTabla');
+Route::get('excel' , 'EfectoresController@generarTabla');
 
 /********************************************************************************
  *								 	WS ROUTES 									*

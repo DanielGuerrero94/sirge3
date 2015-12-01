@@ -720,7 +720,7 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function descargarTabla(){
+    public function generarTabla(){
 
       $efectores = Efector::with([
         'estado' , 
@@ -755,13 +755,22 @@ class EfectoresController extends Controller
 
       Excel::create('Efectores_SUMAR' , function ($e) use ($data){
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
-          
           $s->setHeight(1, 20);
+          $s->setColumnFormat([
+              'B' => '0'
+            ]);
           $s->loadView('efectores.tabla' , $data);
-          
-          //$s->fromModel($efectores);
         });
-      })->store('xlsx');
+      })->store('xls');
+    }
+
+    /**
+     * Decargar la tabla generada
+     *
+     * @return null
+     */
+    public function descargarTabla(){
+      return response()->download('../storage/exports/Efectores_SUMAR.xls');
     }
 
 }
