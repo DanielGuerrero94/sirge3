@@ -723,41 +723,45 @@ class EfectoresController extends Controller
     public function descargarTabla(){
 
       $efectores = Efector::with([
-                'estado' , 
-                'tipo' , 
-                'categoria' ,
-                'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
-                },
-                'dependencia',
-                'compromiso',
-                'emails',
-                'telefonos',
-                'referente',
-                'internet',
-                'convenio',
-                'neonatal' => function($q){
-                  $q->with('info');
-                },
-                'obstetrico' => function($q){
-                  $q->with('info');
-                },
-                'addendas' => function($q){
-                  $q->with('tipo');
-                }
-                ])
-        // ->where('id_efector' , '>=' , 10555)
-        ->orderBy('id_efector' , 'asc')
+        'estado' , 
+        'tipo' , 
+        'categoria' ,
+        'geo' => function($q){ 
+            $q->with(['provincia' , 'departamento' , 'localidad']); 
+        },
+        'dependencia',
+        'compromiso',
+        'emails',
+        'telefonos',
+        'referente',
+        'internet',
+        'convenio',
+        'neonatal' => function($q){
+          $q->with('info');
+        },
+        'obstetrico' => function($q){
+          $q->with('info');
+        },
+        'addendas' => function($q){
+          $q->with('tipo');
+        }
+        ])
+        //->where('id_estado' , 1)
+        //->take(50)
+        ->orderBy('cuie' , 'asc')
         ->get();
       
       $data = ['efectores' => $efectores];
 
       Excel::create('Efectores_SUMAR' , function ($e) use ($data){
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
+          
           $s->setHeight(1, 20);
           $s->loadView('efectores.tabla' , $data);
+          
+          //$s->fromModel($efectores);
         });
-      })->export('xlsx');
+      })->store('xlsx');
     }
 
 }
