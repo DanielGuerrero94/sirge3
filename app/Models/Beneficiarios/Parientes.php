@@ -33,15 +33,15 @@ class Parientes extends Model
      * @var array
      */
     protected $fillable = ['clave_beneficiario','madre_tipo_documento','madre_numero_documento','madre_apellido',
-  'madre_nombre' 
-  'padre_tipo_documento' 
-  'padre_numero_documento' 
-  'padre_apellido' 
-  'padre_nombre' 
-  'otro_tipo_documento' 
-  'otro_numero_documento'
-  'otro_apellido' 
-  'otro_nombre' 
+  'madre_nombre', 
+  'padre_tipo_documento',
+  'padre_numero_documento', 
+  'padre_apellido', 
+  'padre_nombre', 
+  'otro_tipo_documento', 
+  'otro_numero_documento',
+  'otro_apellido',
+  'otro_nombre', 
   'otro_tipo_relacion'];	
 
     /**
