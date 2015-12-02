@@ -25,5 +25,12 @@ class Salud extends Model
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
+
+	/**
+	 * Codigos grupos
+	 */
+	public function grupo(){
+		return $this->hasMany('App\Models\PSS\Grupo' , 'codigo_prestacion' , 'codigo_prestacion');
+	}
 }

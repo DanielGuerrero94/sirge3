@@ -42,6 +42,11 @@ class PssController extends Controller
 	 */
 	public function getListadoTabla(){
 		$pss = Salud::all();
-		return Datatables::of($pss)->make(true);
+		return Datatables::of($pss)
+			->editColumn('descripcion_grupal' , '{!! str_limit($descripcion_grupal, 60) !!}')
+			->addColumn('action' , function($ps){
+				return '<button codigo="'. $ps->codigo_prestacion .'" class="ver btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+			})
+			->make(true);
 	}
 }
