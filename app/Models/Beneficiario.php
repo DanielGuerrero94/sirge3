@@ -80,12 +80,13 @@ class Beneficiario extends Model
 	}
 
 	/**
-	 * Devuelve la provincia
+	 * Devuelve los datos geograficos
 	 */
-	public function provincia()
+	public function geo()
 	{
-		return $this->hasOne('App\Models\Geo\Provincia' , 'id_provincia' , 'id_provincia_alta');
+		return $this->hasOne('App\Models\Beneficiarios\Geografico' , 'clave_beneficiario' , 'clave_beneficiario');
 	}
+
 
 	/**
 	 * Devuelve la clase del documento

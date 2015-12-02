@@ -17,7 +17,7 @@
 				            <th>Fecha Nacimiento</th>
 				            <th>Sexo</th>
 				            <th>Clave Beneficiario</th>
-				            <th>Detalle</th>
+				            <th>Historia Cl&iacute;nica</th>
 				        </tr>
 				    </thead>
 				</table>
@@ -38,7 +38,7 @@ $(function() {
         columns: [
             { data: 'nombre', name: 'nombre' },
             { data: 'apellido', name: 'apellido' },
-            { data: 'provincia.descripcion', name: 'provincia' },
+            { data: 'geo.provincia.descripcion', name: 'provincia' },
             { data: 'fecha_nacimiento', name: 'fecha_nacimiento' },
             { data: 'sexo' , name: 'sexo' },
             { data: 'clave_beneficiario', name: 'clave beneficiario'},
@@ -46,8 +46,15 @@ $(function() {
         ]
     });
 
-    $('#beneficiarios-table').on('click' , '.edit-user' , function(){
-    	console.log($(this).attr('id-usuario'));
+    $('#beneficiarios-table').on('click' , '.ver-beneficiario' , function(){
+    	console.log($(this).attr('clave-beneficiario'));
+
+    	var id = $(this).attr('clave-beneficiario');
+        	$.get('beneficiarios-historia-clinica/' + id + '/listado-beneficiarios' , function(data){
+        		$('.content-wrapper').html(data);
+        	});
+
+
     })
 });
 </script>

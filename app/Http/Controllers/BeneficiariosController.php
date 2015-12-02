@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Datatables;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -45,11 +47,41 @@ class BeneficiariosController extends Controller
      * @return json
      */
     public function getListadoTabla(){
-    	$benefs = Beneficiario::with(['provincia'])->take(100)->skip(100)->get();
+    	$benefs = Beneficiario::select(['nombre','apellido','fecha_nacimiento','sexo','id_provincia_alta','clave_beneficiario'])
+            ->with([ 
+                'geo' => function($q){ 
+                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                }
+            ])->take(100)->skip(100)->get();
         return Datatables::of($benefs)
             ->addColumn('action' , function($benef){
-                return '<button id-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+                return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
             })
             ->make(true);
+    }
+
+
+    /**
+     * Devuelve la historia clinica del beneficiario
+     * @param int $clave_beneficiario
+     * 
+     * @return null
+     */
+    public function historiaClinica($id , $back){
+        $beneficiario = Beneficiario::select(                
+                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad')                
+                )->with([                
+                'geo' => function($q){ 
+                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                }
+                ])
+        ->find($id);
+
+        $data = [
+            'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,
+            'beneficiario' => $beneficiario,
+        'back' => $back
+        ];
+        return view('beneficiarios.historia-clinica' , $data);
     }
 }

@@ -40,7 +40,7 @@ class Geografico extends Model
 	 * @param  string  $value
      * @return string
 	 */
-	public function setEfectorAttribute($value)
+	public function setCalleAttribute($value)
 	{
 		$this->attributes['calle'] = mb_strtoupper($value);
 	}
@@ -51,7 +51,7 @@ class Geografico extends Model
 	 * @param  string  $value
      * @return string
 	 */
-	public function setEfectorAttribute($value)
+	public function setManzanaAttribute($value)
 	{
 		$this->attributes['manzana'] = mb_strtoupper($value);
 	}
@@ -62,7 +62,7 @@ class Geografico extends Model
 	 * @param  string  $value
      * @return string
 	 */
-	public function setEfectorAttribute($value)
+	public function setCalle1Attribute($value)
 	{
 		$this->attributes['calle_1'] = mb_strtoupper($value);
 	}
@@ -73,7 +73,7 @@ class Geografico extends Model
 	 * @param  string  $value
      * @return string
 	 */
-	public function setEfectorAttribute($value)
+	public function setCalle2Attribute($value)
 	{
 		$this->attributes['calle_2'] = mb_strtoupper($value);
 	}
@@ -84,7 +84,7 @@ class Geografico extends Model
 	 * @param  string  $value
      * @return string
 	 */
-	public function setEfectorAttribute($value)
+	public function setBarrioAttribute($value)
 	{
 		$this->attributes['barrio'] = mb_strtoupper($value);
 	}
@@ -95,7 +95,7 @@ class Geografico extends Model
 	 * @param  string  $value
      * @return string
 	 */
-	public function setEfectorAttribute($value)
+	public function setMunicipioAttribute($value)
 	{
 		$this->attributes['municipio'] = mb_strtoupper($value);
 	}
