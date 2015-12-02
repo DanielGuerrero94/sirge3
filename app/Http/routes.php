@@ -150,6 +150,8 @@ Route::get('puco-consultas' , 'PucoController@getConsulta');
  */
 Route::get('listado-beneficiarios' , 'BeneficiariosController@index');
 Route::get('beneficiarios-listado-table' , 'BeneficiariosController@getListadoTabla');
+Route::get('beneficiarios-historia-clinica/{id}/{back}' , 'BeneficiariosController@historiaClinica');
+
 
 /**
  * EFECTORES
