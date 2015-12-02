@@ -154,6 +154,12 @@ Route::get('beneficiarios-historia-clinica/{id}/{back}' , 'BeneficiariosControll
 
 
 /**
+ * PSS
+ */
+Route::get('pss-listado' , 'PssController@getListado');
+Route::get('pss-listado-table' , 'PssController@getListadoTabla');
+
+/**
  * EFECTORES
  */
 #	LISTADO

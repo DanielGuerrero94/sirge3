@@ -18,12 +18,19 @@ class Salud extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_sexo';
+	protected $primaryKey = 'codigo_prestacion';
 
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
+
+	/**
+	 * Codigos grupos
+	 */
+	public function grupo(){
+		return $this->hasMany('App\Models\PSS\Grupo' , 'codigo_prestacion' , 'codigo_prestacion');
+	}
 }

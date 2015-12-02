@@ -1,0 +1,32 @@
+@extends('content')
+@section('content')
+<!--
+	ATRIBUTOS
+		ANEXO
+		CATASTROFICO
+		PRIORIZADO
+		HOMBRE
+		CCC
+		ESTRATEGICO
+
+	GRUPOS ETARIOS
+	
+	
+	MUJER
+		EMBARAZO RIESGO
+		EMBARAZO NORMAL
+
+	CEB
+		GRUPOS ETARIOS
+
+	ODP
+		Nº ODP
+
+	TRAZADORA
+		Nº TRAZADORA
+
+
+
+
+-->
+@endsection
