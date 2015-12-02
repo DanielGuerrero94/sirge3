@@ -49,4 +49,17 @@ class PssController extends Controller
 			})
 			->make(true);
 	}
+
+	/**
+	 * Devuelve el detalle de la prestación seleccionada
+	 * @param string $id
+	 *
+	 * @return null
+	 */
+	public function getDetalle($id){
+		$data = [
+			'page_title' => $id
+		];
+		return view('pss.detail' , $data);
+	}
 }

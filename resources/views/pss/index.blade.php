@@ -43,6 +43,13 @@
             ]
         });
 
+        $('#pss-table').on('click' , '.ver' , function(){
+        	var id = $(this).attr('codigo');
+        	$.get('pss-detalle/' + id , function(data){
+        		$('.content-wrapper').html(data);
+        	})
+        });
+
 	})
 </script>
 @endsection
