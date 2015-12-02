@@ -47,7 +47,7 @@ class BeneficiariosController extends Controller
      * @return json
      */
     public function getListadoTabla(){
-    	$benefs = Beneficiario::select(['nombre','apellido','fecha_nacimiento','sexo','id_provincia_alta','clave_beneficiario'])
+    	$benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','id_provincia_alta','clave_beneficiario')
             ->with([ 
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'departamento' , 'localidad']); 
