@@ -57,6 +57,29 @@ class PssController extends Controller
 	}
 
 	/**
+     * Aclara el color base
+     * @param int
+     *
+     * @return string
+     */
+    protected function alter_brightness($colourstr, $steps) {
+        $colourstr = str_replace('#','',$colourstr);
+        $rhex = substr($colourstr,0,2);
+        $ghex = substr($colourstr,2,2);
+        $bhex = substr($colourstr,4,2);
+
+        $r = hexdec($rhex);
+        $g = hexdec($ghex);
+        $b = hexdec($bhex);
+
+        $r = max(0,min(255,$r + $steps));
+        $g = max(0,min(255,$g + $steps));  
+        $b = max(0,min(255,$b + $steps));
+
+        return '#'.str_pad(dechex($r) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($g) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($b) , 2 , '0' , STR_PAD_LEFT);
+    }
+
+	/**
      * Devuelve listado de 12 meses 
      *
      * @return json
@@ -91,7 +114,7 @@ class PssController extends Controller
 
 	/**
 	 * Devuelve la serie para graficar la facturación
-	 * @param $string id
+	 * @param string $id
 	 *
 	 * @return json
 	 */
@@ -114,6 +137,56 @@ class PssController extends Controller
 		}
 
 		return json_encode($data);
+	}
+
+	/**
+	 * Devuelve la serie para el gráfico de distribución
+	 * @param string $id
+	 *
+	 * @return json
+	 */
+	protected function getDistribucion($id){
+		$interval = $this->getDateInterval();
+		$i = 0;
+
+		$regiones = Fc002::whereBetween('periodo',[$interval['min'],$interval['max']])
+							->where('codigo_prestacion' , $id)
+							->join('geo.provincias as p' , 'estadisticas.fc_002.id_provincia' , '=' , 'p.id_provincia')
+                    		->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                    		->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad) as c'))
+                    		->groupBy('r.id_region')
+                    		->groupBy('r.nombre')
+                    		->get();
+
+        foreach ($regiones as $key => $region){
+            $data[$i]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
+            $data[$i]['id'] = (string)$region->id_region;
+            $data[$i]['name'] = $region->nombre;
+            $data[$i]['value'] = (int)$region->c;
+            $i++;
+        }
+
+        for ($j = 0 ; $j <= 5 ; $j ++){
+            $provincias = Fc002::whereBetween('periodo',[$interval['min'],$interval['max']])
+                            ->where('r.id_region' , $j)
+                            ->join('geo.provincias as p' , 'estadisticas.fc_002.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad) as c'))
+                            ->groupBy('r.id_region')
+                            ->groupBy('p.id_provincia')
+                            ->groupBy('p.nombre')
+                            ->get();
+            foreach ($provincias as $key => $provincia){
+                $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
+                $data[$i]['name'] = $provincia->nombre;
+                $data[$i]['parent'] = (string)$provincia->id_region;
+                $data[$i]['value'] = (int)$provincia->c;
+                $i++;
+            }
+        }
+
+        return json_encode($data);
+
 	}
 
 	/**
@@ -188,7 +261,8 @@ class PssController extends Controller
 			'informacion' => $array,
 			'codigo' => $codigo,
 			'meses' => $this->getMesesArray(),
-			'series' => $this->getProgreso($id)
+			'series' => $this->getProgreso($id),
+			'distribucion' => $this->getDistribucion($id)
 		];
 
 		return view('pss.detail' , $data);

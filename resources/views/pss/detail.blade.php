@@ -212,6 +212,39 @@
 	        series: {!! $series !!}
 		});
 
+		$('.g2').highcharts({
+            series: [{
+                type: "treemap",
+                layoutAlgorithm: 'squarified',
+                allowDrillToNode: true,
+                dataLabels: {
+                    enabled: false
+                },
+                levelIsConstant: false,
+                levels: [{
+                    level: 1,
+                    dataLabels: {
+                        enabled: true
+                    },
+                    borderWidth: 3
+                }],
+                data : {!! $distribucion !!},
+                tooltip: {
+                    pointFormatter : function(){
+                        if (this.codigo_prestacion){
+                            return this.texto_prestacion + ' : ' + Highcharts.numberFormat(this.value , '0');
+                        } else {
+                            return Highcharts.numberFormat(this.value , '0');
+                        }
+                    }
+                },
+                turboThreshold : 5000
+            }],
+            title : {
+            	text : 'Distribución facturación'
+            }
+        });
+
 	});
 </script>
 @endsection
