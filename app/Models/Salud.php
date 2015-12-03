@@ -33,4 +33,25 @@ class Salud extends Model
 	public function grupo(){
 		return $this->hasMany('App\Models\PSS\Grupo' , 'codigo_prestacion' , 'codigo_prestacion');
 	}
+
+	/**
+	 * Devuelve CEB
+	 */
+	public function ceb(){
+		return $this->hasMany('App\Models\PSS\CEB' , 'codigo_prestacion' , 'codigo_prestacion');
+	}
+
+	/**
+	 * Devuelve los ODP
+	 */
+	public function odp(){
+		return $this->hasMany('App\Models\PSS\ODP' , 'codigo_prestacion' , 'codigo_prestacion');
+	}
+
+	/**
+	 * Devuelve trazadoras
+	 */
+	public function trazadora(){
+		return $this->hasMany('App\Models\PSS\Trazadora' , 'codigo_prestacion' , 'codigo_prestacion');
+	}
 }

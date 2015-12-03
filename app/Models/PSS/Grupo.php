@@ -12,4 +12,25 @@ class Grupo extends Model
 	 * @var string
 	 */
 	protected $table = 'pss.codigos_grupos';
+
+	/**
+	 * Primary key asociated with the table.
+	 *
+	 * @var string
+	 */
+	protected $primaryKey = 'codigo_prestacion';
+
+	/**
+	 * Devuelve el grupo etario
+	 */
+	public function grupoEtario(){
+		return $this->hasOne('App\Models\PSS\GrupoEtario' , 'id_grupo_etario' , 'id_grupo_etario');
+	}
+
+	/**
+	 * Devuelve la linea de cuidado
+	 */
+	public function lineaCuidado(){
+		return $this->hasOne('App\Models\PSS\LineaCuidado' , 'id_linea_cuidado' , 'id_linea_cuidado');
+	}
 }
