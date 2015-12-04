@@ -48,6 +48,7 @@ class PssController extends Controller
 	 */
 	public function getListadoTabla(){
 		$pss = Salud::where('codigo_prestacion' , 'CTC001A97')->get();
+		// $pss = Salud::all();
 		return Datatables::of($pss)
 			->editColumn('descripcion_grupal' , '{!! str_limit($descripcion_grupal, 60) !!}')
 			->addColumn('action' , function($ps){
@@ -89,9 +90,8 @@ class PssController extends Controller
         $dt = new \DateTime();
         $dt->modify('-13 months');
         for ($i = 0 ; $i < 12 ; $i ++){
-        $dt->modify('+1 month');
-
-            $meses[$i] = strftime("%b" , $dt->getTimeStamp());
+       		$dt->modify('+1 month');
+            $meses[$i] = strftime("%b %Y" , $dt->getTimeStamp());
         }
         return json_encode($meses);
     }
@@ -129,10 +129,9 @@ class PssController extends Controller
 		foreach ($facturacion as $key => $info){
 			$data[0]['name'] = 'Cant. Fact.';
 			$data[0]['data'][$key] = $info->c;
-
 			/*
 			$data[1]['name'] = 'Monto. Fact.';
-			$data[1]['data'][$key] = (int)$info->f;
+			$data[1]['data'][$key] = (int)($info->f/1000);
 			*/
 		}
 
@@ -146,6 +145,7 @@ class PssController extends Controller
 	 * @return json
 	 */
 	protected function getDistribucion($id){
+		$meses = $this->getMesesArray();
 		$interval = $this->getDateInterval();
 		$i = 0;
 
@@ -169,6 +169,7 @@ class PssController extends Controller
         for ($j = 0 ; $j <= 5 ; $j ++){
             $provincias = Fc002::whereBetween('periodo',[$interval['min'],$interval['max']])
                             ->where('r.id_region' , $j)
+                            ->where('codigo_prestacion' , $id)
                             ->join('geo.provincias as p' , 'estadisticas.fc_002.id_provincia' , '=' , 'p.id_provincia')
                             ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
                             ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad) as c'))
@@ -176,6 +177,7 @@ class PssController extends Controller
                             ->groupBy('p.id_provincia')
                             ->groupBy('p.nombre')
                             ->get();
+
             foreach ($provincias as $key => $provincia){
                 $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
                 $data[$i]['name'] = $provincia->nombre;
@@ -184,6 +186,40 @@ class PssController extends Controller
                 $i++;
             }
         }
+
+
+        for ($k = 1 ; $k <= 24 ; $k ++){
+
+	    	$dt = \DateTime::createFromFormat('Ym' , $interval['max']);
+	    	$dt->modify('+1 month');
+
+        	for ($l = 0 ; $l < 12 ; $l ++){
+	        	
+	        	$dt->modify('-1 month');
+
+	            $periodos = Fc002::where('periodo' , $dt->format('Ym'))
+	            				->where('codigo_prestacion' , $id)
+	            				->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+	            				->join('geo.provincias as p' , 'estadisticas.fc_002.id_provincia' , '=' , 'p.id_provincia')
+                            	->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            	->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , 'periodo' , DB::raw('sum(cantidad) as c'))
+                            	->groupBy('r.id_region')
+                            	->groupBy('p.id_provincia')
+                            	->groupBy('p.nombre')
+                            	->groupBy('periodo')
+                            	->get();
+                
+                foreach ($periodos as $key => $periodo){
+                	$data[$i]['id'] = $periodo->id_region . "_" . $periodo->id_provincia . "_" . $periodo->periodo;
+	                $data[$i]['name'] = strftime("%b %Y" , $dt->getTimeStamp());
+	                $data[$i]['parent'] = (string)$periodo->id_region . "_" . $periodo->id_provincia;
+	                $data[$i]['value'] = (int)$periodo->c;
+	                $i++;
+                }
+        	}
+        }
+
+        
 
         return json_encode($data);
 
