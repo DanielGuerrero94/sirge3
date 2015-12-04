@@ -12,4 +12,11 @@ class LineaCuidado extends Model
 	 * @var string
 	 */
 	protected $table = 'pss.lineas_cuidado';
+
+	/**
+	 * Primary key asociated with the table.
+	 *
+	 * @var string
+	 */
+	protected $primaryKey = 'id_linea_cuidado';
 }

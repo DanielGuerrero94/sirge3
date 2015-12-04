@@ -1,32 +1,5 @@
 @extends('content')
 @section('content')
-<!--
-	ATRIBUTOS
-		ANEXO
-		CATASTROFICO
-		PRIORIZADO
-		HOMBRE
-		CCC
-		ESTRATEGICO
-
-	GRUPOS ETARIOS
-
-	LINEAS DE CUIDADO
-	
-	MUJER
-		EMBARAZO RIESGO
-		EMBARAZO NORMAL
-
-	CEB
-		GRUPOS ETARIOS
-
-	ODP
-		Nº ODP
-
-	TRAZADORA
-		Nº TRAZADORA
-
--->
 <div class="row">
 	<form class="form-horizontal">
 		<div class="col-md-12">
@@ -47,7 +20,6 @@
 						</div>
 					</div>
 					<div class="row">
-						
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="col-md-3">Grupos:</label>
@@ -79,11 +51,9 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
 					
 					<div class="row">
-						
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="col-md-3">Líneas:</label>
@@ -116,11 +86,9 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
 						
 					<div class="row">
-
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="col-md-3">O.D.P.:</label>
@@ -174,7 +142,11 @@
 							<div class="g2" style="height: 300px;"></div>
 						</div>
 					</div>
-
+				</div>
+				<div class="box-footer">
+					<div class="btn-group" role="group">
+						<button type="button" class="back btn btn-info">Atrás</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -182,6 +154,12 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
+
+		$('.back').click(function(){
+			$.get('pss-listado' , function(data){
+				$('.content-wrapper').html(data);
+			});
+		});
 
 		$('.g1').highcharts({
 			title: {
@@ -201,7 +179,8 @@
 	            }],
 	            labels : {
 	            	enabled : true
-	            }
+	            },
+	            min : 0
 	        },
 	        legend: {
 	            layout: 'horizontal',

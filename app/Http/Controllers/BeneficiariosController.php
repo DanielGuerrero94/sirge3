@@ -76,7 +76,7 @@ class BeneficiariosController extends Controller
                 }
                 ])
         ->find($id);
-
+        return json_encode($beneficiario);
         $data = [
             'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,
             'beneficiario' => $beneficiario,

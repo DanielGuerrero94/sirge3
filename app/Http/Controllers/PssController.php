@@ -14,8 +14,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Salud;
 use App\Models\PSS\Grupo;
 use App\Models\PSS\CEB;
+use App\Models\PSS\LineaCuidado;
 
 use App\Models\Dw\Fc002;
+use App\Models\Dw\Fc003;
 
 class PssController extends Controller
 {
@@ -38,7 +40,7 @@ class PssController extends Controller
 		$data = [
 			'page_title' => 'Plan de Servicios de Salud'
 		];
-		return view('pss.index' , $data);
+		return view('pss.pss' , $data);
 	}
 
 	/**
@@ -124,11 +126,12 @@ class PssController extends Controller
 		$facturacion = Fc002::select('periodo' , DB::raw('sum(cantidad) as c') , DB::raw('sum(monto) as f'))
 							->where('codigo_prestacion' , $id)
 							->whereBetween('periodo',[$interval['min'],$interval['max']])
-							->groupBy('periodo' , 'codigo_prestacion')
+							->groupBy('periodo')
 							->get();
 		foreach ($facturacion as $key => $info){
 			$data[0]['name'] = 'Cant. Fact.';
 			$data[0]['data'][$key] = $info->c;
+			$data[0]['color'] = '#ff851b';
 			/*
 			$data[1]['name'] = 'Monto. Fact.';
 			$data[1]['data'][$key] = (int)($info->f/1000);
@@ -159,7 +162,7 @@ class PssController extends Controller
                     		->get();
 
         foreach ($regiones as $key => $region){
-            $data[$i]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
+            $data[$i]['color'] = $this->alter_brightness('#ff851b' , $key * 35);
             $data[$i]['id'] = (string)$region->id_region;
             $data[$i]['name'] = $region->nombre;
             $data[$i]['value'] = (int)$region->c;
@@ -218,8 +221,6 @@ class PssController extends Controller
                 }
         	}
         }
-
-        
 
         return json_encode($data);
 
@@ -301,6 +302,175 @@ class PssController extends Controller
 			'distribucion' => $this->getDistribucion($id)
 		];
 
-		return view('pss.detail' , $data);
+		return view('pss.pss_detail' , $data);
 	}
+
+	/**
+	 * Devuelve la vista para el listado de líneas de cuidado
+	 *
+	 * @return null
+	 */
+	public function getLineas(){
+		$data = [
+			'page_title' => 'Lineas de cuidado'
+		];
+		return view('pss.lineas_cuidado' , $data);
+	}
+
+	/**
+	 * Devuelve el JSON para la datatable
+	 *
+	 * @return json
+	 */
+	public function getLineasTabla(){
+		$lineas = LineaCuidado::all();
+		return Datatables::of($lineas)
+			->addColumn('action' , function($linea){
+				return '<button linea="'. $linea->id_linea_cuidado .'" class="ver btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+			})->make(true);
+	}
+
+	/**
+	 * Devuelve la serie para el gráfico de lineas
+	 *
+	 * @return json
+	 */
+	protected function getSeriesLineaCuidado($id){
+		$interval = $this->getDateInterval();
+
+		$facturacion = Fc003::select('periodo' , DB::raw('sum(cantidad) as c') , DB::raw('sum(monto) as f'))
+							->where('id_linea_cuidado' , $id)
+							->whereBetween('periodo',[$interval['min'],$interval['max']])
+							->groupBy('periodo')
+							->get();
+
+		foreach ($facturacion as $key => $info){
+			$data[0]['name'] = 'Cant. Fact.';
+			$data[0]['data'][$key] = $info->c;
+			$data[0]['color'] = '#ff851b';
+			/*
+			$data[1]['name'] = 'Monto. Fact.';
+			$data[1]['data'][$key] = (int)($info->f/1000);
+			*/
+		}
+
+		return json_encode($data);
+	}
+
+	/**
+	 * Devuelve la serie para el gráfico de distribución
+	 * @param string $id
+	 *
+	 * @return json
+	 */
+	protected function getDistribucionLineaCuidado($id){
+		$meses = $this->getMesesArray();
+		$interval = $this->getDateInterval();
+		$i = 0;
+
+		$regiones = Fc003::whereBetween('periodo',[$interval['min'],$interval['max']])
+							->where('id_linea_cuidado' , $id)
+							->join('geo.provincias as p' , 'estadisticas.fc_003.id_provincia' , '=' , 'p.id_provincia')
+                    		->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                    		->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad) as c'))
+                    		->groupBy('r.id_region')
+                    		->groupBy('r.nombre')
+                    		->get();
+
+        foreach ($regiones as $key => $region){
+            $data[$i]['color'] = $this->alter_brightness('#ff851b' , $key * 35);
+            $data[$i]['id'] = (string)$region->id_region;
+            $data[$i]['name'] = $region->nombre;
+            $data[$i]['value'] = (int)$region->c;
+            $i++;
+        }
+
+        for ($j = 0 ; $j <= 5 ; $j ++){
+            $provincias = Fc003::whereBetween('periodo',[$interval['min'],$interval['max']])
+                            ->where('r.id_region' , $j)
+                            ->where('id_linea_cuidado' , $id)
+                            ->join('geo.provincias as p' , 'estadisticas.fc_003.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad) as c'))
+                            ->groupBy('r.id_region')
+                            ->groupBy('p.id_provincia')
+                            ->groupBy('p.nombre')
+                            ->get();
+
+            foreach ($provincias as $key => $provincia){
+                $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
+                $data[$i]['name'] = $provincia->nombre;
+                $data[$i]['parent'] = (string)$provincia->id_region;
+                $data[$i]['value'] = (int)$provincia->c;
+                $i++;
+            }
+        }
+
+
+        for ($k = 1 ; $k <= 24 ; $k ++){
+
+	    	$dt = \DateTime::createFromFormat('Ym' , $interval['max']);
+	    	$dt->modify('+1 month');
+
+        	for ($l = 0 ; $l < 12 ; $l ++){
+	        	
+	        	$dt->modify('-1 month');
+
+	            $periodos = Fc003::where('periodo' , $dt->format('Ym'))
+	            				->where('id_linea_cuidado' , $id)
+	            				->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+	            				->join('geo.provincias as p' , 'estadisticas.fc_003.id_provincia' , '=' , 'p.id_provincia')
+                            	->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            	->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , 'periodo' , DB::raw('sum(cantidad) as c'))
+                            	->groupBy('r.id_region')
+                            	->groupBy('p.id_provincia')
+                            	->groupBy('p.nombre')
+                            	->groupBy('periodo')
+                            	->get();
+                
+                foreach ($periodos as $key => $periodo){
+                	$data[$i]['id'] = $periodo->id_region . "_" . $periodo->id_provincia . "_" . $periodo->periodo;
+	                $data[$i]['name'] = strftime("%b %Y" , $dt->getTimeStamp());
+	                $data[$i]['parent'] = (string)$periodo->id_region . "_" . $periodo->id_provincia;
+	                $data[$i]['value'] = (int)$periodo->c;
+	                $i++;
+                }
+        	}
+        }
+
+        return json_encode($data);
+
+	}
+
+	/**
+	 * Devuelve la vista del detalle de la línea de cuidado
+	 * @param int $id
+	 *
+	 * @return null
+	 */
+	public function getDetalleLinea($id){
+		$linea = LineaCuidado::find($id);
+
+		$data = [
+			'page_title' => $linea->descripcion,
+			'linea' => $linea,
+			'meses' => $this->getMesesArray(),
+			'series' => $this->getSeriesLineaCuidado($id),
+			'tree_map' => $this->getDistribucionLineaCuidado($id)
+		];
+
+		return view('pss.lineas_cuidado_detail' , $data);
+	}
+
+	/**
+	 * Devuelve JSON para la datatable
+	 * @param int $id
+	 *
+	 * @return json
+	 */
+	public function getLineasCodigosTabla($id){
+		$codigos = Grupo::with(['grupoEtario'])->where('id_linea_cuidado' , $id)->get();
+		return Datatables::of($codigos)->make(true);
+	}
+
 }
