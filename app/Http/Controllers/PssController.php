@@ -15,9 +15,11 @@ use App\Models\Salud;
 use App\Models\PSS\Grupo;
 use App\Models\PSS\CEB;
 use App\Models\PSS\LineaCuidado;
+use App\Models\PSS\GrupoEtario as Etario;
 
 use App\Models\Dw\Fc002;
 use App\Models\Dw\Fc003;
+use App\Models\Dw\Fc004;
 
 class PssController extends Controller
 {
@@ -471,6 +473,75 @@ class PssController extends Controller
 	public function getLineasCodigosTabla($id){
 		$codigos = Grupo::with(['grupoEtario'])->where('id_linea_cuidado' , $id)->get();
 		return Datatables::of($codigos)->make(true);
+	}
+
+	/**
+	 * Devuelve la serie para graficar
+	 *
+	 * @return json
+	 */
+	protected function getSeriesSexoEdad(){
+		$sexos = Fc004::select('sexo' , 'edad' , DB::raw('sum(cantidad) as c'))
+						->whereIn('sexo' , ['M','F'])
+						->whereBetween('edad' , [0,65])
+						->groupBy('sexo')
+						->groupBy('edad')
+						->orderBy('edad')
+						->orderBy('sexo')
+						->get();
+		
+		foreach ($sexos as $sexo){
+				
+			$char[0]['name'] = 'Hombres';
+			$char[1]['name'] = 'Mujeres';
+
+			if ($sexo->sexo == 'M'){
+				$char[0]['data'][] = (int)(-$sexo->c/1000);
+			} else {
+				$char[1]['data'][] = (int)($sexo->c/1000);
+			}
+		}
+
+			return json_encode($char);
+	}
+
+	/**
+	 * Devuelve la vista para los grupos etarios
+	 *
+	 * @return null
+	 */
+	public function getGrupos(){
+		$data = [
+			'page_title' => 'Grupos Etarios',
+			'series' => $this->getSeriesSexoEdad(),
+			'edades' => implode(',' , range(0,65))
+		];
+		return view('pss.grupos' , $data);
+	}
+
+
+	/**
+	 * Devuelve el JSON para la datatable
+	 *
+	 * @return json
+	 */
+	public function getGruposTabla(){
+		$grupos = Etario::all();
+		return Datatables::of($grupos)
+			->addColumn('action' , function($grupo){
+				return '<button grupo="'. $grupo->id_grupo_etario .'" class="ver btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+			})
+			->make(true);
+	}
+
+	/** 
+	 * Devuelve el detalle de un grupo determinado
+	 * @param int $id
+	 * 
+	 * @return null
+	 */
+	public function getDetalleGrupos($id){
+
 	}
 
 }
