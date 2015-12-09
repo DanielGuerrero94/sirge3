@@ -237,6 +237,14 @@ Route::get('ddjj-backup-consolidado' , 'DdjjController@backupConsolidado');
 Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 
 /**
+ * COMPROMISO ANUAL 2016
+ */
+Route::get('compromiso-anual-16-descentralizacion' , 'CompromisoController@getDescentralizacion');
+Route::get('compromiso-anual-16-descentralizacion-periodo-form' , 'CompromisoController@getFormPeriodoDescentralizacion');
+Route::get('compromiso-anual-16-descentralizacion-progresion-form' , 'CompromisoController@getFormProgresionDescentralizacion');
+
+
+/**
  * USUARIO
  */
 Route::get('perfil' , 'UserController@getProfile');

@@ -51,8 +51,8 @@ class PssController extends Controller
 	 * @return json
 	 */
 	public function getListadoTabla(){
-		$pss = Salud::where('codigo_prestacion' , 'CTC001A97')->get();
-		// $pss = Salud::all();
+		// $pss = Salud::where('codigo_prestacion' , 'CTC001A97')->get();
+		$pss = Salud::all();
 		return Datatables::of($pss)
 			->editColumn('descripcion_grupal' , '{!! str_limit($descripcion_grupal, 60) !!}')
 			->addColumn('action' , function($ps){
@@ -124,6 +124,7 @@ class PssController extends Controller
 	 */
 	protected function getProgreso($id){
 		$interval = $this->getDateInterval();
+		$data = [];
 
 		$facturacion = Fc002::select('periodo' , DB::raw('sum(cantidad) as c') , DB::raw('sum(monto) as f'))
 							->where('codigo_prestacion' , $id)
@@ -152,6 +153,7 @@ class PssController extends Controller
 	protected function getDistribucion($id){
 		$meses = $this->getMesesArray();
 		$interval = $this->getDateInterval();
+		$data = [];
 		$i = 0;
 
 		$regiones = Fc002::whereBetween('periodo',[$interval['min'],$interval['max']])
