@@ -22,7 +22,7 @@
 	<div class="col-md-7">
 		<div class="box box-info">
 			<div class="box-body">
-				<div style="height: 800px;" class="g1"></div>
+				<div style="height: 900px;" class="g1"></div>
 			</div>
 		</div>
 	</div>
@@ -58,21 +58,24 @@
             title: {
                 text: 'Facturación por edad y sexo'
             },
+            subtitle : {
+                text: 'Últimos 12 meses'
+            },
             xAxis: [{
-                categories: [{!! $edades !!}],
-                reversed: false,
-                labels: {
-                    step: 1
-                }
-            }, { // mirror axis on right side
-                opposite: true,
-                reversed: false,
-                categories: [{!! $edades !!}],
-                linkedTo: 0,
-                labels: {
-                    step: 1
-                }
-            }],
+                    categories: [{!! $edades !!}],
+                    reversed: false,
+                    labels: {
+                        step: 1
+                    },
+                }, { // mirror axis on right side
+                    opposite: true,
+                    reversed: false,
+                    categories: [{!! $edades !!}],
+                    linkedTo: 0,
+                    labels: {
+                        step: 1
+                    },
+                }],
             yAxis: {
                 title: {
                     text: null
@@ -92,8 +95,8 @@
 
             tooltip: {
                 formatter: function () {
-                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
-                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                    return '<b>' + this.series.name + ', edad ' + this.point.category + '</b><br/>' +
+                        'Prestaciones: ' + Highcharts.numberFormat(Math.abs(this.point.y) * 1000, 0);
                 }
             },
 

@@ -481,9 +481,10 @@ class PssController extends Controller
 	 * @return json
 	 */
 	protected function getSeriesSexoEdad(){
+
 		$sexos = Fc004::select('sexo' , 'edad' , DB::raw('sum(cantidad) as c'))
 						->whereIn('sexo' , ['M','F'])
-						->whereBetween('edad' , [0,65])
+						->whereBetween('edad' , [0,64])
 						->groupBy('sexo')
 						->groupBy('edad')
 						->orderBy('edad')
@@ -497,12 +498,15 @@ class PssController extends Controller
 
 			if ($sexo->sexo == 'M'){
 				$char[0]['data'][] = (int)(-$sexo->c/1000);
+				$char[0]['color'] = '#3c8dbc';
 			} else {
 				$char[1]['data'][] = (int)($sexo->c/1000);
+				$char[1]['color'] = '#D81B60';
 			}
 		}
+		
+		return json_encode($char);
 
-			return json_encode($char);
 	}
 
 	/**
@@ -511,10 +515,21 @@ class PssController extends Controller
 	 * @return null
 	 */
 	public function getGrupos(){
+
+		$grupos = [
+			'"0-1"','"2-3"','"4-5"','"6-7"','"8-9"',
+			'"10-11"','"12-13"','"14-15"','"16-17"','"18-19"',
+			'"20-21"','"22-23"','"24-25"','"26-27"','"28-29"',
+			'"30-31"','"32-33"','"34-35"','"36-37"','"38-39"',
+			'"40-41"','"42-43"','"44-45"','"46-47"','"48-49"',
+			'"50-51"','"52-53"','"54-55"','"56-57"','"58-59"',
+			'"60-61"','"62-63"','"64-65"'
+		];
+
 		$data = [
 			'page_title' => 'Grupos Etarios',
 			'series' => $this->getSeriesSexoEdad(),
-			'edades' => implode(',' , range(0,65))
+			'edades' => implode(',',range(0,64))
 		];
 		return view('pss.grupos' , $data);
 	}
