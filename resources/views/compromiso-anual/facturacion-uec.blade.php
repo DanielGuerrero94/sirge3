@@ -29,7 +29,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="compromiso-anual-16-descentralizacion-periodo-form" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="compromiso-anual-periodo-form/compromiso-anual-16-descentralizacion" class="detalle btn btn-info">Ver detalles</button>
 						</div>
 					</div>
 				</div>	
@@ -44,7 +44,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="compromiso-anual-16-descentralizacion-progresion-form" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="compromiso-anual-provincia-form/compromiso-anual-16-descentralizacion" class="detalle btn btn-info">Ver detalles</button>
 						</div>
 					</div>
 				</div>	
