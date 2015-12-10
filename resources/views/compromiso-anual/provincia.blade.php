@@ -46,7 +46,7 @@
 				}
 			},
 			submitHandler : function(form){
-				$.get('compromiso-anual-16-descentralizacion-progresion/' + $('#provincia').val() , function(data){
+				$.get('{{$modulo}}/' + $('#provincia').val() , function(data){
 					$('.content-wrapper').html(data);
 				});
 			}

@@ -239,10 +239,20 @@ Route::get('check-periodo/{tipo}/{periodo}' , 'DdjjController@checkPeriodo');
 /**
  * COMPROMISO ANUAL
  */
-Route::get('compromiso-anual-periodo-form/{back}' , 'CompromisoController@getFormPeriodo');
-Route::get('compromiso-anual-provincia-form/{back}' , 'CompromisoController@getFormProvincia');
-Route::get('compromiso-anual-16-descentralizacion/{periodo?}' , 'CompromisoController@getDescentralizacion');
-Route::get('compromiso-anual-16-descentralizacion-progresion/{provincia}' , 'CompromisoController@getDescentralizacionProgresion');
+Route::get('ca-periodo-form/{back}/{modulo}' , 'CompromisoController@getFormPeriodo');
+Route::get('ca-provincia-form/{back}/{modulo}' , 'CompromisoController@getFormProvincia');
+
+Route::get('ca-16-descentralizacion/{periodo?}' , 'CompromisoController@getDescentralizacion');
+Route::get('ca-16-descentralizacion-progresion/{provincia}' , 'CompromisoController@getDescentralizacionProgresion');
+
+Route::get('ca-16-facturacion/{periodo?}' , 'CompromisoController@getFacturacion');
+Route::get('ca-16-facturacion-progresion/{provincia}' , 'CompromisoController@getFacturacionProgresion');
+
+Route::get('ca-16-datos-reportables/{periodo?}' , 'CompromisoController@getDatos');
+Route::get('ca-16-datos-reportables-progresion/{provincia}' , 'CompromisoController@getDatosProgresion');
+
+Route::get('ca-16-dependencia/{periodo?}' , 'CompromisoController@getDependencia');
+Route::get('ca-16-dependencia-progresion/{provincia}' , 'CompromisoController@getDependenciaProgresion');
 
 
 /**

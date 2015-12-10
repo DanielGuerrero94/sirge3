@@ -48,7 +48,7 @@
 				}
 			},
 			submitHandler : function(form){
-				$.get('compromiso-anual-16-descentralizacion/' + $('#periodo').val() , function(data){
+				$.get('{{$modulo}}/' + $('#periodo').val() , function(data){
 					$('.content-wrapper').html(data);
 				});
 			}

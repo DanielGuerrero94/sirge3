@@ -4,7 +4,7 @@
 	<div class="col-md-8">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Volumen de facturación descentralizada de los efectores</h2>
+				<h2 class="box-title">Volumen de reporte de datos reportables</h2>
 			</div>
 			<div class="box-body">
 				<div class="g1"></div>
@@ -16,7 +16,7 @@
 			<div class="col-md-12">
 				<div class="callout callout-warning">
 					<h4>Importante!</h4>
-					<p>El gráfico de la izquierda corresponde a la facturación descentralizada calculada en el período {{$periodo_calculado}}</p>
+					<p>El gráfico de la izquierda corresponde a la información de datos reportables calculada en el período {{$periodo_calculado}}</p>
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -25,11 +25,11 @@
 						<h2 class="box-title">Períodos anteriores</h2>
 					</div>
 					<div class="box-body">
-						<p>Desde esta opción podrá ver la facturación descentralizada a nivel país de meses anteriores al actual.</p>
+						<p>Desde esta opción podrá ver la información de datos reportables a nivel país de meses anteriores al actual.</p>
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="ca-periodo-form/ca-16-facturacion/ca-16-facturacion" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="ca-periodo-form/ca-16-datos-reportables/ca-16-datos-reportables" class="detalle btn btn-info">Ver detalles</button>
 						</div>
 					</div>
 				</div>	
@@ -40,11 +40,11 @@
 						<h2 class="box-title">Progresión provincial</h2>
 					</div>
 					<div class="box-body">
-						<p>Desde esta opción podrá ver la evolución de la facturación descentralizada de una provincia determinada</p>
+						<p>Desde esta opción podrá ver la evolución de la información de datos reportables de una provincia determinada</p>
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="ca-provincia-form/ca-16-facturacion/ca-16-facturacion-progresion" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="ca-provincia-form/ca-16-datos-reportables/ca-16-datos-reportables-progresion" class="detalle btn btn-info">Ver detalles</button>
 						</div>
 					</div>
 				</div>	
@@ -84,7 +84,7 @@
 	            min: 0,
 	            max: 100,
 	            title: {
-	                text: 'Facturación descentralizada (%)'
+	                text: 'Reporte de datos (%)'
 	            }
 	        },
 	        tooltip: {

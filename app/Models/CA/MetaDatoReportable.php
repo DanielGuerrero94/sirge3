@@ -4,9 +4,9 @@ namespace App\Models\CA;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MetaDescentralizacion extends Model
+class MetaDatoReportable extends Model
 {
-	/**
+    /**
      * Definir la conexión de la bdd
      *
      * @var string
@@ -18,7 +18,7 @@ class MetaDescentralizacion extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'compromiso_anual.metas_descentralizacion';
+	protected $table = 'compromiso_anual.metas_datos_reportables';
 
 	/**
 	 * Indicates if the model should be timestamped.

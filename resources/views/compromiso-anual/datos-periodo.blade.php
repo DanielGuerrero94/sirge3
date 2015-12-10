@@ -4,7 +4,7 @@
 	<div class="col-md-10 col-md-offset-1">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Volumen de facturación descentralizada de los efectores</h2>
+				<h2 class="box-title">Información de datos reportables</h2>
 			</div>
 			<div class="box-body">
 				<div class="g1"></div>
@@ -47,7 +47,7 @@
 	            min: 0,
 	            max: 100,
 	            title: {
-	                text: 'Facturación descentralizada (%)'
+	                text: 'Datos reportables (%)'
 	            }
 	        },
 	        tooltip: {
