@@ -9,11 +9,6 @@
 			<div class="box-body">
 				<div class="g1"></div>
 			</div>
-			<div class="box-footer">
-				<div class="btn-group" role="group">
-					<button type="button" class="detalle btn btn-info">Ver detalles</button>
-				</div>
-			</div>
 		</div>
 	</div>
 	<div class="col-md-4">
