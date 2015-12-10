@@ -1,7 +1,7 @@
 @extends('content')
 @section('content')
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-10 col-md-offset-1">
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Volumen de descentralización de los efectores</h2>
