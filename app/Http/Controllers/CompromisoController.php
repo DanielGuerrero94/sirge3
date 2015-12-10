@@ -53,7 +53,7 @@ class CompromisoController extends Controller
 			$series[1]['name'] = 'Meta 1º semestre';
 			$series[1]['data'][] = (int)$provincia->primer_semestre;
 			$series[1]['marker']['lineWidth'] = 0;
-			$series[1]['marker']['fillColor'] = '#f56954';
+			$series[1]['marker']['fillColor'] = '#00a65a';
 			$series[1]['marker']['radius'] = 3;
 
 			$series[2]['type'] = 'scatter';
