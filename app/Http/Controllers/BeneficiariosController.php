@@ -52,7 +52,7 @@ class BeneficiariosController extends Controller
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
                 }
-            ])->take(100)->skip(100)->get();
+            ])->where('clave_beneficiario','LIKE','240010000100493%')->take(20)->get();
         return Datatables::of($benefs)
             ->addColumn('action' , function($benef){
                 return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
@@ -73,10 +73,12 @@ class BeneficiariosController extends Controller
                 )->with([                
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
-                }, 'susPrestaciones'
+                }, 'susPrestaciones' => function($q){
+                    $q->with(['datosEfector','datosPrestacion'])->orderBy('fecha_prestacion','desc');
+                }
                 ])
         ->find($id);
-        return json_encode($beneficiario);
+        //return json_encode($beneficiario);
         $data = [
             'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,
             'beneficiario' => $beneficiario,

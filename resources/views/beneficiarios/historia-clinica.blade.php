@@ -142,48 +142,39 @@
 			<div class="box-body">
 				<h4>Pr&aacute;cticas recibidas</h4>
 				<ul class="timeline">
+					@if (count($beneficiario->susPrestaciones))					
 					<!-- timeline time label -->
-					<li class="time-label">
-						<span class="bg-red">
-							18/02/2007
-						</span>
-					</li>
+						<?php $fecha_anterior = ''; ?>
+						@foreach ($beneficiario->susPrestaciones as $unaPrestacion)				
+							@if ($fecha_anterior != $unaPrestacion->fecha_prestacion)
+								<li class="time-label">
+									<span class="bg-red">
+										{{ $unaPrestacion->fecha_prestacion }}<!--18/02/2007-->
+									</span>
+								</li>
+							@endif													
 					<!-- /.timeline-label -->
 					<!-- timeline item -->
 					<li>
 						<!-- timeline icon -->
 						<i class="fa fa-envelope bg-blue"></i>
 						<div class="timeline-item">
-							<span class="time"><i class="fa fa-clock-o"></i> CODIGO PRESTACION</span>
+							<span class="time"><i class="fa fa-clock-o"></i> {{ $unaPrestacion->codigo_prestacion }} </span>
 							<h3 class="timeline-header"><a href="#">Consulta</a></h3>
 							<div class="timeline-body">
-								<b><i>{{ mb_strtoupper("Hospital Posadas") }} </i></b> <br> Amputación de mano izquierda
+								<b><i>{{ mb_strtoupper($unaPrestacion->datosEfector->nombre) }} </i></b> <br> {{ ucfirst(mb_strtolower($unaPrestacion->datosPrestacion->descripcion_grupal)) }}
 							</div>							
 						</div>
 					</li>
-					<!-- END timeline item -->					
-					<li class="time-label">
-						<span class="bg-red">
-							17/02/2007
-						</span>
-					</li>
-					<!-- /.timeline-label -->
-					<!-- timeline item -->
-					<li>
-						<!-- timeline icon -->
-						<i class="fa fa-envelope bg-blue"></i>
-						<div class="timeline-item">
-							<span class="time"><i class="fa fa-clock-o"></i> CODIGO PRESTACION</span>
-							<h3 class="timeline-header"><a href="#">Laboratorio</a></h3>
-							<div class="timeline-body">
-								Vacuna quintuple (va por el orto)
-							</div>
-							<div class="timeline-footer">
-								<a class="btn btn-primary btn-xs">Hospital Posadas</a>
-							</div>
-						</div>
-					</li>
-					<!-- END timeline item -->					
+					<!-- END timeline item -->	
+					<?php $fecha_anterior =  $unaPrestacion->fecha_prestacion; ?>							
+						@endforeach
+					@else
+					<div class="callout callout-warning">
+                		<h4>Atención!</h4>
+                		<p>No hay prestaciones asociadas a este beneficiario</p>
+              		</div>
+					@endif				
 				</ul>
 			</div>
 		</div>		
