@@ -499,12 +499,12 @@ class HomeController extends Controller
     public function postContacto(Request $r){
 
         $user = Auth::user();
-
-        Mail::raw($r->cuerpo, function ($m) use ($user , $r) {
+        $html = $r->cuerpo . "\n" . $r->nombre;
+        Mail::raw($html , function ($m) use ($user , $r) {
             $m->from('sirgeweb@sumar.com.ar');
-            $m->to('gustavo.hekel@gmail.com');
-            $m->subject('Email de contacto SIRG3 Web');
+            $m->to('sistemasuec@gmail.com' , 'gustavo.hekel@gmail.com' , 'sirgeweb@gmail.com');
             $m->replyTo($r->email);
+            $m->subject('Email de contacto SIRG3 Web');
         });
 
     }
