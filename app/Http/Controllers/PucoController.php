@@ -75,9 +75,9 @@ class PucoController extends Controller
 					  	  		  ->where('sistema.lotes.id_estado' ,'=' , 3);
 						  })
 						  ->leftJoin('puco.procesos_obras_sociales' , function($j){
-						  		$j->on('sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
-						  		  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'));
+						  		$j->on('sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote');
 						  })->leftJoin('puco.obras_sociales' , 'puco.obras_sociales_provinciales.codigo_osp' , '=' , 'puco.obras_sociales.codigo_osp')
+						  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
 						  ->get();
 		return Datatables::of($datos)->make(true);
 	}
@@ -155,7 +155,6 @@ class PucoController extends Controller
 			) to '/var/www/sirge/export/puco/sirg3/puco/puco.txt' 
 			");
 
-		
 		$puco = Storage::get('sirg3/puco/puco.txt');
 		Storage::delete('sirg3/puco/puco.txt');
 		

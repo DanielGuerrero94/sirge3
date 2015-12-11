@@ -207,6 +207,12 @@ Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getG
 Route::get('grafico-2/{periodo}' , 'EstadisticasController@getGafico2');
 
 /**
+ * INDICADORES
+ */
+Route::get('indicadores-medica' , 'IndicadoresController@getIndicadoresMedicaForm');
+Route::get('indicadores-medica/{id}/{periodo}' , 'IndicadoresController@getIndicadoresMedica');
+
+/**
  * DDJJ
  */
 Route::get('listado-lotes-cerrados/{padron}' , 'DdjjController@getListadoPendientes');
