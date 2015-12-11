@@ -41,13 +41,29 @@
 								<label for="cuerpo">Mensaje</label>
 								<textarea class="form-control" name="cuerpo" id="cuerpo"></textarea>
 							</div>
-							<input type="submit" class="btn btn-primary" value="Enviar">
+							<button class="submit btn btn-primary">Enviar</button>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal fade modal-info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    			<h4 class="modal-title">Atención!</h4>
+      		</div>
+  			<div class="modal-body">
+  				<p id="modal-text"></p>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -70,6 +86,25 @@
 	        });
 	    }
     	initialize();
+
+    	$('.submit').click(function(){
+
+    		$('form').validate({
+    			rules : {
+    				cuerpo : {
+    					required : true,
+    					minlength : 10
+    				}
+    			},
+    			submitHandler : function(form){
+    				$.post('contact' , $(form).serialize() , function(data){
+    					$('#modal-text').html(data);
+    					$('.modal').modal();
+    					$('form').trigger('reset');
+    				})
+    			}
+    		})
+    	})
 
 	});
 </script>

@@ -75,6 +75,50 @@ return [
             'schema'   => 'public',
         ],
 
+        'pss' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'pss',
+        ],
+
+        'beneficiarios' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'beneficiarios',
+        ],
+
+        'sistema' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'sistema',
+        ],
+
+        'efectores' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'efectores',
+        ],
+
         'datawarehouse' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST_DW', 'localhost'),

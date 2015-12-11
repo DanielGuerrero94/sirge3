@@ -483,10 +483,29 @@ class HomeController extends Controller
      *
      * @return null
      */
-    public function contacto(){
+    public function getContacto(){
         $data = [
             'page_title' => 'Contacto'
         ];
         return view('contact' , $data);
+    }
+
+    /**
+     * Envia el email de contacto
+     * @param Request $r
+     *
+     * @return string
+     */
+    public function postContacto(Request $r){
+
+        $user = Auth::user();
+
+        Mail::raw($r->cuerpo, function ($m) use ($user , $r) {
+            $m->from('sirgeweb@sumar.com.ar');
+            $m->to('gustavo.hekel@gmail.com');
+            $m->subject('Email de contacto SIRG3 Web');
+            $m->replyTo($r->email);
+        });
+
     }
 }

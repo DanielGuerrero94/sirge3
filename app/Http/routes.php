@@ -291,7 +291,8 @@ Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
  * ABOUT US
  */
 Route::get('about-us' , 'HomeController@about');
-Route::get('contact' , 'HomeController@contacto');
+Route::get('contact' , 'HomeController@getContacto');
+Route::post('contact' , 'HomeController@postContacto');
 
 /**
  * ADMIN

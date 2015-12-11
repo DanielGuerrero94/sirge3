@@ -50,7 +50,7 @@ return [
 
         'ftp' => [
             'driver'   => 'ftp',
-            'host'     => '192.6.0.119',
+            'host'     => '192.6.0.118',
             'username' => 'puco',
             'password' => 'sumarpuco2014',
 
