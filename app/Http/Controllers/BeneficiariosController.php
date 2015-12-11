@@ -50,7 +50,7 @@ class BeneficiariosController extends Controller
     	$benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','id_provincia_alta','clave_beneficiario')
             ->with([ 
                 'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                    $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
                 }
             ])->take(100)->skip(100)->get();
         return Datatables::of($benefs)
@@ -72,8 +72,8 @@ class BeneficiariosController extends Controller
                 DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad')                
                 )->with([                
                 'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
-                }
+                    $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
+                }, 'susPrestaciones'
                 ])
         ->find($id);
         return json_encode($beneficiario);

@@ -26,4 +26,14 @@ class Prestacion extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	public function datosEfector()
+	{
+		return $this->hasOne('App\Models\Efector' , 'cuie' , 'efector');	
+	}
+
+	public function datosPrestacion()
+	{
+		return $this->hasOne('App\Models\Codigo' , 'codigo_prestacion' , 'codigo_prestacion');	
+	}	
 }

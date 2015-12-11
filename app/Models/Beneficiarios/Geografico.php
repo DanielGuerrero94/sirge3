@@ -32,7 +32,7 @@ class Geografico extends Model
      *
      * @var array
      */
-    protected $fillable = ['clave_beneficiario','calle','numero','manzana','piso','departamento','calle_1','calle_2','barrio','municipio','id_departamento','id_localidad','id_provincia','codigo_postal'];	
+    protected $fillable = ['clave_beneficiario','calle','numero','manzana','piso','calle_1','calle_2','barrio','municipio','id_departamento','id_localidad','id_provincia','codigo_postal'];	
 
     /**
 	 * Guardar la calle del beneficiario
@@ -110,7 +110,7 @@ class Geografico extends Model
 	/**
 	 * Devuelve el departamento
 	 */
-	public function departamento(){
+	public function ndepartamento(){
 		return $this->hasOne('App\Models\Geo\Departamento' , 'id' , 'id_departamento');
 	}
 
