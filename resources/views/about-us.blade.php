@@ -29,21 +29,21 @@
 				<h3>Conozca a nuestro equipo</h3>
 				<div class="row">
 					@foreach($usuarios as $key => $usuario)
-						<div class="col-md-4 text-center" style="border: solid 1px red;">
-							<img style="height: 150px;" src="{{ asset("/dist/img/usuarios/") . '/' . $usuario->ruta_imagen }}" class="img-circle img-responsive center-block" alt="Responsive image">
+						<div class="col-md-4 text-center" >
+							<img style="height: 120px;" src="{{ asset("/dist/img/usuarios/") . '/' . $usuario->ruta_imagen }}" class="img-circle img-responsive center-block" alt="Responsive image">
 							<h4>{{$usuario->nombre}}</h4>
 							<h5>{{$usuario->ocupacion}}</h5>
-							<div>
-								<blockquote>
-									<p><footer>{{$usuario->mensaje}}</footer></p>
-								</blockquote>	
-							</div>
 							<div class="text-right">
 								<a href="{{strlen($usuario->google) ? $usuario->google : '#'}}" class="btn btn-xs btn-danger"><i class="fa fa-google-plus"></i></a>
 								<a href="{{strlen($usuario->facebook) ? $usuario->facebook : '#'}}" class="btn btn-xs btn-primary"><i class="fa fa-facebook "></i></a>
 								<a href="{{strlen($usuario->linkedin) ? $usuario->linkedin : '#'}}" class="btn btn-xs btn-primary"><i class="fa fa-linkedin "></i></a>
 								<a href="{{strlen($usuario->twitter) ? $usuario->twitter : '#'}}" class="btn btn-xs btn-info"><i class="fa fa-twitter"></i></a>
 								<a href="{{strlen($usuario->skype) ? $usuario->skype : '#'}}" class="btn btn-xs btn-info"><i class="fa fa-skype "></i></a>
+							</div>
+							<div style="height: 100px;">
+								<blockquote>
+									<p><footer>{{$usuario->mensaje}}</footer></p>
+								</blockquote>	
 							</div>
 						</div>
 					@endforeach

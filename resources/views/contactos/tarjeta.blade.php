@@ -27,7 +27,7 @@
         </div>
         <div class="back">
             <div class="header">
-                <h5 class="motto">"To be or not to be, this is my awesome motto!"</h5>
+                <h5 class="motto">"{{$usuario->mensaje}}"</h5>
             </div> 
             <div class="content">
                 <div class="main">

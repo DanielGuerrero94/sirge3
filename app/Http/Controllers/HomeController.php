@@ -477,4 +477,16 @@ class HomeController extends Controller
         return view('about-us' , $data);
 
     }
+
+    /**
+     * Devuelve la vista de contacto
+     *
+     * @return null
+     */
+    public function contacto(){
+        $data = [
+            'page_title' => 'Contacto'
+        ];
+        return view('contact' , $data);
+    }
 }

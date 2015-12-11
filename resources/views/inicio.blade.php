@@ -60,6 +60,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED JS SCRIPTS -->
 
+<!-- Google Maps -->
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
 <!-- jQuery 2.1.4 -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 <!-- Bootstrap 3.3.2 JS -->
