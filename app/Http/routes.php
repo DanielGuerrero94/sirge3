@@ -288,6 +288,12 @@ Route::get('inbox' , 'InboxController@index');
 Route::get('mensajes-inbox/{id_from}/{id_to}' , 'InboxController@chat');
 
 /**
+ * ABOUT US
+ */
+Route::get('about-us' , 'HomeController@about');
+Route::get('contact' , 'HomeController@contacto');
+
+/**
  * ADMIN
  */
 Route::get('usuarios' , 'UserController@index');

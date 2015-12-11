@@ -461,4 +461,20 @@ class HomeController extends Controller
         ];
         return view ('dashboard' , $data);
     }
+
+    /**
+     * Devuelve la vista de Acerca Nuestro
+     *
+     * @return null
+     */
+    public function about(){
+
+        $sistemas = Usuario::where('id_area' , 1)->orderBy('nombre')->get();
+        $data = [
+            'page_title' => 'Acerca nuestro',
+            'usuarios' => $sistemas
+        ];
+        return view('about-us' , $data);
+
+    }
 }

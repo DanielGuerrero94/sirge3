@@ -193,6 +193,7 @@ class UserController extends Controller
             $user->google = $r->gp;
             $user->skype = $r->skype;
             $user->telefono = $r->telefono;
+            $user->mensaje = $r->mensaje;
             if ($user->save()){
                 return 1;
             }
