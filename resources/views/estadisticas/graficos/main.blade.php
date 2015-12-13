@@ -2,25 +2,28 @@
 @section('content')
 <div class="row">
 @foreach ($graficos as $grafico)
-	{{--*/ $i = 0 /*--}}
-	@if ($i % 3 == 0)
-		{{--*/ $i ++ /*--}}
-		<div class="col-md-4">
-			<div class="box box-danger">
-				<div class="box-header">
-					<h2 class="box-title">{{ $grafico->titulo }}</h2>
-				</div>
-				<div class="box-body">
+	
+	<div class="col-md-4">
+		<div class="box box-{{$grafico->css}}">
+			<div class="box-header">
+				<h2 class="box-title">{{ $grafico->titulo }}</h2>
+			</div>
+			<div class="box-body">
+				<div class="descripcion">
 					{{ $grafico->descripcion }}
 				</div>
-				<div class="box-footer">
-					<div class="btn-group" role="group">
-						<button id-grafico="{{ $grafico->id }}" class="view btn btn-info">Ver</button>
-					</div>
+				@foreach ($grafico->tags as $tag)
+				<span class="label label-default">{{$tag}}</span>
+				@endforeach
+			</div>
+			<div class="box-footer">
+				<div class="btn-group" role="group">
+					<button id-grafico="{{ $grafico->id }}" class="view btn btn-info">Ver</button>
 				</div>
 			</div>
-		</div>	
-	@endif
+		</div>
+	</div>	
+
 @endforeach
 </div>
 
@@ -30,6 +33,11 @@
 		$.get('estadisticas-graficos/' + id , function(data){
 			$('.content-wrapper').html(data);
 		});
-	})
+	});
+
+	$('.descripcion').slimScroll({
+		height: '100px'
+	});
+
 </script>
 @endsection

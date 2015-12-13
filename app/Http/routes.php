@@ -204,7 +204,11 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
 Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getGraficoPeriodo');
-Route::get('grafico-2/{periodo}' , 'EstadisticasController@getGafico2');
+
+/**
+ * GRAFICOS
+ */
+Route::get('grafico-2/{periodo}' , 'GraficosController@getGafico2');
 
 /**
  * INDICADORES

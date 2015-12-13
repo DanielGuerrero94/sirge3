@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Grafico extends Model
 {
@@ -40,5 +41,16 @@ class Grafico extends Model
     public function getDescripcionAttribute($value)
     {
         return ucfirst(mb_strtolower($value));
+    }
+
+    /**
+     * Devuelve los tags en un array
+     *
+     * @param  string  $value
+     * @return json
+     */
+    public function getTagsAttribute($value)
+    {
+        return explode(',' , str_replace(['{','}'], '' , $value));
     }
 }

@@ -501,11 +501,15 @@ class HomeController extends Controller
         $user = Auth::user();
         $html = $r->cuerpo . "\n" . $r->nombre;
         Mail::raw($html , function ($m) use ($user , $r) {
-            $m->from('sirgeweb@sumar.com.ar');
-            $m->to('sistemasuec@gmail.com' , 'gustavo.hekel@gmail.com' , 'sirgeweb@gmail.com');
+            $m->from('sirgeweb@gmail.com');
+            $m->to('sistemasuec@gmail.com');
+            $m->to('gustavo.hekel@gmail.com');
+            $m->to('sirgeweb@gmail.com');
             $m->replyTo($r->email);
             $m->subject('Email de contacto SIRG3 Web');
         });
+
+        return 'Mensaje enviado';
 
     }
 }

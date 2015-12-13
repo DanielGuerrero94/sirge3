@@ -116,6 +116,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/dist/js/jquery.bootstrap.wizard.js") }}"></script>
 <!-- Typeahead -->
 <script type="text/javascript" src="{{ asset ("/dist/js/typeahead.js") }}"></script>
+<!-- SlimScroll -->
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- AdminLTE App -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
 
