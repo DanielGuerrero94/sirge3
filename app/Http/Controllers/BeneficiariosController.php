@@ -50,9 +50,9 @@ class BeneficiariosController extends Controller
     	$benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','id_provincia_alta','clave_beneficiario')
             ->with([ 
                 'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                    $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
                 }
-            ])->take(100)->skip(100)->get();
+            ])->where('clave_beneficiario','LIKE','240010000100493%')->take(20)->get();
         return Datatables::of($benefs)
             ->addColumn('action' , function($benef){
                 return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
@@ -72,11 +72,13 @@ class BeneficiariosController extends Controller
                 DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad')                
                 )->with([                
                 'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                    $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
+                }, 'susPrestaciones' => function($q){
+                    $q->with(['datosEfector','datosPrestacion'])->orderBy('fecha_prestacion','desc');
                 }
                 ])
         ->find($id);
-        return json_encode($beneficiario);
+        //return json_encode($beneficiario);
         $data = [
             'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,
             'beneficiario' => $beneficiario,
