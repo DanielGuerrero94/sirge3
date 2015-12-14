@@ -69,12 +69,14 @@ class BeneficiariosController extends Controller
      */
     public function historiaClinica($id , $back){
         $beneficiario = Beneficiario::select(                
-                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad')                
+                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion)) as edad_inscripcion')                
                 )->with([                
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
                 }, 'susPrestaciones' => function($q){
-                    $q->with(['datosEfector','datosPrestacion'])->orderBy('fecha_prestacion','desc');
+                    $q->with(['datosEfector',
+                        'datosPrestacion' => function($q){ $q->with(['tipoDePrestacion']);} 
+                    ])->orderBy('fecha_prestacion','desc');
                 }
                 ])
         ->find($id);
