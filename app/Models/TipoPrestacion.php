@@ -4,20 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Codigo extends Model {
-	/**
+class TipoPrestacion extends Model
+{
+    /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'pss.codigos';
+	protected $table = 'pss.tipo_prestacion';
 
 	/**
 	 * Primary key asociated with the table.
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'codigo_prestacion';
+	protected $primaryKey = 'tipo_prestacion';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -25,9 +26,4 @@ class Codigo extends Model {
 	 * @var bool
 	 */
 	public $timestamps = false;
-
-	public function tipoDePrestacion()
-	{
-		return $this->hasOne('App\Models\TipoPrestacion' , 'tipo_prestacion' , 'tipo');	
-	}	
 }

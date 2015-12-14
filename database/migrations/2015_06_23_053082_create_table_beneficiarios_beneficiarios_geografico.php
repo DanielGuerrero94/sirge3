@@ -23,11 +23,10 @@ class CreateTableBeneficiariosBeneficiariosGeografico extends Migration {
 			$table->string('calle_2', 100)->nullable();
 			$table->string('barrio', 100)->nullable();
 			$table->string('municipio', 100)->nullable();
-			$table->string('id_departamento', 3)->nullable();
-			$table->string('id_localidad', 3)->nullable();
+			$table->string('id_departamento', 4)->nullable();
+			$table->string('id_localidad', 4)->nullable();
 			$table->string('id_provincia', 2)->nullable();
-			$table->string('codigo_postal', 8)->nullable();
-			$table->smallInteger('modificado')->default(0)->nullable();
+			$table->string('codigo_postal', 8)->nullable();						
 			$table->foreign('clave_beneficiario')
 			->references('clave_beneficiario')
 			->on('beneficiarios.beneficiarios')

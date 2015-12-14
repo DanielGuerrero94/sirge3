@@ -104,6 +104,9 @@ class Beneficiario extends Model
 		return $this->hasOne('App\Models\Pss\GrupoEtario' , 'id_grupo_etario' , 'grupo_actual');	
 	}
 
+	/**
+	 * Devuelve las prestaciones asociadas al beneficiario
+	 */
 	public function susPrestaciones()
 	{
 		return $this->hasMany('App\Models\Prestacion' , 'clave_beneficiario' , 'clave_beneficiario');	

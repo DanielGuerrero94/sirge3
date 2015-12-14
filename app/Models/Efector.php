@@ -39,6 +39,17 @@ class Efector extends Model
     }
 
     /**
+     * Mostrar el nombre del efector.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getNombreAttribute($value)
+    {
+        return html_entity_decode($value);
+    }
+
+    /**
      * Guardar el domicilio del efector.
      *
      * @param  string  $value

@@ -27,11 +27,17 @@ class Prestacion extends Model
 	 */
 	public $timestamps = false;
 
+	/**
+	 * Devuelve los datos del efector asociado
+	 */
 	public function datosEfector()
 	{
 		return $this->hasOne('App\Models\Efector' , 'cuie' , 'efector');	
 	}
 
+	/**
+	 * Devuelve los datos del código de prestacion
+	 */
 	public function datosPrestacion()
 	{
 		return $this->hasOne('App\Models\Codigo' , 'codigo_prestacion' , 'codigo_prestacion');	
