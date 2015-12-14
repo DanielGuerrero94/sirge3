@@ -73,15 +73,13 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
 /** 
  * PADRONES
  */
-#	VISTA PRINCIPAL
 Route::get('padron/{id}' , 'PadronesController@getMain');
-#	SUBIDA DE ARCHIVOS
 Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
 Route::post('subir-padron' , 'PadronesController@postUpload');
-#	ACCIONES
 Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
 Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
 Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
+Route::get('padron-consolidado' , 'PadronesController@getConsolidado');
 
 /**
  * LOTES
@@ -204,11 +202,13 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
 Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getGraficoPeriodo');
+Route::get('estadisticas-graficos-pp/{id}/{provincia}/{padron}' , 'EstadisticasController@getGraficoProvinciaPadron');
 
 /**
  * GRAFICOS
  */
 Route::get('grafico-2/{periodo}' , 'GraficosController@getGafico2');
+Route::get('grafico-4/{provincia}/{padron}' , 'GraficosController@getGafico4');
 
 /**
  * INDICADORES

@@ -10,6 +10,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Grafico;
+use App\Models\Padron;
+use App\Models\Geo\Provincia;
 use App\Models\Dw\Ceb001;
 
 class EstadisticasController extends Controller
@@ -21,29 +23,6 @@ class EstadisticasController extends Controller
      */
     public function __construct(){
         $this->middleware('auth');
-    }
-
-    /**
-     * Aclara el color base
-     * @param int
-     *
-     * @return string
-     */
-    protected function alter_brightness($colourstr, $steps) {
-        $colourstr = str_replace('#','',$colourstr);
-        $rhex = substr($colourstr,0,2);
-        $ghex = substr($colourstr,2,2);
-        $bhex = substr($colourstr,4,2);
-
-        $r = hexdec($rhex);
-        $g = hexdec($ghex);
-        $b = hexdec($bhex);
-
-        $r = max(0,min(255,$r + $steps));
-        $g = max(0,min(255,$g + $steps));  
-        $b = max(0,min(255,$b + $steps));
-
-        return '#'.str_pad(dechex($r) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($g) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($b) , 2 , '0' , STR_PAD_LEFT);
     }
 
     /**
@@ -68,6 +47,8 @@ class EstadisticasController extends Controller
     public function getGrafico($id){
         $g = Grafico::find($id);
     	$data = [
+            'provincias' => Provincia::all(),
+            'padrones' => Padron::all(),
     		'page_title' => $g->titulo,
             'data' => $g
     	];
@@ -91,6 +72,22 @@ class EstadisticasController extends Controller
         $data = [
             'page_title' => $grafico->titulo,
             'periodo' => $periodo
+        ];
+        return view('estadisticas.graficos.graficos.' . $id , $data);
+    }
+
+    /**
+     * Devuelve la vista 
+     * 
+     * @return null
+     */
+    public function getGraficoProvinciaPadron($id , $provincia , $padron){
+        $grafico = Grafico::find($id);
+        $data = [
+            'page_title' => $grafico->titulo,
+            'provincia' => $provincia,
+            'padron' => $padron,
+            'grafico' => $grafico
         ];
         return view('estadisticas.graficos.graficos.' . $id , $data);
     }

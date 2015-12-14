@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+
+use App\Models\Grafico;
+use App\Models\Dw\Ceb001;
 
 class GraficosController extends Controller
 {
@@ -17,6 +22,29 @@ class GraficosController extends Controller
      */
     public function __construct(){
         $this->middleware('auth');
+    }
+
+    /**
+     * Aclara el color base
+     * @param int
+     *
+     * @return string
+     */
+    protected function alter_brightness($colourstr, $steps) {
+        $colourstr = str_replace('#','',$colourstr);
+        $rhex = substr($colourstr,0,2);
+        $ghex = substr($colourstr,2,2);
+        $bhex = substr($colourstr,4,2);
+
+        $r = hexdec($rhex);
+        $g = hexdec($ghex);
+        $b = hexdec($bhex);
+
+        $r = max(0,min(255,$r + $steps));
+        $g = max(0,min(255,$g + $steps));  
+        $b = max(0,min(255,$b + $steps));
+
+        return '#'.str_pad(dechex($r) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($g) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($b) , 2 , '0' , STR_PAD_LEFT);
     }
 
 
@@ -113,4 +141,14 @@ class GraficosController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * Devuelve la información para armar el gráfico 3
+     * @param string $provincia
+     * @param int padron
+     *
+     * @return null
+     */
+    public function getGafico4($provincia , $padron){
+        
+    }
 }
