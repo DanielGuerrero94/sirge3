@@ -17,6 +17,7 @@ use App\Models\SubidaOsp;
 use App\Models\Lote;
 use App\Models\PUCO\Provincia as OspProvincias;
 use App\Models\PUCO\Osp;
+use App\Models\Geo\Provincia;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -243,19 +244,21 @@ class PadronesController extends Controller
 	}
 
 	/**
-     * Devuelve listado de 12 meses 
+     * Devuelve listado de 6 meses 
+     * @param int $meses
      *
      * @return array
      */
-    protected function getMesesArray(){
+    protected function getMesesArray($meses){
 
         $dt = new \DateTime();
-        $dt->modify('-6 months');
-        for ($i = 0 ; $i < 6 ; $i ++){
+        $dt->modify("-$meses months");
+        
+        for ($i = 0 ; $i < $meses ; $i ++){
        		$dt->modify('+1 month');
-            $meses[$i] = ucwords(strftime("%b %y" , $dt->getTimeStamp()));
+            $array[$i] = ucwords(strftime("%b %y" , $dt->getTimeStamp()));
         }
-        return $meses;
+        return $array;
     }
 
     /**
@@ -263,7 +266,14 @@ class PadronesController extends Controller
      *
      * @return null
      */
-    protected function insertDummy(&$array , $fuente){
+    protected function insertDummy(){
+    	
+    	$fuentes = [
+    		'prestaciones',
+    		'comprobantes',
+    		'fondos'
+    	];
+
     	$provincias = [
     		'01','02','03','04','05','06',
     		'07','08','09','10','11','12',
@@ -271,9 +281,17 @@ class PadronesController extends Controller
     		'19','20','21','22','23','24',
     	];
 
-    	foreach ($provincias as $provincia){
-    		$array[$provincia][$fuente][] = rand(0,125469);
+    	for ($i = 0 ; $i < 6 ; $i ++){
+	    	foreach ($fuentes as $fuente){
+				foreach ($provincias as $provincia){
+					$periodos[$provincia][$fuente][$i] = -1;
+					$periodos[$provincia]['data'] = Provincia::find($provincia);
+				}
+	    	}
     	}
+
+    	return $periodos;
+    	
     }
 
 	/**
@@ -283,11 +301,12 @@ class PadronesController extends Controller
 	 */
 	public function getConsolidado(){
 	
-		$consolidado = [];
+		$consolidado = $this->insertDummy();
+
 		$dt = new \DateTime();
 		$dt->modify('-7 months');
 
-		for ($i = 1 ; $i <= 6 ; $i ++) {
+		for ($i = 0 ; $i < 6 ; $i ++) {
 
 			$dt->modify('+1 month');
 			$dt->modify('first day of this month');
@@ -307,12 +326,8 @@ class PadronesController extends Controller
 								->orderBy(DB::raw('1'))
 								->get();
 
-			if (count ($prestaciones) == 0) {
-				$this->insertDummy($consolidado , 'prestaciones');
-			}
-
 			foreach ($prestaciones as $prestacion){
-				$consolidado[$prestacion->id_provincia]['prestaciones'][] = $prestacion->c;
+				$consolidado[$prestacion->id_provincia]['prestaciones'][$i] = $prestacion->c;
 			}
 
 			$comprobantes = Lote::join('sistema.subidas as s' , 'sistema.lotes.id_subida' , '=' , 's.id_subida')
@@ -327,11 +342,11 @@ class PadronesController extends Controller
 								->get();
 
 			foreach ($comprobantes as $comprobante){
-				$consolidado[$comprobante->id_provincia]['comprobantes'][] = $comprobante->c;
+				$consolidado[$comprobante->id_provincia]['comprobantes'][$i] = $comprobante->c;
 			}
 
 			$fondos = Lote::join('sistema.subidas as s' , 'sistema.lotes.id_subida' , '=' , 's.id_subida')
-								->where('id_padron' , 3)
+								->where('id_padron' , 2)
 								->where('sistema.lotes.id_estado' , 3)
 								->whereBetween('fin' , [$min , $max])
 								->select('sistema.lotes.id_provincia' , DB::raw("extract (year from fin) :: text || lpad (extract(month from fin) :: text , 2 , '0') as periodo") , DB::raw('sum(registros_in) as c'))
@@ -342,17 +357,79 @@ class PadronesController extends Controller
 								->get();
 
 			foreach ($fondos as $fondo){
-				$consolidado[$fondo->id_provincia]['fondos'][] = $fondo->c;
+				$consolidado[$fondo->id_provincia]['fondos'][$i] = $fondo->c;
 			}
 		}
 
 		$data = [
 			'page_title' => 'Consolidado',
 			'consolidado' => $consolidado,
-			'meses' => $this->getMesesArray()
+			'meses' => $this->getMesesArray(6)
 		];
 
-		return '<pre>' . json_encode($consolidado , JSON_PRETTY_PRINT) . '</pre>';
 		return view('padrones.consolidado' , $data);
+	}
+
+	/**
+	 * Armar array vacio
+	 *
+	 * @return array
+	 */
+	protected function generarDummy($array){
+
+		return array_fill_keys($array , 0);
+
+	}
+
+	/**
+	 * Graficar la progresión de la fuente de datos
+	 * @param int $padron
+	 * @param string $provincia
+	 *
+	 * @return null
+	 */
+	public function graficarPadron($padron , $provincia){
+
+		$meses = $this->getMesesArray(24);
+		$aux = $this->generarDummy($meses);
+		
+		$dt = new \DateTime();
+		$dt->modify('last day of this month');
+		$max = $dt->format('Y-m-d');
+		$dt->modify('first day of this month');
+		$dt->modify("-24 months");
+		$min = $dt->format('Y-m-d');
+
+		$prestaciones = Lote::join('sistema.subidas as s' , 'sistema.lotes.id_subida' , '=' , 's.id_subida')
+							->where('id_padron' , $padron)
+							->where('sistema.lotes.id_estado' , 3)
+							->where('sistema.lotes.id_provincia' , $provincia)
+							->whereBetween('fin' , [$min , $max])
+							->select('sistema.lotes.id_provincia' , DB::raw("extract (year from fin) :: text || lpad (extract(month from fin) :: text , 2 , '0') as periodo") , DB::raw('sum(registros_in) as c'))
+							->groupBy(DB::raw('1'))
+							->groupBy(DB::raw('2'))
+							->orderBy(DB::raw('2'))
+							->orderBy(DB::raw('1'))
+							->get();
+
+		foreach ($prestaciones as $prestacion){
+			$dt = \DateTime::createFromFormat('Ym' , $prestacion->periodo);
+			$pd = ucwords(strftime("%b %y" , $dt->getTimeStamp()));
+			$aux[$pd] = $prestacion->c;
+		}
+
+		foreach ($aux as $a){
+			$series[0]['name'] = 'Registros reportados';
+			$series[0]['data'][] = $a;
+		}
+
+		$data = [
+			'page_title' => 'Progresión reporte fuente de datos',
+			'series' => json_encode($series),
+			'categorias' => json_encode($meses)
+		];
+
+		return view('padrones.grafico-consolidado' , $data);
+
 	}
 }

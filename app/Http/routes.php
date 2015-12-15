@@ -80,6 +80,7 @@ Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
 Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
 Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');
 Route::get('padron-consolidado' , 'PadronesController@getConsolidado');
+Route::get('padron-graficar/{padron}/{provincia}' , 'PadronesController@graficarPadron');
 
 /**
  * LOTES

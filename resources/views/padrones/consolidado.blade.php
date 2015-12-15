@@ -1,12 +1,16 @@
 @extends('content')
 @section('content')
 <style type="text/css">
-	.subtitle{
+	.subtitle, .name{
 		font-size: 10px;
 	}
 	.subtitle th , th , td{
 		text-align: center;
 	}
+	.name{
+		text-align: left;
+	}
+
 </style>
 <div class="row">
 	<div class="col-md-12">
@@ -26,84 +30,74 @@
 						<th colspan="6">Uso de fondos</th>
 						<th rowspan="2"></th>
 					</tr>
+
 					<tr class="subtitle">
 					@for ($i = 0 ; $i < 3 ; $i++)
 						@foreach($meses as $mes)
-							<th>{{$mes}}</th>
+							<td>{{$mes}}</td>
 						@endforeach
 					@endfor
 					</tr>
 
+					@foreach($consolidado as $key => $provincia)
 					<tr>
-						<td>CABA</td>
+						<td class="name">{{ucwords(mb_strtolower($provincia['data']['descripcion']))}}</td>
+						@foreach ($provincia['prestaciones'] as $prestacion)
 						<td>
-							<span class="label label-success">120k</span>
+							@if ($prestacion == 0)
+								<span class="label label-warning">0</span>
+							@elseif ($prestacion == -1)
+								<span class="label label-danger">-</span>
+							@else
+								@if ($prestacion >= 1000)
+								<span class="label label-success">{{round($prestacion/1000,0)}}k</span>
+								@else
+								<span class="label label-success">{{$prestacion}}</span>
+								@endif
+							@endif
 						</td>
+						@endforeach
 						<td>
-							<span class="label label-success">600</span>
+							<button href="padron-graficar/1/{{$provincia['data']['id_provincia']}}" class="graficar btn btn-info btn-xs"><i class="fa fa-line-chart"></i></button>
 						</td>
+						@foreach ($provincia['comprobantes'] as $prestacion)
 						<td>
-							<span class="label label-warning">0</span>
+							@if ($prestacion == 0)
+								<span class="label label-warning">0</span>
+							@elseif ($prestacion == -1)
+								<span class="label label-danger">-</span>
+							@else
+								@if ($prestacion >= 1000)
+								<span class="label label-success">{{round($prestacion/1000,0)}}k</span>
+								@else
+								<span class="label label-success">{{$prestacion}}</span>
+								@endif
+							@endif
 						</td>
+						@endforeach
 						<td>
-							<span class="label label-danger">-</span>
+							<button href="padron-graficar/3/{{$provincia['data']['id_provincia']}}" class="graficar btn btn-info btn-xs"><i class="fa fa-line-chart"></i></button>
 						</td>
+						@foreach ($provincia['fondos'] as $prestacion)
 						<td>
-							<span class="label label-success">541</span>
+							@if ($prestacion == 0)
+								<span class="label label-warning">0</span>
+							@elseif ($prestacion == -1)
+								<span class="label label-danger">-</span>
+							@else
+								@if ($prestacion >= 1000)
+								<span class="label label-success">{{round($prestacion/1000,0)}}k</span>
+								@else
+								<span class="label label-success">{{$prestacion}}</span>
+								@endif
+							@endif
 						</td>
+						@endforeach
 						<td>
-							<span class="label label-success">3</span>
-						</td>
-						<td>
-							<button class="btn btn-info btn-xs"><i class="fa fa-line-chart"></i></button>
-						</td>
-
-						<td>
-							<span class="label label-success">120</span>
-						</td>
-						<td>
-							<span class="label label-success">600</span>
-						</td>
-						<td>
-							<span class="label label-warning">0</span>
-						</td>
-						<td>
-							<span class="label label-danger">-</span>
-						</td>
-						<td>
-							<span class="label label-success">541</span>
-						</td>
-						<td>
-							<span class="label label-success">3</span>
-						</td>
-						<td>
-							<button class="btn btn-info btn-xs"><i class="fa fa-line-chart"></i></button>
-						</td>
-
-						<td>
-							<span class="label label-success">120</span>
-						</td>
-						<td>
-							<span class="label label-success">600</span>
-						</td>
-						<td>
-							<span class="label label-warning">0</span>
-						</td>
-						<td>
-							<span class="label label-danger">-</span>
-						</td>
-						<td>
-							<span class="label label-success">541</span>
-						</td>
-						<td>
-							<span class="label label-success">3</span>
-						</td>
-						<td>
-							<button class="btn btn-info btn-xs"><i class="fa fa-line-chart"></i></button>
+							<button href="padron-graficar/2/{{$provincia['data']['id_provincia']}}" class="graficar btn btn-info btn-xs"><i class="fa fa-line-chart"></i></button>
 						</td>
 					</tr>
-
-
+					@endforeach
 
 				</table>
 			</div>
@@ -113,7 +107,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-    
+    $('.graficar').click(function(event){
+    	var href = $(this).attr('href');
+    	$.get(href , function(data){
+    		$('.content-wrapper').html(data);
+    	});	
+    });
 
 });
 </script>
