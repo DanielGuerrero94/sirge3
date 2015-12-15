@@ -10,7 +10,7 @@
 				<form class="form-horizontal">
 					<h4>Información general</h4>
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-12">
 							<!-- NOMBRE -->
 							<div class="form-group">
 								<label class="col-md-2 control-label">Nombre</label>
@@ -19,51 +19,53 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+					</div>
+					<div class="row">
+						<div class="col-md-12">
 							<!-- APELLIDO -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Apellido</label>
-								<div class="col-md-9">
+								<label class="col-md-2 control-label">Apellido</label>
+								<div class="col-md-10">
 									<p class="form-control-static">{{ $beneficiario->apellido }}</p>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<!-- DNI -->
 							<div class="form-group">
-								<label class="col-md-5 control-label">D.N.I</label>
-								<div class="col-md-7">
+								<label class="col-md-6 control-label">D.N.I</label>
+								<div class="col-md-6">
 									<p class="form-control-static">{{ $beneficiario->numero_documento }}</p>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-4">
 							<!-- FECHA DE INSCRIPCION -->
 							<div class="form-group">
-								<label class="col-md-8 control-label">Fecha de Inscripcion</label>
-								<div class="col-md-4">
-									<p class="form-control-static">{{ date ('d M y', strtotime($beneficiario->fecha_inscripcion)) }}</p>
+								<label class="col-md-6 control-label">Inscripcion</label>
+								<div class="col-md-6">
+									<p class="form-control-static">{{ $beneficiario->fecha_inscripcion }}</p>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-4">
 							<!-- EDAD INSCRIPCION -->
 							<div class="form-group">
-								<label class="col-md-6 control-label">Edad Incripci&oacute;n</label>
-								<div class="col-md-6">
-									<p class="form-control-static">{{ $beneficiario->edad_inscripcion }}</p>
+								<label class="col-md-8 control-label">Edad incripci&oacute;n</label>
+								<div class="col-md-4">
+									<p class="form-control-static">{{ $beneficiario->edad_inscripcion }} años</p>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<!-- ACTIVO -->
 							<div class="form-group">
-								<label class="col-md-5 control-label">Activo</label>
-								<div class="col-md-7">
+								<label class="col-md-6 control-label">Activo</label>
+								<div class="col-md-6">
 									<p class="form-control-static">
 										@if ($beneficiario->activo == 'S')
 										<span class="label label-success">SI</span>
@@ -74,32 +76,32 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-4">
 							<!-- FECHA DE NACIMIENTO -->
 							<div class="form-group">
-								<label class="col-md-8 control-label">Fecha de nacimiento</label>
-								<div class="col-md-4">
-									<p class="form-control-static">{{ date ('d M y', strtotime($beneficiario->fecha_nacimiento)) }}</p>
+								<label class="col-md-6 control-label">Nacimiento</label>
+								<div class="col-md-6">
+									<p class="form-control-static">{{ $beneficiario->fecha_nacimiento }}</p>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-4">
 							<!-- EDAD -->
 							<div class="form-group">
-								<label class="col-md-6 control-label">Edad</label>
-								<div class="col-md-6">
-									<p class="form-control-static">{{ $beneficiario->edad }}</p>
+								<label class="col-md-8 control-label">Edad actual</label>
+								<div class="col-md-4">
+									<p class="form-control-static">{{ $beneficiario->edad }} años</p>
 								</div>
 							</div>
 						</div>
 					</div>
 					<h4>Domicilio</h4>
 					<div class="row">
-						<div class="col-md-6">						
+						<div class="col-md-12">						
 							<!-- PROVINCIA -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Provincia</label>
-								<div class="col-md-9">
+								<label class="col-md-2 control-label">Provincia</label>
+								<div class="col-md-10">
 									<p class="form-control-static">{{ $beneficiario->geo->provincia->descripcion }}</p>
 								</div>
 							</div>													
@@ -109,8 +111,8 @@
 						<div class="col-md-6">
 							<!-- DEPARTAMENTO -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Departamento</label>
-								<div class="col-md-9">
+								<label class="col-md-4 control-label">Departamento</label>
+								<div class="col-md-8">
 									<p class="form-control-static">{{ $beneficiario->geo->ndepartamento->nombre_departamento }}</p>
 								</div>
 							</div>
@@ -118,19 +120,19 @@
 						<div class="col-md-6">
 							<!-- LOCALIDAD -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Localidad</label>
-								<div class="col-md-9">
+								<label class="col-md-4 control-label">Localidad</label>
+								<div class="col-md-8">
 									<p class="form-control-static">{{ $beneficiario->geo->localidad->nombre_localidad }}</p>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row">		
-						<div class="col-md-6">
+						<div class="col-md-12">
 							<!-- CALLE -->
 							<div class="form-group">
-								<label class="col-md-3 control-label">Domicilio</label>
-								<div class="col-md-9">
+								<label class="col-md-2 control-label">Domicilio</label>
+								<div class="col-md-10">
 									<p class="form-control-static">{{ $beneficiario->geo->calle }}</p>
 								</div>
 							</div>

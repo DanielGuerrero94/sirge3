@@ -72,6 +72,28 @@ class Beneficiario extends Model
 	}
 
 	/**
+	 * Devuelve la fecha de nacimiento
+	 *
+	 * @param  string  $value
+     * @return string
+	 */
+	public function getFechaNacimientoAttribute($value)
+	{
+		return date('d/m/Y' , strtotime($value));
+	}
+
+	/**
+	 * Devuelve la fecha de inscripcion
+	 *
+	 * @param  string  $value
+     * @return string
+	 */
+	public function getFechaInscripcionAttribute($value)
+	{
+		return date('d/m/Y' , strtotime($value));
+	}
+
+	/**
 	 * Devuelve el tipo de documento
 	 */
 	public function documento()
