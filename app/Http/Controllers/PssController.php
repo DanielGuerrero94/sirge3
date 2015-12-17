@@ -17,9 +17,9 @@ use App\Models\PSS\CEB;
 use App\Models\PSS\LineaCuidado;
 use App\Models\PSS\GrupoEtario as Etario;
 
-use App\Models\Dw\Fc002;
-use App\Models\Dw\Fc003;
-use App\Models\Dw\Fc004;
+use App\Models\Dw\FC\Fc002;
+use App\Models\Dw\FC\Fc003;
+use App\Models\Dw\FC\Fc004;
 
 class PssController extends Controller
 {

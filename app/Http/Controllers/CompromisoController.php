@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Dw\Ca_16_001 as CA;
+use App\Models\Dw\CA\CA16001 as CA;
 use App\Models\Geo\Provincia;
 use App\Models\CA\MetaDescentralizacion as M1;
 use App\Models\CA\MetaFacturacion as M2;

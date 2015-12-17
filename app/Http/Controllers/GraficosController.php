@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use DB;
+use Datatables;
 
 use Illuminate\Http\Request;
 
@@ -10,7 +12,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Grafico;
-use App\Models\Dw\Ceb001;
+use App\Models\Geo\Provincia;
+use App\Models\Dw\CEB\Ceb001;
+use App\Models\Dw\FC\Fc002;
 
 class GraficosController extends Controller
 {
@@ -142,7 +146,7 @@ class GraficosController extends Controller
     }
 
     /**
-     * Devuelve la información para armar el gráfico 3
+     * Devuelve la información para armar el gráfico 4
      * @param string $provincia
      * @param int padron
      *
@@ -150,5 +154,53 @@ class GraficosController extends Controller
      */
     public function getGafico4($provincia , $padron){
         
+    }
+
+    /**
+     * Devuelve la información para armar el gráfico 5
+     * @param string $periodo
+     *
+     * @return null
+     */
+    public function getGrafico5($periodo){
+        $periodo = str_replace("-", '', $periodo);
+        $data['categorias'] = Provincia::orderBy('id_provincia')->lists('descripcion');
+        
+        foreach ($data['categorias'] as $key => $provincia){
+            $data['categorias'][$key] = ucwords(mb_strtolower($provincia));
+        }
+
+        $prestaciones = Fc002::join('pss.codigos_priorizadas as p' , 'estadisticas.fc_002.codigo_prestacion' , '=' , 'p.codigo_prestacion')
+                            ->select('id_provincia' , DB::raw('sum(cantidad) as c') , DB::raw('sum(monto) as m'))
+                            ->where('periodo' , $periodo)
+                            ->groupBy('id_provincia')
+                            ->orderBy('id_provincia')
+                            ->get();
+        foreach ($prestaciones as $key => $prestacion) {
+            $data['series'][0]['name'] = 'Prestaciones facturadas';
+            $data['series'][0]['data'][] = $prestacion->c;
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Devuelve JSON para la datatable
+     *
+     *
+     */
+    public function getGrafico5Tabla($periodo){
+        $periodo = str_replace("-", '', $periodo);
+
+        $prestaciones = Fc002::join('pss.codigos_priorizadas as p' , 'estadisticas.fc_002.codigo_prestacion' , '=' , 'p.codigo_prestacion')
+                            ->where('periodo' , $periodo);
+
+        if (Auth::user()->id_entidad == 2) {
+            $prestaciones->where('id_provincia' , Auth::user()->id_provincia)->get();
+        } else {
+            $prestaciones->get();
+        }
+
+        return Datatables::of($prestaciones)->make(true);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Dw;
+namespace App\Models\Dw\CEB;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fc004 extends Model
+class Ceb001 extends Model
 {
     /**
      * Definir la conexión de la bdd
@@ -18,5 +18,5 @@ class Fc004 extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'estadisticas.fc_004';
+	protected $table = 'estadisticas.ceb_001 as c001';
 }

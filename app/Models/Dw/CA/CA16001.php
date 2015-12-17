@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Dw;
+namespace App\Models\Dw\CA;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ca_16_001 extends Model
+class CA16001 extends Model
 {
     /**
      * Definir la conexión de la bdd

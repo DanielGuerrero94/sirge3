@@ -210,6 +210,8 @@ Route::get('estadisticas-graficos-pp/{id}/{provincia}/{padron}' , 'EstadisticasC
  */
 Route::get('grafico-2/{periodo}' , 'GraficosController@getGafico2');
 Route::get('grafico-4/{provincia}/{padron}' , 'GraficosController@getGafico4');
+Route::get('grafico-5/{periodo}' , 'GraficosController@getGrafico5');
+Route::get('grafico-5-table/{periodo}' , 'GraficosController@getGrafico5Tabla');
 
 /**
  * INDICADORES

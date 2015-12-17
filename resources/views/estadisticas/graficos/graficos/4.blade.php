@@ -25,44 +25,6 @@
         });
     });
 
-    /*
-    $.get('grafico-2/{{ $padron }}' , function(data){
-        $('#container').highcharts({
-            series: [{
-                type: "treemap",
-                layoutAlgorithm: 'squarified',
-                allowDrillToNode: true,
-                dataLabels: {
-                    enabled: false
-                },
-                levelIsConstant: false,
-                levels: [{
-                    level: 1,
-                    dataLabels: {
-                        enabled: true
-                    },
-                    borderWidth: 3
-                }],
-                data : data,
-                tooltip: {
-                    pointFormatter : function(){
-                        if (this.codigo_prestacion){
-                            return this.texto_prestacion + ' : ' + Highcharts.numberFormat(this.value , '0');
-                        } else {
-                            return Highcharts.numberFormat(this.value , '0');
-                        }
-                    }
-                },
-                turboThreshold : 5000
-            }],
-            subtitle: {
-                text: 'Fuente: SIRGe Web.'
-            },
-            title : {
-                text : 'Facturación CEB'
-            }
-        });
-    });
-    */
+   
 </script>
 @endsection

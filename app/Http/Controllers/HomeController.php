@@ -16,8 +16,8 @@ use App\Models\Usuario;
 use App\Models\Efector;
 use App\Models\Lote;
 
-use App\Models\Dw\Ceb002;
-use App\Models\Dw\Fc001;
+use App\Models\Dw\CEB\Ceb002;
+use App\Models\Dw\FC\Fc001;
 use App\Models\Dw\AfRubro;
 use App\Models\Dw\IndecPoblacionPais as Indec;
 

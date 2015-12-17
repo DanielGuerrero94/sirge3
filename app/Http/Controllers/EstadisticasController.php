@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Grafico;
 use App\Models\Padron;
 use App\Models\Geo\Provincia;
-use App\Models\Dw\Ceb001;
+use App\Models\Dw\CEB\Ceb001;
 
 class EstadisticasController extends Controller
 {
@@ -33,7 +33,7 @@ class EstadisticasController extends Controller
     public function getGraficos(){
     	$data = [
     		'page_title' => 'Gráficos para el análisis de información',
-            'graficos' => Grafico::all()
+            'graficos' => Grafico::orderBy('id')->get()
     	];
     	return view('estadisticas.graficos.main' , $data);
     }
@@ -71,7 +71,8 @@ class EstadisticasController extends Controller
         $grafico = Grafico::find($id);
         $data = [
             'page_title' => $grafico->titulo,
-            'periodo' => $periodo
+            'periodo' => $periodo,
+            'grafico' => $grafico
         ];
         return view('estadisticas.graficos.graficos.' . $id , $data);
     }
