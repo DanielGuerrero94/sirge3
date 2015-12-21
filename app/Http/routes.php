@@ -166,6 +166,13 @@ Route::get('pss-grupos' , 'PssController@getGrupos');
 Route::get('pss-grupos-table' , 'PssController@getGruposTabla');
 Route::get('pss-grupos-detalle/{id}' , 'PssController@getDetalleGrupos');
 
+/** 
+ * CEB
+ */
+Route::get('ceb-resumen-periodo' , 'CebController@getPeriodo');
+Route::get('ceb-resumen/{periodo}' , 'CebController@getResumen');
+
+
 /**
  * EFECTORES
  */
@@ -209,7 +216,8 @@ Route::get('estadisticas-graficos-pp/{id}/{provincia}/{padron}' , 'EstadisticasC
  * GRAFICOS
  */
 Route::get('grafico-2/{periodo}' , 'GraficosController@getGafico2');
-Route::get('grafico-4/{provincia}/{padron}' , 'GraficosController@getGafico4');
+Route::get('grafico-4/{periodo}' , 'GraficosController@getGafico4');
+Route::get('grafico-4-table/{periodo}' , 'GraficosController@getGrafico4Tabla');
 Route::get('grafico-5/{periodo}' , 'GraficosController@getGrafico5');
 Route::get('grafico-5-table/{periodo}' , 'GraficosController@getGrafico5Tabla');
 

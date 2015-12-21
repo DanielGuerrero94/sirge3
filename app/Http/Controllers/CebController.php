@@ -2,31 +2,131 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use DB;
-use Datatables;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Grafico;
 use App\Models\Geo\Provincia;
 use App\Models\Dw\CEB\Ceb001;
-use App\Models\Dw\FC\Fc002;
-use App\Models\Dw\FC\Fc004;
+use App\Models\Dw\CEB\Ceb002;
 
-class GraficosController extends Controller
+class CebController extends Controller
 {
-    
-     /**
-     * Create a new authentication controller instance.
+    /**
+	 * Create a new authentication controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(){
+		$this->middleware('auth');
+		setlocale(LC_TIME, 'es_ES.UTF-8');
+	}
+
+	/**
+	 * Devuelve la vista para ingresar el periodo
+	 *
+	 * @return null
+	 */
+	public function getPeriodo(){
+		$data = [
+			'page_title' => 'Filtros'
+		];
+		return view('ceb.periodo' , $data);
+	}
+
+	/**
+     * Devuelve listado de 6 meses 
      *
-     * @return void
+     * @return json
      */
-    public function __construct(){
-        $this->middleware('auth');
+    protected function getMesesArray($periodo){
+
+        $dt = \DateTime::createFromFormat('Y-m' , $periodo);
+        $dt->modify('-6 month');
+        for ($i = 0 ; $i < 6 ; $i ++){
+        $dt->modify('+1 month');
+
+            $meses[$i] = strftime("%b" , $dt->getTimeStamp());
+        }
+        return json_encode($meses);
+    }
+
+	/**
+     * Devuelve el rango de periodos a filtrar
+     *
+     * @return array
+     */
+    protected function getDateInterval($periodo){
+
+        $dt = \DateTime::createFromFormat('Y-m' , $periodo);
+        $interval['max'] = $dt->format('Ym');
+        $dt->modify('-6 months');
+        $interval['min'] = $dt->format('Ym');
+
+        return $interval;
+    }
+
+	/**
+     * Devuelve la info para generar un gráfico
+     * 
+     * @return json
+     */
+    protected function getProgresoCeb($periodo){
+
+        $interval = $this->getDateInterval($periodo);
+
+        $periodos = Ceb002::select('periodo' , DB::raw('sum(beneficiarios_activos) as b') , DB::raw('sum(beneficiarios_ceb) as c') , DB::raw('sum(beneficiarios_registrados) as i'))
+                    ->whereBetween('periodo',[$interval['min'],$interval['max']])
+                    ->groupBy('periodo')
+                    ->orderBy('periodo')
+                    ->get();
+
+        foreach($periodos as $key => $periodo){
+            $chart[0]['name'] = 'Benef. CEB';
+            $chart[0]['data'][$key] = $periodo->c;
+
+            $chart[1]['name'] = 'Benef. ACT';
+            $chart[1]['data'][$key] = $periodo->b;
+            
+        }
+        return json_encode($chart);
+    }
+
+    /**
+     * Devuelve las provincias en un array
+     *
+     * @return null
+     */
+    protected function getProvinciasArray(){
+    	$data = Provincia::orderBy('id_provincia')->lists('descripcion');
+    	foreach ($data as $key => $provincia){
+            $data[$key] = ucwords(mb_strtolower($provincia));
+        }
+        return $data;
+    }
+
+    /** 
+     * Devuelve la info para armar un gráfico
+	 * @param string $periodo
+     *
+	 * @return json
+	 */
+    protected function getDistribucionProvincial($periodo){
+    	$periodo = str_replace('-', '', $periodo);
+    	$provincias_ceb = Ceb002::where('periodo' , $periodo)->get();
+
+    	foreach ($provincias_ceb as $key => $provincia){
+    		$chart[0]['name'] = 'Benef. CEB';
+            $chart[0]['data'][$key] = $provincia->beneficiarios_ceb;
+
+            $chart[1]['name'] = 'Benef. ACT';
+            $chart[1]['data'][$key] = $provincia->beneficiarios_activos;
+    	}
+
+    	return json_encode($chart);
     }
 
     /**
@@ -52,13 +152,12 @@ class GraficosController extends Controller
         return '#'.str_pad(dechex($r) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($g) , 2 , '0' , STR_PAD_LEFT).str_pad(dechex($b) , 2 , '0' , STR_PAD_LEFT);
     }
 
-
-	/**
-     * Retorna la información para armar el gráfico 2
+    /**
+     * Retorna la información para armar el gráfico complicado
      *
      * @return json
      */
-    public function getGafico2($periodo){
+    public function getDistribucionCodigos($periodo){
         $periodo = str_replace("-", '', $periodo);
         $i = 0;
         $regiones = Ceb001::where('periodo' , $periodo)
@@ -143,132 +242,25 @@ class GraficosController extends Controller
                 }
             }
         }
-        return response()->json($data);
+        return json_encode($data);
     }
+    
+	/** 
+	 * Devuelve la vista del resumen
+	 * @param string $periodo
+	 *
+	 * @return null
+	 */
+	public function getResumen($periodo){
+		$data = [
+			'page_title' => 'Resumen mensual C.E.B., período ' . $periodo,
+			'progreso_ceb_series' => $this->getProgresoCeb($periodo),
+			'progreso_ceb_categorias' => $this->getMesesArray($periodo),
+			'distribucion_provincial_categorias' => $this->getProvinciasArray(),
+			'distribucion_provincial_series' => $this->getDistribucionProvincial($periodo),
+			'treemap_data' => $this->getDistribucionCodigos($periodo)
 
-    /**
-     * Devuelve la información para armar el gráfico 4
-     * @param string $periodo
-     *
-     * @return null
-     */
-    public function getGafico4($periodo){
-        $periodo = str_replace("-", '', $periodo);
-
-        $data['categorias'] = [
-            '0-5','6-9','10-19','20-64'
-        ];
-
-        $rangos = [
-            [ 
-                'min' => 0,
-                'max' => 5,
-            ],
-            [   
-                'min' => 6,
-                'max' => 9 
-            ],
-            [   
-                'min' => 10,
-                'max' => 19 
-            ],
-            [   
-                'min' => 20,
-                'max' => 64 
-            ]
-        ];
-
-        foreach ($rangos as $rango){
-            
-            $sexos = Fc004::select('sexo' , DB::raw('sum(cantidad) as c'))
-                        ->whereIn('sexo' , ['M','F'])
-                        ->whereBetween('edad' , [$rango['min'],$rango['max']])
-                        ->groupBy('sexo')
-                        ->orderBy('sexo')
-                        ->get();
-
-            $data['series'][0]['name'] = 'Hombres';
-            $data['series'][1]['name'] = 'Mujeres';
-
-            foreach ($sexos as $sexo){
-
-                if ($sexo->sexo == 'M'){
-                    $data['series'][0]['data'][] = (int)(-$sexo->c/1000);
-                    $data['series'][0]['color'] = '#3c8dbc';
-                } else {
-                    $data['series'][1]['data'][] = (int)($sexo->c/1000);
-                    $data['series'][1]['color'] = '#D81B60';
-                }
-            }
-        }
-
-        return response()->json($data);
-    }
-
-    /**
-     * Devuelve JSON para la datatable
-     *
-     * @return json
-     */
-    public function getGrafico4Tabla($periodo){
-        $periodo = str_replace("-", '', $periodo);
-
-        $prestaciones = Fc004::where('periodo' , $periodo);
-
-        if (Auth::user()->id_entidad == 2) {
-            $prestaciones->where('id_provincia' , Auth::user()->id_provincia)->get();
-        } else {
-            $prestaciones->get();
-        }
-
-        return Datatables::of($prestaciones)->make(true);
-    }
-
-    /**
-     * Devuelve la información para armar el gráfico 5
-     * @param string $periodo
-     *
-     * @return null
-     */
-    public function getGrafico5($periodo){
-        $periodo = str_replace("-", '', $periodo);
-        $data['categorias'] = Provincia::orderBy('id_provincia')->lists('descripcion');
-        
-        foreach ($data['categorias'] as $key => $provincia){
-            $data['categorias'][$key] = ucwords(mb_strtolower($provincia));
-        }
-
-        $prestaciones = Fc002::join('pss.codigos_priorizadas as p' , 'estadisticas.fc_002.codigo_prestacion' , '=' , 'p.codigo_prestacion')
-                            ->select('id_provincia' , DB::raw('sum(cantidad) as c') , DB::raw('sum(monto) as m'))
-                            ->where('periodo' , $periodo)
-                            ->groupBy('id_provincia')
-                            ->orderBy('id_provincia')
-                            ->get();
-        foreach ($prestaciones as $key => $prestacion) {
-            $data['series'][0]['name'] = 'Prestaciones facturadas';
-            $data['series'][0]['data'][] = $prestacion->c;
-        }
-
-        return response()->json($data);
-    }
-
-    /**
-     * Devuelve JSON para la datatable
-     *
-     * @return json
-     */
-    public function getGrafico5Tabla($periodo){
-        $periodo = str_replace("-", '', $periodo);
-
-        $prestaciones = Fc002::join('pss.codigos_priorizadas as p' , 'estadisticas.fc_002.codigo_prestacion' , '=' , 'p.codigo_prestacion')
-                            ->where('periodo' , $periodo);
-
-        if (Auth::user()->id_entidad == 2) {
-            $prestaciones->where('id_provincia' , Auth::user()->id_provincia)->get();
-        } else {
-            $prestaciones->get();
-        }
-
-        return Datatables::of($prestaciones)->make(true);
-    }
+		];
+		return view('ceb.resumen' , $data);
+	}
 }
