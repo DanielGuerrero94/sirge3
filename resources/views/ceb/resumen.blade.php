@@ -157,12 +157,12 @@
 	            //pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
 	        },
 	        plotOptions: {
-	            column: {
+	            /*column: {
 	                stacking: 'normal',
 	                dataLabels: {
 	                    enabled: false,
 	                }
-	            }
+	            }*/
 	        },
 	        series: {!! $distribucion_provincial_series !!}
 	    });
@@ -276,6 +276,7 @@
                     text: null
                 },
                 labels: {
+                	enabled : false,
                     formatter: function () {
                         return Math.abs(this.value) + '%';
                     }
@@ -295,7 +296,7 @@
                 }
             },
 
-            series: [{"name":"Hombres","data":[-3007,-486,-657,-28],"color":"#3c8dbc"},{"name":"Mujeres","data":[2967,499,1948,5108],"color":"#D81B60"}]
+            series: {!! $distribucion_sexos !!}
         });
 
 

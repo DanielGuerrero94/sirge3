@@ -262,6 +262,43 @@ class CebController extends Controller
     	
     	return json_encode($grupos);
     }
+
+    /**
+     * Devuelve la info para el gráfico por sexo
+     * @param string $periodo
+     *
+     * @return json
+     */
+    protected function getSexosSeries($periodo){
+    	$periodo = str_replace("-", '', $periodo);
+    	$grupos = ['A','B','C','D'];
+
+    	foreach ($grupos as $grupo) {
+
+	    	$sexos = Ceb001::where('periodo' , $periodo)
+	    					->where('grupo_etario' , $grupo)
+	    					->whereIn('sexo',['M','F'])
+	    					->select('sexo' , DB::raw('sum(cantidad) as c'))
+	    					->groupBy('sexo')
+                        	->orderBy('sexo')
+                        	->get();
+
+            $data[0]['name'] = 'Hombres';
+            $data[1]['name'] = 'Mujeres';
+
+            foreach ($sexos as $sexo){
+
+                if ($sexo->sexo == 'M'){
+                    $data[0]['data'][] = (int)(-$sexo->c);
+                    $data[0]['color'] = '#3c8dbc';
+                } else {
+                    $data[1]['data'][] = (int)($sexo->c);
+                    $data[1]['color'] = '#D81B60';
+                }
+            }
+    	}
+    	return json_encode($data);
+    }
     
 	/** 
 	 * Devuelve la vista del resumen
@@ -270,7 +307,6 @@ class CebController extends Controller
 	 * @return null
 	 */
 	public function getResumen($periodo){
-
 		$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 
 		$data = [
@@ -281,6 +317,7 @@ class CebController extends Controller
 			'distribucion_provincial_series' => $this->getDistribucionProvincial($periodo),
 			'treemap_data' => $this->getDistribucionCodigos($periodo),
 			'pie_grupos_etarios' => $this->getDistribucionGruposEtarios($periodo),
+			'distribucion_sexos' => $this->getSexosSeries($periodo),
 			'periodo' => $periodo
 
 		];
