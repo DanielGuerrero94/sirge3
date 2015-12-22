@@ -138,7 +138,7 @@ class HomeController extends Controller
             $chart[0]['name'] = 'Benef. CEB';
             $chart[0]['data'][$key] = $periodo->c;
 
-            $chart[1]['name'] = 'Benef. INS';
+            $chart[1]['name'] = 'Benef. ACT';
             $chart[1]['data'][$key] = $periodo->b;
         }
         return json_encode($chart);

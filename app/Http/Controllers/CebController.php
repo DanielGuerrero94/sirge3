@@ -63,7 +63,7 @@ class CebController extends Controller
 
         $dt = \DateTime::createFromFormat('Y-m' , $periodo);
         $interval['max'] = $dt->format('Ym');
-        $dt->modify('-6 months');
+        $dt->modify('-5 months');
         $interval['min'] = $dt->format('Ym');
 
         return $interval;
