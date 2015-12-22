@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Datatables;
 
 use Illuminate\Http\Request;
 
@@ -244,6 +245,23 @@ class CebController extends Controller
         }
         return json_encode($data);
     }
+
+    /**
+     * Devuelve la info para el grafico de torta
+     * @param string $periodo
+     *
+     * @return json
+     */
+    protected function getDistribucionGruposEtarios($periodo){
+    	$periodo = str_replace("-", '', $periodo);
+    	$grupos = Ceb001::select(DB::raw('substring(grupo_etario from 1 for 1) as name') , DB::raw('sum(cantidad)::int as y'))
+    					->where('periodo' , $periodo)
+    					->groupBy(DB::raw(1))
+    					->orderBy(DB::raw(1))
+    					->get();
+    	
+    	return json_encode($grupos);
+    }
     
 	/** 
 	 * Devuelve la vista del resumen
@@ -252,15 +270,31 @@ class CebController extends Controller
 	 * @return null
 	 */
 	public function getResumen($periodo){
+
+		$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+
 		$data = [
-			'page_title' => 'Resumen mensual C.E.B., período ' . $periodo,
+			'page_title' => 'Resumen mensual C.E.B., ' . ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
 			'progreso_ceb_series' => $this->getProgresoCeb($periodo),
 			'progreso_ceb_categorias' => $this->getMesesArray($periodo),
 			'distribucion_provincial_categorias' => $this->getProvinciasArray(),
 			'distribucion_provincial_series' => $this->getDistribucionProvincial($periodo),
-			'treemap_data' => $this->getDistribucionCodigos($periodo)
+			'treemap_data' => $this->getDistribucionCodigos($periodo),
+			'pie_grupos_etarios' => $this->getDistribucionGruposEtarios($periodo),
+			'periodo' => $periodo
 
 		];
 		return view('ceb.resumen' , $data);
+	}
+
+	/**
+	 * Devuelve la info para la datatable
+	 *
+	 * @return json
+	 */
+	public function getResumenTabla($periodo){
+		$periodo = str_replace("-", '', $periodo);
+		$registros = Ceb001::where('periodo' , $periodo)->get();
+		return Datatables::of($registros)->make(true);
 	}
 }

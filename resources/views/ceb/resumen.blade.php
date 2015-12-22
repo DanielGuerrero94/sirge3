@@ -4,7 +4,7 @@
 	<div class="col-md-4">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Progresión CEB</h2>
+				<h2 class="box-title">Progresión</h2>
 			</div>
 			<div class="box-body">
 				<div class="g1"></div>
@@ -15,7 +15,7 @@
 	<div class="col-md-8">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Progresión CEB</h2>
+				<h2 class="box-title">Distribución</h2>
 			</div>
 			<div class="box-body">
 				<div class="g2"></div>
@@ -26,15 +26,75 @@
 
 <div class="row">
 	<div class="col-md-8">
-		<div class="g3"></div>
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Facturación</h2>
+			</div>
+			<div class="box-body">
+				<div class="g3"></div>
+			</div>
+		</div>
 	</div>
 
 	<div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Prestaciones por grupo etario</h2>
+			</div>
+			<div class="box-body">
+				<div class="g4"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Prestaciones por sexo</h2>
+			</div>
+			<div class="box-body">
+				<div class="g5"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-8">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Información</h2>
+			</div>
+			<div class="box-body">
+				<table class="table table-hover" id="tabla">
+					<thead>
+						<tr>
+							<th>Provincia</th>
+							<th>Código</th>
+							<th>Grupo</th>
+							<th>Cantidad</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
 	$(document).ready(function(){
+
+		$('#tabla').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax : 'ceb-resumen-table/{{$periodo}}',
+        columns: [
+            { data: 'id_provincia', name: 'id_provincia' },
+            { data: 'codigo_prestacion', name: 'codigo_prestacion' },
+            { data: 'grupo_etario', name: 'grupo_etario' },
+            { data: 'cantidad' }
+        ]
+    });
 		
 		$('.g1').highcharts({
 			title: {
@@ -82,9 +142,9 @@
 	            	enabled: false
 	            },
 	            stackLabels: {
-	                enabled: true,
+	                enabled: false,
 	                formatter: function(){
-	                	return (this.total/1000) + 'k';
+	                	return this.total;
 	                },
 	                style: {
 	                    //fontWeight: 'bold',
@@ -136,11 +196,109 @@
                 turboThreshold : 5000
             }],
             title : {
-            	text : 'Facturación CEB'
+            	text : null
             }
         });
 
-	
+	    // Make monochrome colors and set them as default for all pies
+	    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+	        var colors = [],
+	            base = Highcharts.getOptions().colors[0],
+	            i;
+
+	        for (i = 0; i < 10; i += 1) {
+	            // Start out with a darkened base color (negative brighten), and end
+	            // up with a much brighter color
+	            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+	        }
+	        return colors;
+	    }());
+
+		$('.g4').highcharts({
+
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	            type: 'pie'
+	        },
+	        title: {
+	            text: null
+	        },
+	        tooltip: {
+	            pointFormat: 'Prestaciones: <b>{point.y}</b> : {point.percentage:.1f} %'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: false,
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                    style: {
+	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+	                    }
+	                }
+	            }
+	        },
+	        series: [{
+	        	name: 'Grupos',
+	        	colorByPoint: true,
+	        	data: {!! $pie_grupos_etarios !!}
+	        	
+	        }]
+	    });
+
+	    $('.g5').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: null
+            },
+            xAxis: [{
+                    categories: ['0-5' , '6-9' , '10-19' , '20-64'],
+                    reversed: false,
+                    labels: {
+                        step: 1
+                    },
+                }, { // mirror axis on right side
+                    opposite: true,
+                    reversed: false,
+                    categories: ['0-5' , '6-9' , '10-19' , '20-64'],
+                    linkedTo: 0,
+                    labels: {
+                        step: 1
+                    },
+                }],
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) + '%';
+                    }
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + ', edad ' + this.point.category + '</b><br/>' +
+                        'Prestaciones: ' + Highcharts.numberFormat(Math.abs(this.point.y) * 1000, 0);
+                }
+            },
+
+            series: [{"name":"Hombres","data":[-3007,-486,-657,-28],"color":"#3c8dbc"},{"name":"Mujeres","data":[2967,499,1948,5108],"color":"#D81B60"}]
+        });
+
+
 	});
 </script>
 @endsection
