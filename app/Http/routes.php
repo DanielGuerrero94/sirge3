@@ -172,6 +172,7 @@ Route::get('pss-grupos-detalle/{id}' , 'PssController@getDetalleGrupos');
 Route::get('ceb-resumen-periodo' , 'CebController@getPeriodo');
 Route::get('ceb-resumen/{periodo}' , 'CebController@getResumen');
 Route::get('ceb-resumen-table/{periodo}' , 'CebController@getResumenTabla');
+Route::get('ceb-evolucion' , 'CebController@getEvolucion');
 
 
 /**

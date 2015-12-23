@@ -334,4 +334,63 @@ class CebController extends Controller
 		$registros = Ceb001::where('periodo' , $periodo)->get();
 		return Datatables::of($registros)->make(true);
 	}
+
+    /**
+     * Devuelve la info para graficar
+     * 
+     * @return json
+     */
+    protected function getProgresionCebSeries(){
+
+        $dt = new \DateTime();
+        $dt->modify('-1 month');
+
+        $interval = $this->getDateInterval($dt->format('Y-m'));
+
+        for ($i = 1 ; $i <= 5 ; $i ++){
+            
+            $datos = Ceb002::select('estadisticas.ceb_002.*' , 'r.*')
+                            ->join('geo.provincias as p' , 'estadisticas.ceb_002.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->whereBetween('periodo' , [$interval['min'] , $interval['max']])
+                            ->where('r.id_region' , $i)
+                            ->orderBy('periodo')
+                            ->orderBy('p.id_provincia')
+                            ->get();
+
+            foreach ($datos as $key => $registro) {
+                $series['regiones'][$i][$registro->periodo]['name'] = (string)$registro->periodo;
+                $series['regiones'][$i][$registro->periodo]['data'][] = $registro->beneficiarios_ceb;
+            }
+        }
+
+        foreach ($series['regiones'] as $key => $serie){
+            $final['regiones'][$key]['series'] = array_values($serie);
+            $final['regiones'][$key]['elem'] = 'region'.$key;
+            $final['regiones'][$key]['provincias'] = Provincia::where('id_region' , $key)->orderBy('id_provincia')->lists('descripcion');
+        }
+
+        return json_decode(json_encode($final));
+    }
+
+    /** 
+     * Devuelve la vista de evolución
+     *
+     * @return null
+     */
+    public function getEvolucion(){
+        
+        $dt = new \DateTime();
+        $dt->modify('-1 month');
+        $max = strftime("%b %Y" , $dt->getTimeStamp());
+        $dt->modify('-6 months');
+        $min = strftime("%b %Y" , $dt->getTimeStamp());
+
+        $data = [
+            'page_title' => 'Evolución: Período ' . $min . ' - ' . $max ,
+            'series' => $this->getProgresionCebSeries()
+        ];
+
+        return view('ceb.evolucion' , $data);
+    }
 }
