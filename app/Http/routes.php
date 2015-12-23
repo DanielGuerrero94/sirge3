@@ -226,7 +226,7 @@ Route::get('grafico-5-table/{periodo}' , 'GraficosController@getGrafico5Tabla');
  * INDICADORES
  */
 Route::get('indicadores-medica' , 'IndicadoresController@getIndicadoresMedicaForm');
-Route::get('indicadores-medica/{id}/{periodo}' , 'IndicadoresController@getIndicadoresMedica');
+Route::get('indicadores-medica/{id}/{periodo}/{back}' , 'IndicadoresController@getIndicadoresMedica');
 
 /**
  * DDJJ
