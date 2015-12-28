@@ -1,6 +1,5 @@
 @extends('content')
 @section('content')
-<pre>{{ print_r($series) }}</pre>
 <div class="row">
 	<div class="col-md-6">
 		<div class="box box-info">
@@ -56,16 +55,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-6">
-		<div class="box box-info">
-			<div class="box-header">
-				<h2 class="box-title">CENTRO</h2>
-			</div>
-			<div class="box-body">
-				<div class="region6"></div>
-			</div>
-		</div>
-	</div>
+	
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
