@@ -13,15 +13,15 @@ class CreateFondosFondos extends Migration {
 	{
 		Schema::create('fondos.fondos', function(Blueprint $table)
 		{
-			$table->increments('id_gasto');
+			$table->increments('id');
 			$table->string('efector', 14);
 			$table->date('fecha_gasto');
 			$table->integer('periodo');
 			$table->string('numero_comprobante', 50);
 			$table->tinyInteger('codigo_gasto');
 			$table->tinyInteger('subcodigo_gasto');
-			$table->string('efector_cesion')->nullable();
-			$table->decimal('monto');
+			$table->string('efector_cesion',255)->nullable();
+			$table->decimal('monto',8,2);
 			$table->text('concepto')->nullable();
 			$table->integer('lote');
 			

@@ -13,8 +13,7 @@ class CreatePrestaciones extends Migration {
 	{
 		Schema::create('prestaciones.prestaciones', function(Blueprint $table)
 		{
-			$table->increments('id_prestacion');
-			//$table->char('id_provincia', 2);
+			$table->increments('id');			
 			$table->char('estado', 1);
 			$table->string('efector', 14);
 			$table->string('numero_comprobante', 50);
@@ -28,9 +27,9 @@ class CreatePrestaciones extends Migration {
 			$table->string('numero_documento', 14)->nullable();
 			$table->smallInteger('orden');
 			$table->integer('lote');
-			$table->jsonb('datos_reportables')->nullable();
-
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			//$table->jsonb('datos_reportables')->nullable();
+			$table->string('datos_reportables')->nullable();
+			
 			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
 			$table->foreign('codigo_prestacion')->references('codigo_prestacion')->on('pss.codigos');
 			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios');

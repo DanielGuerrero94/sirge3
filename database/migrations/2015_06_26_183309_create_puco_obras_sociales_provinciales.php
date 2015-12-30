@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePucoGruposObrasSociales extends Migration {
+class CreatePucoObrasSocialesProvinciales extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -11,12 +11,10 @@ class CreatePucoGruposObrasSociales extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('puco.grupos_obras_sociales', function(Blueprint $table)
+		Schema::create('puco.obras_sociales_provinciales', function(Blueprint $table)
 		{
-			$table->integer('grupo_os')->primary();
-			$table->string('nombre_grupo', 200);
-			$table->char('id_provincia', 2);
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			$table->integer('codigo_osp')->primary();			
+			$table->char('id_provincia', 2);			
 		});
 	}
 
@@ -27,6 +25,6 @@ class CreatePucoGruposObrasSociales extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('puco.grupos_obras_sociales');
+		Schema::drop('puco.obras_sociales_provinciales');
 	}
 }

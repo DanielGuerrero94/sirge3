@@ -14,9 +14,12 @@ class CreateGraficosTable extends Migration
     {
         Schema::create('graficos.graficos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('titulo' , 100);
-            $table->text('descripcion');
-            $table->timestamps();
+            $table->string('titulo' , 100)->nullable();
+            $table->text('descripcion')->nullable();
+            $table->string('form')->nullable();
+            $table->string('css')->nullable();
+
+            \DB::statement(" ALTER TABLE graficos.graficos ADD COLUMN tags character varying[] ;");                         
         });
     }
 

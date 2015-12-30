@@ -11,14 +11,13 @@ class PucoResumenPuco extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO puco.resumen_puco(id_puco,periodo,clave,registros)
+        \DB::statement(" INSERT INTO puco.resumen_puco(periodo,clave,registros)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-		    'SELECT id_puco,periodo,clave,registros
+		    'SELECT periodo,clave,registros
 			    FROM puco.resumen_puco')
-		    AS migracion(id_puco integer,
-				  periodo integer,
+		    AS migracion(id_puco integer,				  
 				  clave character varying(8),
 				  registros bigint)
 	);	");

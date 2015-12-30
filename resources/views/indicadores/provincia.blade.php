@@ -55,7 +55,7 @@
 				}
 			},
 			submitHandler : function(form){
-				$.get('indicadores-medica/' + $('#provincia').val() + '/' + $('#periodo').val() , function(data){
+				$.get('indicadores-medica/' + $('#provincia').val() + '/' + $('#periodo').val() + '/indicadores-medica', function(data){
 					$('.content-wrapper').html(data);
 				});
 			}

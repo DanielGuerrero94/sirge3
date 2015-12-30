@@ -14,10 +14,17 @@ class PssCodigosSeeder extends Seeder {
 	 (
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
-		    'SELECT codigo_prestacion, tipo, objeto, diagnostico, codigo_logico
-			    FROM pss.codigos')
-		    AS sirge_codigos(codigo_prestacion character varying (11), tipo character varying(2), objeto character varying(4), diagnostico character varying(5), codigo_logico character varying(1))
-	 )
+		    'SELECT codigo_prestacion, tipo, objeto, diagnostico, codigo_logico, (SELECT descripcion FROM pss.codigos_grupos pssv WHERE pssn.codigo_prestacion = pssv.codigo_prestacion LIMIT 1) as descripcion_grupal, inserted_at, updated_at
+			    FROM pss.codigos pssn')
+		    AS sirge_codigos( codigo_prestacion character varying(11),
+							  tipo character(2),
+							  objeto character(4),
+							  diagnostico character(5),
+							  codigo_logico character(1),
+							  descripcion_grupal text,
+							  inserted_at date,
+							  updated_at date)
+							)
         	");
 
 	}

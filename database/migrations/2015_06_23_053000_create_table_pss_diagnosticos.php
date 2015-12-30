@@ -16,7 +16,7 @@ class CreateTablePssDiagnosticos extends Migration {
 			$table->smallInteger('id_grupo_diagnostico');
 			$table->string('diagnostico', 5)->unique();
 			$table->primary(['id_grupo_diagnostico', 'diagnostico']);
-			$table->string('matriz_extendida', 1)->nullable();
+			$table->char('matriz_extendida', 1)->nullable();
 			$table->text('descripcion')->nullable();
 		});
 	}

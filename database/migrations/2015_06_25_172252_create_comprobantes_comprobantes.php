@@ -13,8 +13,7 @@ class CreateComprobantesComprobantes extends Migration {
 	{
 		Schema::create('comprobantes.comprobantes', function(Blueprint $table)
 		{
-			$table->increments('id_comprobante');
-			//$table->char('id_provincia', 2);
+			$table->increments('id');			
 			$table->string('efector', 14);
 			$table->string('numero_comprobante', 50);
 			$table->char('tipo_comprobante', 2);
@@ -23,14 +22,14 @@ class CreateComprobantesComprobantes extends Migration {
 			$table->date('fecha_notificacion');
 			$table->date('fecha_liquidacion');
 			$table->date('fecha_debito_bancario');
-			$table->decimal('importe');
-			$table->decimal('importe_pagado');
+			$table->decimal('importe',8,2);
+			$table->decimal('importe_pagado',8,2);
 			$table->string('factura_debitada', 50);
 			$table->text('concepto');
 			$table->integer('lote');
 
 			$table->foreign('lote')->references('lote')->on('sistema.lotes');
-			$table->unique(['id_provincia','numero_comprobante','tipo_comprobante','efector']);
+			//$table->unique(['id_provincia','numero_comprobante','tipo_comprobante','efector']);
 		});
 	}
 

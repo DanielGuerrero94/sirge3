@@ -12,23 +12,25 @@
 	<div class="col-md-12">
 		<div class="box box-warning">
 			<div class="box-header">
-				<h2 class="box-title">Resultados de indicadores para la provincia de XXXX - período XXXX</h2>
+				<h2 class="box-title">Resultados de indicadores para la provincia de {{ "$provincia->descripcion" }} - período {{ $periodo }}</h2>
 			</div>
 			<div class="box-body">
 
-				<!-- INDICADOR 1 -->
+				<!-- INDICADOR -->
+				@foreach ($indicador as $unIndicador)
+				<h4>{{ $unIndicador->rangoIndicador->descripcionIndicador->descripcion }}</h4>	
 				<div class="row">
 					<div class="col-md-4">
 						<div class="info-box bg-lime">
 							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
 							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR X.X</span>
+								<span class="info-box-text">INDICADOR {{ $unIndicador->rangoIndicador->codigo_indicador }}</span>
 								<span class="info-box-number">24,4%</span>
 								<div class="progress">
 									<div class="progress-bar" style="width: 25%"></div>
 								</div>
 								<span class="progress-description">
-									Diciembre 2015
+									{{ date ('m/y', strtotime($periodo)) }}
 								</span>
 							</div><!-- /.info-box-content -->
 						</div>
@@ -37,25 +39,19 @@
 						<div class="g1" style="height: 250px;"></div>
 					</div>
 					<div class="col-md-4">
-						<p>
-							<b>Numerador</b><br />
-							<p>Número de mujeres embarazadas de 10 a 19 años , a las que se les haya facturado un parto o cesárea en el bimestre y que haya recibido las siguientes prestaciones prenatales :</p>
-							<ul>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-							</ul>
-							<b>Denominador</b>
-							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
-						</p>
+						
+							<p><b>Numerador</b></p>
+							<p>{!! $unIndicador->rangoIndicador->descripcionIndicador->numerador !!}</p>
+							<p><b>Denominador</b></p>
+							<p>{!! $unIndicador->rangoIndicador->descripcionIndicador->denominador !!}</p>
+						
 					</div>
 				</div>
 
 				<hr />
-
+				@endforeach
 				<!-- INDICADOR 2 -->
-				<div class="row">
+				{{-- <div class="row">
 					<div class="col-md-4">
 						<div class="info-box bg-red">
 							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
@@ -240,7 +236,7 @@
 							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
 						</p>
 					</div>
-				</div>
+				</div> --}}
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">

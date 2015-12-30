@@ -12,8 +12,7 @@ class CreatePucoResumenPuco extends Migration {
 	public function up()
 	{
 		Schema::create('puco.resumen_puco', function(Blueprint $table)
-		{
-			$table->increments('id_puco');
+		{			
 			$table->integer('periodo');
 			$table->string('clave', 8);
 			$table->bigInteger('registros');
