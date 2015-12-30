@@ -9,13 +9,13 @@ class SistemaClasesDocumento extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement(" INSERT INTO sistema.clases_documento(id_clase_documento,clase_documento,descripcion)
+		\DB::statement(" INSERT INTO sistema.clases_documento(id,clase_documento,descripcion)
 	 (
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
-		    'SELECT id_clase_documento, clase_documento, descripcion
+		    'SELECT id, clase_documento, descripcion
 			    FROM sistema.clases_documento')
-		    AS sirge_areas(id_clase_documento integer, clase_documento character (1), descripcion character varying(20) )
+		    AS sirge_areas(id integer, clase_documento character (1), descripcion character varying(20) )
 	 )
         			   	");
 	}

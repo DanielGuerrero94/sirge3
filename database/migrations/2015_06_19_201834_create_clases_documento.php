@@ -13,7 +13,7 @@ class CreateClasesDocumento extends Migration {
 	{
 		Schema::create('sistema.clases_documento', function(Blueprint $table)
 		{
-			$table->increments('id_clase_documento');
+			$table->increments('id')->primary();
 			$table->char('clase_documento', 1)->unique();
 			$table->string('descripcion', 100)->unique();
 			

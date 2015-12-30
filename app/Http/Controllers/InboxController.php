@@ -43,7 +43,7 @@ class InboxController extends Controller{
             where usuarios @> '{{$user}}'
             ) a  left join 
             sistema.usuarios u on a.usuarios = u.id_usuario left join
-            sistema.provincias p on u.id_provincia = p.id_provincia
+            geo.provincias p on u.id_provincia = p.id_provincia
         where usuarios <> $user
         order by u.last_login");
 

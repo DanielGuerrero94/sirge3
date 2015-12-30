@@ -29,7 +29,7 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 			$table->smallInteger('grupo_actual')->nullable();
 			$table->char('grupo_alta', 1)->nullable();
 
-			$table->foreign('id_provincia_alta')->references('id_provincia')->on('sistema.provincias');
+			$table->foreign('id_provincia_alta')->references('id_provincia')->on('geo.provincias');
 			$table->foreign('clase_documento')->references('clase_documento')->on('sistema.clases_documento');
 			$table->foreign('grupo_actual')->references('id_grupo_etario')->on('pss.grupos_etarios');
 			$table->foreign('sexo')->references('sigla')->on('sistema.sexos');

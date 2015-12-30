@@ -14,6 +14,7 @@ class CreateProvincias extends Migration {
 			$table->char('id_provincia', 2)->primary();
 			$table->integer('id_region');
 			$table->string('descripcion', 100);
+			$table->string('latlong',100);
 		});
 	}
 
