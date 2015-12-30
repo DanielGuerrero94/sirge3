@@ -17,8 +17,8 @@ class CreateTablePssCodigos extends Migration {
 			$table->string('diagnostico', 5)->nullable();
 			$table->string('codigo_logico', 1)->nullable();
 			$table->text('descripcion_grupal', 1);
-			$table->timestamp('inserted_at')->default(DB::raw('now()');
-			$table->timestamp('updated_at')->default(DB::raw('now()');
+			$table->timestamp('inserted_at')->default(DB::raw('now()'));
+			$table->timestamp('updated_at')->default(DB::raw('now()'));
 
 			$table->foreign('diagnostico')->references('diagnostico')->on('pss.diagnosticos');
 		});
