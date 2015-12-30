@@ -13,7 +13,7 @@ class CreateTipoDocumento extends Migration
     public function up()
     {
         Schema::create('sistema.tipo_documento', function (Blueprint $table) {
-            $table->increments('id_tipo_documento');
+            $table->increments('id_tipo_documento')->primary();
             $table->char('tipo_documento' , 3)->unique();
             $table->string('descripcion' , 100);
         });
