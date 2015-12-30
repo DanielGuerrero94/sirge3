@@ -51,8 +51,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('DROP SCHEMA prestaciones CASCADE;');		
 		DB::statement('DROP SCHEMA pss CASCADE;');
 		DB::statement('DROP SCHEMA puco CASCADE;');
-		DB::statement('DROP SCHEMA sistema CASCADE;');				
-		DB::statement('DROP SCHEMA trazadoras CASCADE;');
+		DB::statement('DROP SCHEMA sistema CASCADE;');						
 		DB::statement('DROP SCHEMA solicitudes CASCADE;');
 		DB::statement('DROP SCHEMA graficos CASCADE;');
 		DB::statement('DROP SCHEMA chat CASCADE;');
