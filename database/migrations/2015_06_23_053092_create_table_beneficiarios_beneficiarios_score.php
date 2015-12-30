@@ -13,12 +13,13 @@ class CreateTableBeneficiariosBeneficiariosScore extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_score', function(Blueprint $table)
 		{
-			$table->string('clave_beneficiario', 16)->primary();
+			$table->increments('id')->primary();
+			$table->string('clave_beneficiario', 16);
 			$table->smallInteger('score_riesgo')->nullable();
-			$table->foreign('clave_beneficiario')
-			->references('clave_beneficiario')
-			->on('beneficiarios.beneficiarios')
-			->onDelete('cascade');
+			
+			$table->index('clave_beneficiario');
+			$table->unique('clave_beneficiario');
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
 

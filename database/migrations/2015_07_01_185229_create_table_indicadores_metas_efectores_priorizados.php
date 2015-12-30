@@ -13,12 +13,15 @@ class CreateTableIndicadoresMetasEfectoresPriorizados extends Migration {
 	{
 		Schema::create('indicadores.metas_efectores_priorizados', function(Blueprint $table)
 		{
+			$table->increments('id')->primary();
 			$table->string('efector', 14);
+			$table->string('indicador', 5);
 			$table->float('c1')->nullable();
 			$table->float('c2')->nullable();
 			$table->float('c3')->nullable();
-			$table->string('indicador', 5);
-			$table->primary(['efector', 'indicador']);
+
+			$table->unique(['efector', 'indicador']);
+			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
 		});
 	}
 

@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresTipoCategorizacion extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.tipo_categorizacion', function (Blueprint $table) {
-			$table->increments('id_categorizacion');
+			$table->increments('id_categorizacion')->primary();
 			$table->char('sigla', 6);
 			$table->string('descripcion', 100);
 		});

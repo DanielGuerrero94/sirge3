@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresReferentes extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.referentes', function (Blueprint $table) {
-			$table->increments('id_referente');
+			$table->increments('id_referente')->primary();
 			$table->integer('id_efector');
 			$table->string('nombre', 200);
 			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');

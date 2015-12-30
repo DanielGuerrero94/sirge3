@@ -17,6 +17,9 @@ class CreacionDeTablasEfectoresEfectoresPpac extends Migration {
 			$table->char('perinatal_ac', 1)->nullable();
 			$table->char('categoria_obstetrico', 1)->nullable();
 			$table->char('categoria_neonatal', 1)->nullable();
+
+			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores');
+			
 		});
 	}
 

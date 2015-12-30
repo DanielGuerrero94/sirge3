@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresTipoOperacion extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.tipo_operacion', function (Blueprint $table) {
-			$table->increments('id_operacion');
+			$table->increments('id_operacion')->primary();
 			$table->string('descripcion', 100);
 		});
 	}

@@ -27,10 +27,9 @@ class CreateTableBeneficiariosBeneficiariosParientes extends Migration {
 			$table->string('otro_apellido', 100);
 			$table->string('otro_nombre', 100);
 			$table->smallInteger('otro_tipo_relacion');
-			$table->foreign('clave_beneficiario')
-			->references('clave_beneficiario')
-			->on('beneficiarios.beneficiarios')
-			->onDelete('cascade');
+			
+			$table->index('clave_beneficiario');
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
 

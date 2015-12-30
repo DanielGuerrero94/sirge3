@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresConvenioAdministrativo extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.convenio_administrativo', function (Blueprint $table) {
-			$table->increments('id_convenio');
+			$table->increments('id_convenio')->primary();
 			$table->integer('id_efector');
 			$table->string('numero_compromiso', 50);
 			$table->string('firmante', 200);
@@ -20,6 +20,7 @@ class CreacionDeTablasEfectoresConvenioAdministrativo extends Migration {
 			$table->date('fecha_suscripcion');
 			$table->date('fecha_inicio');
 			$table->date('fecha_fin');
+			$table->nullableTimestamps();
 
 			$table->unique(['id_efector', 'numero_compromiso']);
 			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');

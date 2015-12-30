@@ -13,15 +13,16 @@ class CreacionDeTablasEfectoresDatosGeograficos extends Migration {
 		Schema::create('efectores.datos_geograficos', function (Blueprint $table) {
 			$table->integer('id_efector')->primary();
 			$table->char('id_provincia', 2);
-			$table->char('id_departamento',4);
-			$table->char('id_localidad',4);
+			$table->smallInteger('id_departamento');
+			$table->smallInteger('id_localidad');
 			$table->string('ciudad', 200)->nullable();
+			$table->nullableTimestamps();
 			//$table->float('latitud')->nullable();
 			//$table->float('longitud')->nullable();
 			//$table->integer('msnm')->nullable();
 
-			$table->foreign(['id_departamento'])->references(['id'])->on('geo.departamentos');
-			$table->foreign(['id_localidad'])->references(['id'])->on('geo.localidades');
+			$table->foreign('id_departamento')->references('id')->on('geo.departamentos');
+			$table->foreign('id_localidad')->references('id')->on('geo.localidades');
 			$table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onUpdate('NO ACTION')->onDelete('CASCADE');
 		});
 	}

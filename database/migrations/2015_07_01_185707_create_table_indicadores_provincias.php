@@ -11,11 +11,13 @@ class CreateTableIndicadoresProvincias extends Migration {
 	 */
 	public function up()
 	{
+		/*
 		Schema::create('indicadores.provincias', function(Blueprint $table)
 		{
 			$table->char('id_provincia', 2)->primary();
 			$table->string('provincia', 40);
 		});
+		*/
 	}
 
 	/**
@@ -25,6 +27,8 @@ class CreateTableIndicadoresProvincias extends Migration {
 	 */
 	public function down()
 	{
+		/*
 		Schema::drop('indicadores.provincias');
+		*/
 	}
 }

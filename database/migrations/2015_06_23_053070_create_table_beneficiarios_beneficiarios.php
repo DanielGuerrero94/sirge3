@@ -11,6 +11,7 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 	 */
 	public function up() {
 		Schema::create('beneficiarios.beneficiarios', function (Blueprint $table) {
+			
 			$table->string('clave_beneficiario', 16)->primary();
 			$table->string('apellido', 100);
 			$table->string('nombre', 100);
@@ -27,18 +28,12 @@ class CreateTableBeneficiariosBeneficiarios extends Migration {
 			$table->longText('observaciones')->nullable();
 			$table->smallInteger('grupo_actual')->nullable();
 			$table->char('grupo_alta', 1)->nullable();
-			$table->foreign('clase_documento')
-			->references('clase_documento')
-			->on('sistema.clases_documento');
-			$table->foreign('grupo_actual')
-			->references('id_grupo_etario')
-			->on('pss.grupos_etarios');
-			$table->foreign('sexo')
-			->references('sigla')
-			->on('sistema.sexos');
-			$table->foreign('tipo_documento')
-			->references('tipo_documento')
-			->on('sistema.tipo_documento');
+
+			$table->foreign('id_provincia_alta')->references('id_provincia')->on('sistema.provincias');
+			$table->foreign('clase_documento')->references('clase_documento')->on('sistema.clases_documento');
+			$table->foreign('grupo_actual')->references('id_grupo_etario')->on('pss.grupos_etarios');
+			$table->foreign('sexo')->references('sigla')->on('sistema.sexos');
+			$table->foreign('tipo_documento')->references('tipo_documento')->on('sistema.tipo_documento');
 		});
 	}
 

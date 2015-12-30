@@ -13,25 +13,18 @@ class CreateTableBeneficiariosBeneficiariosEmbarazos extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_embarazos', function(Blueprint $table)
 		{
+			$table->increments('id')->primary();
 			$table->string('clave_beneficiario', 16);
-			$table->increments('id_embarazo');
 			$table->date('fecha_diagnostico_embarazo');
 			$table->smallInteger('semanas_embarazo');
 			$table->date('fecha_probable_parto')->nullable();
 			$table->date('fecha_efectiva_parto')->nullable();
 			$table->date('fum')->nullable();
 			$table->integer('periodo');
-		});
 
-		\DB::statement('ALTER TABLE beneficiarios.beneficiarios_embarazos DROP CONSTRAINT beneficiarios_embarazos_pkey');
-
-		Schema::table('beneficiarios.beneficiarios_embarazos', function(Blueprint $table)
-		{
-			$table->primary(['clave_beneficiario', 'id_embarazo']);
-			$table->foreign('clave_beneficiario')
-			->references('clave_beneficiario')
-			->on('beneficiarios.beneficiarios')
-			->onDelete('cascade');
+			$table->unique(['clave_beneficiario', 'id']);
+			$table->index(['clave_beneficiario', 'id']);
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
 

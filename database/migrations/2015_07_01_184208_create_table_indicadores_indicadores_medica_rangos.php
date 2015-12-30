@@ -13,6 +13,7 @@ class CreateTableIndicadoresIndicadoresMedicaRangos extends Migration {
 	{
 		Schema::create('indicadores.indicadores_medica_rangos', function(Blueprint $table)
 		{
+			$table->increments('id')->primary();
 			$table->char('id_provincia', 2);
 			$table->integer('periodo')->unsigned();
 			$table->string('codigo_indicador', 5);
@@ -20,8 +21,9 @@ class CreateTableIndicadoresIndicadoresMedicaRangos extends Migration {
 			$table->integer('max_verde')->unsigned();
 			$table->integer('min_rojo')->unsigned();
 			$table->integer('min_verde')->unsigned();
-			$table->primary(['id_provincia', 'periodo', 'codigo_indicador']);
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			
+			$table->unique(['id_provincia', 'periodo', 'codigo_indicador']);
+			$table->foreign('id_provincia')->references('id_provincia')->on('sistema.provincias');
 		});
 	}
 

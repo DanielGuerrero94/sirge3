@@ -17,10 +17,9 @@ class CreateTableBeneficiariosBeneficiariosIndigenas extends Migration {
 			$table->char('declara_indigena', 1);
 			$table->smallInteger('id_lengua');
 			$table->smallInteger('id_tribu');
-			$table->foreign('clave_beneficiario')
-			->references('clave_beneficiario')
-			->on('beneficiarios.beneficiarios')
-			->onDelete('cascade');
+
+			$table->index('clave_beneficiario');
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
 

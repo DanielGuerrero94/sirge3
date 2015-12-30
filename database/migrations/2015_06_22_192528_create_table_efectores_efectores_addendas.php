@@ -13,11 +13,15 @@ class CreateTableEfectoresEfectoresAddendas extends Migration
     public function up()
     {
         Schema::create('efectores.efectores_addendas', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('id_efector')->nullable();          
-            $table->integer('id_addenda')->nullable();
-            $table->date('fecha_addenda')->nullable();
-            $table->timestamps();                          
+            $table->increments('id')->primary();
+            $table->integer('id_efector');
+            $table->integer('id_addenda');
+            $table->date('fecha');
+            $table->timestamps();
+
+            $table->unique(['id_efector','id_addenda']);
+            $table->foreign('id_efector')->references('id_efector')->on('efectores.efectores')->onDelete('cascade');
+            $table->foreign('id_addenda')->references('id')->on('efectores.addendas')->onDelete('cascade');
         });
     }
 

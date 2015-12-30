@@ -13,13 +13,14 @@ class CreateTableBeneficiariosBeneficiariosCategoriasNacer extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_categorias_nacer', function(Blueprint $table)
 		{
+			$table->increments('id')->primary();
 			$table->string('clave_beneficiario', 16);
 			$table->integer('periodo');
 			$table->smallInteger('tipo_categoria')->nullable();
-			$table->primary(['clave_beneficiario', 'periodo']);
-			$table->foreign('clave_beneficiario')
-			->references('clave_beneficiario')
-			->on('beneficiarios.beneficiarios');
+			
+			$table->index(['clave_beneficiario', 'periodo']);
+			$table->unique(['clave_beneficiario', 'periodo']);
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
 

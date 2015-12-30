@@ -13,17 +13,16 @@ class CreateTableBeneficiariosBeneficiariosContacto extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_contacto', function(Blueprint $table)
 		{
+			$table->increments('id')->primary();
 			$table->string('clave_beneficiario', 16);
 			$table->string('telefono', 50)->nullable();
 			$table->string('celular', 50)->nullable();
 			$table->string('email', 50)->nullable();
 			$table->smallInteger('modificado')->default(0)->nullable();
 
-			$table->primary('clave_beneficiario');
-			$table->foreign('clave_beneficiario')
-			->references('clave_beneficiario')
-			->on('beneficiarios.beneficiarios')
-			->onDelete('cascade');
+			$table->index('clave_beneficiario');
+			$table->unique('clave_beneficiario');
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
 
