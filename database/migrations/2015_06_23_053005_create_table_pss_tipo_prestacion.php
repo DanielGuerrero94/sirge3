@@ -12,8 +12,8 @@ class CreateTablePssTipoPrestacion extends Migration {
 	public function up() {
 		Schema::create('pss.tipo_prestacion', function (Blueprint $table) {
 			$table->string('tipo_prestacion', 2)->primary();
-			$table->text('descripcion')->nullable();
-			$table->string('icono',30)->nullable();
+			$table->string('descripcion',50)->nullable();
+			$table->string('icono',40)->nullable();
 		});
 	}
 
