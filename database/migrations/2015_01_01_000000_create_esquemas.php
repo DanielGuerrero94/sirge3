@@ -44,22 +44,19 @@ class CreateEsquemas extends Migration {
 		DB::statement('DROP SCHEMA ddjj CASCADE;');
 		DB::statement('DROP SCHEMA efectores CASCADE;');
 		DB::statement('DROP SCHEMA fondos CASCADE;');
-		DB::statement('DROP SCHEMA geo CASCADE;');
-		DB::statement('DROP SCHEMA indec CASCADE;');
+		DB::statement('DROP SCHEMA geo CASCADE;');		
 		DB::statement('DROP SCHEMA indicadores CASCADE;');
 		DB::statement('DROP SCHEMA logs CASCADE;');
-		DB::statement('DROP SCHEMA mobile CASCADE;');
-		DB::statement('DROP SCHEMA osp CASCADE;');
-		DB::statement('DROP SCHEMA prestaciones CASCADE;');
-		DB::statement('DROP SCHEMA profe CASCADE;');
+		DB::statement('DROP SCHEMA mobile CASCADE;');		
+		DB::statement('DROP SCHEMA prestaciones CASCADE;');		
 		DB::statement('DROP SCHEMA pss CASCADE;');
 		DB::statement('DROP SCHEMA puco CASCADE;');
-		DB::statement('DROP SCHEMA sistema CASCADE;');
-		DB::statement('DROP SCHEMA sss CASCADE;');
-		DB::statement('DROP SCHEMA tmp CASCADE;');
+		DB::statement('DROP SCHEMA sistema CASCADE;');				
 		DB::statement('DROP SCHEMA trazadoras CASCADE;');
 		DB::statement('DROP SCHEMA solicitudes CASCADE;');
 		DB::statement('DROP SCHEMA graficos CASCADE;');
+		DB::statement('DROP SCHEMA chat CASCADE;');
+		DB::statement('DROP SCHEMA diccionarios CASCADE;');
 
 	}
 }
