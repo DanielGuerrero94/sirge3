@@ -17,22 +17,18 @@ class CreateEsquemas extends Migration {
 		DB::statement('CREATE SCHEMA ddjj;');
 		DB::statement('CREATE SCHEMA efectores;');
 		DB::statement('CREATE SCHEMA fondos;');
-		DB::statement('CREATE SCHEMA geo;');
-		DB::statement('CREATE SCHEMA indec;');
+		DB::statement('CREATE SCHEMA geo;');		
 		DB::statement('CREATE SCHEMA indicadores;');
 		DB::statement('CREATE SCHEMA logs;');
-		DB::statement('CREATE SCHEMA mobile;');
-		DB::statement('CREATE SCHEMA osp;');
-		DB::statement('CREATE SCHEMA prestaciones;');
-		DB::statement('CREATE SCHEMA profe;');
+		DB::statement('CREATE SCHEMA mobile;');		
+		DB::statement('CREATE SCHEMA prestaciones;');	
 		DB::statement('CREATE SCHEMA pss;');
 		DB::statement('CREATE SCHEMA puco;');
-		DB::statement('CREATE SCHEMA sistema;');
-		DB::statement('CREATE SCHEMA sss;');
-		DB::statement('CREATE SCHEMA tmp;');
-		DB::statement('CREATE SCHEMA trazadoras;');
+		DB::statement('CREATE SCHEMA sistema;');						
 		DB::statement('CREATE SCHEMA solicitudes;');
 		DB::statement('CREATE SCHEMA graficos;');
+		DB::statement('CREATE SCHEMA chat;');
+		DB::statement('CREATE SCHEMA diccionarios;');
 	}
 
 	/**
