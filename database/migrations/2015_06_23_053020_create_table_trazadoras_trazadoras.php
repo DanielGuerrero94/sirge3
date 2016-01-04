@@ -11,11 +11,13 @@ class CreateTableTrazadorasTrazadoras extends Migration {
 	 */
 	public function up()
 	{
+		
 		Schema::create('trazadoras.trazadoras', function(Blueprint $table)
 		{
 			$table->smallInteger('id_trazadora')->primary();
 			$table->string('nombre', 200);
 		});
+		
 	}
 
 	/**
@@ -25,6 +27,6 @@ class CreateTableTrazadorasTrazadoras extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('trazadoras.trazadoras');
+		//Schema::drop('trazadoras.trazadoras');
 	}
 }

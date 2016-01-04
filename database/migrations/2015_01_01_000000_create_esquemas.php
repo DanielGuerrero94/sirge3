@@ -22,6 +22,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('CREATE SCHEMA logs;');
 		DB::statement('CREATE SCHEMA mobile;');
 		DB::statement('CREATE SCHEMA prestaciones;');
+		DB::statement('CREATE SCHEMA trazadoras;');
 		DB::statement('CREATE SCHEMA pss;');
 		DB::statement('CREATE SCHEMA puco;');
 		DB::statement('CREATE SCHEMA sistema;');					
@@ -49,6 +50,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('DROP SCHEMA logs CASCADE;');
 		DB::statement('DROP SCHEMA mobile CASCADE;');
 		DB::statement('DROP SCHEMA prestaciones CASCADE;');
+		DB::statement('DROP SCHEMA trazadoras CASCADE;');
 		DB::statement('DROP SCHEMA pss CASCADE;');
 		DB::statement('DROP SCHEMA puco CASCADE;');
 		DB::statement('DROP SCHEMA sistema CASCADE;');				

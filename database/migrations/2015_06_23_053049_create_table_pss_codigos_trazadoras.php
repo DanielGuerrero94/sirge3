@@ -10,6 +10,7 @@ class CreateTablePssCodigosTrazadoras extends Migration {
 	 * @return void
 	 */
 	public function up() {
+		
 		Schema::create('pss.codigos_trazadoras', function (Blueprint $table) {
 			$table->string('codigo_prestacion', 11);
 			$table->smallInteger('id_linea_cuidado');
@@ -29,7 +30,7 @@ class CreateTablePssCodigosTrazadoras extends Migration {
 			$table->foreign('id_trazadora')
 			->references('id_trazadora')
 			->on('trazadoras.trazadoras');
-		});
+		});		
 	}
 
 	/**
@@ -38,6 +39,6 @@ class CreateTablePssCodigosTrazadoras extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('pss.codigos_trazadoras');
+		//Schema::drop('pss.codigos_trazadoras');
 	}
 }

@@ -11,7 +11,7 @@ class CreateTableTrazadorasFuncionRetribucion extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('trazadoras.funcion_retribucion', function(Blueprint $table)
+		/*Schema::create('trazadoras.funcion_retribucion', function(Blueprint $table)
 		{
 			$table->string('id_provincia', 2);
 			$table->smallInteger('id_trazadora');
@@ -24,6 +24,7 @@ class CreateTableTrazadorasFuncionRetribucion extends Migration {
 			$table->float('meta_casos')->nullable();
 			$table->primary(['id_provincia', 'id_trazadora']);
 		});
+		*/
 	}
 
 	/**
@@ -33,6 +34,6 @@ class CreateTableTrazadorasFuncionRetribucion extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('trazadoras.funcion_retribucion');
+		//Schema::drop('trazadoras.funcion_retribucion');
 	}
 }
