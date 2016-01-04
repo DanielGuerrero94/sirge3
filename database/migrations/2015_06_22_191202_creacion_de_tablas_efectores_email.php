@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresEmail extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.email', function (Blueprint $table) {
-			$table->increments('id_email')->primary();
+			$table->increments('id_email');
 			$table->integer('id_efector');
 			$table->string('email', 200);
 			$table->string('observaciones', 100)->nullable();

@@ -13,7 +13,7 @@ class CreateTableBeneficiariosBeneficiariosCeb extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_ceb', function(Blueprint $table)
 		{
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
 			$table->integer('periodo');
 			$table->char('ceb', 1);

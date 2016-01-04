@@ -13,7 +13,7 @@ class LogRechazos extends Migration
     public function up()
     {
         Schema::create('logs.rechazos', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->integer('lote');
             $table->jsonb('registro');
             $table->jsonb('motivos');

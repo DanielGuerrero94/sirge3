@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresCompromisoGestion extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.compromiso_gestion', function (Blueprint $table) {
-			$table->increments('id_compromiso')->primary();
+			$table->increments('id_compromiso');
 			$table->integer('id_efector');
 			$table->string('numero_compromiso', 50);
 			$table->string('firmante', 200);

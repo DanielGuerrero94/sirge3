@@ -13,7 +13,7 @@ class CreateTableEfectoresAddendas extends Migration
     public function up()
     {
         Schema::create('efectores.addendas', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->string('nombre',50);                
         });
     }

@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresConvenioAdministrativo extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.convenio_administrativo', function (Blueprint $table) {
-			$table->increments('id_convenio')->primary();
+			$table->increments('id_convenio');
 			$table->integer('id_efector');
 			$table->string('numero_compromiso', 50);
 			$table->string('firmante', 200);

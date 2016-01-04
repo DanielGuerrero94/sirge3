@@ -13,7 +13,7 @@ class CreateTableIndicadoresIndicadoresMedicaRangos extends Migration {
 	{
 		Schema::create('indicadores.indicadores_medica_rangos', function(Blueprint $table)
 		{
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->char('id_provincia', 2);
 			$table->integer('periodo')->unsigned();
 			$table->string('codigo_indicador', 5);

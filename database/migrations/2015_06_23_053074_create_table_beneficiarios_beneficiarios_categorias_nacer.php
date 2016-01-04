@@ -13,7 +13,7 @@ class CreateTableBeneficiariosBeneficiariosCategoriasNacer extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_categorias_nacer', function(Blueprint $table)
 		{
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
 			$table->integer('periodo');
 			$table->smallInteger('tipo_categoria')->nullable();

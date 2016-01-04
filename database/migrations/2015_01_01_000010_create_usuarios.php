@@ -12,7 +12,7 @@ class CreateUsuarios extends Migration {
 	public function up() {
 		Schema::create('sistema.usuarios', function (Blueprint $table) {
 			
-			$table->increments('id_usuario')->primary();
+			$table->increments('id_usuario');
 			$table->string('usuario', 50)->unique();
 			$table->string('password', 100);
 			$table->string('nombre', 100);

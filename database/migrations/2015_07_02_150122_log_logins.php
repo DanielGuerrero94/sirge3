@@ -13,7 +13,7 @@ class CreateTableLogsLogLogins extends Migration {
 	{
 		Schema::create('logs.logins', function(Blueprint $table)
 		{
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->integer('id_usuario')->unsigned();
 			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
 		});

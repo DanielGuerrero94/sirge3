@@ -13,7 +13,7 @@ class CreateRegiones extends Migration
     public function up()
     {
         Schema::create('sistema.regiones', function (Blueprint $table) {
-            $table->increments('id_region')->primary();
+            $table->increments('id_region');
             $table->string('descripcion' , 100)->unique();
         });
     }

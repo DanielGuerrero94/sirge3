@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresTipoDependenciaAdministrativa extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.tipo_dependencia_administrativa', function (Blueprint $table) {
-			$table->increments('id_dependencia_administrativa')->primary();
+			$table->increments('id_dependencia_administrativa');
 			$table->char('sigla', 4);
 			$table->string('descripcion', 50);
 		});

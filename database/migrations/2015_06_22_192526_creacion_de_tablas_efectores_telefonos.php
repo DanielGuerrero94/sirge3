@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresTelefonos extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.telefonos', function (Blueprint $table) {
-			$table->increments('id_telefono')->primary();
+			$table->increments('id_telefono');
 			$table->integer('id_efector');
 			$table->string('numero_telefono', 200);
 			$table->integer('id_tipo_telefono')->nullable();

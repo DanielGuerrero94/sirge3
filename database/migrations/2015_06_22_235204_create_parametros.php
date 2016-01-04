@@ -13,7 +13,7 @@ class CreateParametros extends Migration
     public function up()
     {
         Schema::create('sistema.parametros', function (Blueprint $table) {
-            $table->increments('id_parametro')->primary();
+            $table->increments('id_parametro');
             $table->string('descripcion' , 100);
             $table->string('valor' , 100);
             $table->nullableTimestamps();

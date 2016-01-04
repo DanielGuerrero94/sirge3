@@ -13,7 +13,7 @@ class CreateTableIndicadoresIndicadoresPriorizados extends Migration {
 	{
 		Schema::create('indicadores.indicadores_priorizados', function(Blueprint $table)
 		{
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->string('efector', 6);
 			//$table->string('nombre', 200);
 			$table->integer('periodo')->unsigned();

@@ -13,7 +13,7 @@ class CreateTableBeneficiariosBeneficiariosEmbarazos extends Migration {
 	{
 		Schema::create('beneficiarios.beneficiarios_embarazos', function(Blueprint $table)
 		{
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
 			$table->date('fecha_diagnostico_embarazo');
 			$table->smallInteger('semanas_embarazo');

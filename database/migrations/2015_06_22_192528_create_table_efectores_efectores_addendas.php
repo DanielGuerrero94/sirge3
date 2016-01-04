@@ -13,7 +13,7 @@ class CreateTableEfectoresEfectoresAddendas extends Migration
     public function up()
     {
         Schema::create('efectores.efectores_addendas', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->integer('id_efector');
             $table->integer('id_addenda');
             $table->date('fecha');

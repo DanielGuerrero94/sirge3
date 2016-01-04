@@ -11,7 +11,7 @@ class CreacionDeTablasEfectoresEfectores extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.efectores', function (Blueprint $table) {
-			$table->increments('id_efector')->primary();
+			$table->increments('id_efector');
 			$table->char('cuie', 6)->unique();
 			$table->char('siisa', 14);
 			$table->string('nombre', 200);
