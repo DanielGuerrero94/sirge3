@@ -11,7 +11,7 @@ class Bajas extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_bajas';
+	protected $table = 'beneficiarios.bajas';
 
 	/**
 	 * Primary key asociated with the table.

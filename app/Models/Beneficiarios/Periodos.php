@@ -11,7 +11,7 @@ class Periodos extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_periodos';
+	protected $table = 'beneficiarios.periodos';
 
 	/**
 	 * Primary key asociated with the table.

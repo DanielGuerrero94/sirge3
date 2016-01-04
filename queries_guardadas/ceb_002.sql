@@ -5,7 +5,7 @@
 	, sum(case when activo = 'S' then 1 else 0 end) as beneficiarios_activos
 	, sum(case when ceb = 'S' then 1 else 0 end) as beneficiarios_ceb
 from 
-	beneficiarios.beneficiarios_periodos p
+	beneficiarios.periodos p
 	inner join beneficiarios.beneficiarios b 
 		on p.clave_beneficiario = b.clave_beneficiario
 	left join beneficiarios.beneficiarios_ceb c 

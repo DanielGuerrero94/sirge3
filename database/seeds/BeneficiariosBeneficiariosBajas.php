@@ -12,12 +12,12 @@ class BeneficiariosBeneficiariosBajas extends Seeder
     public function run()
     {
         
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_bajas(clave_beneficiario,periodo,motivo,mensaje)
+        \DB::statement(" INSERT INTO beneficiarios.bajas(clave_beneficiario,periodo,motivo,mensaje)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,periodo,motivo,mensaje
-			    FROM beneficiarios.beneficiarios_bajas')
+			    FROM beneficiarios.benficiarios_bajas')
 		    AS migracion(clave_beneficiario character varying(16),
 				  periodo integer,
 				  motivo smallint,

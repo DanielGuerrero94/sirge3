@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosPeriodos extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_periodos(clave_beneficiario,periodo,activo,efector_asignado,efector_habitual,id_ingreso,embarazo)
+        \DB::statement(" INSERT INTO beneficiarios.periodos(clave_beneficiario,periodo,activo,efector_asignado,efector_habitual,id_ingreso,embarazo)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

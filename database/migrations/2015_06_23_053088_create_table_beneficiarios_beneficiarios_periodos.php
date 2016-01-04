@@ -11,7 +11,7 @@ class CreateTableBeneficiariosBeneficiariosPeriodos extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('beneficiarios.beneficiarios_periodos', function(Blueprint $table)
+		Schema::create('beneficiarios.periodos', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
@@ -37,6 +37,6 @@ class CreateTableBeneficiariosBeneficiariosPeriodos extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('beneficiarios.beneficiarios_periodos');
+		Schema::drop('beneficiarios.periodos');
 	}
 }
