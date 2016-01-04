@@ -11,15 +11,13 @@ class SistemaEntidades extends Seeder
      */
     public function run()
     {
-        \DB::statement("INSERT INTO sistema.entidades(id_entidad,id_tipo_entidad,id_region,descripcion)
+        \DB::statement("INSERT INTO sistema.entidades(id,descripcion)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
-		    'SELECT id_entidad,id_tipo_entidad,id_region,descripcion
+		FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',
+		    'SELECT id,descripcion
 			    FROM sistema.entidades')
-		    AS migracion(id_entidad character(2),
-				  id_tipo_entidad integer,
-				  id_region integer,
+		    AS migracion(id character(2),				  				  
 				  descripcion character varying(50))
 	);");
     }

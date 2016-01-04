@@ -37,7 +37,7 @@ class CreateUsuarios extends Migration {
 			$table->timestamps();
 			$table->rememberToken()->nullable();
 
-			$table->foreign('id_entidad')->references('id_entidad')->on('sistema.entidades');
+			$table->foreign('id_entidad')->references('id')->on('sistema.entidades');
 			$table->foreign('id_provincia')->references('id_provincia')->on('geo.provincias');
 			$table->foreign('id_menu')->references('id_menu')->on('sistema.menues');
 			$table->foreign('id_area')->references('id_area')->on('sistema.areas');
