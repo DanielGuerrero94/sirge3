@@ -21,7 +21,7 @@ class CreateTableBeneficiariosBeneficiariosPeriodos extends Migration {
 			$table->string('efector_habitual', 14)->nullable()->index();
 			$table->integer('id_ingreso');
 			$table->char('embarazo', 1)->default('N');
-			$table->primary(['clave_beneficiario', 'periodo']);
+			//$table->primary(['clave_beneficiario', 'periodo']);
 			
 			$table->index(['clave_beneficiario', 'periodo']);
 			$table->index(['clave_beneficiario', 'periodo' , 'activo']);
