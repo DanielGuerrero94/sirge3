@@ -76,8 +76,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PssCodigosOdp');
 		$this->call('PssCodigosPpac');
 		$this->call('PssCodigosPriorizadas');
-		$this->call('PssCodigosSumarNacer');
-		$this->call('TrazadorasFuncionRetribucion');
+		$this->call('PssCodigosSumarNacer');		
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
 		$this->call('PssGruposDiagnosticos');
@@ -106,8 +105,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('DdjjBackup');
 		$this->call('DdjjDoiu9');
 		$this->call('DdjjSirge');
-		$this->call('IndecPoblacion');
-		$this->call('IndecPoblacionDepartamentos');
+		//$this->call('IndecPoblacion');
+		//$this->call('IndecPoblacionDepartamentos');
 		$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
