@@ -18,7 +18,7 @@ class CreateTableBeneficiariosBeneficiariosCategoriasNacer extends Migration {
 			$table->integer('periodo');
 			$table->smallInteger('tipo_categoria')->nullable();			
 			$table->unique(['periodo','clave_beneficiario']);
-			$table->index(['periodo','clave_beneficiario']);
+			//$table->index(['clave_beneficiario','periodo']);
 			
 			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('CASCADE');
 		});
