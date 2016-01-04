@@ -14,9 +14,7 @@ class CreateGeoDepartamentos extends Migration {
 			$table->increments('id');
 			$table->char('id_provincia' , 2);
 			$table->char('id_departamento' , 3);
-			$table->string('nombre_departamento' , 200);
-			$table->string('id' , 4);
-
+			$table->string('nombre_departamento' , 200);			
 
 			$table->unique(['id_provincia', 'id_departamento']);
 		});

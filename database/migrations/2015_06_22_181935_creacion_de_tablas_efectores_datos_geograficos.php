@@ -17,8 +17,8 @@ class CreacionDeTablasEfectoresDatosGeograficos extends Migration {
 			$table->smallInteger('id_localidad');
 			$table->string('ciudad', 200)->nullable();
 			$table->nullableTimestamps();
-			//$table->float('latitud')->nullable();
-			//$table->float('longitud')->nullable();
+			$table->float('latitud')->nullable();
+			$table->float('longitud')->nullable();
 			//$table->integer('msnm')->nullable();
 
 			$table->foreign('id_departamento')->references('id')->on('geo.departamentos');
