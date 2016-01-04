@@ -19,7 +19,7 @@ class CreateUsuarios extends Migration {
 			$table->string('email', 50)->unique();
 			$table->char('activo', 1);
 			$table->char('id_provincia', 2);
-			$table->char('id_entidad', 2);
+			$table->integer('id_entidad');
 			$table->integer('id_area')->nullable();
 			$table->integer('id_menu');
 			$table->string('ruta_imagen', 100)->nullable();
