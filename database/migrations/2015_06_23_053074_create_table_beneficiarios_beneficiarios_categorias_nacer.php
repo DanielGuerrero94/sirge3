@@ -11,7 +11,7 @@ class CreateTableBeneficiariosBeneficiariosCategoriasNacer extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('beneficiarios.beneficiarios_categorias_nacer', function(Blueprint $table)
+		Schema::create('beneficiarios.categorias_nacer', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
@@ -30,6 +30,6 @@ class CreateTableBeneficiariosBeneficiariosCategoriasNacer extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('beneficiarios.beneficiarios_categorias_nacer');
+		Schema::drop('beneficiarios.categorias_nacer');
 	}
 }

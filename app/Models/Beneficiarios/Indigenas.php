@@ -11,7 +11,7 @@ class Indigenas extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_indigenas';
+	protected $table = 'beneficiarios.indigenas';
 
 	/**
 	 * Primary key asociated with the table.

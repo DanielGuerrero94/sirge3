@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosCeb extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_ceb(clave_beneficiario,periodo,ceb,efector,fecha_ultima_prestacion,devenga_capita, devenga_cantidad_capita)
+        \DB::statement(" INSERT INTO beneficiarios.ceb(clave_beneficiario,periodo,ceb,efector,fecha_ultima_prestacion,devenga_capita, devenga_cantidad_capita)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

@@ -11,7 +11,7 @@ class Embarazos extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_embarazos';
+	protected $table = 'beneficiarios.embarazos';
 
 	/**
 	 * Primary key asociated with the table.

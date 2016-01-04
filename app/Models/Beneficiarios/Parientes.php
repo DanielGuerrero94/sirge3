@@ -11,7 +11,7 @@ class Parientes extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_parientes';
+	protected $table = 'beneficiarios.parientes';
 
 	/**
 	 * Primary key asociated with the table.

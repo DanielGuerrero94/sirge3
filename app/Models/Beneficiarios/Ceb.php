@@ -11,7 +11,7 @@ class Ceb extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_ceb';
+	protected $table = 'beneficiarios.ceb';
 
 	/**
 	 * Primary key asociated with the table.

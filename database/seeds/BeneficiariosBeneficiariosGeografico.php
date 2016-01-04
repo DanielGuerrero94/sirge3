@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosGeografico extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_geografico(clave_beneficiario,calle,numero,manzana,piso,departamento,calle_1,calle_2,barrio,municipio,id_departamento,id_localidad,id_provincia,codigo_postal)
+        \DB::statement(" INSERT INTO beneficiarios.geografico(clave_beneficiario,calle,numero,manzana,piso,departamento,calle_1,calle_2,barrio,municipio,id_departamento,id_localidad,id_provincia,codigo_postal)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

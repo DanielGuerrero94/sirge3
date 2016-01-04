@@ -1,4 +1,4 @@
-﻿UPDATE beneficiarios.beneficiarios_geografico bg 
+﻿UPDATE beneficiarios.geografico bg 
 	SET id_departamento = (
 				SELECT id FROM geo.departamentos gd
 				WHERE gd.id_provincia = bg.id_provincia
@@ -8,7 +8,7 @@
 
 			    
 
-UPDATE beneficiarios.beneficiarios_geografico bg
+UPDATE beneficiarios.geografico bg
 	SET id_localidad = (
 				SELECT gl.id FROM geo.localidades gl
 				INNER JOIN geo.departamentos gd ON bg.id_departamento = gd.id::varchar

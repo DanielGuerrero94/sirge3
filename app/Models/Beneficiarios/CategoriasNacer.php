@@ -11,7 +11,7 @@ class CategoriasNacer extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_categorias_nacer';
+	protected $table = 'beneficiarios.categorias_nacer';
 
 	/**
 	 * Primary key asociated with the table.

@@ -8,7 +8,7 @@ from
 	beneficiarios.periodos p
 	inner join beneficiarios.beneficiarios b 
 		on p.clave_beneficiario = b.clave_beneficiario
-	left join beneficiarios.beneficiarios_ceb c 
+	left join beneficiarios.ceb c 
 		on p.clave_beneficiario || p.periodo :: text = c.clave_beneficiario || c.periodo :: text
 			--and c.periodo = 200412
 --where

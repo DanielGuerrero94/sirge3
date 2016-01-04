@@ -11,7 +11,7 @@ class Score extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_score';
+	protected $table = 'beneficiarios.score';
 
 	/**
 	 * Primary key asociated with the table.

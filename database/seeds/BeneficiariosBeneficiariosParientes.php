@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosParientes extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_parientes(clave_beneficiario,madre_tipo_documento,madre_numero_documento,madre_apellido,madre_nombre,padre_tipo_documento,padre_numero_documento,padre_apellido,padre_nombre,otro_tipo_documento,otro_numero_documento,otro_apellido,otro_nombre,otro_tipo_relacion)
+        \DB::statement(" INSERT INTO beneficiarios.parientes(clave_beneficiario,madre_tipo_documento,madre_numero_documento,madre_apellido,madre_nombre,padre_tipo_documento,padre_numero_documento,padre_apellido,padre_nombre,otro_tipo_documento,otro_numero_documento,otro_apellido,otro_nombre,otro_tipo_relacion)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

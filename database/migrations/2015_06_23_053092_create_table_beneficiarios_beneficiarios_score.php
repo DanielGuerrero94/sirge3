@@ -11,7 +11,7 @@ class CreateTableBeneficiariosBeneficiariosScore extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('beneficiarios.beneficiarios_score', function(Blueprint $table)
+		Schema::create('beneficiarios.score', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
@@ -29,6 +29,6 @@ class CreateTableBeneficiariosBeneficiariosScore extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('beneficiarios.beneficiarios_score');
+		Schema::drop('beneficiarios.score');
 	}
 }

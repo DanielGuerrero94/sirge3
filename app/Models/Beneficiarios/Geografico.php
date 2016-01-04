@@ -11,7 +11,7 @@ class Geografico extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_geografico';
+	protected $table = 'beneficiarios.geografico';
 
 	/**
 	 * Primary key asociated with the table.

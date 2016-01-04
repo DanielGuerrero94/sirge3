@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosContacto extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_contacto(clave_beneficiario,telefono,celular,email,modificado)
+        \DB::statement(" INSERT INTO beneficiarios.contacto(clave_beneficiario,telefono,celular,email,modificado)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosCategoriasNacer extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_categorias_nacer(clave_beneficiario,periodo,tipo_categoria)
+        \DB::statement(" INSERT INTO beneficiarios.categorias_nacer(clave_beneficiario,periodo,tipo_categoria)
 	(
 		SELECT clave_beneficiario,periodo,tipo_categoria
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

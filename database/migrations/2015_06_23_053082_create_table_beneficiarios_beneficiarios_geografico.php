@@ -11,7 +11,7 @@ class CreateTableBeneficiariosBeneficiariosGeografico extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('beneficiarios.beneficiarios_geografico', function(Blueprint $table)
+		Schema::create('beneficiarios.geografico', function(Blueprint $table)
 		{
 			$table->string('clave_beneficiario', 16)->primary();
 			$table->string('calle', 100)->nullable();
@@ -40,6 +40,6 @@ class CreateTableBeneficiariosBeneficiariosGeografico extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('beneficiarios.beneficiarios_geografico');
+		Schema::drop('beneficiarios.geografico');
 	}
 }

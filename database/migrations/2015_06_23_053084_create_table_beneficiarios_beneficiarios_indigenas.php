@@ -11,7 +11,7 @@ class CreateTableBeneficiariosBeneficiariosIndigenas extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('beneficiarios.beneficiarios_indigenas', function(Blueprint $table)
+		Schema::create('beneficiarios.indigenas', function(Blueprint $table)
 		{
 			$table->string('clave_beneficiario', 16)->primary();
 			$table->char('declara_indigena', 1);
@@ -30,6 +30,6 @@ class CreateTableBeneficiariosBeneficiariosIndigenas extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('beneficiarios.beneficiarios_indigenas');
+		Schema::drop('beneficiarios.indigenas');
 	}
 }

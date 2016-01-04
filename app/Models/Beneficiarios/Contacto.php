@@ -11,7 +11,7 @@ class Contacto extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'beneficiarios.beneficiarios_contacto';
+	protected $table = 'beneficiarios.contacto';
 
 	/**
 	 * Primary key asociated with the table.

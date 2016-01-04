@@ -11,7 +11,7 @@ class CreateTableBeneficiariosBeneficiariosParientes extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('beneficiarios.beneficiarios_parientes', function(Blueprint $table)
+		Schema::create('beneficiarios.parientes', function(Blueprint $table)
 		{
 			$table->string('clave_beneficiario', 16)->primary();
 			$table->string('madre_tipo_documento', 5);
@@ -40,6 +40,6 @@ class CreateTableBeneficiariosBeneficiariosParientes extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('beneficiarios.beneficiarios_parientes');
+		Schema::drop('beneficiarios.parientes');
 	}
 }

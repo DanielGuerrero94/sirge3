@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosIndigenas extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_indigenas(clave_beneficiario,declara_indigena,id_lengua, id_tribu)
+        \DB::statement(" INSERT INTO beneficiarios.indigenas(clave_beneficiario,declara_indigena,id_lengua, id_tribu)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

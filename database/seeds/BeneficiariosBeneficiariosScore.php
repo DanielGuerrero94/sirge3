@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosScore extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO beneficiarios.beneficiarios_score(clave_beneficiario,score_riesgo)
+        \DB::statement(" INSERT INTO beneficiarios.score(clave_beneficiario,score_riesgo)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
