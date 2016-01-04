@@ -25,7 +25,7 @@ class CreateLotes extends Migration {
 
 			$table->foreign('id_subida')->references('id_subida')->on('sistema.subidas');
 			$table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			$table->foreign('id_provincia')->references('id_provincia')->on('geo.provincias');
 			$table->foreign('id_estado')->references('id_estado')->on('sistema.estados');
 		});
 	}

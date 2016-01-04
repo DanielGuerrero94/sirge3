@@ -16,7 +16,7 @@ class CreacionDeTablasGeoUbicacionProvincias extends Migration {
 			$table->float('latitud');
 			$table->float('longitud');
 
-			$table->foreign('id_provincia')->references('id_entidad')->on('sistema.entidades');
+			$table->foreign('id_provincia')->references('id_provincia')->on('geo.provincias');
 		});
 	}
 
