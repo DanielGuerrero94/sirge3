@@ -11,7 +11,7 @@ class CreateSistemaEntidades extends Migration {
 	 */
 	public function up() {
 		Schema::create('sistema.entidades', function (Blueprint $table) {
-			$table->increments('id')->primary();
+			$table->increments('id');
 			$table->string('descripcion',50)->unique();
 		});
 	}
