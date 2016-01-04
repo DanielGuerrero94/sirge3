@@ -23,9 +23,9 @@ class CreateTableBeneficiariosBeneficiariosPeriodos extends Migration {
 			$table->char('embarazo', 1)->default('N');
 			//$table->primary(['clave_beneficiario', 'periodo']);
 			
-			$table->index(['clave_beneficiario', 'periodo']);
+			$table->index(['clave_beneficiario', 'periodo'],'beneficiarios_periodos_clave_beneficiario_periodo_index');
 			$table->index(['clave_beneficiario', 'periodo' , 'activo']);
-			$table->unique(['clave_beneficiario', 'periodo']);
+			$table->unique(['clave_beneficiario', 'periodo'],'beneficiarios_periodos_clave_beneficiario_periodo_unique');
 			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
 		});
 	}
