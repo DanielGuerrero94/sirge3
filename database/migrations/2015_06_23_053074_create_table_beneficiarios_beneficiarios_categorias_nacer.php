@@ -16,11 +16,10 @@ class CreateTableBeneficiariosBeneficiariosCategoriasNacer extends Migration {
 			$table->increments('id');
 			$table->string('clave_beneficiario', 16);
 			$table->integer('periodo');
-			$table->smallInteger('tipo_categoria')->nullable();
-			
-			$table->index(['clave_beneficiario', 'periodo']);
+			$table->smallInteger('tipo_categoria')->nullable();			
+			//$table->index(['clave_beneficiario', 'periodo']);
 			$table->unique(['clave_beneficiario', 'periodo']);
-			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('cascade');
+			$table->foreign('clave_beneficiario')->references('clave_beneficiario')->on('beneficiarios.beneficiarios')->onDelete('CASCADE');
 		});
 	}
 
