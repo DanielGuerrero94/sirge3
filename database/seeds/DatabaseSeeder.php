@@ -12,10 +12,7 @@ class DatabaseSeeder extends Seeder {
 	public function run() {
 		Model::unguard();
 
-		// $this->call('UserTableSeeder');
-		//$this->call('ImportTableDepartamentosSchemaGeoSeeder');
-		//$this->call('ImportTableEntidadesSchemaGeoSeeder');
-		/*$this->call('SistemaProvinciasSeeder');
+		$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
 		$this->call('PssCodigosSeeder');
@@ -91,9 +88,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosPeriodos');
 		//$this->call('BeneficiariosBeneficiariosPeriodosYCeb2015');
 		$this->call('BeneficiariosBeneficiariosScore');
-		$this->call('BeneficiariosResumenBeneficiarios');*/
+		$this->call('BeneficiariosResumenBeneficiarios');
 		$this->call('PrestacionesP');
-		/*$this->call('ComprobantesC');
+		$this->call('ComprobantesC');
 		$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
 		$this->call('FondosA');	
@@ -116,7 +113,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('LogsLogins');
 		$this->call('LogsQueriesDinamicos');
 		$this->call('EfectoresAddendas');
-		%this->call('EfectoresEfectoresAddendas');*/
+		%this->call('EfectoresEfectoresAddendas');
 		//$this->call('OspProvincias');
 
 		Model::reguard();
