@@ -17,10 +17,10 @@ class CreateGraficosTable extends Migration
             $table->string('titulo' , 100)->nullable();
             $table->text('descripcion')->nullable();
             $table->string('form')->nullable();
-            $table->string('css')->nullable();
-
-            \DB::statement(" ALTER TABLE graficos.graficos ADD COLUMN tags character varying[] ;");                         
+            $table->string('css')->nullable();            
         });
+
+        \DB::statement(" ALTER TABLE graficos.graficos ADD COLUMN tags character varying[] ;");                     
     }
 
     /**
