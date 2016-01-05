@@ -11,6 +11,7 @@ class CreateTableProfeBeneficiarios extends Migration {
 	 */
 	public function up()
 	{
+		/*
 		Schema::create('profe.beneficiarios', function(Blueprint $table)
 		{
 			$table->char('tipo_documento', 3)->nullable();
@@ -28,6 +29,7 @@ class CreateTableProfeBeneficiarios extends Migration {
 			$table->integer('codigo_os')->unsigned()->default(997001);
 			$table->integer('lote')->nullable();
 		});
+		*/
 	}
 
 	/**
@@ -37,6 +39,6 @@ class CreateTableProfeBeneficiarios extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('profe.beneficiarios');
+		//Schema::drop('profe.beneficiarios');
 	}
 }

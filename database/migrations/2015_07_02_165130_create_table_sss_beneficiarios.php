@@ -11,6 +11,7 @@ class CreateTableSssBeneficiarios extends Migration {
 	 */
 	public function up()
 	{
+		/*
 		Schema::create('sss.beneficiarios', function(Blueprint $table)
 		{
 			$table->bigInteger('cuil_beneficiario')->nullable()->unsigned();
@@ -30,6 +31,7 @@ class CreateTableSssBeneficiarios extends Migration {
 			$table->bigInteger('cuit_empleador');
 			$table->integer('lote')->nullable();
 		});
+		*/
 	}
 
 	/**
