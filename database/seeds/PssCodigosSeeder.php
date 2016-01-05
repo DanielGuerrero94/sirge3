@@ -10,12 +10,12 @@ class PssCodigosSeeder extends Seeder {
 	 */
 	public function run() {
 
-		\DB::statement(" INSERT INTO pss.codigos(codigo_prestacion, tipo, objeto, diagnostico, codigo_logico)
+		\DB::statement(" INSERT INTO pss.codigos(codigo_prestacion, tipo, objeto, diagnostico, codigo_logico, descripcion_grupal ,created_at, updated_at)
 	 (
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
-		    'SELECT codigo_prestacion, tipo, objeto, diagnostico, codigo_logico, (SELECT descripcion FROM pss.codigos_grupos pssv WHERE pssn.codigo_prestacion = pssv.codigo_prestacion LIMIT 1) as descripcion_grupal, inserted_at, updated_at
-			    FROM pss.codigos pssn')
+		    'SELECT codigo_prestacion, tipo, objeto, diagnostico, codigo_logico, descripcion_grupal, inserted_at, updated_at
+			    FROM pss.codigos')
 		    AS sirge_codigos( codigo_prestacion character varying(11),
 							  tipo character(2),
 							  objeto character(4),
