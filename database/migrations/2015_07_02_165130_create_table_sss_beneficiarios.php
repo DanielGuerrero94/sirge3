@@ -41,6 +41,6 @@ class CreateTableSssBeneficiarios extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('sss.beneficiarios');
+		//Schema::drop('sss.beneficiarios');
 	}
 }
