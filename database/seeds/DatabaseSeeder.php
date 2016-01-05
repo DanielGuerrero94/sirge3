@@ -12,10 +12,10 @@ class DatabaseSeeder extends Seeder {
 	public function run() {
 		Model::unguard();
 
-		$this->call('SistemaProvinciasSeeder');
+		/*$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
-		$this->call('PssCodigosSeeder');
+		$this->call('PssCodigosSeeder');*/
 		$this->call('SistemaClasesDocumento');
 		$this->call('PssGruposEtarios');
 		$this->call('SistemaSexos');
