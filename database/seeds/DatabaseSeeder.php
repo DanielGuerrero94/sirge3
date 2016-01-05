@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
-		$this->call('PssCodigosSeeder');
+		/*$this->call('PssCodigosSeeder');
 		$this->call('SistemaClasesDocumento');
 		$this->call('PssGruposEtarios');
 		$this->call('SistemaSexos');
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PssCodigosOdp');
 		$this->call('PssCodigosPpac');
 		$this->call('PssCodigosPriorizadas');
-		$this->call('PssCodigosSumarNacer');		
+		$this->call('PssCodigosSumarNacer');
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
 		$this->call('PssGruposDiagnosticos');
@@ -93,9 +93,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('ComprobantesC');
 		$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
-		$this->call('FondosA');	
-		$this->call('PucoObrasSociales');		
-		$this->call('PucoObrasSocialesProvinciales');		
+		$this->call('FondosA');
+		$this->call('PucoObrasSociales');
+		$this->call('PucoObrasSocialesProvinciales');
 		$this->call('CompromisoAnualMetasCodigosValidos');
 		$this->call('CompromisoAnualMetasDescentralizacion');
 		$this->call('CompromisoAnualMetasFacturacion');
@@ -113,7 +113,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('LogsLogins');
 		$this->call('LogsQueriesDinamicos');
 		$this->call('EfectoresAddendas');
-		%this->call('EfectoresEfectoresAddendas');
+		$this->call('EfectoresEfectoresAddendas');*/
 		//$this->call('OspProvincias');
 
 		Model::reguard();
