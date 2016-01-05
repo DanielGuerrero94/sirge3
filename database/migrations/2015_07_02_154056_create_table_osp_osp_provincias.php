@@ -11,6 +11,7 @@ class CreateTableOspOspProvincias extends Migration {
 	 */
 	public function up()
 	{
+		/*
 		$default = (int) 901001;
 
 		for ($i = 1; $i <= 24; $i++)
@@ -67,6 +68,7 @@ class CreateTableOspOspProvincias extends Migration {
 
 			$default += 1000;
 		}
+		*/
 	}
 
 	/**
@@ -76,6 +78,7 @@ class CreateTableOspOspProvincias extends Migration {
 	 */
 	public function down()
 	{
+		/*
 		for ($i = 1; $i <= 24; $i++)
 		{
 			if ($i < 10)
@@ -88,5 +91,6 @@ class CreateTableOspOspProvincias extends Migration {
 			}
 			Schema::drop('osp.osp_'.$prov);
 		}
+		*/
 	}
 }

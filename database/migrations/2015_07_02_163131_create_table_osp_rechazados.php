@@ -11,6 +11,7 @@ class CreateTableOspRechazados extends Migration {
 	 */
 	public function up()
 	{
+		/*
 		Schema::create('osp.rechazados', function(Blueprint $table)
 		{
 			$table->char('id_provincia', 2)->nullable();
@@ -20,6 +21,7 @@ class CreateTableOspRechazados extends Migration {
 		});
 
 		\DB::statement(" ALTER TABLE osp.rechazados ADD COLUMN fecha_rechazo timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone ");
+		*/
 	}
 
 	/**
@@ -29,6 +31,6 @@ class CreateTableOspRechazados extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('osp.rechazados');
+		//Schema::drop('osp.rechazados');
 	}
 }

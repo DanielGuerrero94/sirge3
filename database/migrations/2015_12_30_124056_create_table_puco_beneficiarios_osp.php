@@ -14,22 +14,23 @@ class CreateTablePucoBeneficiariosOsp extends Migration
     {
         Schema::create('puco.beneficiarios_osp', function(Blueprint $table)
         {
+
             $table->string('tipo_documento', 3);
-            $table->bigInteger('numero_documento'); 
-            $table->string('nombre_apellido',50);
-            $table->char('sexo',1);
+            $table->bigInteger('numero_documento')->unsigned();
+            $table->string('nombre_apellido', 50)->nullable();
+            $table->char('sexo', 1);
             $table->integer('codigo_os')->nullable();
-            $table->string('codigo_postal',8);
-            $table->char('id_provincia',2)->nullable();
-            $table->char('tipo_afiliado',1);
-            $table->integer('lote');
+            $table->string('codigo_postal', 8);
+            $table->char('id_provincia', 2)->nullable();
+            $table->char('tipo_afiliado', 1);
+            $table->integer('lote')->nullable();
             $table->foreign('codigo_os')
             ->references('codigo_osp')
             ->on('puco.obras_sociales');
             $table->foreign('tipo_documento')
             ->references('tipo_documento')
-            ->on('sistema.tipo_documento');                        
-        });
+            ->on('sistema.tipo_documento');
+        });         
     }
 
     /**
