@@ -13,10 +13,10 @@ class SistemaProvinciasSeeder extends Seeder {
 		\DB::statement(" INSERT INTO geo.provincias(id_provincia,descripcion,id_region)
 						 (
 							SELECT *
-							FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
-							    'SELECT id_provincia, nombre, id_region
-								    FROM sistema.provincias')
-							    AS sirge_provincias(id_provincia character varying(2), descripcion character varying(100), id_region integer)
+							FROM dblink('dbname=sirge host=192.6.0.66 user=postgres password=110678',
+							    'SELECT id_entidad, descripcion, id_region, (SELECT ll FROM geo.provincias gp WHERE p.id_entidad = gp.id_provincia) as ll
+								    FROM sistema.entidades p where id_entidad::integer < 25')
+							    AS sirge_provincias(id_provincia character varying(2), descripcion character varying(100), id_region integer, ll character varying(100))
 						 )
         			   	");
 	}
