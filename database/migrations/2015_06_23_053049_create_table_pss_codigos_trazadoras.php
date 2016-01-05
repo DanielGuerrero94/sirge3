@@ -39,6 +39,6 @@ class CreateTablePssCodigosTrazadoras extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		//Schema::drop('pss.codigos_trazadoras');
+		Schema::drop('pss.codigos_trazadoras');
 	}
 }
