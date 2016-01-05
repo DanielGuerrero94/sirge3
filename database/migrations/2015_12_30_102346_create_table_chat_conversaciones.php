@@ -17,7 +17,7 @@ class CreateTableChatConversaciones extends Migration
             $table->timestamps();
         });
 
-        \DB::statement(" ALTER TABLE chat.conversaciones ADD COLUMN usuarios integer[] ADD CONSTRAINT UNIQUE (usuarios);");
+        \DB::statement(" ALTER TABLE chat.conversaciones ADD COLUMN usuarios integer[], ADD CONSTRAINT UNIQUE (usuarios);");
     }
 
     /**
