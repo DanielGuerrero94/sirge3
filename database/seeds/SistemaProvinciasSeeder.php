@@ -10,7 +10,7 @@ class SistemaProvinciasSeeder extends Seeder {
 	 */
 	public function run()
 	{
-		\DB::statement(" INSERT INTO geo.provincias(id_provincia,descripcion,id_region)
+		\DB::statement(" INSERT INTO geo.provincias(id_provincia,descripcion,id_region,latlong)
 						 (
 							SELECT *
 							FROM dblink('dbname=sirge host=192.6.0.66 user=postgres password=110678',
