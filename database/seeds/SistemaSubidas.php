@@ -10,7 +10,7 @@ class SistemaSubidas extends Seeder {
 	 */
 	public function run() {
 
-		/*\DB::statement("INSERT INTO sistema.subidas(id_subida,id_usuario,fecha_subida,id_padron,nombre_original,nombre_actual,size,id_estado)
+		\DB::statement("INSERT INTO sistema.subidas(id_subida,id_usuario,fecha_subida,id_padron,nombre_original,nombre_actual,size,id_estado)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
@@ -29,7 +29,7 @@ class SistemaSubidas extends Seeder {
 				 nombre_actual text,
 				 size double precision,
 				 id_estado integer)
-	);");*/
+	);");
 
 	/*	\DB::statement("INSERT INTO sistema.subidas_aceptadas(id_subida,id_usuario,fecha_aceptado)
 	(
