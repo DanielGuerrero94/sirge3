@@ -12,7 +12,7 @@ class CreateModulos extends Migration {
 	public function up() {
 		Schema::create('sistema.modulos', function (Blueprint $table) {
 			$table->increments('id_modulo');
-			$table->integer('id_padre');
+			$table->integer('id_padre')->nullable();
 			$table->char('arbol', 1)->nullable();
 			$table->integer('nivel_1');
 			$table->integer('nivel_2')->nullable();
@@ -20,7 +20,6 @@ class CreateModulos extends Migration {
 			$table->string('modulo', 100)->nullable();
 			$table->string('icono' , 100)->nullable();
 			$table->nullableTimestamps();
-
 			$table->unique(['nivel_1', 'nivel_2']);
 		});
 	}
