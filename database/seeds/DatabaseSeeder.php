@@ -44,8 +44,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresConvenioAdministrativo');*/
 		$this->call('EfectoresDatosGeograficos');
 		$this->call('EfectoresDescentralizacion');
-		$this->call('EfectoresEmail');
-		$this->call('EfectoresOperaciones');
+		$this->call('EfectoresEmail');		
 		$this->call('EfectoresReferentes');
 		$this->call('EfectoresTelefonos');
 		$this->call('SistemaEstados');

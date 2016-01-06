@@ -13,7 +13,7 @@ class EfectoresEmail extends Seeder {
 (
 	SELECT *
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-	    'SELECT id_email,id_efector,email,observaciones
+	    'SELECT id_email,id_efector,trim(email),observaciones
 		    FROM efectores.email')
 	    AS migracion(id_email integer,
   id_efector integer,
