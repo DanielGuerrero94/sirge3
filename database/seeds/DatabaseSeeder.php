@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaClasesDocumento');
 		$this->call('PssGruposEtarios');
 		$this->call('SistemaSexos');
-		$this->call('SistemaTipoDocumento');*/
+		$this->call('SistemaTipoDocumento');
 		$this->call('BeneficiariosBeneficiarios');
-		$this->call('SistemaMenues');
-		$this->call('SistemaTipoEntidad');
+		$this->call('SistemaMenues');*/
+		//$this->call('SistemaTipoEntidad');
 		$this->call('SistemaEntidades');		
 		$this->call('SistemaUsuarios');
 		$this->call('GeoDepartamentos');
