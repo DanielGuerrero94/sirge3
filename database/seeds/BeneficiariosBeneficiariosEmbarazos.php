@@ -11,7 +11,7 @@ class BeneficiariosBeneficiariosEmbarazos extends Seeder
      */
     public function run()
     {
-         \DB::statement(" INSERT INTO beneficiarios.embarazos(clave_beneficiario,id_embarazo,fecha_diagnostico_embarazo,semanas_embarazo,fecha_probable_parto,fecha_efectiva_parto,fum,periodo)
+         \DB::statement(" INSERT INTO beneficiarios.embarazos(clave_beneficiario,fecha_diagnostico_embarazo,semanas_embarazo,fecha_probable_parto,fecha_efectiva_parto,fum,periodo)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
