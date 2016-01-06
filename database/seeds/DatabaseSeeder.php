@@ -76,10 +76,10 @@ class DatabaseSeeder extends Seeder {
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
 		$this->call('PssGruposDiagnosticos');*/
-		$this->call('BeneficiariosBeneficiariosBajas');
-		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
-		$this->call('BeneficiariosBeneficiariosCeb');
-		$this->call('BeneficiariosBeneficiariosContacto');
+		//$this->call('BeneficiariosBeneficiariosBajas');
+		//$this->call('BeneficiariosBeneficiariosCategoriasNacer');
+		//$this->call('BeneficiariosBeneficiariosCeb');
+		//$this->call('BeneficiariosBeneficiariosContacto');
 		$this->call('BeneficiariosBeneficiariosEmbarazos');
 		$this->call('BeneficiariosBeneficiariosGeografico');
 		$this->call('BeneficiariosBeneficiariosIndigenas');
