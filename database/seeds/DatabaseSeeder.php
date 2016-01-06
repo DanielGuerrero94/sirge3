@@ -52,10 +52,10 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaRegiones');
 		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
-		$this->call('SistemaModulosMenu');*/
+		$this->call('SistemaModulosMenu');
 		$this->call('SistemaComentarios');
-		$this->call('SistemaSugerencias');
-		/*$this->call('SistemaSubidas');
+		$this->call('SistemaSugerencias');*/
+		$this->call('SistemaSubidas');
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
 		$this->call('SistemaLotesRechazados');
