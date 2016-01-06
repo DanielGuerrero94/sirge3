@@ -50,9 +50,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaEstados');
 		$this->call('SistemaPadrones');
 		$this->call('SistemaRegiones');
-		$this->call('SistemaParametros');*/
+		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
-		$this->call('SistemaModulosMenu');
+		$this->call('SistemaModulosMenu');*/
 		$this->call('SistemaComentarios');
 		$this->call('SistemaSugerencias');
 		/*$this->call('SistemaSubidas');
