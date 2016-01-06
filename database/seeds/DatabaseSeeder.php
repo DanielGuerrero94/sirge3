@@ -31,15 +31,15 @@ class DatabaseSeeder extends Seeder {
 		$this->call('GeoGepDepartamentos');
 		$this->call('GeoLocalidades');		
 		$this->call('EfectoresCategoriasPpac');
-		$this->call('EfectoresNeonatales');*/
-		$this->call('EfectoresObstetricos');
-		$this->call('EfectoresEfectoresPpac');
+		$this->call('EfectoresNeonatales');
+		$this->call('EfectoresObstetricos');*/		
 		$this->call('EfectoresTipoCategorizacion');
 		$this->call('EfectoresTipoDependenciaAdministrativa');
 		$this->call('EfectoresTipoEfecotr');
 		$this->call('EfectoresTipoEstado');
 		$this->call('EfectoresTipoTelefono');
 		$this->call('EfectoresEfectores');
+		$this->call('EfectoresEfectoresPpac');
 		$this->call('EfectoresCompromisoGestion');
 		$this->call('EfectoresConvenioAdministrativo');
 		$this->call('EfectoresDatosGeograficos');
