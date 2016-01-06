@@ -61,8 +61,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaLotesRechazados');
 		$this->call('PssLineasCuidado');
 		$this->call('PssModulosCCC');
-		$this->call('PssTipoPrestacion');*/
-		$this->call('PssDiagnosticosSeeder');
+		$this->call('PssTipoPrestacion');*/		
 		$this->call('PssCodigosSeeder');
 		$this->call('PssCodigosAnexo');
 		$this->call('PssCodigosCatastroficos');
