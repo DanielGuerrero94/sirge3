@@ -15,6 +15,7 @@ class CreateRegiones extends Migration
         Schema::create('sistema.regiones', function (Blueprint $table) {
             $table->increments('id_region');
             $table->string('descripcion' , 100)->unique();
+            $table->nullableTimestamps();
         });
     }
 

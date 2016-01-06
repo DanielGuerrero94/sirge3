@@ -15,7 +15,7 @@ class CreatePadrones extends Migration
         Schema::create('sistema.padrones', function (Blueprint $table) {
             $table->increments('id_padron');
             $table->string('descripcion' , 100)->unique();
-            $table->timestamps();
+            $table->nullableTimestamps();
         });
     }
 
