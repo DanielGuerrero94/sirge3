@@ -56,18 +56,18 @@ class SistemaSubidas extends Seeder {
 	);");
 	*/
 
-		\DB::statement("INSERT INTO sistema.subidas_osp(id_subida,codigo_osp,id_archivo,nombre_backup)
+		\DB::statement("INSERT INTO sistema.subidas_osp(id_subida,codigo_osp,id_archivo,created_at,updated_at)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-		    'SELECT o.id_carga,codigo_os,id_archivo_sss,nombre_backup
+		    'SELECT o.id_carga,codigo_os,id_archivo_sss,now() as created_at, now() as updated_at
 	 			FROM sistema.cargas_archivos l
 	 			INNER JOIN sistema.cargas_archivos_osp o on o.id_carga = l.id_carga AND id_padron = 6 ')
 		    AS migracion(id_subida integer,
 				 codigo_osp integer,
 				 id_archivo smallint,
-				 nombre_backup character varying(100)
-				 )
+				 created_at timestamp(0) without time zone,
+  				 updated_at timestamp(0) without time zone)				 
 	);");
 	}
 }
