@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('LogsLogins');
 		$this->call('LogsQueriesDinamicos');
 		$this->call('EfectoresAddendas');
-		$this->call('EfectoresEfectoresAddendas');*/
+		$this->call('EfectoresEfectoresAddendas');
 		//$this->call('OspProvincias');
 
 		Model::reguard();
