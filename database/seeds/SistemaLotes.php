@@ -14,7 +14,7 @@ class SistemaLotes extends Seeder {
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-		    'SELECT lote,(select id_carga from sistema.cargas_archivos c where c.lote = l.lote),id_usuario_proceso,id_provincia,coalesce(id_estado,2),registros_insertados,registros_rechazados,coalesce(inicio,now()),fin
+		    'SELECT lote,(select id_carga from sistema.cargas_archivos c where c.lote = l.lote),id_usuario_proceso,case id_provincia when ''25'' then ''01'' else id_provincia end as id_provincia,coalesce(id_estado,2),registros_insertados,registros_rechazados,coalesce(inicio,now()),fin
 			    FROM sistema.lotes l')
 		    AS migracion( lote integer,
 	  id_subida integer,
