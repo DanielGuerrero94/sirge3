@@ -16,7 +16,7 @@ class BeneficiariosBeneficiariosGeografico extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,calle,numero,manzana,piso,departamento,calle_1,calle_2,barrio,municipio,id_departamento,id_localidad,id_provincia,codigo_postal
-			    FROM beneficiarios.beneficiarios_geografico')
+			    FROM beneficiarios.beneficiarios_geografico limit 10000')
 		    AS migracion(clave_beneficiario character varying(16),
 				  calle character varying(100),
 				  numero character varying(10),

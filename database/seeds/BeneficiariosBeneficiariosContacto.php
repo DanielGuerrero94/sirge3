@@ -16,7 +16,7 @@ class BeneficiariosBeneficiariosContacto extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,telefono,celular,email,modificado
-			    FROM beneficiarios.beneficiarios_contacto')
+			    FROM beneficiarios.beneficiarios_contacto limit 10000')
 		    AS migracion(clave_beneficiario character varying(16),
 				  telefono character varying(50),
 				  celular character varying(50),

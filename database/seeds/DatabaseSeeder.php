@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaLotesRechazados');
 		$this->call('PssLineasCuidado');
 		$this->call('PssModulosCCC');
-		$this->call('PssTipoPrestacion');*/		
+		$this->call('PssTipoPrestacion');	
 		$this->call('PssCodigosSeeder');
 		$this->call('PssCodigosAnexo');
 		$this->call('PssCodigosCatastroficos');
@@ -75,7 +75,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PssCodigosSumarNacer');
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
-		$this->call('PssGruposDiagnosticos');
+		$this->call('PssGruposDiagnosticos');*/
 		$this->call('BeneficiariosBeneficiariosBajas');
 		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
 		$this->call('BeneficiariosBeneficiariosCeb');
@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('BeneficiariosBeneficiariosPeriodosYCeb2015');
 		$this->call('BeneficiariosBeneficiariosScore');
 		$this->call('BeneficiariosResumenBeneficiarios');
-		$this->call('PrestacionesP');
+		/*$this->call('PrestacionesP');
 		$this->call('ComprobantesC');
 		$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
@@ -113,7 +113,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('LogsQueriesDinamicos');
 		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
-		//$this->call('OspProvincias');
+		//$this->call('OspProvincias');*/
 
 		Model::reguard();
 	}

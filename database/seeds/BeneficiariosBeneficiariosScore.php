@@ -16,7 +16,7 @@ class BeneficiariosBeneficiariosScore extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,score_riesgo
-			    FROM beneficiarios.beneficiarios_score')
+			    FROM beneficiarios.beneficiarios_score limit 10000')
 		    AS migracion(clave_beneficiario character varying(16),
 				  score_riesgo smallint)			
 	); 	");
