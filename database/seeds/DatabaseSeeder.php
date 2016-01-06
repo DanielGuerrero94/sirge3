@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('GeoLocalidades');		
 		$this->call('EfectoresCategoriasPpac');
 		$this->call('EfectoresNeonatales');
-		$this->call('EfectoresObstetricos');*/		
+		$this->call('EfectoresObstetricos');		
 		$this->call('EfectoresTipoCategorizacion');
 		$this->call('EfectoresTipoDependenciaAdministrativa');
 		$this->call('EfectoresTipoEfecotr');
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresEfectores');
 		$this->call('EfectoresEfectoresPpac');
 		$this->call('EfectoresCompromisoGestion');
-		$this->call('EfectoresConvenioAdministrativo');
+		$this->call('EfectoresConvenioAdministrativo');*/
 		$this->call('EfectoresDatosGeograficos');
 		$this->call('EfectoresDescentralizacion');
 		$this->call('EfectoresEmail');
