@@ -9,7 +9,7 @@ class GeoDepartamentos extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement(" INSERT INTO geo.departamentos(id_provincia,id_departamento,nombre_departamento)
+		\DB::statement(" INSERT INTO geo.departamentos(id,id_provincia,id_departamento,nombre_departamento)
  (
 	SELECT *
 	FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',

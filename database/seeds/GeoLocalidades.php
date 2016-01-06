@@ -9,7 +9,7 @@ class GeoLocalidades extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement(" INSERT INTO geo.localidades(id_provincia,id_departamento,id_localidad,nombre_localidad)
+		\DB::statement(" INSERT INTO geo.localidades(id,id_provincia,id_departamento,id_localidad,nombre_localidad)
 (
 	SELECT *
 	FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',

@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiarios');
 		$this->call('SistemaMenues');
 		//$this->call('SistemaTipoEntidad');
-		$this->call('SistemaEntidades');*/		
-		$this->call('SistemaUsuarios');
+		$this->call('SistemaEntidades');		
+		$this->call('SistemaUsuarios');*/
 		$this->call('GeoDepartamentos');
 		$this->call('GeoEntidades');
 		$this->call('GeoGeojson');
