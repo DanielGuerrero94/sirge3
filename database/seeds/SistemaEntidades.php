@@ -17,7 +17,7 @@ class SistemaEntidades extends Seeder
 		FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',
 		    'SELECT id,descripcion
 			    FROM sistema.entidades')
-		    AS migracion(id character(2),				  				  
+		    AS migracion(id integer,				  				  
 				  descripcion character varying(50))
 	);");
     }
