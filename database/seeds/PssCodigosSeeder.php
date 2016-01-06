@@ -26,6 +26,5 @@ class PssCodigosSeeder extends Seeder {
 							  updated_at date)
 							)
         	");
-
 	}
 }

@@ -55,13 +55,14 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaModulosMenu');
 		$this->call('SistemaComentarios');
 		$this->call('SistemaSugerencias');
-		$this->call('SistemaSubidas');*/
+		$this->call('SistemaSubidas');
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
 		$this->call('SistemaLotesRechazados');
 		$this->call('PssLineasCuidado');
 		$this->call('PssModulosCCC');
-		$this->call('PssTipoPrestacion');
+		$this->call('PssTipoPrestacion');*/
+		$this->call('PssCodigosSeeder');
 		$this->call('PssCodigosAnexo');
 		$this->call('PssCodigosCatastroficos');
 		$this->call('PssCodigosCCC');
