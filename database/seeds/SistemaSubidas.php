@@ -31,7 +31,7 @@ class SistemaSubidas extends Seeder {
 				 id_estado integer)
 	);");
 
-		\DB::statement("INSERT INTO sistema.subidas_aceptadas(id_subida,id_usuario,fecha_aceptado)
+	/*	\DB::statement("INSERT INTO sistema.subidas_aceptadas(id_subida,id_usuario,fecha_aceptado)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
@@ -54,6 +54,7 @@ class SistemaSubidas extends Seeder {
 				 fecha_eliminado timestamp(0) without time zone
 				 )
 	);");
+	*/
 
 		\DB::statement("INSERT INTO sistema.subidas_osp(id_subida,codigo_osp,id_archivo,nombre_backup)
 	(
