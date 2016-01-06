@@ -41,12 +41,12 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresEfectores');
 		$this->call('EfectoresEfectoresPpac');
 		$this->call('EfectoresCompromisoGestion');
-		$this->call('EfectoresConvenioAdministrativo');*/
+		$this->call('EfectoresConvenioAdministrativo');
 		$this->call('EfectoresDatosGeograficos');
 		$this->call('EfectoresDescentralizacion');
 		$this->call('EfectoresEmail');		
 		$this->call('EfectoresReferentes');
-		$this->call('EfectoresTelefonos');
+		$this->call('EfectoresTelefonos');*/
 		$this->call('SistemaEstados');
 		$this->call('SistemaPadrones');
 		$this->call('SistemaRegiones');
