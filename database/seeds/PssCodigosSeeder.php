@@ -19,7 +19,7 @@ class PssCodigosSeeder extends Seeder {
 		    AS sirge_codigos( codigo_prestacion character varying(11),
 							  tipo character(2),
 							  objeto character(4),
-							  diagnostico character(5),
+							  diagnostico character varying(5),
 							  codigo_logico character(1),
 							  descripcion_grupal text,
 							  inserted_at date,
