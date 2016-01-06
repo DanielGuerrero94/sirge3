@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaMenues');
 		//$this->call('SistemaTipoEntidad');
 		$this->call('SistemaEntidades');		
-		$this->call('SistemaUsuarios');*/
+		$this->call('SistemaUsuarios');
 		$this->call('GeoDepartamentos');
 		$this->call('GeoEntidades');
 		$this->call('GeoGeojson');
-		$this->call('GeoGepDepartamentos');
+		$this->call('GeoGepDepartamentos');*/
 		$this->call('GeoLocalidades');
 		$this->call('GeoUbicacionProvincias');
 		$this->call('EfectoresCategoriasPpac');
