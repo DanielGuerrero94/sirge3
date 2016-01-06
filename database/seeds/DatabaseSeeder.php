@@ -47,8 +47,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresEmail');		
 		$this->call('EfectoresReferentes');
 		$this->call('EfectoresTelefonos');
-		$this->call('SistemaEstados');*/
-		$this->call('SistemaPadrones');
+		$this->call('SistemaEstados');
+		$this->call('SistemaPadrones');*/
 		$this->call('SistemaRegiones');
 		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
