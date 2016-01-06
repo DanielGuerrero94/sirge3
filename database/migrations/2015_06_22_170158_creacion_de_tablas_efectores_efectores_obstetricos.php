@@ -11,8 +11,10 @@ class CreacionDeTablasEfectoresEfectoresObstetricos extends Migration {
 	 */
 	public function up() {
 		Schema::create('efectores.efectores_obstetricos', function (Blueprint $table) {
-			$table->char('siisa', 14)->primary();
-			$table->integer('id_categoria')->unique();
+			$table->increments('id');
+			$table->char('siisa', 14);
+			$table->integer('id_categoria');
+			$table->unique(['siisa','id_categoria']);
 		});
 	}
 

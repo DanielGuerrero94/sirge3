@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('GeoGeojson');
 		$this->call('GeoGepDepartamentos');
 		$this->call('GeoLocalidades');		
-		$this->call('EfectoresCategoriasPpac');*/
-		$this->call('EfectoresNeonatales');
+		$this->call('EfectoresCategoriasPpac');
+		$this->call('EfectoresNeonatales');*/
 		$this->call('EfectoresObstetricos');
 		$this->call('EfectoresEfectoresPpac');
 		$this->call('EfectoresTipoCategorizacion');
