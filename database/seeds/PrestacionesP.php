@@ -12,7 +12,7 @@ class PrestacionesP extends Seeder
     public function run()
     {
         
-		for ($i = 17; $i <= 24; $i++)
+		for ($i = 1; $i <= 24; $i++)
 		{
 			if ($i < 10)
 			{
