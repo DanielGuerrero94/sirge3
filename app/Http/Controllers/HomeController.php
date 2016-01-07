@@ -113,7 +113,7 @@ class HomeController extends Controller
         $dt = new \DateTime();
         $dt->modify('-1 month');
         $interval['max'] = $dt->format('Ym');
-        $dt->modify('-5 months');
+        $dt->modify('-11 months');
         $interval['min'] = $dt->format('Ym');
 
         return $interval;
@@ -161,9 +161,12 @@ class HomeController extends Controller
         foreach($periodos as $key => $periodo){
             $chart[0]['name'] = 'Prest. fact.';
             $chart[0]['data'][$key] = $periodo->cf;
+            $chart[0]['marker']['enabled'] = false;
 
+            /*
             $chart[1]['name'] = 'Monto. fact.';
-            $chart[1]['data'][$key] = (int)$periodo->mf;
+            $chart[1]['data'][$key] = (float)$periodo->mf/100;
+            */
         }
         return json_encode($chart);
     }
@@ -191,8 +194,8 @@ class HomeController extends Controller
     protected function getMesesArray(){
 
         $dt = new \DateTime();
-        $dt->modify('-7 month');
-        for ($i = 0 ; $i < 6 ; $i ++){
+        $dt->modify('-13 months');
+        for ($i = 0 ; $i < 12 ; $i ++){
         $dt->modify('+1 month');
 
             $meses[$i] = strftime("%b" , $dt->getTimeStamp());

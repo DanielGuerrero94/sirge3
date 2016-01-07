@@ -13,9 +13,8 @@
                             <thead>
                                 <tr>
                                     <th>Provincia</th>
-                                    <th>Código</th>
-                                    <th>Cantidad</th>
-                                    <th>Monto</th>
+                                    <th>Periodo</th>
+                                    <th>Prest. Fact.</th>
                                 </tr>
                             </thead>
                         </table>                        
@@ -52,16 +51,15 @@
     var dt = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax : 'grafico-5-table/{{$periodo}}',
+            ajax : 'grafico-6-table',
             columns: [
-                { data: 'id_provincia', name: 'id_provincia' },
-                { data: 'codigo_prestacion' , name: 'codigo_prestacion'},
-                { data: 'cantidad'},
-                { data: 'monto'}
+                { data: 'nombre', name: 'nombre' },
+                { data: 'periodo' , name: 'periodo'},
+                { data: 'cantidad'}
             ]
         });
     
-    $.get('grafico-5/{{$periodo}}' , function(data){
+    $.get('grafico-6' , function(data){
 
         $('#container').highcharts({
             chart: {

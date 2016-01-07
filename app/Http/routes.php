@@ -167,12 +167,20 @@ Route::get('pss-grupos-table' , 'PssController@getGruposTabla');
 Route::get('pss-grupos-detalle/{id}' , 'PssController@getDetalleGrupos');
 
 /** 
- * CEB
+ * ANALISIS CEB
  */
 Route::get('ceb-resumen-periodo' , 'CebController@getPeriodo');
 Route::get('ceb-resumen/{periodo}' , 'CebController@getResumen');
 Route::get('ceb-resumen-table/{periodo}' , 'CebController@getResumenTabla');
 Route::get('ceb-evolucion' , 'CebController@getEvolucion');
+
+/**
+ * ANALISIS PRESTACIONES
+ */
+Route::get('prestaciones-resumen-periodo' , 'PrestacionesController@getPeriodo');
+Route::get('prestaciones-resumen/{periodo}' , 'PrestacionesController@getResumen');
+Route::get('prestaciones-resumen-table/{periodo}' , 'PrestacionesController@getResumenTabla');
+Route::get('prestaciones-evolucion' , 'PrestacionesController@getEvolucion');
 
 
 /**
@@ -222,6 +230,8 @@ Route::get('grafico-4/{periodo}' , 'GraficosController@getGafico4');
 Route::get('grafico-4-table/{periodo}' , 'GraficosController@getGrafico4Tabla');
 Route::get('grafico-5/{periodo}' , 'GraficosController@getGrafico5');
 Route::get('grafico-5-table/{periodo}' , 'GraficosController@getGrafico5Tabla');
+Route::get('grafico-6' , 'GraficosController@getGrafico6');
+Route::get('grafico-6-table' , 'GraficosController@getGrafico6Tabla');
 
 /**
  * INDICADORES
