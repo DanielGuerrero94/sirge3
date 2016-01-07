@@ -55,7 +55,7 @@ class PrestacionesRechazosMigracion extends Seeder
 				    	efector NOT IN (select cuie FROM efectores.efectores)
 				    OR 
 				    	lote NOT IN (select lote FROM sistema.lotes)
-		)			
+		)	as blabla		
 	);");
 
 		}
