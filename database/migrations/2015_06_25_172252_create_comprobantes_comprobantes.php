@@ -22,8 +22,8 @@ class CreateComprobantesComprobantes extends Migration {
 			$table->date('fecha_notificacion');
 			$table->date('fecha_liquidacion');
 			$table->date('fecha_debito_bancario');
-			$table->decimal('importe',8,2);
-			$table->decimal('importe_pagado',8,2);
+			$table->double('importe');
+			$table->double('importe_pagado');
 			$table->string('factura_debitada', 50);
 			$table->text('concepto');
 			$table->integer('lote');
