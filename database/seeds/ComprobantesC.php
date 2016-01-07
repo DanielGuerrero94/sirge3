@@ -37,8 +37,8 @@ class ComprobantesC extends Seeder
 					  fecha_notificacion date,
 					  fecha_liquidacion date,
 					  fecha_debito_bancario date,
-					  importe numeric(8,2),
-					  importe_pagado numeric(8,2),
+					  importe numeric,
+					  importe_pagado numeric,
 					  factura_debitada character varying(50),
 					  concepto text,
 					  lote integer)			
