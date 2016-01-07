@@ -28,7 +28,7 @@ class PrestacionesP extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables::text
-			    FROM prestaciones.p_".$prov." ')		
+			    FROM prestaciones.p_".$prov." limit 10000')		
 		    AS migracion(estado character(1),
 				  efector character varying(14),
 				  numero_comprobante character varying(50),
