@@ -11,7 +11,7 @@ class PucoObrasSociales extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO puco.obras_sociales(id_osp,codigo_osp,sigla,nombre)
+        \DB::statement(" INSERT INTO puco.obras_sociales(codigo_osp,sigla,nombre)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
