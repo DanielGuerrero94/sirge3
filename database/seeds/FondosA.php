@@ -35,7 +35,7 @@ class FondosA extends Seeder
 				  codigo_gasto smallint,
 				  subcodigo_gasto smallint,
 				  efector_cesion character varying(255),
-				  monto numeric(10,2),
+				  monto double precision,
 				  concepto text,
 				  lote integer)			
 	); ");

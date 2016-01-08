@@ -21,7 +21,7 @@ class CreateFondosFondos extends Migration {
 			$table->tinyInteger('codigo_gasto');
 			$table->tinyInteger('subcodigo_gasto');
 			$table->string('efector_cesion',255)->nullable();
-			$table->decimal('monto',8,2);
+			$table->double('monto');
 			$table->text('concepto')->nullable();
 			$table->integer('lote');
 			
