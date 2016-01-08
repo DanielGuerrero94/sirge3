@@ -15,10 +15,9 @@ class PucoObrasSociales extends Seeder
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-		    'SELECT id_osp, codigo_osp, sigla, nombre_os
+		    'SELECT codigo_osp, sigla, nombre_os
 			    FROM puco.obras_sociales order by id_osp desc')
-		    AS migracion( id_osp integer,
-				  codigo_osp integer,
+		    AS migracion( codigo_osp integer,
 				  sigla character varying(20),
 				  nombre text )			
 	); ");
