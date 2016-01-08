@@ -85,9 +85,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosParientes');
 		$this->call('BeneficiariosBeneficiariosPeriodos');		
 		$this->call('BeneficiariosBeneficiariosScore');
-		$this->call('PrestacionesRechazosMigracion');*/
+		$this->call('PrestacionesRechazosMigracion');
 		$this->call('PrestacionesP');
-		/*$this->call('ComprobantesC');
+		$this->call('ComprobantesC');*/
 		$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
 		$this->call('FondosA');
@@ -101,7 +101,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('DdjjSirge');
 		//$this->call('IndecPoblacion');
 		//$this->call('IndecPoblacionDepartamentos');
-		$this->call('IndicadoresIndicadoresDescripcion');
+		/*$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
 		$this->call('IndicadoresIndicadoresPriorizados');
