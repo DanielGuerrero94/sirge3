@@ -84,26 +84,27 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosIndigenas');
 		$this->call('BeneficiariosBeneficiariosParientes');
 		$this->call('BeneficiariosBeneficiariosPeriodos');		
-		$this->call('BeneficiariosBeneficiariosScore');*/
+		$this->call('BeneficiariosBeneficiariosScore');
 		$this->call('PrestacionesRechazosMigracion');
-		/*$this->call('PrestacionesP');
+		$this->call('PrestacionesP');
 		$this->call('ComprobantesC');
 		$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
 		$this->call('FondosA');
 		$this->call('PucoObrasSociales');
 		$this->call('PucoObrasSocialesProvinciales');
+		$this->call('PucoResumenPuco');
 		$this->call('CompromisoAnualMetasCodigosValidos');
 		$this->call('CompromisoAnualMetasDescentralizacion');
 		$this->call('CompromisoAnualMetasFacturacion');
 		$this->call('DdjjBackup');
 		$this->call('DdjjDoiu9');
-		$this->call('DdjjSirge');
+		$this->call('DdjjSirge');*/
 		//$this->call('IndecPoblacion');
 		//$this->call('IndecPoblacionDepartamentos');
-		$this->call('IndicadoresIndicadoresDescripcion');
+		/*$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedica');
-		$this->call('IndicadoresIndicadoresMedicaRangos');
+		$this->call('IndicadoresIndicadoresMedicaRangos');*/
 		$this->call('IndicadoresIndicadoresPriorizados');
 		$this->call('IndicadoresMetasEfectoresPriorizados');
 		$this->call('IndicadoresProvincias');
