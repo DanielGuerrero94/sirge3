@@ -87,7 +87,7 @@
 		$('#tabla').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax : 'ceb-resumen-table/{{$periodo}}',
+	        ajax : 'prestaciones-resumen-table/{{$periodo}}',
 	        columns: [
 	            { data: 'id_provincia', name: 'id_provincia' },
 	            { data: 'codigo_prestacion', name: 'codigo_prestacion' },
@@ -101,7 +101,7 @@
 	            text: '',
 	        },
 	        xAxis: {
-	            categories: {!! $progreso_ceb_categorias !!}
+	            categories: {!! $progreso_prestaciones_categorias !!}
 	        },
 	        yAxis: {
 	            title: {
@@ -122,7 +122,7 @@
 	            verticalAlign: 'bottom',
 	            borderWidth: 0
 	        },
-	        series: {!! $progreso_ceb_series !!}
+	        series: {!! $progreso_prestaciones_series !!}
 		});
 
 	 	$('.g2').highcharts({
