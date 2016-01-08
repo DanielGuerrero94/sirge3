@@ -562,7 +562,7 @@ class PrestacionesController extends Controller
      * 
      * @return json
      */
-    protected function getProgresionCebSeries(){
+    protected function getProgresionPrestacionesSeries(){
 
         $dt = new \DateTime();
         $dt->modify('-1 month');
@@ -571,7 +571,21 @@ class PrestacionesController extends Controller
 
         $provincias = Provincia::all();
 
-        
+        foreach ($provincias as $key => $provincia){
+
+        	$periodos = Fc001::where('id_provincia' , $provincia->id_provincia)
+        						->whereBetween('periodo' , [$interval['min'] , $interval['max']])
+        						->get();
+
+        	foreach ($periodos as $periodo){
+        		$series['provincias'][$key]['series'][] = $periodo->cantidad;
+        		$series['provincias'][$key]['elem'] = 'provincia' . $periodo->id_provincia;
+        		$series['provincias'][$key]['name'] = 'Prestaciones';
+        		$series['provincias'][$key]['categorias'] = $this->getMesesArray(date('Y-m'));
+        	}
+
+        }
+        return json_decode(json_encode($series , JSON_PRETTY_PRINT));
     }
 
     /** 
@@ -589,10 +603,10 @@ class PrestacionesController extends Controller
 
         $data = [
             'page_title' => 'Evolución: Período ' . $min . ' - ' . $max ,
-            'series' => $this->getProgresionCebSeries()
+            'series' => $this->getProgresionPrestacionesSeries()
         ];
 
-        return view('ceb.evolucion' , $data);
+        return view('prestaciones.evolucion' , $data);
     }
 
 
