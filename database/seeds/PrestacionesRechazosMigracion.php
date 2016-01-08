@@ -11,28 +11,13 @@ class PrestacionesRechazosMigracion extends Seeder
      */
     public function run()
     {
-    	for ($i = 1; $i <= 24; $i++)
-		{
-			if ($i < 10)
-			{
-				$prov = '0'.$i;
-			}
-			else
-			{
-				$prov = (string) $i;
-			}
 
         \DB::statement(" INSERT INTO prestaciones.rechazos_migracion(estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables)
 	(
-		SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables
-		GROUP BY estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables
-		
-		FROM (
-			
-			SELECT *
+			SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables
 			FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 			    'SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables::text
-				    FROM prestaciones.p_".$prov." ')		
+				    FROM prestaciones.rechazos_migracion ')		
 			    AS migracion(estado character(1),
 					  efector character varying(14),
 					  numero_comprobante character varying(50),
@@ -47,17 +32,7 @@ class PrestacionesRechazosMigracion extends Seeder
 					  orden smallint,
 					  lote integer,
 					  datos_reportables character varying)
-				WHERE 
-				    	codigo_prestacion NOT IN (select codigo_prestacion FROM pss.codigos)
-				    OR
-				    	clave_beneficiario NOT IN (select clave_beneficiario FROM beneficiarios.beneficiarios)
-				    OR 
-				    	efector NOT IN (select cuie FROM efectores.efectores)
-				    OR 
-				    	lote NOT IN (select lote FROM sistema.lotes)
-		)	as blabla		
 	);");
 
-		}
     }
 }

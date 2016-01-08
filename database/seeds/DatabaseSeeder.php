@@ -86,8 +86,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosPeriodos');		
 		$this->call('BeneficiariosBeneficiariosScore');*/
 		$this->call('PrestacionesRechazosMigracion');
-		/*$this->call('PrestacionesP');
-		$this->call('ComprobantesC');
+		$this->call('PrestacionesP');
+		/*$this->call('ComprobantesC');
 		$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
 		$this->call('FondosA');
