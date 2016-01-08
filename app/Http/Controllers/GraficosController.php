@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Grafico;
 use App\Models\Geo\Provincia;
 use App\Models\Dw\CEB\Ceb001;
+use App\Models\Dw\FC\Fc001;
 use App\Models\Dw\FC\Fc002;
 use App\Models\Dw\FC\Fc004;
 
@@ -269,6 +270,40 @@ class GraficosController extends Controller
             $prestaciones->get();
         }
 
+        return Datatables::of($prestaciones)->make(true);
+    }
+
+    /**
+     * Devuelve la info para el gráfico 6
+     *
+     * @return json
+     */
+    public function getGrafico6(){
+        $data['categorias'] = Provincia::orderBy('id_provincia')->lists('descripcion');
+        
+        foreach ($data['categorias'] as $key => $provincia){
+            $data['categorias'][$key] = ucwords(mb_strtolower($provincia));
+        }
+
+        $prestaciones = Fc001::select('id_provincia' , DB::raw('sum(cantidad) as c'))
+                            ->groupBy('id_provincia')
+                            ->orderBy('id_provincia')
+                            ->get();
+        foreach ($prestaciones as $key => $prestacion) {
+            $data['series'][0]['name'] = 'Prestaciones facturadas';
+            $data['series'][0]['data'][] = $prestacion->c;
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Devuelve JSON para la datatable
+     *
+     * @return json
+     */
+    public function getGrafico6Tabla(){
+        $prestaciones = Fc001::join('geo.provincias as p' , 'estadisticas.fc_001.id_provincia' , '=' , 'p.id_provincia')->get();
         return Datatables::of($prestaciones)->make(true);
     }
 }

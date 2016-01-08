@@ -274,6 +274,9 @@
 	});
 
 	$('.g2').highcharts({
+		chart: {
+			type: 'area'
+		},
 		title: {
             text: '',
         },
