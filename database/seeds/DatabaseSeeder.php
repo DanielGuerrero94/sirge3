@@ -92,9 +92,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('FondosSubCodigosGasto');
 		$this->call('FondosA');
 		$this->call('PucoObrasSociales');
-		$this->call('PucoObrasSocialesProvinciales');*/
+		$this->call('PucoObrasSocialesProvinciales');
 		$this->call('PucoResumenPuco');
-		/*$this->call('CompromisoAnualMetasCodigosValidos');
+		$this->call('CompromisoAnualMetasCodigosValidos');
 		$this->call('CompromisoAnualMetasDescentralizacion');
 		$this->call('CompromisoAnualMetasFacturacion');
 		$this->call('DdjjBackup');
