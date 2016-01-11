@@ -15,7 +15,7 @@ class EfectoresEfectoresAddendas extends Seeder
 (
 	SELECT *
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
-	    'SELECT id,id_efector,id_addenda,fecha_addenda,created_at,update_at
+	    'SELECT id,id_efector,id_addenda,fecha_addenda,created_at,updated_at
 		    FROM efectores.efectores_addendas')
 	    AS migracion(id integer,
 					  id_efector integer,
