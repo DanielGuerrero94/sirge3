@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
 		<div id="menues-container">
-			<div class="box box-info">
+			<div class="box box-lime">
                 <div class="box-header">
                     <h2 class="box-title">Menues</h2>
                     <p>Se muestran todas las menues registrados:</p>
