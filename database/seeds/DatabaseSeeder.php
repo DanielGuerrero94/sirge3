@@ -72,6 +72,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PssCodigosPpac');
 		$this->call('PssCodigosPriorizadas');
 		$this->call('PssCodigosSumarNacer');
+		$this->call('PssCodigosMujer');
+		$this->call('PssCodigosHombre');
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
 		$this->call('PssGruposDiagnosticos');
@@ -106,12 +108,13 @@ class DatabaseSeeder extends Seeder {
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
 		$this->call('IndicadoresIndicadoresPriorizados');
-		$this->call('IndicadoresMetasEfectoresPriorizados');*/		
-		$this->call('LogsLogins');
-		$this->call('LogsQueriesDinamicos');
+		$this->call('IndicadoresMetasEfectoresPriorizados');
+		$this->call('LogsLogins');*/	
+		$this->call('PssCodigosMujer');
+		$this->call('PssCodigosHombre');	
 		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
-		//$this->call('OspProvincias');*/
+		//$this->call('OspProvincias');
 
 		Model::reguard();
 	}

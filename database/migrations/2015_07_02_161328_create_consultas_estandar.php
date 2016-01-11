@@ -10,6 +10,7 @@ class CreateConsultasEstandar extends Migration {
 	 * @return void
 	 */
 	public function up() {
+		/*
 		Schema::create('consultas.estandar', function (Blueprint $table) {
 			$table->increments('id_consulta');
 			$table->string('nombre')->unique();
@@ -17,6 +18,7 @@ class CreateConsultasEstandar extends Migration {
 			$table->string('descripcion');
 			$table->string('ruta_sql');
 		});
+		*/
 	}
 
 	/**
@@ -25,6 +27,6 @@ class CreateConsultasEstandar extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('consultas.estandar');
+		//Schema::drop('consultas.estandar');
 	}
 }

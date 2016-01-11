@@ -10,6 +10,7 @@ class CreateConsultasAutomaticas extends Migration {
 	 * @return void
 	 */
 	public function up() {
+		/*
 		Schema::create('consultas.automaticas', function (Blueprint $table) {
 			$table->increments('id_consulta');
 			$table->string('nombre');
@@ -19,6 +20,7 @@ class CreateConsultasAutomaticas extends Migration {
 		});
 		DB::statement('ALTER TABLE consultas.automaticas ADD COLUMN destinatarios character varying[];');
 		DB::statement('ALTER TABLE consultas.automaticas ADD COLUMN cronjob character varying;');
+		*/
 	}
 
 	/**
@@ -27,6 +29,6 @@ class CreateConsultasAutomaticas extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('consultas.automaticas');
+		//Schema::drop('consultas.automaticas');
 	}
 }
