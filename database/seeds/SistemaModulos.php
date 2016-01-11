@@ -15,7 +15,7 @@ class SistemaModulos extends Seeder {
 		FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',
 		    'SELECT id_modulo,arbol,nivel_1,nivel_2,descripcion,modulo,icono,id_padre
 			    FROM sistema.modulos')
-		    AS migracion(id_modulo serial,
+		    AS migracion(id_modulo integer,
 						  arbol character(1),
 						  nivel_1 integer,
 						  nivel_2 integer,
