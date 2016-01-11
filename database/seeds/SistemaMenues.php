@@ -12,7 +12,7 @@ class SistemaMenues extends Seeder {
 		\DB::statement(" INSERT INTO sistema.menues(id_menu,descripcion)
  (
 	SELECT *
-	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
+	FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',
 	    'SELECT *
 		    FROM sistema.menues')
 	    AS sirge_menues(id_menu integer, descripcion character varying(100))
