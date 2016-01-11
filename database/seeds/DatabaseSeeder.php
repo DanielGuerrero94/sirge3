@@ -105,9 +105,8 @@ class DatabaseSeeder extends Seeder {
 		/*$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
-		$this->call('IndicadoresIndicadoresPriorizados');*/
-		$this->call('IndicadoresMetasEfectoresPriorizados');
-		$this->call('IndicadoresProvincias');
+		$this->call('IndicadoresIndicadoresPriorizados');
+		$this->call('IndicadoresMetasEfectoresPriorizados');*/		
 		$this->call('LogsLogins');
 		$this->call('LogsQueriesDinamicos');
 		$this->call('EfectoresAddendas');
