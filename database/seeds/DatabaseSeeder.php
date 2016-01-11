@@ -12,6 +12,17 @@ class DatabaseSeeder extends Seeder {
 	public function run() {
 		Model::unguard();
 
+		/**
+		CAMBIOS, CORRECCIONES TEMPORALES
+		**/
+		$this->call('SistemaMenues');
+		$this->call('SistemaModulos');
+		$this->call('SistemaModulosMenu');
+		/**
+		FIN DE CORRECCIONES TEMPORALES
+		**/
+
+		/*
 		$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
@@ -113,6 +124,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
 		//$this->call('OspProvincias');
+		*/
 
 		Model::reguard();
 	}
