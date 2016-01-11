@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder {
 		**/
 		//$this->call('SistemaMenues');
 		//$this->call('SistemaModulos');
-		$this->call('SistemaModulosMenu');
+		//$this->call('SistemaModulosMenu');
+		$this->call('SistemaUsuarios');
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
