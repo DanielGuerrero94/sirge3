@@ -11,7 +11,7 @@ class IndicadoresMetasEfectoresPriorizados extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO indicadores.indicadores_metas_efectores_priorizados(efector,base,c1,c2,c3,indicador)
+        \DB::statement(" INSERT INTO indicadores.metas_efectores_priorizados(efector,base,c1,c2,c3,indicador)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
