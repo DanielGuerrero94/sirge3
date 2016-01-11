@@ -11,7 +11,7 @@ class PssCodigosHombre extends Seeder
      */
     public function run()
     {
-        \DB::statement("INSERT INTO pss.codigos_hombre(codigo_prestacion,id_linea_cuidado,id_grupo_etario,embarazo_riesgo,embarazo_normal)
+        \DB::statement("INSERT INTO pss.codigos_hombre(codigo_prestacion,id_linea_cuidado,id_grupo_etario)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
