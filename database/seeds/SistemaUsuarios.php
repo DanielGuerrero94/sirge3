@@ -13,7 +13,15 @@ class SistemaUsuarios extends Seeder {
  (
 	SELECT *
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012$',
-	    'SELECT id_usuario,usuario,password,descripcion as nombre,email,activo,id_area,id_menu,null as telefono,case id_entidad when ''25'' then ''01'' else id_entidad end as id_provincia,case id_entidad when ''25'' then 1 else 2 end as id_entidad,null as last_login,now() as created_at, now() as updated_at
+	    'SELECT id_usuario,usuario,password,descripcion as nombre,email,activo,id_area,
+	    case id_menu 
+	    	when 3 then 4
+	    	when 4 then 8
+	    	when 5 then 6
+	    	when 6 then 5
+	    	when 13 then 5
+	    	else id_menu end as id_menu
+	    	,null as telefono,case id_entidad when ''25'' then ''01'' else id_entidad end as id_provincia,case id_entidad when ''25'' then 1 else 2 end as id_entidad,null as last_login,now() as created_at, now() as updated_at
 		    FROM sistema.usuarios')
 	    AS migracion( id_usuario integer,
 			  usuario character varying(50),
