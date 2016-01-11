@@ -19,10 +19,10 @@ class IndicadoresMetasEfectoresPriorizados extends Seeder
 			FROM
 				indicadores.metas_efectores_priorizados;')
 		    AS migracion(efector character varying (14),
-				base integer,
-				c1 integer,
-				c2 integer,
-				c3 integer,
+				base double precision,
+				c1 double precision,
+				c2 double precision,
+				c3 double precision,
 				indicador character varying(5)				
 				)
 	); ");
