@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder {
 	public function run() {
 		Model::unguard();
 
-		/*$this->call('SistemaProvinciasSeeder');
+		$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
 		$this->call('PssCodigosSeeder');
@@ -101,16 +101,16 @@ class DatabaseSeeder extends Seeder {
 		$this->call('CompromisoAnualMetasFacturacion');
 		$this->call('DdjjBackup');
 		$this->call('DdjjDoiu9');
-		$this->call('DdjjSirge');*/
+		$this->call('DdjjSirge');
 		//$this->call('IndecPoblacion');
 		//$this->call('IndecPoblacionDepartamentos');
-		/*$this->call('IndicadoresIndicadoresDescripcion');
+		$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
 		$this->call('IndicadoresIndicadoresPriorizados');
 		$this->call('IndicadoresMetasEfectoresPriorizados');
 		$this->call('LogsLogins');			
-		$this->call('EfectoresAddendas');*/
+		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
 		//$this->call('OspProvincias');
 
