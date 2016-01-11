@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder {
 		/**
 		CAMBIOS, CORRECCIONES TEMPORALES
 		**/
-		$this->call('SistemaMenues');
-		$this->call('SistemaModulos');
+		//$this->call('SistemaMenues');
+		//$this->call('SistemaModulos');
 		$this->call('SistemaModulosMenu');
 		/**
 		FIN DE CORRECCIONES TEMPORALES
