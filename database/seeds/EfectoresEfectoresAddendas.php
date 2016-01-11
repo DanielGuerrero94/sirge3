@@ -22,7 +22,7 @@ class EfectoresEfectoresAddendas extends Seeder
 					  id_addenda integer,
 					  fecha_addenda date,
 					  created_at timestamp without time zone,
-					  updated_at timestamp without time zone,)
+					  updated_at timestamp without time zone)
 );");
     }
 }
