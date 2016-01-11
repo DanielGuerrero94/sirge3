@@ -12,7 +12,7 @@ class SistemaModulosMenu extends Seeder {
 		\DB::statement("INSERT INTO sistema.modulos_menu(id_menu,id_modulo,created_at,updated_at)
 (
 	SELECT *
-	FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
+	FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',
 	    'SELECT id_menu,id_modulo,now(),now()
 		    FROM sistema.modulos_menu')
 	    AS migracion(id_menu integer,
