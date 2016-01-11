@@ -16,7 +16,7 @@ class CreateTableEfectoresEfectoresAddendas extends Migration
             $table->increments('id');
             $table->integer('id_efector');
             $table->integer('id_addenda');
-            $table->date('fecha');
+            $table->date('fecha_addenda');
             $table->timestamps();
 
             $table->unique(['id_efector','id_addenda']);
