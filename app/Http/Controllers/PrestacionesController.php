@@ -608,7 +608,7 @@ class PrestacionesController extends Controller
         $dt = new \DateTime();
         $dt->modify('-1 month');
         $max = strftime("%b %Y" , $dt->getTimeStamp());
-        $dt->modify('-12 months');
+        $dt->modify('-11 months');
         $min = strftime("%b %Y" , $dt->getTimeStamp());
 
         $data = [

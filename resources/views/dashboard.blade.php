@@ -12,7 +12,7 @@
 	    <div class="icon">
 	      <i class="ion ion-ios-pulse-strong"></i>
 	    </div>
-	    <a href="#" class="small-box-footer">
+	    <a href="prestaciones-evolucion" class="ajax-href small-box-footer">
 	      Info <i class="fa fa-arrow-circle-right"></i>
 	    </a>
 	  </div>
@@ -27,7 +27,7 @@
 	    <div class="icon">
 	      <i class="ion ion-ios-medkit"></i>
 	    </div>
-	    <a href="#" class="small-box-footer">
+	    <a href="efectores-listado" class="ajax-href small-box-footer">
 	      Info <i class="fa fa-arrow-circle-right"></i>
 	    </a>
 	  </div>
@@ -42,7 +42,7 @@
 	    <div class="icon">
 	      <i class="ion ion-person"></i>
 	    </div>
-	    <a href="#" class="small-box-footer">
+	    <a href="contactos" class="ajax-href small-box-footer">
 	      Info <i class="fa fa-arrow-circle-right"></i>
 	    </a>
 	  </div>
@@ -57,7 +57,7 @@
 	    <div class="icon">
 	      <i class="ion ion-ios-people"></i>
 	    </div>
-	    <a href="#" class="small-box-footer">
+	    <a href="beneficiarios-listado" class="ajax-href small-box-footer">
 	      Info <i class="fa fa-arrow-circle-right"></i>
 	    </a>
 	  </div>
@@ -228,6 +228,14 @@
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script type="text/javascript">
+
+	$('.ajax-href').click(function(event){
+		event.preventDefault();
+		var href = $(this).attr('href');
+		$.get(href , function(data){
+			$('.content-wrapper').html(data);
+		});
+	})
 
 	// Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {

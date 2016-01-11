@@ -58,15 +58,15 @@ return array(
     ),
 
     'properties' => array(
-        'creator'        => 'Maatwebsite',
-        'lastModifiedBy' => 'Maatwebsite',
-        'title'          => 'Spreadsheet',
-        'description'    => 'Default spreadsheet export',
-        'subject'        => 'Spreadsheet export',
-        'keywords'       => 'maatwebsite, excel, export',
+        'creator'        => 'SIRGe Web',
+        'lastModifiedBy' => 'SIRGe Web',
+        'title'          => 'Programa SUMAR',
+        'description'    => 'Archivo generado por SIRGe Web',
+        'subject'        => 'Archivo generado por SIRGe Web',
+        'keywords'       => 'sirge, web',
         'category'       => 'Excel',
-        'manager'        => 'Maatwebsite',
-        'company'        => 'Maatwebsite',
+        'manager'        => 'Gustavo D. Hekel',
+        'company'        => 'Programa SUMAR',
     ),
 
     /*
@@ -106,7 +106,7 @@ return array(
     |
     */
 
-    'creator'    => 'Maatwebsite',
+    'creator'    => 'SIRGe Web',
 
     'csv'        => array(
         /*

@@ -8,7 +8,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="UTF-8">
     <title>SIRGe Web</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap 3.3.2 -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}"  />
     <!-- Font Awesome Icons -->
@@ -174,6 +173,13 @@ $(document).ready(function(){
 
     getMessages();
     newMessages();
+
+    $.extend( true, $.fn.dataTable.defaults, {
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.10/i18n/Spanish.json"
+        },
+        "pagingType": "simple"
+    });
 });
 </script>
 </body>
