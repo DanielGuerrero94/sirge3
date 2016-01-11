@@ -16,6 +16,7 @@ class CreateTableIndicadoresMetasEfectoresPriorizados extends Migration {
 			$table->increments('id');
 			$table->string('efector', 14);
 			$table->string('indicador', 5);
+			$table->integer('base')->nullable();
 			$table->float('c1')->nullable();
 			$table->float('c2')->nullable();
 			$table->float('c3')->nullable();
