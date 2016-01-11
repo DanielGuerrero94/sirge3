@@ -3,7 +3,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
 		<div id="operadores-container">
-			<div class="box box-info">
+			<div class="box box-lime">
 				<div class="box-header">
 					<h2 class="box-title">Operadores habilitados</h2>
 					<p>Se muestran todos los operadores que pueden resolver requerimientos:</p>

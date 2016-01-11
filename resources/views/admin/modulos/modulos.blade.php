@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
 		<div id="modulos-container">
-			<div class="box box-info">
+			<div class="box box-lime">
                 <div class="box-header">
                     <h2 class="box-title">Módulos</h2>
                     <p>Se muestran todas las módulos registrados:</p>

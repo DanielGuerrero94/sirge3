@@ -569,23 +569,31 @@ class PrestacionesController extends Controller
 
         $interval = $this->getDateInterval($dt->format('Y-m'));
 
-        $provincias = Provincia::all();
+        $provincias = Provincia::orderBy('id_provincia')->get();
 
         foreach ($provincias as $key => $provincia){
 
-        	$periodos = Fc001::where('id_provincia' , $provincia->id_provincia)
-        						->whereBetween('periodo' , [$interval['min'] , $interval['max']])
-        						->get();
-
+        	$periodos = Fc001::where('estadisticas.fc_001.id_provincia' , $provincia->id_provincia)
+        					->join('geo.provincias as p' , 'estadisticas.fc_001.id_provincia' , '=' , 'p.id_provincia')
+        					->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+        					->select('estadisticas.fc_001.*' , 'p.nombre as nombre_provincia' , 'r.*')
+    						->whereBetween('periodo' , [$interval['min'] , $interval['max']])
+    						->get();
         	foreach ($periodos as $periodo){
-        		$series['provincias'][$key]['series'][] = $periodo->cantidad;
+        		$series['provincias'][$key]['series'][0]['data'][] = $periodo->cantidad;
+        		$series['provincias'][$key]['series'][0]['name'] = 'Prestaciones';
+        		$series['provincias'][$key]['series'][0]['color'] = $periodo->color;
+        		$series['provincias'][$key]['series'][0]['marker']['enabled'] = false;
         		$series['provincias'][$key]['elem'] = 'provincia' . $periodo->id_provincia;
-        		$series['provincias'][$key]['name'] = 'Prestaciones';
         		$series['provincias'][$key]['categorias'] = $this->getMesesArray(date('Y-m'));
+        		$series['provincias'][$key]['provincia'] = $periodo->nombre_provincia;
+        		$series['provincias'][$key]['css'] = $periodo->css;
+
         	}
 
         }
         return json_decode(json_encode($series , JSON_PRETTY_PRINT));
+        //return json_encode($series , JSON_PRETTY_PRINT);
     }
 
     /** 
@@ -594,6 +602,8 @@ class PrestacionesController extends Controller
      * @return null
      */
     public function getEvolucion(){
+
+    	//return '<pre>' . $this->getProgresionPrestacionesSeries() . '</pre>';
         
         $dt = new \DateTime();
         $dt->modify('-1 month');

@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
         <div id="usuarios-container">
-            <div class="box box-info">
+            <div class="box box-lime">
                 <div class="box-header">
                     <h2 class="box-title">Listado completo de beneficiarios</h2>
                 </div>
