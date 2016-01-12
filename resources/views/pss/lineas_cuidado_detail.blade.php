@@ -120,6 +120,12 @@
             }
         });
 
+		$('.back').click(function(){
+			$.get('{{ $back }}' , function(data){
+				$('.content-wrapper').html(data);
+			});
+		});
+
 	});
 </script>
 @endsection

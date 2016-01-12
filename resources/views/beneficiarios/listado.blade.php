@@ -46,7 +46,7 @@ $(function() {
     	console.log($(this).attr('clave-beneficiario'));
 
     	var id = $(this).attr('clave-beneficiario');
-        	$.get('beneficiarios-historia-clinica/' + id + '/listado-beneficiarios' , function(data){
+        	$.get('beneficiarios-historia-clinica/' + id + '/beneficiarios-listado' , function(data){
         		$('.content-wrapper').html(data);
         	});
 
