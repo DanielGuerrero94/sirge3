@@ -240,7 +240,7 @@
 	// Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
-            base = Highcharts.getOptions().colors[0],
+            base = Highcharts.getOptions().colors[8],
             i;
 
         for (i = 0; i < 10; i += 1) {
