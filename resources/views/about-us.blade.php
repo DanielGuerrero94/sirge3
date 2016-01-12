@@ -29,7 +29,7 @@
 				<h3>Conozca a nuestro equipo</h3>
 				<div class="row">
 					@foreach($usuarios as $key => $usuario)
-						<div class="col-md-4 text-center" >
+						<div class="col-md-4 text-center" style="margin-bottom:80px;">
 							<img style="height: 120px;" src="{{ asset("/dist/img/usuarios/") . '/' . $usuario->ruta_imagen }}" class="img-circle img-responsive center-block" alt="Responsive image">
 							<h4>{{$usuario->nombre}}</h4>
 							<h5>{{$usuario->ocupacion}}</h5>
