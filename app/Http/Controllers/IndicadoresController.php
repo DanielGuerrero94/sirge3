@@ -79,7 +79,7 @@ class IndicadoresController extends Controller
 	public function getIndicadoresMedica($id , $periodo, $back){		
 		
 
-		$indicador = Indicador::select('id_provincia','periodo','codigo_indicador','resultado','id_rango_indicador')
+		$indicador = Indicador::select('id_provincia','periodo','codigo_indicador','resultado','id')
                 ->with([                
                 'rangoIndicador' => function($q){ 
                     $q->with(['descripcionIndicador']); 
