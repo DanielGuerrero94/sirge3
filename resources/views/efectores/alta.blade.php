@@ -556,7 +556,7 @@ $(document).ready(function() {
 			},
 			direccion : {
 				required : true,
-				minlength : 10,
+				minlength : 6,
 				maxlength : 500
 			},
 			provincia : {
