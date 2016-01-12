@@ -39,11 +39,13 @@ class SistemaUsuarios extends Seeder {
 			  updated_at timestamp(0) without time zone
 		)
  );");
-
+				
 		\DB::statement(" UPDATE sistema.usuarios SET ruta_imagen = ruta, fecha_nacimiento = nacimiento, ocupacion = ocup, facebook = face, twitter = twr, linkedin = lk, google_plus = plus, skype = sk, cargo = car, mensaje = men
 	FROM
 		dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
-	    'SELECT id_usuario,ruta_imagen,fecha_nacimiento,ocupacion,facebook,twitter,linkedin,google_plus,skype,cargo,mensaje
+	    'SELECT id_usuario,case ruta_imagen
+	    						when ''public/img/users/unknown_user.png'' then ''default-avatar.png''
+	    						else replace(ruta_imagen,''public/img/users/'','''') end as ruta_imagen,fecha_nacimiento,ocupacion,facebook,twitter,linkedin,google_plus,skype,cargo,mensaje
 		    FROM sistema.usuarios')
 	    AS sirge_usuarios(
 			  id_user integer,

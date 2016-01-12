@@ -41,7 +41,7 @@ class ActualizarSecuencias extends Seeder
 		DB::statement("SELECT SETVAL('graficos.graficos_id_seq', COALESCE(MAX(id), 1) ) FROM graficos.graficos;");
 		DB::statement("SELECT SETVAL('solicitudes.grupos_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.grupos;");
 		DB::statement("SELECT SETVAL('indicadores.indicadores_medica_id_seq', COALESCE(MAX(id), 1) ) FROM indicadores.indicadores_medica;");
-		DB::statement("SELECT SETVAL('indicadores.indicadores_medica_rangos_id_seq', COALESCE(MAX(id), 1) ) FROM indicadores.indicadores_medica_rangos;");
+		DB::statement("SELECT SETVAL('indicadores.indicadores_medica_rangos_id_rango_indicador_seq', COALESCE(MAX(id_rango_indicador), 1) ) FROM indicadores.indicadores_medica_rangos;");
 		DB::statement("SELECT SETVAL('indicadores.indicadores_priorizados_id_seq', COALESCE(MAX(id), 1) ) FROM indicadores.indicadores_priorizados;");
 		DB::statement("SELECT SETVAL('geo.localidades_id_seq', COALESCE(MAX(id), 1) ) FROM geo.localidades;");
 		DB::statement("SELECT SETVAL('logs.logins_id_seq', COALESCE(MAX(id_inicio), 1) ) FROM logs.logins;");

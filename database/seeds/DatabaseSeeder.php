@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('SistemaModulosMenu');
 		//$this->call('SistemaUsuarios');
 		//$this->call('BeneficiariosBeneficiariosGeografico');
-
+		$this->call('IndicadoresIndicadoresMedicaRangos');
+		$this->call('IndicadoresIndicadoresMedica');
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
@@ -119,8 +120,8 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('IndecPoblacion');
 		//$this->call('IndecPoblacionDepartamentos');
 		$this->call('IndicadoresIndicadoresDescripcion');
-		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
+		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresPriorizados');
 		$this->call('IndicadoresMetasEfectoresPriorizados');
 		$this->call('LogsLogins');			
