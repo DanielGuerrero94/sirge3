@@ -35,7 +35,7 @@ class NuevoEfectorRequest extends Request
             'integrante' => 'required',
             'priorizado' => 'required',
             'compromiso' => 'required',
-            'direccion' => 'required|between:15,500',
+            'direccion' => 'required|between:6,500',
             'provincia' => 'required',
             'departamento' => 'required',
             'localidad' => 'required',

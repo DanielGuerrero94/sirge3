@@ -472,7 +472,7 @@ class HomeController extends Controller
      */
     public function about(){
 
-        $sistemas = Usuario::where('id_area' , 1)->orderBy('nombre')->get();
+        $sistemas = Usuario::where('id_area' , 1)->where('id_menu', 1)->orderBy('nombre')->get();
         $data = [
             'page_title' => 'Acerca nuestro',
             'usuarios' => $sistemas
