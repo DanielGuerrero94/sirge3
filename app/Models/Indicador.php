@@ -25,6 +25,6 @@ class Indicador extends Model
 	 */
 	public function rangoIndicador()
 	{
-		return $this->hasOne('App\Models\Indicadores\MedicaRangos' , 'id_rango_indicador' , 'id_rango_indicador');	
+		return $this->hasOne('App\Models\Indicadores\MedicaRangos' , 'id' , 'id_rango_indicador');	
 	}
 }
