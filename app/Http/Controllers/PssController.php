@@ -460,7 +460,8 @@ class PssController extends Controller
 			'linea' => $linea,
 			'meses' => $this->getMesesArray(),
 			'series' => $this->getSeriesLineaCuidado($id),
-			'tree_map' => $this->getDistribucionLineaCuidado($id)
+			'tree_map' => $this->getDistribucionLineaCuidado($id),
+			'back' => 'pss-lineas'
 		];
 
 		return view('pss.lineas_cuidado_detail' , $data);
