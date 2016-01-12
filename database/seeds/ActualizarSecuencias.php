@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
 class ActualizarSecuencias extends Seeder
 {
     /**
@@ -34,12 +33,8 @@ class ActualizarSecuencias extends Seeder
 		DB::statement("SELECT SETVAL('efectores.email_id_email_seq', COALESCE(MAX(id_email), 1) ) FROM efectores.email;");
 		DB::statement("SELECT SETVAL('beneficiarios.embarazos_id_seq', COALESCE(MAX(id), 1) ) FROM beneficiarios.embarazos;");
 		DB::statement("SELECT SETVAL('sistema.entidades_id_seq', COALESCE(MAX(id), 1) ) FROM sistema.entidades;");
-		DB::statement("SELECT SETVAL('sistema.entidades_id_seq', COALESCE(MAX(id), 1) ) FROM sistema.entidades;");
-		DB::statement("SELECT SETVAL('geo.entidades_id_seq', COALESCE(MAX(id), 1) ) FROM geo.entidades;");
-		DB::statement("SELECT SETVAL('geo.entidades_id_seq', COALESCE(MAX(id), 1) ) FROM geo.entidades;");
-		DB::statement("SELECT SETVAL('sistema.estados_id_estado_seq', COALESCE(MAX(id_estado), 1) ) FROM sistema.estados;");
-		DB::statement("SELECT SETVAL('solicitudes.estados_id_estado_seq', COALESCE(MAX(id_estado), 1) ) FROM solicitudes.estados;");
-		DB::statement("SELECT SETVAL('sistema.estados_id_seq', COALESCE(MAX(id), 1) ) FROM sistema.estados;");
+		DB::statement("SELECT SETVAL('geo.entidades_id_seq', COALESCE(MAX(id), 1) ) FROM geo.entidades;");		
+		DB::statement("SELECT SETVAL('sistema.estados_id_estado_seq', COALESCE(MAX(id_estado), 1) ) FROM sistema.estados;");				
 		DB::statement("SELECT SETVAL('solicitudes.estados_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.estados;");
 		DB::statement("SELECT SETVAL('consultas.estandar_id_consulta_seq', COALESCE(MAX(id_consulta), 1) ) FROM consultas.estandar;");
 		DB::statement("SELECT SETVAL('fondos.fondos_id_seq', COALESCE(MAX(id), 1) ) FROM fondos.fondos;");
@@ -68,8 +63,6 @@ class ActualizarSecuencias extends Seeder
 		DB::statement("SELECT SETVAL('prestaciones.rechazos_migracion_id_seq', COALESCE(MAX(id), 1) ) FROM prestaciones.rechazos_migracion;");
 		DB::statement("SELECT SETVAL('efectores.referentes_id_referente_seq', COALESCE(MAX(id_referente), 1) ) FROM efectores.referentes;");
 		DB::statement("SELECT SETVAL('geo.regiones_id_region_seq', COALESCE(MAX(id_region), 1) ) FROM geo.regiones;");
-		DB::statement("SELECT SETVAL('geo.regiones_id_region_seq', COALESCE(MAX(id_region), 1) ) FROM geo.regiones;");
-		DB::statement("SELECT SETVAL('sistema.regiones_id_region_seq', COALESCE(MAX(id_region), 1) ) FROM sistema.regiones;");
 		DB::statement("SELECT SETVAL('sistema.regiones_id_region_seq', COALESCE(MAX(id_region), 1) ) FROM sistema.regiones;");
 		DB::statement("SELECT SETVAL('mobile.reporte_problemas_id_problema_seq', COALESCE(MAX(id_problema), 1) ) FROM mobile.reporte_problemas;");
 		DB::statement("SELECT SETVAL('beneficiarios.score_id_seq', COALESCE(MAX(id), 1) ) FROM beneficiarios.score;");
@@ -91,8 +84,5 @@ class ActualizarSecuencias extends Seeder
 		DB::statement("SELECT SETVAL('efectores.tipo_telefono_id_tipo_telefono_seq', COALESCE(MAX(id_tipo_telefono), 1) ) FROM efectores.tipo_telefono;");
 		DB::statement("SELECT SETVAL('sistema.usuarios_id_usuario_seq', COALESCE(MAX(id_usuario), 1) ) FROM sistema.usuarios;");
 		DB::statement("SELECT SETVAL('mobile.usuarios_id_usuario_seq', COALESCE(MAX(id_usuario), 1) ) FROM mobile.usuarios;");
-		DB::statement("SELECT SETVAL('sistema.usuarios_id_usuario_seq', COALESCE(MAX(id_usuario), 1) ) FROM sistema.usuarios;");
-		DB::statement("SELECT SETVAL('mobile.usuarios_id_usuario_seq', COALESCE(MAX(id_usuario), 1) ) FROM mobile.usuarios;");
-
     }
 }

@@ -13,7 +13,7 @@ class CreateSolicitudesEstados extends Migration
     public function up()
     {
         Schema::create('solicitudes.estados', function (Blueprint $table) {
-            $table->increments('id_estado');
+            $table->increments('id');
             $table->string('descripcion' , 50);
             $table->string('css' , 20);
         });
