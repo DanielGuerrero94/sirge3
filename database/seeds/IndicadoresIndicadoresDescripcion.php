@@ -14,7 +14,7 @@ class IndicadoresIndicadoresDescripcion extends Seeder
         \DB::statement(" INSERT INTO indicadores.indicadores_descripcion(indicador,descripcion,numerador,denominador)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
+		FROM dblink('dbname=sirge3 host=192.6.0.118 user=postgres password=LatinoSandwich007',
 		    'SELECT indicador,descripcion,numerador,denominador
 			FROM
 				indicadores.indicadores_descripcion;')
