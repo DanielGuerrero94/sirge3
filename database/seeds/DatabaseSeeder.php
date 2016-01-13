@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('SistemaModulosMenu');
 		//$this->call('SistemaUsuarios');
 		//$this->call('BeneficiariosBeneficiariosGeografico');
-		$this->call('IndicadoresIndicadoresMedicaRangos');
-		$this->call('IndicadoresIndicadoresMedica');
+		//$this->call('IndicadoresIndicadoresMedicaRangos');
+		//$this->call('IndicadoresIndicadoresMedica');
+		$this->call('IndicadoresIndicadoresDescripcion');
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
