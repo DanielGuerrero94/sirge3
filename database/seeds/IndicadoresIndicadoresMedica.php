@@ -27,11 +27,12 @@ class IndicadoresIndicadoresMedica extends Seeder
 
         \DB::statement(" UPDATE indicadores.indicadores_medica SET id_rango_indicador = r.valor 
 						FROM
-							(SELECT id_rango_indicador as valor
-								FROM indicadores.indicadores_medica_rangos r 
-								WHERE id_provincia = r.id_provincia 
-								AND substring(r.periodo::text,1,4) = substring(periodo::text,1,4) 
-								AND left(codigo_indicador,-2) =  r.codigo_indicador
-							) as r ");
+							(SELECT mr.codigo_indicador as codigo_indicadormr,mr.id_rango_indicador as valor, substring(mr.periodo::text,1,4) as periodomr, mr.id_provincia as id_provinciamr
+								FROM indicadores.indicadores_medica_rangos mr 		
+							) as r
+
+							WHERE id_provincia = r.id_provinciamr 
+							AND r.periodomr = substring(periodo::text,1,4) 
+							AND left(codigo_indicador,-2) =  r.codigo_indicadormr ");
     }
 }
