@@ -175,6 +175,11 @@ Route::get('ceb-resumen-table/{periodo}' , 'CebController@getResumenTabla');
 Route::get('ceb-evolucion' , 'CebController@getEvolucion');
 
 /**
+ * ANALISIS CEI
+ */
+Route::get('cei-test' , 'CeiController@getIndicadorUnoNormal');
+
+/**
  * ANALISIS PRESTACIONES
  */
 Route::get('prestaciones-resumen-periodo' , 'PrestacionesController@getPeriodo');
