@@ -18,7 +18,7 @@ class MedicaRangos extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id';
+	protected $primaryKey = 'id_rango_indicador';
 
 	/**
 	 * Indicates if the model should be timestamped.
