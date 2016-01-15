@@ -43,6 +43,34 @@ class IndicadoresController extends Controller
 	}
 
 	/**
+	 * Devuelve la vista principal de indicadores priorizados
+	 *
+	 * @return view
+	 */
+	public function getIndicadoresEfectoresForm(){
+
+		$provincias = Provincia::all();
+		$indicadores = Descripcion::whereNotIn('indicador',['3.10','3.11','3.12','3.13','3.6','3.9'])
+		->orderBy('indicador','asc')
+		->get();
+
+		$anio = date('Y');
+		$dt = \DateTime::createFromFormat('Y',$anio);
+        $anios[] = $dt->format('Y');
+        $dt->modify('-1 year');
+        $anios[] = $dt->format('Y');
+		
+		$data = [
+			'page_title' => 'Indicadores Priorizados',
+			'provincias' => $provincias,
+			'indicadores' => $indicadores,
+			'anios' => $anios
+		];
+
+		return view('indicadores.priorizados' , $data);
+	}
+
+	/**
      * Devuelve el rango de periodos a filtrar
      *
      * @return array
@@ -271,12 +299,101 @@ class IndicadoresController extends Controller
 	        return (array_sum($resultados) / count($resultados));
 	}
 
+	public function getListadoPriorizadosView($id,$indicador,$year,$back)
+	{				
+		$data = [
+			'page_title' => 'Indicadores Priorizados de ' . $id, 						
+			'back' => $back,
+			'id_provincia' => $id,
+			'indicador' => $indicador,
+			'periodo' => $year.'01'	,
+			'anio' => $year				
+		];
 
-		/*$intervalo = $this->getDateInterval12Months($periodo);						
+		return view('indicadores.listado' , $data);
+	}	
 
-        $dt = \DateTime::createFromFormat('Ym',$periodo);
-		for ($i=0; $i < 12; $i++) { 
-			$periodos[] = $dt->format('Ym');
-			$dt->modify('-1 month');
-		}*/
+	public function getListadoPriorizadosTabla($id,$indicador,$year)
+	{		
+		if ($indicador == "5.3") 
+		{
+			$resultados = $this->getResultadosEfectoresPriorizadosNoPorcentual($indicador,$id,$year.'01');
+		} 
+		else 
+		{
+			$resultados = $this->getResultadosEfectoresPriorizadosNoPorcentual($indicador,$id,$year.'01');
+		}	
+
+		return json_encode($resultados);
+	}	
+
+	protected function getResultadosEfectoresPriorizadosNoPorcentual($indicador, $id_provincia, $periodo) {
+		
+		return \DB::select( DB::raw(" SELECT nombre, r.efector, case
+			when abril > 0 then abril
+			else (case
+				when marzo > 0 then marzo
+				else (case
+					when febrero > 0 then febrero
+					else (case
+						when enero > 0 then enero
+						else 0 end) end) end) end as c1, case
+										when agosto > 0 then agosto
+										else (case
+											when julio > 0 then julio
+											else (case
+												when junio > 0 then junio
+												else (case
+													when mayo > 0 then mayo
+													else 0 end) end) end) end as c2, case
+																	when diciembre > 0 then diciembre
+																	else (case
+																		when noviembre > 0 then noviembre
+																		else (case
+																			when octubre > 0 then octubre
+																			else (case
+																				when septiembre > 0 then septiembre
+																				else 0 end) end) end) end as c3, i.c1 as meta_c1, i.c2 as meta_c2, i.c3 as meta_c3
+
+	FROM indicadores.resumen_anio_indicadores_priorizados_no_porcentual(:periodo,:id_provincia,:indicador) r
+	LEFT JOIN indicadores.metas_efectores_priorizados i ON r.efector = i.efector
+	WHERE 
+		i.indicador = :indicador 
+		ORDER BY 3 desc;"), array('periodo'=> $periodo, 'id_provincia'=>$id_provincia, 'indicador'=>$indicador));		
+	}
+
+	protected function getResultadosEfectoresPriorizadosPorcentual($indicador, $id_provincia, $periodo) 
+	{	
+		return \DB::select( DB::raw(" SELECT nombre, r.efector, case
+			when abril > 0 then abril
+			else (case
+				when marzo > 0 then marzo
+				else (case
+					when febrero > 0 then febrero
+					else (case
+						when enero > 0 then enero
+						else 0 end) end) end) end as c1, case
+										when agosto > 0 then agosto
+										else (case
+											when julio > 0 then julio
+											else (case
+												when junio > 0 then junio
+												else (case
+													when mayo > 0 then mayo
+													else 0 end) end) end) end as c2, case
+																	when diciembre > 0 then diciembre
+																	else (case
+																		when noviembre > 0 then noviembre
+																		else (case
+																			when octubre > 0 then octubre
+																			else (case
+																				when septiembre > 0 then septiembre
+																				else 0 end) end) end) end as c3, i.c1 as meta_c1, i.c2 as meta_c2, i.c3 as meta_c3
+
+	FROM indicadores.resumen_anio_indicadores_priorizados(:periodo,:id_provincia,:indicador) r
+	LEFT JOIN indicadores.metas_efectores_priorizados i ON r.efector = i.efector
+	WHERE 
+		i.indicador = :indicador
+		ORDER BY 3 desc;"), array('periodo'=> $periodo, 'id_provincia'=>$id_provincia, 'indicador'=>$indicador));		
+	}
 }
