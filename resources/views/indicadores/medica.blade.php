@@ -17,15 +17,15 @@
 			<div class="box-body">
 
 				<!-- INDICADOR -->
-				@foreach ($indicador as $unIndicador)
+				@foreach ($indicadores as $unIndicador)
 				<h4>{{ $unIndicador->rangoIndicador->descripcionIndicador->descripcion }}</h4>	
 				<div class="row">
 					<div class="col-md-4">
-						<div class="info-box bg-lime">
+						<div class="info-box bg-{{$unIndicador->color}}">
 							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
 							<div class="info-box-content">
 								<span class="info-box-text">INDICADOR {{ $unIndicador->rangoIndicador->codigo_indicador }}</span>
-								<span class="info-box-number">24,4%</span>
+								<span class="info-box-number">{{ number_format((float)$unIndicador->resultadoTotal, 2, '.', '') }}%</span>
 								<div class="progress">
 									<div class="progress-bar" style="width: 25%"></div>
 								</div>
@@ -36,7 +36,7 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<div class="g1" style="height: 250px;"></div>
+						<div class="{{ 'indicador-'.preg_replace("/\./","-",$unIndicador->codigo_indicador) }}" style="height: 250px;"></div>
 					</div>
 					<div class="col-md-4">
 						
@@ -50,193 +50,6 @@
 
 				<hr />
 				@endforeach
-				<!-- INDICADOR 2 -->
-				{{-- <div class="row">
-					<div class="col-md-4">
-						<div class="info-box bg-red">
-							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
-							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR X.X</span>
-								<span class="info-box-number">1,4%</span>
-								<div class="progress">
-									<div class="progress-bar" style="width: 1%"></div>
-								</div>
-								<span class="progress-description">
-									Diciembre 2015
-								</span>
-							</div><!-- /.info-box-content -->
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="g2" style="height: 300px;"></div>
-					</div>
-					<div class="col-md-4">
-						<p>
-							<b>Numerador</b><br />
-							<p>Número de mujeres embarazadas de 10 a 19 años , a las que se les haya facturado un parto o cesárea en el bimestre y que haya recibido las siguientes prestaciones prenatales :</p>
-							<ul>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-							</ul>
-							<b>Denominador</b>
-							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
-						</p>
-					</div>
-				</div>
-
-				<hr />
-
-				<!-- INDICADOR 3 -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="info-box bg-yellow">
-							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
-							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR X.X</span>
-								<span class="info-box-number">24,4%</span>
-								<div class="progress">
-									<div class="progress-bar" style="width: 25%"></div>
-								</div>
-								<span class="progress-description">
-									Diciembre 2015
-								</span>
-							</div><!-- /.info-box-content -->
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="g1" style="height: 250px;"></div>
-					</div>
-					<div class="col-md-4">
-						<p>
-							<b>Numerador</b><br />
-							<p>Número de mujeres embarazadas de 10 a 19 años , a las que se les haya facturado un parto o cesárea en el bimestre y que haya recibido las siguientes prestaciones prenatales :</p>
-							<ul>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-							</ul>
-							<b>Denominador</b>
-							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
-						</p>
-					</div>
-				</div>
-
-				<hr />
-
-				<!-- INDICADOR 4 -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="info-box bg-lime">
-							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
-							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR X.X</span>
-								<span class="info-box-number">24,4%</span>
-								<div class="progress">
-									<div class="progress-bar" style="width: 25%"></div>
-								</div>
-								<span class="progress-description">
-									Diciembre 2015
-								</span>
-							</div><!-- /.info-box-content -->
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="g1" style="height: 250px;"></div>
-					</div>
-					<div class="col-md-4">
-						<p>
-							<b>Numerador</b><br />
-							<p>Número de mujeres embarazadas de 10 a 19 años , a las que se les haya facturado un parto o cesárea en el bimestre y que haya recibido las siguientes prestaciones prenatales :</p>
-							<ul>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-							</ul>
-							<b>Denominador</b>
-							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
-						</p>
-					</div>
-				</div>
-
-				<hr />
-
-				<!-- INDICADOR 5 -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="info-box bg-lime">
-							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
-							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR X.X</span>
-								<span class="info-box-number">24,4%</span>
-								<div class="progress">
-									<div class="progress-bar" style="width: 25%"></div>
-								</div>
-								<span class="progress-description">
-									Diciembre 2015
-								</span>
-							</div><!-- /.info-box-content -->
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="g1" style="height: 250px;"></div>
-					</div>
-					<div class="col-md-4">
-						<p>
-							<b>Numerador</b><br />
-							<p>Número de mujeres embarazadas de 10 a 19 años , a las que se les haya facturado un parto o cesárea en el bimestre y que haya recibido las siguientes prestaciones prenatales :</p>
-							<ul>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-							</ul>
-							<b>Denominador</b>
-							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
-						</p>
-					</div>
-				</div>
-
-				<hr />
-
-				<!-- INDICADOR 6 -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="info-box bg-lime">
-							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
-							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR X.X</span>
-								<span class="info-box-number">24,4%</span>
-								<div class="progress">
-									<div class="progress-bar" style="width: 25%"></div>
-								</div>
-								<span class="progress-description">
-									Diciembre 2015
-								</span>
-							</div><!-- /.info-box-content -->
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="g1" style="height: 250px;"></div>
-					</div>
-					<div class="col-md-4">
-						<p>
-							<b>Numerador</b><br />
-							<p>Número de mujeres embarazadas de 10 a 19 años , a las que se les haya facturado un parto o cesárea en el bimestre y que haya recibido las siguientes prestaciones prenatales :</p>
-							<ul>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-								<li>4 controles de embarazo.</li>
-							</ul>
-							<b>Denominador</b>
-							<p>Cantidad de mujeres de 10 a 19 años a las que se les haya facturado un parto o cesárea en el bimestre evaluado.</p>
-						</p>
-					</div>
-				</div> --}}
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
@@ -249,13 +62,15 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		$('.g1').highcharts({
+		
+		@foreach ($grafico as $unGrafico)
+			$('.indicador-{{ preg_replace("/\./","-",$unGrafico["indicador"]) }}').highcharts({
 			title: {
-				text: 'Evolución indicador x.x',
+				text: 'Evolución indicador {{$unGrafico["indicador"]}}',
 			},
 			xAxis: {
-				// ULTIMOS 6 MESES
-				categories: ['mes1','mes2','mes3','mes4','mes5','mes seleccionado']
+				// ULTIMOS 6 MESES				
+				categories: {!! json_encode($unGrafico["categories"]) !!}
 			},
 			yAxis: {
 				title: {
@@ -263,22 +78,16 @@
 				},
 				plotLines: [
 					{
-						value: 5,
-						width: 2,
-						dashStyle: 'shortdash',
-						color: '#d33724'
-					},
-					{
-						value: 15,
-						width: 2,
-						dashStyle: 'shortdash',
-						color: '#ff851b'
-					},
-					{
-						value: 21,
+						value: {{ $unGrafico['rangos']['max_verde'] }},
 						width: 2,
 						dashStyle: 'shortdash',
 						color: '#00a65a'
+					},
+					{
+						value: {{ $unGrafico['rangos']['min_rojo'] }},
+						width: 2,
+						dashStyle: 'shortdash',
+						color: '#ff851b'
 					}
 				],
 				labels : {
@@ -290,57 +99,17 @@
 				enabled: false
 			},
 			series: [{
-				name : 'lalala',
-				data : [1.3,3.4,5.6,6.7,7.8,25]
+				name : 'resultado',
+				data : {!! json_encode($unGrafico["data"]) !!}
 			}]
 		});
+		@endforeach	
 
-		$('.g2').highcharts({
-			title: {
-				text: 'Evolución indicador x.x',
-			},
-			xAxis: {
-				// ULTIMOS 6 MESES
-				categories: ['mes1','mes2','mes3','mes4','mes5','mes seleccionado']
-			},
-			yAxis: {
-				title: {
-					text: ''
-				},
-				plotLines: [
-					{
-						value: 5,
-						width: 2,
-						dashStyle: 'shortdash',
-						color: '#d33724'
-					},
-					{
-						value: 15,
-						width: 2,
-						dashStyle: 'shortdash',
-						color: '#ff851b'
-					},
-					{
-						value: 21,
-						width: 2,
-						dashStyle: 'shortdash',
-						color: '#00a65a'
-					}
-				],
-				labels : {
-					enabled : false
-				},
-				min : 0
-			},
-			legend: {
-				enabled: false
-			},
-			series: [{
-				name : 'lalala',
-				data : [0,0,1.1,1.2,1.3,1.4]
-			}]
+		$('.back').click(function(){
+			$.get('{{ $back }}' , function(data){
+				$('.content-wrapper').html(data);
+			});
 		});
-
 	});
 </script>
 @endsection
