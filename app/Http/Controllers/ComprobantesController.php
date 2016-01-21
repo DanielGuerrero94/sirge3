@@ -158,6 +158,7 @@ class ComprobantesController extends Controller
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($comprobante_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
+					$this->_error['created_at'] = date("Y-m-d H:i:s");					
 					Rechazo::insert($this->_error);
 				} else {
 					try {

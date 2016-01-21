@@ -16,7 +16,7 @@ class BeneficiariosBeneficiariosPeriodos extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,periodo,activo,efector_asignado,efector_habitual,id_ingreso,embarazo
-			    FROM beneficiarios.beneficiarios_periodos limit 10000')
+			    FROM beneficiarios.beneficiarios_periodos')
 		    AS migracion(clave_beneficiario character varying(16),
 				  periodo integer,
 				  activo character(1),

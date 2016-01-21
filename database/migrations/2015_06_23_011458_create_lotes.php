@@ -20,7 +20,7 @@ class CreateLotes extends Migration {
 			$table->integer('registros_out');
 			$table->integer('registros_mod')->default(0);
 			$table->timestamp('inicio')->default(DB::raw('now()::timestamp(0)'));
-			$table->timestamp('fin');
+			$table->timestamp('fin')->nullable();
 			$table->nullableTimestamps();
 
 			$table->foreign('id_subida')->references('id_subida')->on('sistema.subidas');

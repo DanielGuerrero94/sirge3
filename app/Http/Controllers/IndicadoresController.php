@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Datatables;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -321,15 +322,65 @@ class IndicadoresController extends Controller
 		} 
 		else 
 		{
-			$resultados = $this->getResultadosEfectoresPriorizadosNoPorcentual($indicador,$id,$year.'01');
-		}	
+			$resultados = $this->getResultadosEfectoresPriorizadosPorcentual($indicador,$id,$year.'01');
+		}				
 
-		return json_encode($resultados);
-	}	
+		for ($i=0; $i < count($resultados); $i++) { 			
+			$datatables[$i]['nombre']	= $resultados[$i]->nombre;	
+			$datatables[$i]['efector']	= $resultados[$i]->efector;											
+			$datatables[$i]['c1_color'] = $this->getColorCuatrimestre($resultados[$i]->c1,$resultados[$i]->meta_c1,$year,1);
+			$datatables[$i]['c2_color'] = $this->getColorCuatrimestre($resultados[$i]->c2,$resultados[$i]->meta_c2,$year,2);
+			$datatables[$i]['c3_color'] = $this->getColorCuatrimestre($resultados[$i]->c3,$resultados[$i]->meta_c3,$year,3);
+			$datatables[$i]['c1'] = '<a href="#" efector="'.$resultados[$i]->efector.'" color="'.$datatables[$i]['c1_color'].'" cuatri="1" class="detalle badge bg-'.$datatables[$i]['c1_color'].'">'. $resultados[$i]->c1 .'</a>';
+			$datatables[$i]['c2'] = '<a href="#" efector="'.$resultados[$i]->efector.'" color="'.$datatables[$i]['c2_color'].'" cuatri="2" class="detalle badge bg-'.$datatables[$i]['c2_color'].'">'. $resultados[$i]->c2 .'</a>';	
+			$datatables[$i]['c3'] = '<a href="#" efector="'.$resultados[$i]->efector.'" color="'.$datatables[$i]['c3_color'].'" cuatri="3" class="detalle badge bg-'.$datatables[$i]['c3_color'].'">'. $resultados[$i]->c3 .'</a>';		
+		}
+
+		return json_encode($datatables);
+
+		//return Datatables::make($aobjeto)
+        //->make(true);
+        //->addColumn('action' , function($benef){
+        //    return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+        //})
+        
+	}
+
+	public function getQuarterByMonth($monthNumber) {
+ 		return floor(($monthNumber - 1) / 3) + 1;
+	}
+
+	protected function getColorCuatrimestre($valor,$meta,$año,$cuatri){
+		$anio = date('Y');
+		$curMonth = date("m", time());		
+
+		if (intval($anio) == $año && $cuatri <= $this->getQuarterByMonth(intval($curMonth))) {
+			if($valor < $meta){
+				return 'red';
+			}
+			else{
+				return 'green';
+			}		
+		}
+		elseif (intval($anio) == $año && $cuatri > $this->getQuarterByMonth(intval($curMonth))) {			
+			return 'grey';			
+		}
+		elseif (intval($anio) > $año) {
+			if($valor < $meta){
+				return 'red';
+			}
+			else{
+				return 'green';
+			}			
+		}
+		else{
+			return 'red';
+		}				
+	}
 
 	protected function getResultadosEfectoresPriorizadosNoPorcentual($indicador, $id_provincia, $periodo) {
-		
-		return \DB::select( DB::raw(" SELECT nombre, r.efector, case
+				
+		return DB::select( 'SELECT nombre, r.efector, case
 			when abril > 0 then abril
 			else (case
 				when marzo > 0 then marzo
@@ -355,16 +406,16 @@ class IndicadoresController extends Controller
 																				when septiembre > 0 then septiembre
 																				else 0 end) end) end) end as c3, i.c1 as meta_c1, i.c2 as meta_c2, i.c3 as meta_c3
 
-	FROM indicadores.resumen_anio_indicadores_priorizados_no_porcentual(:periodo,:id_provincia,:indicador) r
+	FROM indicadores.resumen_anio_indicadores_priorizados_no_porcentual(?::integer,?::character varying,?::character varying) r
 	LEFT JOIN indicadores.metas_efectores_priorizados i ON r.efector = i.efector
 	WHERE 
-		i.indicador = :indicador 
-		ORDER BY 3 desc;"), array('periodo'=> $periodo, 'id_provincia'=>$id_provincia, 'indicador'=>$indicador));		
+		i.indicador = ?
+		ORDER BY 3 desc;', [$periodo,$id_provincia,$indicador,$indicador]);		
 	}
 
 	protected function getResultadosEfectoresPriorizadosPorcentual($indicador, $id_provincia, $periodo) 
 	{	
-		return \DB::select( DB::raw(" SELECT nombre, r.efector, case
+		return DB::select( 'SELECT nombre, r.efector, case
 			when abril > 0 then abril
 			else (case
 				when marzo > 0 then marzo
@@ -390,10 +441,10 @@ class IndicadoresController extends Controller
 																				when septiembre > 0 then septiembre
 																				else 0 end) end) end) end as c3, i.c1 as meta_c1, i.c2 as meta_c2, i.c3 as meta_c3
 
-	FROM indicadores.resumen_anio_indicadores_priorizados(:periodo,:id_provincia,:indicador) r
+	FROM indicadores.resumen_anio_indicadores_priorizados(?,?,?) r
 	LEFT JOIN indicadores.metas_efectores_priorizados i ON r.efector = i.efector
 	WHERE 
-		i.indicador = :indicador
-		ORDER BY 3 desc;"), array('periodo'=> $periodo, 'id_provincia'=>$id_provincia, 'indicador'=>$indicador));		
+		i.indicador = ?
+		ORDER BY c1 desc;', [$periodo,$id_provincia,$indicador,$indicador]);		
 	}
 }

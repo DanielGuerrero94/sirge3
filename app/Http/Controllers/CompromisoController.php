@@ -106,6 +106,8 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.descentralizacion-uec';
 		}
 
+		$series = array();
+
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
 		$provincias = CA::join('compromiso_anual.metas_descentralizacion as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
 						->where('periodo' , $dt->format('Ym'))->orderBy('m.id_provincia')->get();

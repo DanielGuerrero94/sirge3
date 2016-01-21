@@ -27,8 +27,8 @@ class CreatePrestaciones extends Migration {
 			$table->string('numero_documento', 14)->nullable();
 			$table->smallInteger('orden');
 			$table->integer('lote');
-			//$table->jsonb('datos_reportables')->nullable();
-			$table->string('datos_reportables')->nullable();
+			$table->jsonb('datos_reportables')->nullable();
+			//$table->string('datos_reportables')->nullable();
 			
 			$table->foreign('efector')->references('cuie')->on('efectores.efectores');
 			$table->foreign('codigo_prestacion')->references('codigo_prestacion')->on('pss.codigos');

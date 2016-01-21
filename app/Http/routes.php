@@ -243,6 +243,10 @@ Route::get('grafico-6-table' , 'GraficosController@getGrafico6Tabla');
  */
 Route::get('indicadores-medica' , 'IndicadoresController@getIndicadoresMedicaForm');
 Route::get('indicadores-medica/{id}/{periodo}/{back}' , 'IndicadoresController@getIndicadoresMedica');
+Route::get('indicadores-efectores' , 'IndicadoresController@getIndicadoresEfectoresForm');
+Route::get('indicadores-efectores/{id}/{indicador}/{anio}/{back}' , 'IndicadoresController@getListadoPriorizadosView');
+Route::get('priorizados-listado-table/{id}/{indicador}/{anio}' , 'IndicadoresController@getListadoPriorizadosTabla');
+Route::get('priorizados-indicadores/{id}/{anio}' , 'Indicadores\PriorizadosController@getIndicador_3_3_numerador');
 
 /**
  * DDJJ

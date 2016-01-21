@@ -16,7 +16,7 @@ class BeneficiariosBeneficiariosParientes extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,madre_tipo_documento,madre_numero_documento,madre_apellido,madre_nombre,padre_tipo_documento,padre_numero_documento,padre_apellido,padre_nombre,otro_tipo_documento,otro_numero_documento,otro_apellido,otro_nombre,otro_tipo_relacion
-			    FROM beneficiarios.beneficiarios_parientes limit 10000')
+			    FROM beneficiarios.beneficiarios_parientes')
 		    AS migracion(clave_beneficiario character varying(16),
 				  madre_tipo_documento character varying(5),
 				  madre_numero_documento character varying(14),

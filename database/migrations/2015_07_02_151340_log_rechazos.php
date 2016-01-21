@@ -17,7 +17,7 @@ class LogRechazos extends Migration
             $table->integer('lote');
             $table->jsonb('registro');
             $table->jsonb('motivos');
-            $table->timestamps();
+            $table->nullableTimestamps();
         });
     }
 

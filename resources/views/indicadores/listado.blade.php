@@ -35,7 +35,32 @@ $(function() {
 			$('.content-wrapper').html(data);
 	});*/
 
+	$.ajax({
+		     type : 'get',
+		     url  : 'priorizados-listado-table/{{$id_provincia}}/{{$indicador}}/{{$anio}}',
+		     dataType: 'json',
+		     success : function (data) { 
 
+			     $('#priorizados-table').dataTable({
+				        "data": data,
+				        dom	: 'frt<"bottom"lp><"clear">' ,
+					    info : true,
+						filter : true,
+						"iDisplayLength": 10,
+				        "processing": true,
+				        "columns": [
+			            { "data": "nombre" },
+			            { "data": "efector" , "sWidth": "22%"},
+			            { "data": "c1", "class": "center" , "sWidth": "12%"},
+			            { "data": "c2", "class": "center" , "sWidth": "12%"},
+			            { "data": "c3", "class": "center" , "sWidth": "12%"}
+			        	]
+		    	});   
+		 	}
+	});
+
+
+/*
    $('#priorizados-table').DataTable({
         processing: true,
         serverSide: true,
@@ -48,6 +73,7 @@ $(function() {
             { data: 'c3' , name: 'c3' }
         ]
     }); 
+*/
 
     $('.back').click(function(){
 		$.get('{{ $back }}' , function(data){

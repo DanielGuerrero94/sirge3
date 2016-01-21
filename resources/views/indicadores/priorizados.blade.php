@@ -65,7 +65,11 @@
 				}
 			},
 			submitHandler : function(form){
-				$.get('indicadores-efectores/' + $('#provincia').val() + '/' + $('#indicador').val() + '/' + $('#anio').val() + '/indicadores-efectores', function(data){
+				/*$.get('indicadores-efectores/' + $('#provincia').val() + '/' + $('#indicador').val() + '/' + $('#anio').val() + '/indicadores-efectores', function(data){
+					$('.content-wrapper').html(data);
+				});*/
+
+				$.get('priorizados-indicadores/' + $('#provincia').val() + '/' + $('#anio').val(), function(data){
 					$('.content-wrapper').html(data);
 				});
 			}

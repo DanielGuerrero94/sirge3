@@ -16,7 +16,7 @@ class BeneficiariosBeneficiariosCeb extends Seeder
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,periodo,ceb,efector,fecha_ultima_prestacion,devenga_capita, devenga_cantidad_capita
-			    FROM beneficiarios.beneficiarios_ceb limit 10000')
+			    FROM beneficiarios.beneficiarios_ceb')
 		    AS migracion(clave_beneficiario character varying(16),
 				  periodo integer,
 				  ceb character(1),

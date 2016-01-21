@@ -134,12 +134,27 @@ class PrestacionesController extends Controller
 	 * @return array
 	 */
 	protected function armarArray($linea , $lote) {
-		$datos_reportables = [
-			$linea[11] => $linea[12],
-			$linea[13] => $linea[14],
-			$linea[15] => $linea[16],
-			$linea[17] => $linea[18]
-		];
+
+		$datos_reportables = array();
+
+		if($linea[11] != null && $linea[12] != null && $linea[11] != '' && $linea[12] != ''){							
+			$datos_reportables[$linea[11]] = $linea[12];							
+		}
+		if($linea[13] != null && $linea[14] != null && $linea[13] != '' && $linea[14] != ''){							
+			$datos_reportables[$linea[13]] = $linea[14];
+		}
+		if($linea[15] != null && $linea[16] != null && $linea[15] != '' && $linea[16] != ''){							
+			$datos_reportables[$linea[15]] = $linea[16];
+		}
+		if($linea[17] != null && $linea[18] != null && $linea[17] != '' && $linea[18] != ''){							
+			$datos_reportables[$linea[17]] = $linea[18];
+		}						
+
+		$json_datos_reportables = json_encode($datos_reportables);
+
+		if(count($datos_reportables) < 1){
+			$json_datos_reportables = null;
+		}
 
 		$prestacion = [
 			$linea[0],
@@ -156,7 +171,7 @@ class PrestacionesController extends Controller
 			$linea[19],
 			$linea[20],
 			$lote,
-			json_encode($datos_reportables)
+			$json_datos_reportables
 		];
 		return $prestacion;
 	}

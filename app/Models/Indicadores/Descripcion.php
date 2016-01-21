@@ -26,4 +26,15 @@ class Descripcion extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * Mostrar la descripcion del indicador.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getDescripcionAttribute($value)
+    {
+        return mb_strtoupper(html_entity_decode($value));
+    }
 }
