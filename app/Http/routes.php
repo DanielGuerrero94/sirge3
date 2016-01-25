@@ -265,7 +265,7 @@ Route::get('ddjj-doiu9-reimprimir/{id}' , 'DdjjController@getD9');
 Route::get('ddjj-doiu9-consolidado' , 'DdjjController@D9Consolidado');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
-
+Route::get('ddjj-backup-reimprimir/{id}' , 'DdjjController@getBack');
 Route::get('ddjj-periodo/{tipo}' , [
 		'middleware' => 'uec' , 
 		'uses' => 'DdjjController@getPeriodo'
