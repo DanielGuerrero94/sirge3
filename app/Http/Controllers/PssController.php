@@ -53,6 +53,7 @@ class PssController extends Controller
 	public function getListadoTabla(){
 		// $pss = Salud::where('codigo_prestacion' , 'CTC001A97')->get();
 		$pss = Salud::all();
+		return json_encode($pss);
 		return Datatables::of($pss)
 			->editColumn('descripcion_grupal' , '{!! str_limit($descripcion_grupal, 60) !!}')
 			->addColumn('action' , function($ps){

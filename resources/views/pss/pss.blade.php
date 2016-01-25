@@ -29,7 +29,11 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		$('#pss-table').DataTable({
+		$.get('pss-listado-table', function(data) {
+			$('.content-wrapper').html(data);
+		});
+
+		/*$('#pss-table').DataTable({
             processing: true,
             serverSide: true,
             ajax : 'pss-listado-table',
@@ -41,7 +45,7 @@
                 { data: 'descripcion_grupal'},
                 { data: 'action'}
             ]
-        });
+        });*/
 
         $('#pss-table').on('click' , '.ver' , function(){
         	var id = $(this).attr('codigo');
