@@ -24,7 +24,7 @@ class Conversacion extends Model {
 	 *
 	 * @var bool
 	 */
-	public $timestamps = false;
+	public $timestamps = true;
 
 	/**
 	 * Obtener todos los mensajes de una conversacion

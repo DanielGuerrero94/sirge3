@@ -207,6 +207,7 @@ class OspController extends Controller
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($osp_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
+					$this->_error['created_at'] = date("Y-m-d H:i:s");
 					Rechazo::insert($this->_error);
 				} else {
 					$this->_resumen['insertados'] ++;
@@ -222,6 +223,7 @@ class OspController extends Controller
 				$this->_error['lote'] = $lote;
 				$this->_error['registro'] = json_encode($linea);
 				$this->_error['motivos'] = '{"registro invalido" : ["El número de campos es incorrecto"]}';
+				$this->_error['created_at'] = date("Y-m-d H:i:s");
 				Rechazo::insert($this->_error);
 			}
 		}

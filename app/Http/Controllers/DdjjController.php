@@ -440,14 +440,15 @@ class DdjjController extends Controller
 		$d_pr = \DateTime::createFromFormat('Y-m' , $d->periodo_reportado);
 		$d_fi = \DateTime::createFromFormat('d/m/Y' , $d->fecha_impresion);
 		$d_cc = \DateTime::createFromFormat('Y-m' , $d->periodo_cuenta_capitas);
-		
+				
 		$data = [
 			'ddjj' => $d,
 			'mensaje' => Parametro::find(2),
 			'fecha_impresion' => strftime("%d de %B de %Y" , $d_fi->getTimeStamp()),
 			'fecha_tabla_efectores' => strftime("%B de %Y" , $d_pr->getTimeStamp()),
 			'fecha_cc' => strftime("%B de %Y" , $d_cc->getTimeStamp()),
-		];
+		];		
+
 		$pdf = PDF::loadView('pdf.ddjj.doiu9' , $data);
 		return $pdf;
 	}
@@ -481,7 +482,18 @@ class DdjjController extends Controller
 	 * @return stream
 	 */
 	public function getD9($id){
-		$pdf = $this->getPdfDoiu9($id);
+		$pdf = $this->getPdfDoiu9($id);		
+		return $pdf->download($id . '.pdf');
+	}
+
+	/**
+	 * Devuelve un archivo
+	 * @param int $id
+	 *
+	 * @return stream
+	 */
+	public function getBack($id){
+		$pdf = $this->getPdfBackup($id);		
 		return $pdf->download($id . '.pdf');
 	}
 

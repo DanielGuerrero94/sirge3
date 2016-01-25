@@ -14,10 +14,10 @@ class IndicadoresIndicadoresMedica extends Seeder
         \DB::statement(" INSERT INTO indicadores.indicadores_medica(id_provincia,periodo,codigo_indicador,resultado)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
+		FROM dblink('dbname=sirge host=192.6.0.36 user=postgres password=BernardoCafe008',
 		    'SELECT id_provincia,periodo,codigo_indicador,coalesce(resultado,0)		    
 			FROM
-				indicadores.indicadores_medica i;')
+				indicadores.indicadores_medica i WHERE periodo = 201512')
 		    AS migracion(id_provincia char(2),
 				periodo integer,
 				codigo_indicador character varying(6),
