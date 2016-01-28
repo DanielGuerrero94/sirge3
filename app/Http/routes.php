@@ -165,6 +165,7 @@ Route::get('pss-lineas-detalle/{id}' , 'PssController@getDetalleLinea');
 Route::get('pss-grupos' , 'PssController@getGrupos');
 Route::get('pss-grupos-table' , 'PssController@getGruposTabla');
 Route::get('pss-grupos-detalle/{id}' , 'PssController@getDetalleGrupos');
+Route::get('pss-grupos-codigos-table/{id}' , 'PssController@getGruposCodigosTabla');
 
 /** 
  * ANALISIS CEB

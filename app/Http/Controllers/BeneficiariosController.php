@@ -47,14 +47,7 @@ class BeneficiariosController extends Controller
      * @return json
      */
     public function getListadoTabla(){
-    	$benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','id_provincia_alta','clave_beneficiario')
-            ->with([ 
-                'geo' => function($q){ 
-                    $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
-                }
-            ]);
-            // ->where('clave_beneficiario','LIKE','240010000100493%')->take(20);        
-        //return json_encode($benefs);
+    	$benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','numero_documento','clave_beneficiario');
         return Datatables::of($benefs)
             ->addColumn('action' , function($benef){
                 return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
@@ -71,7 +64,7 @@ class BeneficiariosController extends Controller
      */
     public function historiaClinica($id , $back){
         $beneficiario = Beneficiario::select(                
-                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion)) as edad_inscripcion')                
+                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion,fecha_nacimiento)) as edad_inscripcion')                
                 )->with([                
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
@@ -82,6 +75,7 @@ class BeneficiariosController extends Controller
                 }
                 ])
         ->find($id);
+            
         //return json_encode($beneficiario);
         $data = [
             'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,

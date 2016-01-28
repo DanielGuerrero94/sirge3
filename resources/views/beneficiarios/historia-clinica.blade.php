@@ -55,7 +55,7 @@
 							<div class="form-group">
 								<label class="col-md-8 control-label">Edad incripci&oacute;n</label>
 								<div class="col-md-4">
-									<p class="form-control-static">{{ $beneficiario->edad_inscripcion }} años</p>
+									<p class="form-control-static">{{ ($beneficiario->edad_inscripcion == 1) ? $beneficiario->edad_inscripcion . ' año' : $beneficiario->edad_inscripcion . ' años' }}</p>
 								</div>
 							</div>
 						</div>
@@ -90,7 +90,7 @@
 							<div class="form-group">
 								<label class="col-md-8 control-label">Edad actual</label>
 								<div class="col-md-4">
-									<p class="form-control-static">{{ $beneficiario->edad }} años</p>
+									<p class="form-control-static">{{ ($beneficiario->edad == 1) ? $beneficiario->edad . ' año' : $beneficiario->edad . ' años' }}</p>
 								</div>
 							</div>
 						</div>
@@ -102,7 +102,7 @@
 							<div class="form-group">
 								<label class="col-md-2 control-label">Provincia</label>
 								<div class="col-md-10">
-									<p class="form-control-static">{{ $beneficiario->geo->provincia->descripcion }}</p>
+									<p class="form-control-static">{{ $beneficiario->geo->provincia->descripcion or 'No se encontraron datos'}}</p>
 								</div>
 							</div>													
 						</div>
@@ -113,7 +113,7 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label">Departamento</label>
 								<div class="col-md-8">
-									<p class="form-control-static">{{ $beneficiario->geo->ndepartamento->nombre_departamento }}</p>
+									<p class="form-control-static">{{ $beneficiario->geo->ndepartamento->nombre_departamento or 'No se encontraron datos'}}</p>
 								</div>
 							</div>
 						</div>
@@ -122,7 +122,7 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label">Localidad</label>
 								<div class="col-md-8">
-									<p class="form-control-static">{{ $beneficiario->geo->localidad->nombre_localidad }}</p>
+									<p class="form-control-static">{{ $beneficiario->geo->localidad->nombre_localidad or 'No se encontraron datos'}}</p>
 								</div>
 							</div>
 						</div>
@@ -133,7 +133,7 @@
 							<div class="form-group">
 								<label class="col-md-2 control-label">Domicilio</label>
 								<div class="col-md-10">
-									<p class="form-control-static">{{ $beneficiario->geo->calle }}</p>
+									<p class="form-control-static">{{ $beneficiario->geo->calle or 'No se encontraron datos'}}</p>
 								</div>
 							</div>
 						</div>
@@ -171,12 +171,12 @@
 							<!-- timeline item -->
 							<li>
 								<!-- timeline icon -->
-								<i class="{{$unaPrestacion->datosPrestacion->TipoDePrestacion->icono}}"></i>
+								<i class="{{ (isset($unaPrestacion->datosPrestacion->TipoDePrestacion->icono) ? $unaPrestacion->datosPrestacion->TipoDePrestacion->icono : 'fa fa-minus-square-o bg-gray') }}"></i>
 								<div class="timeline-item">
 									<span class="time"><i class="fa fa-tag"></i> {{ $unaPrestacion->codigo_prestacion }} </span>
-									<h3 class="timeline-header"><a href="#">{{ $unaPrestacion->datosPrestacion->TipoDePrestacion->descripcion }}</a></h3>
+									<h3 class="timeline-header"><a href="#">{{ ($unaPrestacion->datosPrestacion->TipoDePrestacion != null ? $unaPrestacion->datosPrestacion->TipoDePrestacion->descripcion : 'PRESTACION ANTIGUA') }}</a></h3>
 									<div class="timeline-body">
-										<b><i>{{ mb_strtoupper($unaPrestacion->datosEfector->nombre) }} </i></b> <br> {{ ucfirst(mb_strtolower($unaPrestacion->datosPrestacion->descripcion_grupal)) }}
+										<b><i>{{ mb_strtoupper($unaPrestacion->datosEfector->nombre) }} </i></b> <br> {{ ucfirst(mb_strtolower(($unaPrestacion->datosPrestacion->descripcion_grupal == null ? 'No hay datos' : $unaPrestacion->datosPrestacion->descripcion_grupal))) }}
 									</div>
 								</div>
 							</li>

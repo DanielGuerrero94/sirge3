@@ -54,4 +54,12 @@ class Salud extends Model
 	public function trazadora(){
 		return $this->hasMany('App\Models\PSS\Trazadora' , 'codigo_prestacion' , 'codigo_prestacion');
 	}
+
+	/**
+	 * Devuelve las prestaciones con ese codigo
+	 */
+	public function tipoDePrestacion()
+	{
+		return $this->hasOne('App\Models\TipoPrestacion' , 'tipo_prestacion' , 'tipo');	
+	}
 }

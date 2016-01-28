@@ -20,6 +20,9 @@ use App\Models\PSS\GrupoEtario as Etario;
 use App\Models\Dw\FC\Fc002;
 use App\Models\Dw\FC\Fc003;
 use App\Models\Dw\FC\Fc004;
+use App\Models\Dw\FC\Fc005;
+use App\Models\Dw\FC\Fc006;
+
 
 class PssController extends Controller
 {
@@ -50,9 +53,8 @@ class PssController extends Controller
 	 *
 	 * @return json
 	 */
-	public function getListadoTabla(){
-		// $pss = Salud::where('codigo_prestacion' , 'CTC001A97')->get();
-		$pss = Salud::all();		
+	public function getListadoTabla(){		
+		$pss = Salud::select('codigo_prestacion','tipo','objeto','diagnostico','descripcion_grupal');		
 		return Datatables::of($pss)
 			->editColumn('descripcion_grupal' , '{!! str_limit($descripcion_grupal, 60) !!}')
 			->addColumn('action' , function($ps){
@@ -327,7 +329,7 @@ class PssController extends Controller
 	 * @return json
 	 */
 	public function getLineasTabla(){
-		$lineas = LineaCuidado::all();
+		$lineas = LineaCuidado::select('descripcion','id_linea_cuidado');
 		return Datatables::of($lineas)
 			->addColumn('action' , function($linea){
 				return '<button linea="'. $linea->id_linea_cuidado .'" class="ver btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
@@ -356,6 +358,33 @@ class PssController extends Controller
 			$data[1]['name'] = 'Monto. Fact.';
 			$data[1]['data'][$key] = (int)($info->f/1000);
 			*/
+		}
+
+		return json_encode($data);
+	}
+
+	/**
+	 * Devuelve la serie para el gráfico de facturacion para un determinado grupo etario
+	 * @param string $id
+	 *
+	 * @return json
+	 */
+	protected function getSeriesGrupoEtario($id){
+		$interval = $this->getDateInterval();
+
+		$facturacion = Fc006::select('periodo' , DB::raw('sum(cantidad) as c'))
+							->where('id_grupo_etario' , $id)
+							->whereBetween('periodo',[$interval['min'],$interval['max']])
+							->groupBy('periodo')
+							->orderBy('periodo','asc')
+							->get();
+
+	    $data = array();										    
+
+		foreach ($facturacion as $key => $info){
+			$data[0]['name'] = 'Cant. Fact.';
+			$data[0]['data'][$key] = (int) $info->c;
+			$data[0]['color'] = '#ff851b';			
 		}
 
 		return json_encode($data);
@@ -447,6 +476,90 @@ class PssController extends Controller
 	}
 
 	/**
+	 * Devuelve la serie para el gráfico de distribución
+	 * @param string $id
+	 *
+	 * @return json
+	 */
+	protected function getDistribucionGrupoEtario($id){
+		$meses = $this->getMesesArray();
+		$interval = $this->getDateInterval();
+		$i = 0;
+
+		$data = [];
+
+		$regiones = Fc006::select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad) as c'))							
+							->join('geo.provincias as p' , 'estadisticas.fc_006.id_provincia' , '=' , 'p.id_provincia')
+                    		->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                    		->whereBetween('periodo',[$interval['min'],$interval['max']])
+							->where('id_grupo_etario' , $id)                    		
+                    		->groupBy('r.id_region','r.nombre')                    		
+                    		->get();
+
+        foreach ($regiones as $key => $region){
+            $data[$i]['color'] = $this->alter_brightness('#ff851b' , $key * 35);
+            $data[$i]['id'] = (string)$region->id_region;
+            $data[$i]['name'] = $region->nombre;
+            $data[$i]['value'] = (int)$region->c;
+            $i++;
+        }
+
+        for ($j = 0 ; $j <= 5 ; $j ++){
+            $provincias = Fc006::select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad) as c'))            				
+                            ->join('geo.provincias as p' , 'estadisticas.fc_006.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->whereBetween('periodo',[$interval['min'],$interval['max']])
+                            ->where('r.id_region' , $j)
+                            ->where('id_grupo_etario' , $id)                            
+                            ->groupBy('r.id_region','p.id_provincia','p.nombre')                            
+                            ->get();
+
+            foreach ($provincias as $key => $provincia){
+                $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
+                $data[$i]['name'] = $provincia->nombre;
+                $data[$i]['parent'] = (string)$provincia->id_region;
+                $data[$i]['value'] = (int)$provincia->c;
+                $i++;
+            }
+        }
+
+
+        /*for ($k = 1 ; $k <= 24 ; $k ++){
+
+	    	$dt = \DateTime::createFromFormat('Ym' , $interval['max']);
+	    	$dt->modify('+1 month');
+
+        	for ($l = 0 ; $l < 12 ; $l ++){
+	        	
+	        	$dt->modify('-1 month');
+
+	            $periodos = Fc006::where('periodo' , $dt->format('Ym'))
+	            				->where('id_grupo_etario' , $id)
+	            				->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+	            				->join('geo.provincias as p' , 'estadisticas.fc_006.id_provincia' , '=' , 'p.id_provincia')
+                            	->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            	->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , 'periodo' , DB::raw('sum(cantidad) as c'))
+                            	->groupBy('r.id_region')
+                            	->groupBy('p.id_provincia')
+                            	->groupBy('p.nombre')
+                            	->groupBy('periodo')
+                            	->get();
+                
+                foreach ($periodos as $key => $periodo){
+                	$data[$i]['id'] = $periodo->id_region . "_" . $periodo->id_provincia . "_" . $periodo->periodo;
+	                $data[$i]['name'] = strftime("%b %Y" , $dt->getTimeStamp());
+	                $data[$i]['parent'] = (string)$periodo->id_region . "_" . $periodo->id_provincia;
+	                $data[$i]['value'] = (int)$periodo->c;
+	                $i++;
+                }
+        	}
+        }*/
+
+        return json_encode($data);
+
+	}
+
+	/**
 	 * Devuelve la vista del detalle de la línea de cuidado
 	 * @param int $id
 	 *
@@ -474,7 +587,25 @@ class PssController extends Controller
 	 * @return json
 	 */
 	public function getLineasCodigosTabla($id){
-		$codigos = Grupo::with(['grupoEtario'])->where('id_linea_cuidado' , $id)->get();
+		$codigos = Grupo::select('codigo_prestacion','id_grupo_etario')->with(['grupoEtario'])->where('id_linea_cuidado' , $id);
+		return Datatables::of($codigos)->make(true);
+	}
+
+		/**
+	 * Devuelve JSON para la datatable
+	 * @param int $id
+	 *
+	 * @return json
+	 */
+	public function getGruposCodigosTabla($id){
+
+		$codigos = Salud::select('pss.codigos.codigo_prestacion','descripcion_grupal')					
+				   ->join('pss.codigos_grupos', function($join) use ($id)
+                                {
+                                    $join->on('pss.codigos_grupos.codigo_prestacion','=','pss.codigos.codigo_prestacion')
+                                         ->where('pss.codigos_grupos.id_grupo_etario','=',$id);
+                                })
+				   ->groupBy('pss.codigos.codigo_prestacion');									
 		return Datatables::of($codigos)->make(true);
 	}
 
@@ -559,7 +690,25 @@ class PssController extends Controller
 	 * @return null
 	 */
 	public function getDetalleGrupos($id){
+		
+		$grupoEtario = Etario::find($id);
 
+		/*$codigo_grupo = Grupo::select('codigo_prestacion','descripcion')
+		->where('id_grupo_etario','=',$id)
+		->groupBy('codigo_prestacion','descripcion')
+		->orderBy('codigo_prestacion','desc')		
+		->orderBy('descripcion','desc')
+		->get();*/
+
+		$data = [
+			'page_title' => $grupoEtario->descripcion,
+			'id_grupo_etario' => $grupoEtario->id_grupo_etario,			
+			'meses' => $this->getMesesArray(),
+			'series' => $this->getSeriesGrupoEtario($id),
+			'tree_map' => $this->getDistribucionGrupoEtario($id),
+			'back' => 'pss-grupos'
+		];
+
+		return view('pss.grupos_detail' , $data);
 	}
-
 }

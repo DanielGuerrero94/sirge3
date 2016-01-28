@@ -40,6 +40,6 @@ class Prestacion extends Model
 	 */
 	public function datosPrestacion()
 	{
-		return $this->hasOne('App\Models\Codigo' , 'codigo_prestacion' , 'codigo_prestacion');	
+		return $this->hasOne('App\Models\Salud' , 'codigo_prestacion' , 'codigo_prestacion');	
 	}	
 }
