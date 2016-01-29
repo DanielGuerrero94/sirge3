@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('BeneficiariosBeneficiariosEmbarazos');
 		//$this->call('BeneficiariosBeneficiariosIndigenas');
 		//$this->call('BeneficiariosBeneficiariosPeriodos');
-		$this->call('DiccionariosDiccionario');		
+		//$this->call('DiccionariosDiccionario');
+		$this->call('GraficosGraficos');		
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
@@ -139,7 +140,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
 		$this->call('DiccionariosDiccionario');
-		//$this->call('OspProvincias');*/
+		//$this->call('OspProvincias');
+		$this->call('GraficosGraficos');*/
 		$this->call('ActualizarSecuencias');
 		
 
