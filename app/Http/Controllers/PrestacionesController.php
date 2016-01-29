@@ -558,7 +558,7 @@ class PrestacionesController extends Controller
 		$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 
 		$data = [
-			'page_title' => 'Resumen mensual facturación prestaciones , ' . ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
+			'page_title' => 'Resumen mensual facturación prestaciones, ' . ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
 			'progreso_prestaciones_series' => $this->getProgresoPrestaciones($periodo),
 			'progreso_prestaciones_categorias' => $this->getMesesArray($periodo),
 			'distribucion_provincial_categorias' => $this->getProvinciasArray(),

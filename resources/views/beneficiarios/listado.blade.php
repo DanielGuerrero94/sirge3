@@ -33,14 +33,13 @@ $(function() {
         sortable: false,
         ajax : 'beneficiarios-listado-table',
         columns: [
-            { data: 'nombre', orderable: false},
-            { data: 'apellido', orderable: false},
-            /*{ data: 'geo.provincia.descripcion', name: 'provincia' },*/
-            { data: 'numero_documento', name: 'numero_documento', orderable: false},
-            { data: 'fecha_nacimiento', orderable: false},
-            { data: 'sexo', orderable: false},
-            { data: 'clave_beneficiario', name: 'clave beneficiario', orderable: false},
-            { data: 'action', orderable: false},
+            { data: 'nombre', orderable: false, searchable: false},
+            { data: 'apellido', orderable: false, searchable: false},            
+            { data: 'numero_documento', name:'numero_documento' , orderable: false},
+            { data: 'fecha_nacimiento', orderable: false, searchable: false},
+            { data: 'sexo', orderable: false, searchable: false},
+            { data: 'clave_beneficiario', name: 'clave_beneficiario', orderable: false},
+            { data: 'action', orderable: false, searchable: false},
         ]
     });
 
