@@ -33,7 +33,12 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('BeneficiariosBeneficiariosIndigenas');
 		//$this->call('BeneficiariosBeneficiariosPeriodos');
 		//$this->call('DiccionariosDiccionario');
-		$this->call('GraficosGraficos');		
+		//$this->call('GraficosGraficos');
+		//$this->call('SolicitudesGrupos');
+		//$this->call('SolicitudesEstados');
+		// $this->call('SolicitudesPrioridades');
+		// $this->call('SolicitudesTipoSolicitud');
+		$this->call('SolicitudesOperadores');		
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
@@ -141,8 +146,12 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresEfectoresAddendas');
 		$this->call('DiccionariosDiccionario');
 		//$this->call('OspProvincias');
-		$this->call('GraficosGraficos');*/
-		$this->call('ActualizarSecuencias');
+		$this->call('GraficosGraficos');
+		$this->call('SolicitudesGrupos');
+		$this->call('SolicitudesEstados');
+		$this->call('SolicitudesPrioridades');
+		$this->call('SolicitudesTipoSolicitud');
+		$this->call('ActualizarSecuencias');*/
 		
 
 		Model::reguard();
