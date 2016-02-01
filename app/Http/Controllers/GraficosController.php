@@ -303,7 +303,7 @@ class GraficosController extends Controller
      * @return json
      */
     public function getGrafico6Tabla(){
-        $prestaciones = Fc001::join('geo.provincias as p' , 'estadisticas.fc_001.id_provincia' , '=' , 'p.id_provincia')->get();
+        $prestaciones = Fc001::join('geo.provincias as p' , 'estadisticas.fc_001.id_provincia' , '=' , 'p.id_provincia');
         return Datatables::of($prestaciones)->make(true);
     }
 }

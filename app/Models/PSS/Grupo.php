@@ -33,4 +33,11 @@ class Grupo extends Model
 	public function lineaCuidado(){
 		return $this->hasOne('App\Models\PSS\LineaCuidado' , 'id_linea_cuidado' , 'id_linea_cuidado');
 	}
+
+	/**
+	 * Devuelve la prestacion
+	 */
+	public function prestacion(){
+		return $this->hasOne('App\Models\Prestacion' , 'codigo_prestacion' , 'codigo_prestacion');
+	}
 }

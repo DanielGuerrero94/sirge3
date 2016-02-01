@@ -196,7 +196,7 @@
                 turboThreshold : 5000
             }],
             title : {
-            	text : null
+            	text : 'Distribución facturación'
             }
         });
 

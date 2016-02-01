@@ -33,11 +33,11 @@
             serverSide: true,
             ajax : 'efectores-listado-table',
             columns: [
-                { data: 'cuie', name: 'cuie' },
-                { data: 'siisa', name: 'siisa' },
-                { data: 'nombre', name: 'nombre' },
-                { data: 'label_estado', name: 'estado.descripcion' },
-                { data: 'action', name: 'action' }
+                { data: 'cuie', name: 'cuie', orderable: false },
+                { data: 'siisa', name: 'siisa', orderable: false },
+                { data: 'nombre', name: 'nombre', orderable: false },
+                { data: 'label_estado', name: 'estado.descripcion', orderable: false, searchable: false},
+                { data: 'action', orderable: false, searchable: false}
             ]
         });
 

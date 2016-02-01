@@ -17,7 +17,7 @@ class CreateOperadores extends Migration
             $table->integer('id_usuario');
             $table->integer('id_grupo');
             $table->char('habilitado', 1);
-            $table->timestamps();
+            $table->nullableTimestamps();
 
             $table->unique(['id_usuario','id_grupo']);
             $table->foreign('id_usuario')->references('id_usuario')->on('sistema.usuarios');

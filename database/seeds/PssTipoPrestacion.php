@@ -9,25 +9,16 @@ class PssTipoPrestacion extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		\DB::statement("INSERT INTO pss.tipo_prestacion(tipo_prestacion,descripcion)
+		\DB::statement("INSERT INTO pss.tipo_prestacion(tipo_prestacion,descripcion,icono)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
-		    'SELECT tipo_prestacion, descripcion
-			    FROM pss.tipos_prestacion')
+		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008',
+		    'SELECT tipo_prestacion, descripcion, icono
+			    FROM pss.tipo_prestacion')
 		    AS migracion( tipo_prestacion character varying(2),
-				 descripcion text)
+				 descripcion character varying(50),
+				 icono character varying(40))
 	);");
-
-		\DB::statement(" UPDATE pss.tipo_prestacion SET icono = valor
-FROM 
-	(
-		SELECT *
-		FROM dblink('dbname=sirge2 host=192.6.0.66 user=postgres password=110678',
-		    'SELECT tipo, clase
-			    FROM mobile.tipo_hc')
-		    AS migracion( tipo character(2), valor character varying(50) )			
-	) as blabla
-	WHERE tipo = tipo_prestacion;" );		
+		
 	}
 }

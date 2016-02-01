@@ -48,6 +48,16 @@ class UserController extends Controller
      */
     public function tabla(){
         $usuarios = Usuario::with(['provincia','area','menu','entidad'])->get();
+
+        for ($i=0; $i < count($usuarios); $i++) { 
+            if( isset($usuarios[$i]->area)){
+                $usuarios[$i]['nombre_area'] = $usuarios[$i]->area->nombre;    
+            }
+            else{
+                $usuarios[$i]['nombre_area'] = '';       
+            }            
+        }
+        //return print_r(json_encode($usuarios));
         return Datatables::of($usuarios)
             ->addColumn('action' , function($usuario){
                 return '<button id-usuario="'. $usuario->id_usuario .'" class="edit-user btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';

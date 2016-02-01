@@ -310,7 +310,7 @@ class CebController extends Controller
 		$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 
 		$data = [
-			'page_title' => 'Resumen mensual C.E.B., ' . ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
+			'page_title' => 'Resumen mensual C.E.B, ' . ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
 			'progreso_ceb_series' => $this->getProgresoCeb($periodo),
 			'progreso_ceb_categorias' => $this->getMesesArray($periodo),
 			'distribucion_provincial_categorias' => $this->getProvinciasArray(),
@@ -331,7 +331,7 @@ class CebController extends Controller
 	 */
 	public function getResumenTabla($periodo){
 		$periodo = str_replace("-", '', $periodo);
-		$registros = Ceb001::where('periodo' , $periodo)->get();
+		$registros = Ceb001::where('periodo' , $periodo);
 		return Datatables::of($registros)->make(true);
 	}
 

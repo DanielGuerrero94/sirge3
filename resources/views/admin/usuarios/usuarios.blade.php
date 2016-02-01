@@ -32,12 +32,14 @@ $(function() {
         serverSide: true,
         ajax : 'usuarios-table',
         columns: [
-            { data: 'nombre', name: 'nombre' },
-            { data: 'email', name: 'email' },
-            { data: 'provincia.descripcion', name: 'provincia' },
-            { data: 'area.nombre', name: 'area' },
-            { data: 'menu.descripcion', name: 'menu' },
-            { data: 'action', name: 'action'}
+            { data: 'nombre', name: 'nombre'},
+            { data: 'email', orderable: false },
+            { data: 'provincia.descripcion', name: 'provincia.descripcion', orderable: false },
+            { data: 'nombre_area', orderable: false },
+            { data: 'menu.descripcion', orderable: false },
+            { data: 'action', orderable: false, searchable: false }
+
+           
         ]
     });
 

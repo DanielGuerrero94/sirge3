@@ -68,7 +68,7 @@ class EfectoresController extends Controller
      * @return json
      */
     public function listadoTabla(){
-    	$hospitals = Efector::with(['estado'])->get();        
+    	$hospitals = Efector::with(['estado']);        
         return Datatables::of($hospitals)
         	->addColumn('label_estado' , function($hospital){
         		return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';

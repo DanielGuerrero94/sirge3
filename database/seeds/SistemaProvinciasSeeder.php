@@ -10,6 +10,8 @@ class SistemaProvinciasSeeder extends Seeder {
 	 */
 	public function run()
 	{
+		\DB::statement(" CREATE EXTENSION dblink; ");
+
 		\DB::statement(" INSERT INTO geo.provincias(id_provincia,descripcion,id_region,latlong)
 						 (
 							SELECT *
@@ -19,5 +21,7 @@ class SistemaProvinciasSeeder extends Seeder {
 							    AS sirge_provincias(id_provincia character varying(2), descripcion character varying(100), id_region integer, ll character varying(100))
 						 )
         			   	");
+
+
 	}
 }

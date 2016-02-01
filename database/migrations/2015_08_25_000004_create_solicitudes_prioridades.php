@@ -16,7 +16,7 @@ class CreateSolicitudesPrioridades extends Migration
             $table->increments('id');
             $table->string('descripcion' , 50);
             $table->string('css' , 20);
-            $table->timestamps();
+            $table->nullableTimestamps();
         });
     }
 

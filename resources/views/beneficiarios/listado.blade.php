@@ -12,7 +12,7 @@
 				        <tr>
 				            <th>Nombre</th>
 				            <th>Apellido</th>
-				            <th>Provincia</th>
+				            <th>DNI</th>
 				            <th>Fecha Nacimiento</th>
 				            <th>Sexo</th>
 				            <th>Clave Beneficiario</th>
@@ -30,15 +30,16 @@ $(function() {
     $('#beneficiarios-table').DataTable({
         processing: true,
         serverSide: true,
+        sortable: false,
         ajax : 'beneficiarios-listado-table',
         columns: [
-            { data: 'nombre', name: 'nombre' },
-            { data: 'apellido', name: 'apellido' },
-            { data: 'geo.provincia.descripcion', name: 'provincia' },
-            { data: 'fecha_nacimiento', name: 'fecha_nacimiento' },
-            { data: 'sexo' , name: 'sexo' },
-            { data: 'clave_beneficiario', name: 'clave beneficiario'},
-            { data: 'action', name: 'detalle'},
+            { data: 'nombre', orderable: false, searchable: false},
+            { data: 'apellido', orderable: false, searchable: false},            
+            { data: 'numero_documento', name:'numero_documento' , orderable: false},
+            { data: 'fecha_nacimiento', orderable: false, searchable: false},
+            { data: 'sexo', orderable: false, searchable: false},
+            { data: 'clave_beneficiario', name: 'clave_beneficiario', orderable: false},
+            { data: 'action', orderable: false, searchable: false},
         ]
     });
 

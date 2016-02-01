@@ -54,8 +54,8 @@
             ajax : 'grafico-6-table',
             columns: [
                 { data: 'nombre', name: 'nombre' },
-                { data: 'periodo' , name: 'periodo'},
-                { data: 'cantidad'}
+                { data: 'periodo' , name: 'periodo'},                
+                { data: 'cantidad', orderable: false, searchable: false }
             ]
         });
     

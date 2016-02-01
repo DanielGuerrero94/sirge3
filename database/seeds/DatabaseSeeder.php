@@ -32,13 +32,19 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('BeneficiariosBeneficiariosEmbarazos');
 		//$this->call('BeneficiariosBeneficiariosIndigenas');
 		//$this->call('BeneficiariosBeneficiariosPeriodos');
-		// $this->call('DiccionariosDiccionario');		
+		//$this->call('DiccionariosDiccionario');
+		//$this->call('GraficosGraficos');
+		//$this->call('SolicitudesGrupos');
+		//$this->call('SolicitudesEstados');
+		// $this->call('SolicitudesPrioridades');
+		// $this->call('SolicitudesTipoSolicitud');
+		//$this->call('SolicitudesOperadores');		
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
 
-		/*
-		$this->call('SistemaProvinciasSeeder');
+		
+		/*$this->call('SistemaProvinciasSeeder');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
 		$this->call('PssCodigosSeeder');
@@ -78,9 +84,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('SistemaRegiones');
 		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
-		$this->call('SistemaModulosMenu');
-		$this->call('SistemaComentarios');
-		$this->call('SistemaSugerencias');
+		$this->call('SistemaModulosMenu');				
 		$this->call('SistemaSubidas');
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
@@ -103,15 +107,15 @@ class DatabaseSeeder extends Seeder {
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
 		$this->call('PssGruposDiagnosticos');
-		$this->call('BeneficiariosBeneficiariosBajas');
-		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
-		$this->call('BeneficiariosBeneficiariosCeb');
+		$this->call('BeneficiariosBeneficiariosBajas');*/
+		/*$this->call('BeneficiariosBeneficiariosCategoriasNacer');*/
+		/*$this->call('BeneficiariosBeneficiariosCeb');*/
 		$this->call('BeneficiariosBeneficiariosContacto');
-		$this->call('BeneficiariosBeneficiariosEmbarazos');
+		/*$this->call('BeneficiariosBeneficiariosEmbarazos');*/
 		$this->call('BeneficiariosBeneficiariosGeografico');
 		$this->call('BeneficiariosBeneficiariosIndigenas');
 		$this->call('BeneficiariosBeneficiariosParientes');
-		$this->call('BeneficiariosBeneficiariosPeriodos');		
+		/*$this->call('BeneficiariosBeneficiariosPeriodos');	*/	
 		$this->call('BeneficiariosBeneficiariosScore');
 		$this->call('PrestacionesRechazosMigracion');
 		$this->call('PrestacionesP');
@@ -139,7 +143,13 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
 		$this->call('DiccionariosDiccionario');
-		//$this->call('OspProvincias');*/
+		//$this->call('OspProvincias');
+		$this->call('GraficosGraficos');
+		$this->call('SolicitudesGrupos');
+		$this->call('SolicitudesEstados');
+		$this->call('SolicitudesPrioridades');
+		$this->call('SolicitudesTipoSolicitud');
+		$this->call('SolicitudesOperadores');	
 		$this->call('ActualizarSecuencias');
 		
 
