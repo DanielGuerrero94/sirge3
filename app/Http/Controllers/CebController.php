@@ -331,7 +331,7 @@ class CebController extends Controller
 	 */
 	public function getResumenTabla($periodo){
 		$periodo = str_replace("-", '', $periodo);
-		$registros = Ceb001::where('periodo' , $periodo)->get();
+		$registros = Ceb001::where('periodo' , $periodo);
 		return Datatables::of($registros)->make(true);
 	}
 

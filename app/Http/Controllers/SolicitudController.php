@@ -71,6 +71,7 @@ class SolicitudController extends Controller
         $s = new Solicitud;
         $s->referencia = strlen($r->ref) ? $r->ref : 0;
         $s->usuario_solicitante = Auth::user()->id_usuario;
+        $s->fecha_solicitud = date("Y/m/d");
         $s->fecha_estimada_solucion = $r->fecha;
         $s->prioridad = $r->prioridad;
         $s->tipo = $r->tipo_solicitud;

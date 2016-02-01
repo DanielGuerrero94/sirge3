@@ -544,7 +544,7 @@ class PrestacionesController extends Controller
 	 */
 	public function getResumenTabla($periodo){
 		$periodo = str_replace("-", '', $periodo);
-		$registros = Fc005::where('periodo' , $periodo)->get();
+		$registros = Fc005::where('periodo' , $periodo);
 		return Datatables::of($registros)->make(true);
 	}
 

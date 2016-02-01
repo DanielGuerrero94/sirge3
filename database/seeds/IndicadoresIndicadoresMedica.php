@@ -14,7 +14,7 @@ class IndicadoresIndicadoresMedica extends Seeder
         \DB::statement(" INSERT INTO indicadores.indicadores_medica(id_provincia,periodo,codigo_indicador,resultado)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge host=192.6.0.36 user=postgres password=BernardoCafe008',
+		FROM dblink('dbname=sirge host=192.6.0.37 user=postgres password=BernardoCafe008',
 		    'SELECT id_provincia,periodo,codigo_indicador,coalesce(resultado,0)		    
 			FROM
 				indicadores.indicadores_medica i WHERE periodo = 201512')
