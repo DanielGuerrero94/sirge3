@@ -52,7 +52,8 @@ class BeneficiariosController extends Controller
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
                 }
-            ]);
+            ])
+            ->where('clave_beneficiario','0199900993035548');
             // ->where('clave_beneficiario','LIKE','240010000100493%')->take(20);        
         //return json_encode($benefs);
         return Datatables::of($benefs)
