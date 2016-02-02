@@ -179,6 +179,7 @@ Route::get('ceb-evolucion' , 'CebController@getEvolucion');
  * ANALISIS CEI
  */
 Route::get('cei-resumen-periodo' , 'CeiController@getResumen');
+Route::get('cei-lineas-cuidado/{grupo}' , 'CeiController@getLineas');
 
 /**
  * ANALISIS PRESTACIONES

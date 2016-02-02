@@ -14,6 +14,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Prestacion;
 use App\Models\Geo\Provincia;
 
+use App\Models\CEI\Grupo;
+use App\Models\CEI\Linea;
+
 class CeiController extends Controller
 {
     /**
@@ -35,9 +38,21 @@ class CeiController extends Controller
 
 		$data = [
 			'page_title' => 'Resumen C.E.I.',
-			'provincias' => Provincia::orderBy('id_provincia')->get()
+			'provincias' => Provincia::orderBy('id_provincia')->get(),
+			'grupos' => Grupo::all()
 		];
 
-		return view('cei.resumen' , $data);
+		return view('cei.filtros' , $data);
+	}
+
+	/**
+	 * Devuelve las lineas de cuidado asociadas a un grupo etario
+	 * @param int $grupo
+	 * 
+	 * @return null
+	 */
+	public function getLineas($grupo){
+		$lineas = Linea::where('grupo_etario' , $grupo)->get();
+		return response()->json($lineas);
 	}
 }
