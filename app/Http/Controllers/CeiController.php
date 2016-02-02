@@ -27,20 +27,17 @@ class CeiController extends Controller
 	}
 
 	/**
-	 * Calculo indicador 1 - NORMAL
-	 *
-	 * @return json	 
+	 * Devuelve la vista para el Resumen mensual
+	 * 
+	 * @return null
 	 */
-	public function getIndicadorUnoNormal(){
-		$provincias = Provincia::find('05');
+	public function getResumen(){
 
-		foreach ($provincias as $provincia){
-		}
-		$numerador = DB::table('prestaciones')
-					->where('codigo_prestacion' , '')
-					->get();
+		$data = [
+			'page_title' => 'Resumen C.E.I.',
+			'provincias' => Provincia::orderBy('id_provincia')->get()
+		];
 
-		return json_encode($numerador);
-
+		return view('cei.resumen' , $data);
 	}
 }
