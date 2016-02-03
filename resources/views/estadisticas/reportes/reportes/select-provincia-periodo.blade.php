@@ -44,7 +44,7 @@
 	});
 
 	$('.back').click(function(){
-		$.get('estadisticas-graficos' , function(data){
+		$.get('estadisticas-reportes' , function(data){
 			$('.content-wrapper').html(data);
 		});
 	});
@@ -62,7 +62,7 @@
 				}
 			},
 			submitHandler : function(form){
-				$.get('estadisticas-graficos/{{ $data->id }}/' + $('#periodo').val() + '/' + provincia, function(data){
+				$.get('estadisticas-reportes/{{ $data->id }}/' + $('#periodo').val() + '/' + provincia, function(data){
 					$('.content-wrapper').html(data);
 				});
 			}

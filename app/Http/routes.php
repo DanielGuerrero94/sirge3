@@ -227,12 +227,13 @@ Route::post('rechazo-efector' , 'EfectoresController@rechazo');
 Route::get('estadisticas-graficos' , 'EstadisticasController@getGraficos');
 Route::get('estadisticas-graficos/{id}' , 'EstadisticasController@getGrafico');
 Route::get('estadisticas-graficos/{id}/{periodo}' , 'EstadisticasController@getGraficoPeriodo');
+Route::get('estadisticas-graficos/{id}/{periodo}/{provincia}' , 'EstadisticasController@getGraficoProvinciaPeriodo');
 Route::get('estadisticas-graficos-pp/{id}/{provincia}/{padron}' , 'EstadisticasController@getGraficoProvinciaPadron');
 
 Route::get('estadisticas-reportes' , 'EstadisticasController@getReportes');
 Route::get('estadisticas-reportes/{id}' , 'EstadisticasController@getReporte');
 Route::get('estadisticas-reportes/{id}/{periodo}' , 'EstadisticasController@getReportePeriodo');
-//Route::get('estadisticas-reportes-pp/{id}/{provincia}/{padron}' , 'EstadisticasController@getReporteProvinciaPadron');
+Route::get('estadisticas-reportes/{id}/{periodo}/{provincia}' , 'EstadisticasController@getReporteProvinciaPeriodo');
 
 /**
  * GRAFICOS
@@ -247,6 +248,8 @@ Route::get('grafico-5/{periodo}' , 'GraficosController@getGrafico5');
 Route::get('grafico-5-table/{periodo}' , 'GraficosController@getGrafico5Tabla');
 Route::get('grafico-6' , 'GraficosController@getGrafico6');
 Route::get('grafico-6-table' , 'GraficosController@getGrafico6Tabla');
+Route::get('grafico-7/{periodo}/{provincia}' , 'GraficosController@getGrafico7');
+Route::get('grafico-7-table/{periodo}/{provincia}' , 'GraficosController@getGrafico7Tabla');
 
 /**
  * INDICADORES

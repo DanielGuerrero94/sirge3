@@ -14,8 +14,9 @@ class CreateTableCompromisoAnualMetasDescentralizacion extends Migration {
 		Schema::create('compromiso_anual.metas_descentralizacion', function(Blueprint $table)
 		{
 			$table->char('id_provincia', 2);
-			$table->float('primer_semestre')->nullable();
-			$table->float('segundo_semestre')->nullable();
+			$table->float('primer_cuatrimestre')->nullable();
+			$table->float('segundo_cuatrimestre')->nullable();
+			$table->float('tercer_cuatrimestre')->nullable();
 			$table->integer('year');
 			$table->primary(['id_provincia', 'year']);
 		});

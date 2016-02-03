@@ -34,6 +34,7 @@ class GraficosController extends Controller
      */
     public function __construct(){
         $this->middleware('auth');
+        setlocale(LC_TIME, 'es_ES.UTF-8');
     }
 
     /**
@@ -430,8 +431,74 @@ class GraficosController extends Controller
      *
      * @return json
      */
+    public function getGrafico7Tabla($periodo, $provincia){
+        $periodo = str_replace("-", '', $periodo);
+
+        $prestaciones = Fc008::select('periodo_prestacion','codigo_prestacion','cantidad')
+                        ->where('periodo',$periodo)
+                        ->where('id_provincia',$provincia);
+
+        return Datatables::of($prestaciones)->make(true);
+    }
+
+    /**
+     * Devuelve la info para el gráfico 7
+     *
+     * @return json
+     */
+    public function getGrafico7($periodo, $provincia){
+        $periodo = str_replace("-", '', $periodo);
+        $categorias = Fc008::select('periodo_prestacion')
+                              ->where('periodo',$periodo)
+                              ->where('id_provincia',$provincia)
+                              ->groupBy('periodo_prestacion')
+                              ->orderBy('periodo_prestacion')
+                              ->get();
+
+        foreach ($categorias as $categoria) {
+            $meses[] = $categoria->periodo_prestacion; 
+        }        
+
+        $data['categorias'] = $this->getFormatMeses($meses); 
+
+        
+        $prestaciones = Fc008::select('periodo_prestacion',DB::raw('sum(cantidad) as c'))
+                              ->where('periodo',$periodo)
+                              ->where('id_provincia',$provincia)
+                              ->groupBy('periodo_prestacion')
+                              ->orderBy('periodo_prestacion')
+                              ->get();
+
+        foreach ($prestaciones as $key => $prestacion) {
+            $data['series'][0]['name'] = 'Prestaciones reportadas en ' . $periodo;
+            $data['series'][0]['data'][] = (int) $prestacion->c;
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Devuelve JSON para la datatable
+     *
+     * @return json
+     */
     public function getGrafico6Tabla(){
         $prestaciones = Fc001::join('geo.provincias as p' , 'estadisticas.fc_001.id_provincia' , '=' , 'p.id_provincia');
         return Datatables::of($prestaciones)->make(true);
+    }
+
+    /**
+     * Devuelve listado de 12 meses 
+     *
+     * @return json
+     */
+    protected function getFormatMeses($meses){
+
+        foreach ($meses as $mes) {
+            $dt = \DateTime::createFromFormat('Ym' , $mes);
+            $array_meses[] = strftime("%b %Y" , $dt->getTimeStamp());            
+        }
+        
+        return $array_meses;      
     }
 }

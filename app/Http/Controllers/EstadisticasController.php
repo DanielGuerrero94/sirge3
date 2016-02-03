@@ -78,6 +78,25 @@ class EstadisticasController extends Controller
         return view('estadisticas.graficos.graficos.' . $id , $data);
     }
 
+     /**
+     * Devuelve la vista del gráfico con los parámetros para realizar las llamadas en Ajax
+     * @param int $id
+     * @param int $periodo
+     *
+     * @return null
+     */
+    public function getGraficoProvinciaPeriodo($id , $periodo, $provincia){
+        $grafico = Grafico::find($id);
+        $provincia = Provincia::find($provincia);
+        $data = [
+            'page_title' => $grafico->titulo . ' DE ' . $provincia->descripcion . ' EN ' . $periodo,            
+            'periodo' => $periodo,
+            'grafico' => $grafico,
+            'provincia' => $provincia->id_provincia
+        ];
+        return view('estadisticas.graficos.graficos.' . $id , $data);
+    }
+
     /**
      * Devuelve la vista 
      * 
@@ -123,28 +142,9 @@ class EstadisticasController extends Controller
         ];
 
         if (is_null($g->form)) {
-            return view('estadisticas.graficos.graficos.' . $id , $data);
+            return view('estadisticas.reportes.reportes.' . $id , $data);
         } else {
-            return view('estadisticas.graficos.graficos.' . $g->form , $data);
+            return view('estadisticas.reportes.reportes.' . $g->form , $data);
         }
     }
-
-    /**
-     * Devuelve la vista del reporte con los parámetros para realizar las llamadas en Ajax
-     * @param int $id
-     * @param int $periodo
-     *
-     * @return null
-     */
-    public function getReportePeriodo($id , $periodo){
-        $reporte = Grafico::find($id);
-        $data = [
-            'page_title' => $reporte->titulo,
-            'periodo' => $periodo,
-            'reporte' => $reporte
-        ];
-        return view('estadisticas.reportes.reportes.' . $id , $data);
-    }
-
-
 }

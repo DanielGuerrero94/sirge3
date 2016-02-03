@@ -38,7 +38,9 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('SolicitudesEstados');
 		// $this->call('SolicitudesPrioridades');
 		// $this->call('SolicitudesTipoSolicitud');
-		//$this->call('SolicitudesOperadores');		
+		//$this->call('SolicitudesOperadores');	
+		$this->call('CompromisoAnualMetasDescentralizacion');	
+			
 		/**
 		FIN DE CORRECCIONES TEMPORALES
 		**/
