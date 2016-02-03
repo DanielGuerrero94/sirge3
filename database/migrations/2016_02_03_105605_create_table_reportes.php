@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGraficosTable extends Migration
+class CreateReportesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateGraficosTable extends Migration
      */
     public function up()
     {
-        Schema::create('estadisticas.graficos', function (Blueprint $table) {
+        Schema::create('estadisticas.reportes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('titulo' , 100)->nullable();
             $table->text('descripcion')->nullable();
@@ -20,7 +20,7 @@ class CreateGraficosTable extends Migration
             $table->string('css')->nullable();            
         });
 
-        \DB::statement(" ALTER TABLE estadisticas.graficos ADD COLUMN tags character varying[] ;");                     
+        \DB::statement(" ALTER TABLE estadisticas.reportes ADD COLUMN tags character varying[] ;");                     
     }
 
     /**
@@ -30,6 +30,6 @@ class CreateGraficosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('estadisticas.graficos');
+        Schema::drop('estadisticas.reportes');
     }
 }

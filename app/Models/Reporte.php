@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Grafico extends Model
+class Reporte extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'estadisticas.graficos';
+	protected $table = 'estadisticas.reportes';
 
 	/**
 	 * Indicates if the model should be timestamped.

@@ -13,6 +13,8 @@ class Solicitud extends Model
 	 */
 	protected $table = 'solicitudes.solicitudes';
 
+    public $timestamps = true;
+
 	/**
      * Ingresar la descripción del requerimiento
      *

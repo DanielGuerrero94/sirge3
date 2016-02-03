@@ -16,7 +16,7 @@
 				            <th>Fecha Nacimiento</th>
 				            <th>Sexo</th>
 				            <th>Clave Beneficiario</th>
-				            <th>Historia Cl&iacute;nica</th>
+				            <th>Detalles</th>
 				        </tr>
 				    </thead>
 				</table>

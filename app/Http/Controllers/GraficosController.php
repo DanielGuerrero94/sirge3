@@ -17,6 +17,12 @@ use App\Models\Dw\CEB\Ceb001;
 use App\Models\Dw\FC\Fc001;
 use App\Models\Dw\FC\Fc002;
 use App\Models\Dw\FC\Fc004;
+use App\Models\Dw\FC\Fc005;
+use App\Models\Dw\FC\Fc006;
+use App\Models\Dw\FC\Fc007;
+use App\Models\Dw\FC\Fc008;
+use App\Models\Dw\FC\Fc009;
+use App\Models\PSS\DatoReportable;
 
 class GraficosController extends Controller
 {
@@ -59,7 +65,7 @@ class GraficosController extends Controller
      *
      * @return json
      */
-    public function getGafico2($periodo){
+    public function getGrafico2($periodo){
         $periodo = str_replace("-", '', $periodo);
         $i = 0;
         $regiones = Ceb001::where('periodo' , $periodo)
@@ -148,12 +154,134 @@ class GraficosController extends Controller
     }
 
     /**
+     * Devuelve la info para el gráfico 3
+     *
+     * @return json
+     */
+    public function getGrafico3($periodo){
+        $periodo = str_replace("-", '', $periodo);
+
+        $data['categorias'] = Provincia::orderBy('id_provincia')->lists('descripcion');
+        
+        foreach ($data['categorias'] as $key => $provincia){
+            $data['categorias'][$key] = ucwords(mb_strtolower($provincia));
+        }
+
+        $prestaciones = Fc009::select('id_provincia' , DB::raw('(sum(cantidad_dr) / sum(cantidad_total_dr)) * 100 as c'))
+                            ->join('pss.codigos_datos_reportables as dr' , 'dr.codigo_prestacion' , '=' , 'estadisticas.fc_009.codigo_prestacion')
+                            ->where('periodo',$periodo)
+                            ->groupBy('id_provincia')
+                            ->orderBy('id_provincia')
+                            ->get();
+
+        for ($i=0; $i < 24; $i++) { 
+            $data['series'][0]['data'][$i] = 0;        
+        }        
+        foreach ($prestaciones as $key => $prestacion) {                        
+            $data['series'][0]['name'] = 'Porcentaje de prestaciones con datos reportables';            
+            $data['series'][0]['data'][((int) $prestacion->id_provincia) - 1] = (float) number_format($prestacion->c,2);
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Devuelve JSON para la datatable
+     *
+     * @return json
+     */
+    public function getGrafico3Tabla($periodo){
+        $periodo = str_replace("-", '', $periodo);
+
+        $prestaciones = Fc009::select('id_provincia' , 'dr.codigo_prestacion', 'cantidad_dr', 'cantidad_total_dr')
+                            ->join('pss.codigos_datos_reportables as dr' , 'dr.codigo_prestacion' , '=' , 'estadisticas.fc_009.codigo_prestacion')
+                            ->where('periodo',$periodo)                            
+                            ->orderBy('id_provincia')
+                            ->orderBy('dr.codigo_prestacion');                            
+        
+        return Datatables::of($prestaciones)->make(true);
+    }
+
+    /**
+     * Retorna la información para armar el gráfico complicado
+     *
+     * @return json
+     */
+    public function getDistribucionGrafico3($periodo){
+        $periodo = str_replace("-", '', $periodo);
+        $i = 0;
+        $regiones = Fc009::where('periodo' , $periodo)
+                        ->join('geo.provincias as p' , 'estadisticas.fc_009.id_provincia' , '=' , 'p.id_provincia')
+                        ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                        ->join('pss.codigos_datos_reportables as dr' , 'dr.codigo_prestacion' , '=' , 'estadisticas.fc_009.codigo_prestacion')
+                        ->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad_dr) as cantidad'))
+                        ->groupBy('r.id_region')
+                        ->groupBy('r.nombre')
+                        ->get();
+        foreach ($regiones as $key => $region){
+            $data[$i]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
+            $data[$i]['id'] = (string)$region->id_region;
+            $data[$i]['name'] = $region->nombre;
+            $data[$i]['value'] = (int)$region->cantidad;
+            $i++;
+        }
+
+        for ($j = 0 ; $j <= 5 ; $j ++){
+            $provincias = Fc009::where('periodo' , $periodo)
+                            ->where('r.id_region' , $j)
+                            ->join('geo.provincias as p' , 'estadisticas.fc_009.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->join('pss.codigos_datos_reportables as dr' , 'dr.codigo_prestacion' , '=' , 'estadisticas.fc_009.codigo_prestacion')
+                            ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad_dr) as cantidad'))
+                            ->groupBy('r.id_region')
+                            ->groupBy('p.id_provincia')
+                            ->groupBy('p.nombre')
+                            ->get();
+            foreach ($provincias as $key => $provincia){
+                $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
+                $data[$i]['name'] = $provincia->nombre;
+                $data[$i]['parent'] = (string)$provincia->id_region;
+                $data[$i]['value'] = (int)$provincia->cantidad;
+                $i++;
+            }
+        }
+
+        for ($k = 1 ; $k <= 24 ; $k ++){
+            $matriz_aux = [];
+            $codigos = Fc009::where('periodo' , $periodo)
+                            ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+                            ->join('geo.provincias as p' , 'estadisticas.fc_009.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->join('pss.codigos_datos_reportables as dr' , 'dr.codigo_prestacion' , '=' , 'estadisticas.fc_009.codigo_prestacion')
+                            ->select('r.id_region' , 'p.id_provincia' , 'estadisticas.fc_009.codigo_prestacion' , DB::raw('sum(cantidad_dr) as cantidad'))
+                            ->groupBy('r.id_region')
+                            ->groupBy('p.id_provincia')
+                            ->groupBy('estadisticas.fc_009.codigo_prestacion')                            
+                            ->orderBy(DB::raw('sum(cantidad_dr)') , 'desc')
+                            ->take(5)                            
+                            ->get();
+            foreach ($codigos as $key => $codigo){
+                $matriz_aux[] = $codigo->codigo_prestacion;
+                $data[$i]['id'] = $codigo->id_region . "_" . $codigo->id_provincia . "_" . $codigo->codigo_prestacion;
+                $data[$i]['name'] = $codigo->codigo_prestacion;
+                $data[$i]['parent'] = $codigo->id_region . "_" . $codigo->id_provincia;
+                $data[$i]['value'] = (int)$codigo->cantidad;
+                $data[$i]['texto_prestacion'] = $codigo->codigo_prestacion;
+                $data[$i]['codigo_prestacion'] = true;
+                $i++;   
+            }
+            
+        }
+        return response()->json($data);
+    }
+
+    /**
      * Devuelve la información para armar el gráfico 4
      * @param string $periodo
      *
      * @return null
      */
-    public function getGafico4($periodo){
+    public function getGrafico4($periodo){
         $periodo = str_replace("-", '', $periodo);
 
         $data['categorias'] = [

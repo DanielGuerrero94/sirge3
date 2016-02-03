@@ -23,6 +23,7 @@ use App\Models\Beneficiarios\Parientes;
 use App\Models\Beneficiarios\Periodos;
 use App\Models\Beneficiarios\Resumen;
 use App\Models\Beneficiarios\Score;
+use App\Models\Indicador;
 
 use App\Models\Entidad;
 
@@ -63,8 +64,12 @@ class BeneficiariosController extends Controller
      * @return null
      */
     public function historiaClinica($id , $back){
+
+        $row_periodo = Indicador::select(DB::raw('max(periodo)'))->get();                
+        $max_periodo = $row_periodo[0]['max'];
+
         $beneficiario = Beneficiario::select(                
-                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion,fecha_nacimiento)) as edad_inscripcion')                
+                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion,fecha_nacimiento)) as edad_inscripcion, activo')                
                 )->with([                
                 'geo' => function($q){ 
                     $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
@@ -73,10 +78,13 @@ class BeneficiariosController extends Controller
                         'datosPrestacion' => function($q){ $q->with(['tipoDePrestacion']);} 
                     ])->orderBy('fecha_prestacion','desc');
                 }
-                ])
+                ])->leftJoin('beneficiarios.periodos', function($join) use ($max_periodo)
+                                {
+                                    $join->on('beneficiarios.periodos.clave_beneficiario','=','beneficiarios.beneficiarios.clave_beneficiario')
+                                         ->where('beneficiarios.periodos.periodo','=',$max_periodo); 
+                                })            
         ->find($id);
-            
-        //return json_encode($beneficiario);
+                    
         $data = [
             'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,
             'beneficiario' => $beneficiario,

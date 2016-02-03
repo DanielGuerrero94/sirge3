@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder {
 		**/
 
 		
-		/*$this->call('SistemaProvinciasSeeder');
+		/*$this->call('GeoProvincias');
 		$this->call('SistemaAreasSeeder');
 		$this->call('PssDiagnosticosSeeder');
 		$this->call('PssCodigosSeeder');
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresTelefonos');
 		$this->call('SistemaEstados');
 		$this->call('SistemaPadrones');
-		$this->call('SistemaRegiones');
+		$this->call('GeoRegiones');
 		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
 		$this->call('SistemaModulosMenu');				
@@ -144,12 +144,14 @@ class DatabaseSeeder extends Seeder {
 		$this->call('EfectoresEfectoresAddendas');
 		$this->call('DiccionariosDiccionario');
 		//$this->call('OspProvincias');
-		$this->call('GraficosGraficos');
+		$this->call('EstadisticasGraficos');
+		$this->call('EstadisticasReportes');
 		$this->call('SolicitudesGrupos');
 		$this->call('SolicitudesEstados');
 		$this->call('SolicitudesPrioridades');
 		$this->call('SolicitudesTipoSolicitud');
-		$this->call('SolicitudesOperadores');	
+		$this->call('SolicitudesOperadores');
+		$this->call('PssCodigosDatosReportables');	
 		$this->call('ActualizarSecuencias');
 		
 

@@ -27,7 +27,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('CREATE SCHEMA puco;');
 		DB::statement('CREATE SCHEMA sistema;');					
 		DB::statement('CREATE SCHEMA solicitudes;');
-		DB::statement('CREATE SCHEMA graficos;');
+		DB::statement('CREATE SCHEMA estadisticas;');
 		DB::statement('CREATE SCHEMA chat;');
 		DB::statement('CREATE SCHEMA diccionarios;');
 	}
@@ -55,7 +55,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('DROP SCHEMA puco CASCADE;');
 		DB::statement('DROP SCHEMA sistema CASCADE;');				
 		DB::statement('DROP SCHEMA solicitudes CASCADE;');
-		DB::statement('DROP SCHEMA graficos CASCADE;');
+		DB::statement('DROP SCHEMA estadisticas CASCADE;');
 		DB::statement('DROP SCHEMA chat CASCADE;');
 		DB::statement('DROP SCHEMA diccionarios CASCADE;');
 

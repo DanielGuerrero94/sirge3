@@ -4,7 +4,7 @@ namespace App\Models\Dw\FC;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fc006 extends Model
+class Fc007 extends Model
 {
       /**
      * Definir la conexión de la bdd
@@ -17,12 +17,5 @@ class Fc006 extends Model
      *
      * @var string
      */
-    protected $table = 'estadisticas.fc_006';
-
-    /**
-	 * Devuelve la prestacion
-	 */
-	public function prestacion(){
-		return $this->hasOne('App\Models\Salud' , 'codigo_prestacion' , 'codigo_prestacion');
-	}
+    protected $table = 'estadisticas.fc_007';
 }
