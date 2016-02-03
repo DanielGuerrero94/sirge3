@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('IndicadoresIndicadoresMedicaRangos');
 		//$this->call('IndicadoresIndicadoresMedica');
 		//$this->call('IndicadoresIndicadoresDescripcion');
-		$this->call('SistemaSubidas');
-		$this->call('SistemaLotes');
-		$this->call('SistemaLotesAceptados');
-		$this->call('SistemaLotesRechazados');
-		$this->call('PrestacionesP');
+		//$this->call('SistemaSubidas');
+		//$this->call('SistemaLotes');
+		//$this->call('SistemaLotesAceptados');
+		//$this->call('SistemaLotesRechazados');
+		//$this->call('PrestacionesP');
 		//$this->call('BeneficiariosBeneficiariosCeb');
 		//$this->call('BeneficiariosBeneficiariosEmbarazos');
 		//$this->call('BeneficiariosBeneficiariosIndigenas');
