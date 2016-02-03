@@ -383,7 +383,7 @@ class CebController extends Controller
         $dt = new \DateTime();
         $dt->modify('-1 month');
         $max = strftime("%b %Y" , $dt->getTimeStamp());
-        $dt->modify('-6 months');
+        $dt->modify('-5 months');
         $min = strftime("%b %Y" , $dt->getTimeStamp());
 
         $data = [

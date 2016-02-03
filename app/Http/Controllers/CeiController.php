@@ -14,6 +14,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Prestacion;
 use App\Models\Geo\Provincia;
 
+use App\Models\CEI\Grupo;
+use App\Models\CEI\Linea;
+
 class CeiController extends Controller
 {
     /**
@@ -27,20 +30,29 @@ class CeiController extends Controller
 	}
 
 	/**
-	 * Calculo indicador 1 - NORMAL
-	 *
-	 * @return json	 
+	 * Devuelve la vista para el Resumen mensual
+	 * 
+	 * @return null
 	 */
-	public function getIndicadorUnoNormal(){
-		$provincias = Provincia::find('05');
+	public function getResumen(){
 
-		foreach ($provincias as $provincia){
-		}
-		$numerador = DB::table('prestaciones')
-					->where('codigo_prestacion' , '')
-					->get();
+		$data = [
+			'page_title' => 'Resumen C.E.I.',
+			'provincias' => Provincia::orderBy('id_provincia')->get(),
+			'grupos' => Grupo::all()
+		];
 
-		return json_encode($numerador);
+		return view('cei.filtros' , $data);
+	}
 
+	/**
+	 * Devuelve las lineas de cuidado asociadas a un grupo etario
+	 * @param int $grupo
+	 * 
+	 * @return null
+	 */
+	public function getLineas($grupo){
+		$lineas = Linea::where('grupo_etario' , $grupo)->get();
+		return response()->json($lineas);
 	}
 }
