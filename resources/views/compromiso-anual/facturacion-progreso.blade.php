@@ -38,21 +38,30 @@
 	                text: ''
 	            },
 	            plotLines: [{
-	                value: {{$metas->primer_semestre}},
+	                value: {{$metas->primer_cuatrimestre}},
 	                width: 2,
 	                dashStyle: 'shortdash',
-	                color: '#f56954',
+	                color: '#00a65a',
 	                label: {
-                        text: 'Meta 1º semestre'
+                        text: 'Meta 1º cuatrimestre'
                     }
 	            },
 	            {
-	                value: {{$metas->segundo_semestre}},
+	                value: {{$metas->segundo_cuatrimestre}},
 	                width: 2,
 	                dashStyle: 'shortdash',
 	                color: '#ff851b',
 	                label: {
-                        text: 'Meta 2º semestre'
+                        text: 'Meta 2º cuatrimestre'
+                    }
+	            },
+	            {
+	                value: {{$metas->tercer_cuatrimestre}},
+	                width: 2,
+	                dashStyle: 'shortdash',
+	                color: '#d33724',
+	                label: {
+                        text: 'Meta 3º cuatrimestre'
                     }
 	            }],
 	            labels : {

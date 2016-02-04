@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -40,6 +41,21 @@ class CompromisoController extends Controller
             $meses[$i] = strftime("%b %Y" , $dt->getTimeStamp());
         }
         return json_encode($meses);
+    }
+
+    /**
+     * Devuelve listado de 12 meses 
+     *
+     * @return json
+     */
+    protected function getFormatMeses($meses){
+
+        foreach ($meses as $mes) {
+            $dt = \DateTime::createFromFormat('Ym' , $mes);
+            $array_meses[] = strftime("%b %Y" , $dt->getTimeStamp());            
+        }
+        
+        return $array_meses;      
     }
 
 	/**
@@ -107,10 +123,18 @@ class CompromisoController extends Controller
 		}
 
 		$series = array();
+		$period = $dt->format('Ym');
 
-		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
-		$provincias = CA::join('compromiso_anual.metas_descentralizacion as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , $dt->format('Ym'))->orderBy('m.id_provincia')->get();
+		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');		
+		$provincias = CA::join('compromiso_anual.metas_descentralizacion as m', function($join) use ($period)
+                                {
+                                    $join->on('indicadores.ca_16_001.id_provincia','=','m.id_provincia')
+                                         ->where('periodo','=',$period); 
+                                })
+					->where('year',$dt->format('Y'))
+					->orderBy('m.id_provincia')->get();
+
+						
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
@@ -122,7 +146,7 @@ class CompromisoController extends Controller
 			$series[1]['name'] = 'Meta 1º cuatrimestre';
 			$series[1]['data'][] = (float)$provincia->primer_cuatrimestre;
 			$series[1]['marker']['lineWidth'] = 0;
-			$series[1]['marker']['fillColor'] = '#00a65a';
+			$series[1]['marker']['fillColor'] = '#d33724';
 			$series[1]['marker']['radius'] = 3;
 			$series[1]['marker']['symbol'] = 'circle';
 
@@ -138,19 +162,28 @@ class CompromisoController extends Controller
 			$series[3]['name'] = 'Meta 3º cuatrimestre';
 			$series[3]['data'][] = (float)$provincia->tercer_cuatrimestre;
 			$series[3]['marker']['lineWidth'] = 0;
-			$series[3]['marker']['fillColor'] = '#d33724';
+			$series[3]['marker']['fillColor'] = '#00a65a';
 			$series[3]['marker']['radius'] = 3;
 			$series[3]['marker']['symbol'] = 'circle';
 		}
 
+		$year = $dt->format('Y');
+		$dt->modify('-1 month');
+		if(intval($dt->format('Y')) < intval($year)){
+			$estado = 'disabled';
+		}
+		else{
+			$estado = '';
+		}		
 
 		$data = [
 			'page_title' => 'Descentralización',
 			'categorias' => json_encode($categorias),
 			'series' => json_encode($series),
 			'periodo_calculado' => $dt->format('Y-m'),
+			'estado' => $estado,
 			'back' => 'ca-periodo-form/ca-16-descentralizacion/ca-16-descentralizacion'
-		];
+		];		
 
 		return view($vista , $data);
 	}
@@ -163,21 +196,26 @@ class CompromisoController extends Controller
 	 */
 	public function getDescentralizacionProgresion($id){
 
-		$rango = $this->getDateInterval();
-		$metas = M1::where('id_provincia' , $id)->get()[0];
+		$dt = new \DateTime();			
+		$year = $dt->format('Y');
+				
+		$metas = M1::where('id_provincia' , $id)->where('year',$year)->get()[0];
 
 		$periodos = CA::where('id_provincia' , $id)
-					->whereBetween('periodo' , [$rango['min'],$rango['max']])
+					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Descentralización';
 			$chart[0]['data'][] = (real)$periodo->descentralizacion;
+			$meses[] = $periodo->periodo;
 		}
+
+		$meses = $this->getFormatMeses($meses); 
 
 		$data = [
 			'page_title' => 'Evolución de la descentralización',
 			'series' => json_encode($chart),
-			'categorias' => $this->getMesesArray(),
+			'categorias' => json_encode($meses),
 			'metas' => $metas,
 			'back' => 'ca-provincia-form/ca-16-descentralizacion/ca-16-descentralizacion-progresion'
 		];
@@ -200,9 +238,13 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.facturacion-uec';
 		}
 
+		$series = array();
+
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
 		$provincias = CA::join('compromiso_anual.metas_facturacion as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , $dt->format('Ym'))->orderBy('m.id_provincia')->get();
+						->where('periodo' , intval($dt->format('Ym')))
+						->where('year',intval($dt->format('Y')))
+						->orderBy('m.id_provincia')->get();
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
@@ -235,12 +277,21 @@ class CompromisoController extends Controller
 			$series[3]['marker']['symbol'] = 'circle';
 		}
 
+		$year = $dt->format('Y');
+		$dt->modify('-1 month');
+		if(intval($dt->format('Y')) < intval($year)){
+			$estado = 'disabled';
+		}
+		else{
+			$estado = '';
+		}		
 
 		$data = [
 			'page_title' => 'Facturación descentralizada',
 			'categorias' => json_encode($categorias),
 			'series' => json_encode($series),
 			'periodo_calculado' => $dt->format('Y-m'),
+			'estado' => $estado,
 			'back' => 'ca-periodo-form/ca-16-facturacion/ca-16-facturacion'
 		];
 
@@ -255,21 +306,26 @@ class CompromisoController extends Controller
 	 */
 	public function getFacturacionProgresion($id){
 
-		$rango = $this->getDateInterval();
+		$dt = new \DateTime();			
+		$year = $dt->format('Y');
+
 		$metas = M2::where('id_provincia' , $id)->get()[0];
 
 		$periodos = CA::where('id_provincia' , $id)
-					->whereBetween('periodo' , [$rango['min'],$rango['max']])
+					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Facturación';
 			$chart[0]['data'][] = (real)$periodo->volumen;
-		}
+			$meses[] = $periodo->periodo;
+		}		
+
+		$meses = $this->getFormatMeses($meses); 				
 
 		$data = [
 			'page_title' => 'Evolución de la facturacion descentralizada',
 			'series' => json_encode($chart),
-			'categorias' => $this->getMesesArray(),
+			'categorias' => json_encode($meses),
 			'metas' => $metas,
 			'back' => 'ca-provincia-form/ca-16-facturacion/ca-16-facturacion-progresion'
 		];
@@ -292,9 +348,13 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.datos-uec';
 		}
 
+		$series = array();
+
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
 		$provincias = CA::join('compromiso_anual.metas_datos_reportables as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , $dt->format('Ym'))->orderBy('m.id_provincia')->get();
+						->where('periodo' , intval($dt->format('Ym')))
+						->where('year',$dt->format('Y'))
+						->orderBy('m.id_provincia')->get();
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
@@ -327,11 +387,20 @@ class CompromisoController extends Controller
 			$series[3]['marker']['symbol'] = 'circle';
 		}
 
+		$year = $dt->format('Y');
+		$dt->modify('-1 month');
+		if(intval($dt->format('Y')) < intval($year)){
+			$estado = 'disabled';
+		}
+		else{
+			$estado = '';
+		}	
 
 		$data = [
 			'page_title' => 'Datos reportables',
 			'categorias' => json_encode($categorias),
 			'series' => json_encode($series),
+			'estado' => $estado,
 			'periodo_calculado' => $dt->format('Y-m'),
 			'back' => 'ca-periodo-form/ca-16-datos-reportables/ca-16-datos-reportables'
 		];
@@ -347,21 +416,26 @@ class CompromisoController extends Controller
 	 */
 	public function getDatosProgresion($id){
 
-		$rango = $this->getDateInterval();
+		$dt = new \DateTime();			
+		$year = $dt->format('Y');
+
 		$metas = M3::where('id_provincia' , $id)->get()[0];
 
 		$periodos = CA::where('id_provincia' , $id)
-					->whereBetween('periodo' , [$rango['min'],$rango['max']])
+					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Datos reportables';
 			$chart[0]['data'][] = (real)$periodo->datos_reportables;
+			$meses[] = $periodo->periodo;
 		}
+
+		$meses = $this->getFormatMeses($meses);
 
 		$data = [
 			'page_title' => 'Evolución del reporte de datos reportables',
 			'series' => json_encode($chart),
-			'categorias' => $this->getMesesArray(),
+			'categorias' => json_encode($meses),
 			'metas' => $metas,
 			'back' => 'ca-provincia-form/ca-16-datos-reportables/ca-16-datos-reportables-progresion'
 		];
@@ -384,9 +458,13 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.dependencia-uec';
 		}
 
+		$series = array();
+
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
 		$provincias = CA::join('compromiso_anual.metas_dependencias_sanitarias as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , $dt->format('Ym'))->orderBy('m.id_provincia')->get();
+						->where('periodo' , intval($dt->format('Ym')))
+						->where('year',$dt->format('Y'))
+						->orderBy('m.id_provincia')->get();
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
@@ -419,11 +497,20 @@ class CompromisoController extends Controller
 			$series[3]['marker']['symbol'] = 'circle';
 		}
 
+		$year = $dt->format('Y');
+		$dt->modify('-1 month');
+		if(intval($dt->format('Y')) < intval($year)){
+			$estado = 'disabled';
+		}
+		else{
+			$estado = '';
+		}	
 
 		$data = [
 			'page_title' => 'Dependencias Sanitarias',
 			'categorias' => json_encode($categorias),
 			'series' => json_encode($series),
+			'estado' => $estado,
 			'periodo_calculado' => $dt->format('Y-m'),
 			'back' => 'ca-periodo-form/ca-16-dependencia/ca-16-dependencia'
 		];
@@ -439,21 +526,26 @@ class CompromisoController extends Controller
 	 */
 	public function getDependenciaProgresion($id){
 
-		$rango = $this->getDateInterval();
+		$dt = new \DateTime();			
+		$year = $dt->format('Y');
+
 		$metas = M4::where('id_provincia' , $id)->get()[0];
 
 		$periodos = CA::where('id_provincia' , $id)
-					->whereBetween('periodo' , [$rango['min'],$rango['max']])
+					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Dependencias Sanitarias';
 			$chart[0]['data'][] = (real)$periodo->dependencia_sanitaria;
+			$meses[] = $periodo->periodo;
 		}
+
+		$meses = $this->getFormatMeses($meses);
 
 		$data = [
 			'page_title' => 'Evolución de dependencias sanitarias',
 			'series' => json_encode($chart),
-			'categorias' => $this->getMesesArray(),
+			'categorias' => json_encode($meses),
 			'metas' => $metas,
 			'back' => 'ca-provincia-form/ca-16-dependencia/ca-16-dependencia-progresion'
 		];

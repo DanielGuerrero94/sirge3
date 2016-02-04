@@ -25,11 +25,11 @@
 						<h2 class="box-title">Períodos anteriores</h2>
 					</div>
 					<div class="box-body">
-						<p>Desde esta opción podrá ver la descentralización a nivel país de meses anteriores al actual.</p>
+						<p>Desde esta opción podrá ver la descentralización a nivel país de meses anteriores en el a&ntilde;o actual.</p>
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="ca-periodo-form/ca-16-descentralizacion/ca-16-descentralizacion" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="ca-periodo-form/ca-16-descentralizacion/ca-16-descentralizacion" class="detalle btn btn-info" {{$estado}}>Ver detalles</button>
 						</div>
 					</div>
 				</div>	
@@ -44,7 +44,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="ca-provincia-form/ca-16-descentralizacion/ca-16-descentralizacion-progresion" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="ca-provincia-form/ca-16-descentralizacion/ca-16-descentralizacion-progresion" class="detalle btn btn-info" {{$estado}}>Ver detalles</button>
 						</div>
 					</div>
 				</div>	
