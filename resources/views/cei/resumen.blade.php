@@ -24,6 +24,9 @@
 			</div>
 		</div>
 	</div>
+	
+</div>
+<div class="row">
 
 	<div class="col-md-4">
 		<div class="box box-warning">
@@ -46,6 +49,9 @@
 			</div>
 		</div>
 	</div>
+
+</div>
+<div class="row">
 
 	<div class="col-md-4">
 		<div class="box box-success">
@@ -93,6 +99,20 @@
 			},
 			legend : {
 				enabled : true
+			},
+			plotOptions: {
+				series : {
+					events: {
+						click : function(e){
+							var periodo = e.point.periodo;
+							var provincia = e.point.provincia;
+							var indicador = e.point.indicador;
+
+							$("#grafico-cei-{{ $map['clase'] }}").html('');
+							$("#grafico-cei-{{ $map['clase'] }}").load('cei-resumen/' + periodo + '/' + indicador + '/' + provincia);
+						}
+					}
+				}
 			},
 			series : [{
 				data : {!! $map['map-data'] !!},

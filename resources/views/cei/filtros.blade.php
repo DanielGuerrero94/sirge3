@@ -82,7 +82,7 @@
 			$.get('cei-lineas-cuidado/' + $(this).val() , function(data){
 				var html = '';
 				$.each(data , function(key , value){
-					html += '<option indicador="' + value.id + '">';
+					html += '<option value="' + value.id + '">';
 					html += value.nombre;
 					html += '</option>';
 				});
@@ -95,7 +95,10 @@
 	$('.submit').click(function(event){
 		event.preventDefault();
 
-		$('#cei-container').load('cei-resumen/2014-03/1');
+		var periodo = $('#periodo').val();
+		var linea = $('#linea_cuidado').val();
+
+		$('#cei-container').load('cei-resumen/' + periodo + '/' + linea);
 
 	})
 </script>

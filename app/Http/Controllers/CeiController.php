@@ -82,11 +82,15 @@ class CeiController extends Controller
 			foreach ($resultados as $key_provincia => $resultado){
 
 				if ($resultado->resultados->denominador == 0) {
-					$map[$indicador]['map-data'][$key]['value'] = 0;
+					$map[$indicador]['map-data'][$key_provincia]['value'] = 0;
 				} else {
 					$map[$indicador]['map-data'][$key_provincia]['value'] = round($resultado->resultados->beneficiarios_puntuales / $resultado->resultados->denominador , 4) * 100;
-					$map[$indicador]['map-data'][$key_provincia]['hc-key'] = $resultado->geojson_provincia;
 				}
+				
+				$map[$indicador]['map-data'][$key_provincia]['hc-key'] = $resultado->geojson_provincia;
+				$map[$indicador]['map-data'][$key_provincia]['indicador'] = $indicador;
+				$map[$indicador]['map-data'][$key_provincia]['periodo'] = $periodo;
+				$map[$indicador]['map-data'][$key_provincia]['provincia'] = $resultado->provincia;
 			}
 
 			$map[$indicador]['map-data'] = json_encode($map[$indicador]['map-data']);
@@ -155,5 +159,17 @@ class CeiController extends Controller
 		];
 
 		return view('cei.resumen' , $data);
+	}
+
+	/**
+	 * Devuelve un pequeño detalle del indicador para una provincia y un período
+	 * @param int $periodo
+	 * @param int $indicador
+	 * @param char $provincia
+	 *
+	 * @return null
+	 */
+	public function getDetalleProvincia($periodo , $indicador , $provincia){
+		
 	}
 }
