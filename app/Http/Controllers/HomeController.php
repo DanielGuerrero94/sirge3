@@ -15,6 +15,7 @@ use App\Models\Modulo;
 use App\Models\Usuario;
 use App\Models\Efector;
 use App\Models\Lote;
+use App\Models\Indicador;
 
 use App\Models\Dw\CEB\Ceb002;
 use App\Models\Dw\FC\Fc001;
@@ -241,6 +242,17 @@ class HomeController extends Controller
         $dt->modify('-1 month');
         $periodo = $dt->format('Ym');
 
+        /** 
+        TEMPORAL INICIO
+        **/
+        $periodos = Indicador::select(DB::raw('max(periodo)'))->get();
+
+        foreach ($periodos as $unPeriodo) {
+            $periodo = $unPeriodo->max;
+        }                      
+        /** 
+        FIN 
+        **/
         return round (Ceb002::where('periodo' , $periodo)->sum('beneficiarios_registrados') / 1000000 , 2);
     }
 
@@ -407,6 +419,17 @@ class HomeController extends Controller
         $dt->modify('-1 month');
         $periodo = $dt->format('Ym');
 
+        /** 
+        TEMPORAL INICIO
+        **/
+        $periodos = Indicador::select(DB::raw('max(periodo)'))->get();
+
+        foreach ($periodos as $unPeriodo) {
+            $periodo = $unPeriodo->max;
+        }  
+        /** 
+        FIN 
+        **/
         $provincias = Indec::leftJoin('geo.geojson' , 'indec.poblacion.id_provincia' , '=' , 'geo.geojson.id_provincia')
                 ->leftJoin('estadisticas.ceb_002' , function($q) use ($periodo){
                     $q->on('geo.geojson.id_provincia' , '=' , 'estadisticas.ceb_002.id_provincia')
