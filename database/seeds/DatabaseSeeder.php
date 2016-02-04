@@ -128,7 +128,8 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PucoObrasSociales');
 		$this->call('PucoObrasSocialesProvinciales');
 		$this->call('PucoResumenPuco');
-		$this->call('CompromisoAnualMetasCodigosValidos');
+		$this->call('CompromisoAnualMetasDatosReportables');
+		$this->call('CompromisoAnualMetasDependeciasSanitarias');
 		$this->call('CompromisoAnualMetasDescentralizacion');
 		$this->call('CompromisoAnualMetasFacturacion');
 		$this->call('DdjjBackup');
