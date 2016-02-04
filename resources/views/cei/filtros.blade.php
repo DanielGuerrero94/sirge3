@@ -56,10 +56,16 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button class="go btn btn-info">Ver resumen</button>
+					<button class="submit btn btn-info">Ver resumen</button>
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div id="cei-container"></div>
 	</div>
 </div>
 
@@ -85,6 +91,13 @@
 		});
 
 	});
+
+	$('.submit').click(function(event){
+		event.preventDefault();
+
+		$('#cei-container').load('cei-resumen/2014-03/1');
+
+	})
 </script>
 
 @endsection

@@ -16,6 +16,8 @@ use App\Models\Geo\Provincia;
 
 use App\Models\CEI\Grupo;
 use App\Models\CEI\Linea;
+use App\Models\CEI\Resultado;
+use App\Models\CEI\Indicador;
 
 class CeiController extends Controller
 {
@@ -34,7 +36,7 @@ class CeiController extends Controller
 	 * 
 	 * @return null
 	 */
-	public function getResumen(){
+	public function getFiltros(){
 
 		$data = [
 			'page_title' => 'Resumen C.E.I.',
@@ -54,5 +56,104 @@ class CeiController extends Controller
 	public function getLineas($grupo){
 		$lineas = Linea::where('grupo_etario' , $grupo)->get();
 		return response()->json($lineas);
+	}
+
+	/**
+	 * Devuelve la información para graficar los mapas
+	 * @param int $periodo 
+	 * @param int $linea
+	 *
+	 * @return array
+	 */
+	protected function getMapSeries($periodo , $linea){
+
+		$indicadores = Indicador::where('indicador' , $linea)->orderBy('id' , 'asc')->lists('id');
+
+		foreach ($indicadores as $key => $indicador) {
+
+			$resultados = Resultado::join('geo.geojson as g' , 'cei.resultados.provincia' , '=' , 'g.id_provincia')
+									->where('indicador' , $indicador)
+									->where('periodo' , $periodo)
+									->orderBy('provincia' , 'asc')
+									->get();
+
+			// return '<pre>' . json_encode($resultados , JSON_PRETTY_PRINT) . '</pre>';
+
+			foreach ($resultados as $key_provincia => $resultado){
+
+				if ($resultado->resultados->denominador == 0) {
+					$map[$indicador]['map-data'][$key]['value'] = 0;
+				} else {
+					$map[$indicador]['map-data'][$key_provincia]['value'] = round($resultado->resultados->beneficiarios_puntuales / $resultado->resultados->denominador , 4) * 100;
+					$map[$indicador]['map-data'][$key_provincia]['hc-key'] = $resultado->geojson_provincia;
+				}
+			}
+
+			$map[$indicador]['map-data'] = json_encode($map[$indicador]['map-data']);
+			$map[$indicador]['clase'] = $key;
+		}
+
+		return $map;
+
+	}
+
+	/**
+	 * Devuelve la información para armar los gráficos de barra
+	 * @param int $periodo 
+	 * @param int $linea
+	 *
+	 * @return array
+	 */
+	protected function getGraficoSeries($periodo , $linea){
+
+		$indicadores = Indicador::where('indicador' , $linea)->orderBy('id' , 'asc')->lists('id');
+		$data['categorias'] = Provincia::orderBy('id_provincia')->lists('descripcion');
+
+		foreach ($indicadores as $key => $indicador) {
+
+			$resultados = Resultado::join('geo.provincias as p' , 'cei.resultados.provincia' , '=' , 'p.id_provincia')
+									->where('indicador' , $indicador)
+									->where('periodo' , $periodo)
+									->orderBy('provincia' , 'asc')
+									->get();
+
+			foreach ($resultados as $key_provincia => $resultado){
+
+				if ($resultado->resultados->denominador == 0) {
+					$data['info'][$indicador]['serie']['data'][] = 0;
+				} else {
+					$data['info'][$indicador]['serie']['data'][] = round($resultado->resultados->beneficiarios_puntuales / $resultado->resultados->denominador , 4) * 100;
+					$data['info'][$indicador]['serie']['name'] = 'Resultados';
+				}
+			}
+
+			$data['info'][$indicador]['serie'] = json_encode($data['info'][$indicador]['serie']);
+			$data['info'][$indicador]['clase'] = $key;
+		}
+
+		return $data;
+
+	}
+
+	/**
+	 * Devuelve la vista resumen
+	 * @param int $periodo
+	 * @param int $linea
+	 *
+	 * @return null
+	 */
+	public function getResumen($periodo , $linea){
+
+		$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+		$periodo = $dt->format('Ym');
+		
+		// return $this->getGraficoSeries($periodo , $linea);
+
+		$data = [
+			'maps' => $this->getMapSeries($periodo , $linea),
+			'graficos' => $this->getGraficoSeries($periodo , $linea)
+		];
+
+		return view('cei.resumen' , $data);
 	}
 }
