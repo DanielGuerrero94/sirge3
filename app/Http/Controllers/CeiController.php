@@ -170,6 +170,28 @@ class CeiController extends Controller
 	 * @return null
 	 */
 	public function getDetalleProvincia($periodo , $indicador , $provincia){
-		
+		$resultado = Resultado::where('provincia' , $provincia)
+							->where('indicador' , $indicador)
+							->where('periodo' , $periodo)
+							->firstOrFail();
+		$provincia = Provincia::find($provincia);
+
+		foreach ($resultado->resultados->prestaciones->codigos as $codigo => $cantidad) {
+			$data['serie'][0]['name'] = 'Fact. Prest.';
+			$data['serie'][0]['data'][] = $cantidad;
+			$data['categorias'][] = $codigo;
+			$data['provincia'] = $provincia->descripcion;
+		}
+
+		$data = [
+			'indicador' => $indicador,
+			'serie' => $data,
+			'beneficiarios_oportunos' => $resultado->resultados->beneficiarios_oportunos,
+			'beneficiarios_puntuales' => $resultado->resultados->beneficiarios_puntuales,
+			'denominador' => $resultado->resultados->denominador
+		];
+
+		return view('cei.detalle-provincia' , $data);
+
 	}
 }

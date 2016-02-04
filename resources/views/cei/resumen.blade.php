@@ -21,10 +21,11 @@
 			</div>
 			<div class="box-body">
 				<div id="grafico-cei-0"></div>
+				<div id="detalle-cei-0"></div>
 			</div>
 		</div>
 	</div>
-	
+
 </div>
 <div class="row">
 
@@ -46,6 +47,7 @@
 			</div>
 			<div class="box-body">
 				<div id="grafico-cei-1"></div>
+				<div id="detalle-cei-1"></div>
 			</div>
 		</div>
 	</div>
@@ -71,6 +73,7 @@
 			</div>
 			<div class="box-body">
 				<div id="grafico-cei-2"></div>
+				<div id="detalle-cei-2"></div>
 			</div>
 		</div>
 	</div>
@@ -108,8 +111,8 @@
 							var provincia = e.point.provincia;
 							var indicador = e.point.indicador;
 
-							$("#grafico-cei-{{ $map['clase'] }}").html('');
-							$("#grafico-cei-{{ $map['clase'] }}").load('cei-resumen/' + periodo + '/' + indicador + '/' + provincia);
+							$("#grafico-cei-{{ $map['clase'] }}").hide();
+							$("#detalle-cei-{{ $map['clase'] }}").load('cei-resumen/' + periodo + '/' + indicador + '/' + provincia);
 						}
 					}
 				}
@@ -152,28 +155,6 @@
 	            labels: {
 	            	enabled: true
 	            },
-	            stackLabels: {
-	                enabled: false,
-	                formatter: function(){
-	                	return this.total;
-	                },
-	                style: {
-	                    //fontWeight: 'bold',
-	                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-	                }
-	            }
-	        },
-	        tooltip: {
-	            //headerFormat: '<b>{point.x}</b><br/>',
-	            //pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-	        },
-	        plotOptions: {
-	            /*column: {
-	                stacking: 'normal',
-	                dataLabels: {
-	                    enabled: false,
-	                }
-	            }*/
 	        },
 	        series: [{!! $grafico['serie'] !!}]
 		});

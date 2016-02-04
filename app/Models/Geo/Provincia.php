@@ -33,6 +33,6 @@ class Provincia extends Model {
      * @return string
      */
     public function getDescripcionAttribute($value){
-        return (mb_strtoupper($value));
+        return mb_strtoupper($value);
     }
 }
