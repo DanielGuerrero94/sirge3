@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Datatables;
 use Auth;
+use Mail;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -135,7 +136,16 @@ class UserController extends Controller
         $u = Usuario::find($id);
         $u->activo = 'S';
         if ($u->save()){
+
+            Mail::send('emails.alta', ['usuario' => $u], function ($m) use ($u) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to($u->email , $u->nombre);
+                $m->to('gustavo.hekel@gmail.com', $u->nombre);
+                $m->subject('Usuario habilitado');
+            });
+
             return 'Se desbloqueado el acceso al usuario ' . $u->nombre;
+
         }
     }
 
@@ -149,6 +159,7 @@ class UserController extends Controller
         $user = Usuario::with(['provincia' , 'entidad' ,'area' , 'menu' , 'conexiones' => function($query){
             $query->orderBy('fecha_login' , 'desc')->take(5);
         }])->where('id_usuario' , $id)->get()[0];
+
         $data = [
             'page_title' => 'Perfil',
             'usuario' => $user

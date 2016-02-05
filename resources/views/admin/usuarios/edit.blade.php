@@ -20,7 +20,15 @@
 					<!-- PROVINCIA -->
 					<div class="form-group">
 						<label for="provincia">Provincia</label>
-						@include('common.select-provincia')
+						<select id="provincia" name="provincia" class="form-control">
+						@foreach ($provincias as $provincia)
+							@if ($usuario->id_provincia == $provincia->id_provincia)
+							<option value="{{ $provincia->id_provincia }}" selected>{{ $provincia->descripcion }}</option>
+							@else
+							<option value="{{ $provincia->id_provincia }}">{{ $provincia->descripcion }}</option>
+							@endif
+						@endforeach
+						</select>
 					</div>
 					<!-- ENTIDAD -->
 					<div class="form-group">

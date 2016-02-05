@@ -86,11 +86,12 @@
       });
     
       $.backstretch([
-        "http://dl.dropbox.com/u/515046/www/outside.jpg"
-      , "http://dl.dropbox.com/u/515046/www/garfield-interior.jpg"
-      , "http://dl.dropbox.com/u/515046/www/cheers.jpg"
-      , "https://scontent-gru1-1.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/538669_3912335528347_530471242_n.jpg?oh=fe9fa224ed1b7a8ca0588914fff76098&oe=565437DF"
-      ], {duration: 3000, fade: 750});
+        "http://i.imgur.com/TKZpSPq.jpg"
+      , "http://i.imgur.com/wvAoHzO.jpg"
+      , "http://i.imgur.com/cjBRlew.jpg"
+      , "http://i.imgur.com/2konMTs.jpg"
+      , "http://i.imgur.com/7MyX5Vg.jpg"
+      ], {duration: 3000, fade: 2000});
     </script>
   </body>
 </html>
