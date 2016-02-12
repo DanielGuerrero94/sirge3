@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mail;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Usuario;
 use App\Http\Requests\SolicitudUsuarioRequest;
+
+use App\Models\Usuario;
+use App\Models\Area;
+
 
 class RegistrationController extends Controller
 {
@@ -18,7 +22,11 @@ class RegistrationController extends Controller
      */
     public function index()
     {
-    	return view('registration.main');
+        $data = [
+            'areas' => Area::all()
+        ];
+
+    	return view('registration.main' , $data);
     }
 
     /**
@@ -52,8 +60,8 @@ class RegistrationController extends Controller
         if ($user->save()){
             Mail::send('emails.reminder', ['usuario' => $user], function ($m) use ($user) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-                $m->to('sistemasuec@gmail.com', $user->nombre);
-                $m->to('gustavo.hekel@gmail.com', $user->nombre);
+                $m->to('sistemasuec@gmail.com');
+                $m->to('gustavo.hekel@gmail.com');
                 $m->subject('Solicitud de usuario!');
             });
             return view('registration.aviso');

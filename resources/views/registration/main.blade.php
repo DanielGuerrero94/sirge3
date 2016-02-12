@@ -53,6 +53,7 @@
                                 <div class="col-sm-8 col-sm-offset-2">
                                     <label>Área</label><br>
                                     <select name="area" class="form-control">
+                                        <!--
                                         <option value="16">Coordinación</option>
                                         <option value="5">Legal</option>
                                         <option value="17">Comunicación</option>
@@ -65,6 +66,10 @@
                                         <option value="6">Planes especiales</option>
                                         <option value="1">Sistemas informáticos</option>
                                         <option value="21">Externo</option>
+                                        -->
+                                        @foreach ($areas as $area)
+                                        <option value="{{$area->id_area}}">{{$area->nombre}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>    
