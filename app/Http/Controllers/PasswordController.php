@@ -28,7 +28,7 @@ class PasswordController extends Controller
      */
     public function recover(Request $r)
     {
-    	Usuario::where('email' , '=' , $r->email)->update(['password' => bcrypt('Homero')]);
+    	Usuario::where('email' , '=' , $r->email)->update(['password' => bcrypt(md5('Homero'))]);
     	$user = Usuario::where('email' , '=' , $r->email)->get();
     	Mail::send('emails.new_password', ['usuario' => $user[0]], function ($m) use ($user) {
             $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
