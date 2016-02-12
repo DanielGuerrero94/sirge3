@@ -16,7 +16,8 @@ class PublicBeneficiariosErrores extends Migration
             $table->string('clave_beneficiario',40)->primary();
             $table->longText('descripcion_errores')->nullable();
             $table->longText('valores')->nullable();
-            $table->string('estado',2)->nullable();
+            $table->string('estado',2);
+            $table->integer('periodo');
 
         });
     }

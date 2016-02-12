@@ -150,6 +150,7 @@ Route::get('puco-consultas' , 'PucoController@getConsulta');
 Route::get('beneficiarios-listado' , 'BeneficiariosController@index');
 Route::get('beneficiarios-listado-table' , 'BeneficiariosController@getListadoTabla');
 Route::get('beneficiarios-historia-clinica/{id}/{back}' , 'BeneficiariosController@historiaClinica');
+Route::get('beneficiarios-busqueda/{beneficiario}' , 'BeneficiariosController@busquedaBeneficiario');
 
 
 /**
@@ -322,6 +323,8 @@ Route::get('new-password' , 'UserController@getNewPassword');
 Route::post('new-password' , 'UserController@postNewPassword');
 Route::get('usuario-imagen' , 'UserController@getAvatar');
 Route::post('usuario-imagen' , 'UserController@postAvatar');
+Route::get('usuario-cambiar-pass' , 'UserController@modificarContrasenas');
+
 
 /**
  * CONTACTOS

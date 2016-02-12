@@ -243,7 +243,7 @@ class UserController extends Controller
         ]);
 
         $user = Auth::user();
-        $user->password = bcrypt($r->pass);
+        $user->password = bcrypt(md5($r->pass));
         if ($user->save()){
             return 'Se ha modificado la contraseña';
         }
@@ -288,5 +288,45 @@ class UserController extends Controller
 
         return response()->json($response);
     }
+
+    /**
+     * Modifica las constraseñas de los usuarios a bcript de un md5
+     * @param null
+     *
+     * @return null
+     */
+    public function modificarContrasenas(){
+        
+        $usuarios = Usuario::where('id_entidad' ,'=', 1)->where('id_area','=', 1)->whereNotIn('usuario',['gustavo.hekel@gmail.com','rcadaval'])->get();
+
+        //$usuarios = Usuario::where('usuario' ,'=', 'rcadaval')->get();
+        
+        //return json_encode($usuarios);
+        $ok = 1;
+
+        if ($ok){
+        
+            foreach ($usuarios as $unUsuario) {
+
+                $user = Usuario::find($unUsuario->id_usuario);
+
+                //return json_encode($user);
+                
+                $user->password = bcrypt($user->password);
+
+                if ($user->save()){
+                    $ok = 1;
+                }
+                else {                    
+                    die(response('Error' , 422));
+                    $ok = 0;
+                }
+            }
+            return json_encode($user);
+            die('Todo ok');
+        }
+    }
+
+
 }
 

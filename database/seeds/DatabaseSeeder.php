@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('IndicadoresIndicadoresMedicaRangos');
 		//$this->call('IndicadoresIndicadoresMedica');
 		//$this->call('IndicadoresIndicadoresDescripcion');
-		//$this->call('SistemaSubidas');
-		//$this->call('SistemaLotes');
-		//$this->call('SistemaLotesAceptados');
-		//$this->call('SistemaLotesRechazados');
-		//$this->call('PrestacionesP');
+		// $this->call('SistemaSubidas');
+		// $this->call('SistemaLotes');
+		// $this->call('SistemaLotesAceptados');
+		// $this->call('SistemaLotesRechazados');
+		// $this->call('PrestacionesP');
 		//$this->call('BeneficiariosBeneficiariosCeb');
 		//$this->call('BeneficiariosBeneficiariosEmbarazos');
 		//$this->call('BeneficiariosBeneficiariosIndigenas');
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder {
 		// $this->call('SolicitudesPrioridades');
 		// $this->call('SolicitudesTipoSolicitud');
 		//$this->call('SolicitudesOperadores');	
-		$this->call('CompromisoAnualMetasDescentralizacion');	
+		//$this->call('CompromisoAnualMetasDescentralizacion');	
 			
 		/**
 		FIN DE CORRECCIONES TEMPORALES
@@ -108,26 +108,26 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PssCodigosHombre');
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
-		$this->call('PssGruposDiagnosticos');
-		$this->call('BeneficiariosBeneficiariosBajas');*/
-		/*$this->call('BeneficiariosBeneficiariosCategoriasNacer');*/
-		/*$this->call('BeneficiariosBeneficiariosCeb');*/
+		$this->call('PssGruposDiagnosticos');*/
+		$this->call('BeneficiariosBeneficiariosBajas');
+		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
+		$this->call('BeneficiariosBeneficiariosCeb');
 		$this->call('BeneficiariosBeneficiariosContacto');
-		/*$this->call('BeneficiariosBeneficiariosEmbarazos');*/
+		$this->call('BeneficiariosBeneficiariosEmbarazos');
 		$this->call('BeneficiariosBeneficiariosGeografico');
 		$this->call('BeneficiariosBeneficiariosIndigenas');
 		$this->call('BeneficiariosBeneficiariosParientes');
-		/*$this->call('BeneficiariosBeneficiariosPeriodos');	*/	
+		$this->call('BeneficiariosBeneficiariosPeriodos');
 		$this->call('BeneficiariosBeneficiariosScore');
-		$this->call('PrestacionesRechazosMigracion');
-		$this->call('PrestacionesP');
+		/*$this->call('PrestacionesRechazosMigracion');
+		$this->call('PrestacionesP');*/
 		$this->call('ComprobantesC');
-		$this->call('FondosCodigosGasto');
-		$this->call('FondosSubCodigosGasto');
+		/*$this->call('FondosCodigosGasto');
+		$this->call('FondosSubCodigosGasto');*/
 		$this->call('FondosA');
-		$this->call('PucoObrasSociales');
+		/*$this->call('PucoObrasSociales');
 		$this->call('PucoObrasSocialesProvinciales');
-		$this->call('PucoResumenPuco');
+		$this->call('PucoResumenPuco');*/
 		$this->call('CompromisoAnualMetasDatosReportables');
 		$this->call('CompromisoAnualMetasDependeciasSanitarias');
 		$this->call('CompromisoAnualMetasDescentralizacion');
@@ -135,26 +135,23 @@ class DatabaseSeeder extends Seeder {
 		$this->call('DdjjBackup');
 		$this->call('DdjjDoiu9');
 		$this->call('DdjjSirge');
-		//$this->call('IndecPoblacion');
-		//$this->call('IndecPoblacionDepartamentos');
-		$this->call('IndicadoresIndicadoresDescripcion');
+		/*$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresPriorizados');
-		$this->call('IndicadoresMetasEfectoresPriorizados');
+		$this->call('IndicadoresMetasEfectoresPriorizados');*/
 		$this->call('LogsLogins');			
 		$this->call('EfectoresAddendas');
 		$this->call('EfectoresEfectoresAddendas');
-		$this->call('DiccionariosDiccionario');
-		//$this->call('OspProvincias');
-		$this->call('EstadisticasGraficos');
-		$this->call('EstadisticasReportes');
-		$this->call('SolicitudesGrupos');
+		/*$this->call('DiccionariosDiccionario');		*/
+/*		$this->call('EstadisticasGraficos');
+		$this->call('EstadisticasReportes');*/
+/*		$this->call('SolicitudesGrupos');
 		$this->call('SolicitudesEstados');
 		$this->call('SolicitudesPrioridades');
 		$this->call('SolicitudesTipoSolicitud');
 		$this->call('SolicitudesOperadores');
-		$this->call('PssCodigosDatosReportables');	
+		$this->call('PssCodigosDatosReportables');*/
 		$this->call('ActualizarSecuencias');
 		
 

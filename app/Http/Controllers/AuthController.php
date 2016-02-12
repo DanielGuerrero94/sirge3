@@ -17,7 +17,7 @@ class AuthController extends Controller
      */
     public function authenticate(Request $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password , 'activo' => 'S'])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => md5($request->password) , 'activo' => 'S'])) {
             // Authentication passed...
         	
         	$login = new Login;

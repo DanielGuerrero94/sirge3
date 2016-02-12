@@ -52,7 +52,22 @@ class BeneficiariosController extends Controller
         return Datatables::of($benefs)
             ->addColumn('action' , function($benef){
                 return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
-            })
+            })            
+            ->make(true);
+    }
+
+    /**
+     * Devuelve un json para la datatable
+     *
+     * @return json
+     */
+    public function busquedaBeneficiario($valor){
+        $benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','numero_documento','clave_beneficiario')
+        ->where('clave_beneficiario',$valor);
+        return Datatables::of($benefs)
+            ->addColumn('action' , function($benef){
+                return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+            })            
             ->make(true);
     }
 
