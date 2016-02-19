@@ -89,6 +89,15 @@
 		})
 	});
 
+	if({{$id_padron}} == 4){
+		if({{Auth::user()->id_entidad}} != 1){
+			$('#codigo_osp option:enabled').each(function (){
+				$("#codigo_osp option[value='"+$(this).val()+"']").attr('selected', 'selected');
+			});		
+		}	
+	}
+	
+
 	$('#codigo_osp').change(function(){
 		$('#fileupload').removeAttr('disabled');
 		$.get('check-periodo/' + $(this).val() , function(data){

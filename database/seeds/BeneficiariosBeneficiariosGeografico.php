@@ -13,7 +13,9 @@ class BeneficiariosBeneficiariosGeografico extends Seeder
     {
         \DB::statement(" INSERT INTO beneficiarios.geografico(clave_beneficiario,calle,numero,manzana,piso,departamento,calle_1,calle_2,barrio,municipio,id_departamento,id_localidad,id_provincia,codigo_postal)
 	(
-		SELECT clave_beneficiario_n,calle_n,numero_n,manzana_n,piso_n,departamento_n,calle_1_n,calle_2_n,barrio_n,municipio_n,(SELECT id FROM geo.departamentos WHERE id_departamento = id_departamento_n AND id_provincia = id_provincia_n) as id_departamento ,(SELECT id FROM geo.localidades WHERE id_departamento = id_departamento_n AND id_provincia = id_provincia_n AND id_localidad = id_localidad_n) as id_localidad,id_provincia_n,codigo_postal_n
+		SELECT clave_beneficiario_n,calle_n,numero_n,manzana_n,piso_n,departamento_n,calle_1_n,calle_2_n,barrio_n,municipio_n,
+		(SELECT id FROM geo.departamentos WHERE id_departamento = id_departamento_n AND id_provincia = id_provincia_n) as id_departamento ,
+		(SELECT id FROM geo.localidades WHERE id_departamento = id_departamento_n AND id_provincia = id_provincia_n AND id_localidad = id_localidad_n) as id_localidad,id_provincia_n,codigo_postal_n
 		
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT clave_beneficiario,calle,numero,manzana,piso,departamento,calle_1,calle_2,barrio,municipio,id_departamento,id_localidad,id_provincia,codigo_postal

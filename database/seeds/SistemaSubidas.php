@@ -15,11 +15,11 @@ class SistemaSubidas extends Seeder {
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 		    'SELECT id_carga,id_usuario_carga,fecha_carga,id_padron,nombre_original,nombre_actual,size,case procesado
-														when ''N'' then 0
-														when ''S'' then 1
-														when ''P'' then 2
-														when ''E'' then 3
-														else 4 end
+														when ''N'' then 2
+														when ''S'' then 3
+														when ''P'' then 1
+														when ''E'' then 4
+														else 2 end
 			    FROM sistema.cargas_archivos l')
 		    AS migracion(id_subida integer,
 				 id_usuario integer,

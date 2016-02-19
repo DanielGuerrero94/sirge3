@@ -20,7 +20,7 @@ class SistemaLotesAceptados extends Seeder {
 				  fecha_aceptado_posta timestamp(0) without time zone)
 
 		INNER JOIN sistema.lotes l ON l.lote = lote_posta
-		AND id_estado = 1
+		AND id_estado = 3
 	);
 
 ");

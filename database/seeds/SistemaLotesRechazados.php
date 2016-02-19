@@ -20,7 +20,7 @@ class SistemaLotesRechazados extends Seeder {
 				  fecha_rechazado_posta timestamp(0) without time zone)
 
 		INNER JOIN sistema.lotes l ON l.lote = lote_posta
-		AND id_estado = 3
+		AND id_estado = 4
 	);");
 		
 		//\DB::statement(" INSERT INTO sistema.lotes_rechazados(id_usuario,fecha_rechazado) VALUES (191,now());");

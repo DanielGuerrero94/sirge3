@@ -95,7 +95,6 @@ class ActualizarSecuencias extends Seeder
 		DB::statement(SELECT SETVAL('solicitudes.operadores_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.operadores;);
 		DB::statement(SELECT SETVAL('solicitudes.prioridades_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.prioridades;);
 		DB::statement(SELECT SETVAL('solicitudes.solicitudes_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.solicitudes;);
-		DB::statement(SELECT SETVAL('solicitudes.tipo_solicitud_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.tipo_solicitud;);
-		DB::statement();
+		DB::statement(SELECT SETVAL('solicitudes.tipo_solicitud_id_seq', COALESCE(MAX(id), 1) ) FROM solicitudes.tipo_solicitud;);		
     }
 }

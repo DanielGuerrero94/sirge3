@@ -86,12 +86,12 @@ class DatabaseSeeder extends Seeder {
 		$this->call('GeoRegiones');
 		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
-		$this->call('SistemaModulosMenu');				
+		$this->call('SistemaModulosMenu');*/
 		$this->call('SistemaSubidas');
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
 		$this->call('SistemaLotesRechazados');
-		$this->call('PssLineasCuidado');
+		/*$this->call('PssLineasCuidado');
 		$this->call('PssModulosCCC');
 		$this->call('PssTipoPrestacion');			
 		$this->call('PssCodigosAnexo');
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PssCodigosHombre');
 		$this->call('TrazadorasTrazadoras');
 		$this->call('PssCodigosTrazadoras');
-		$this->call('PssGruposDiagnosticos');*/
+		$this->call('PssGruposDiagnosticos');
 		$this->call('BeneficiariosBeneficiariosBajas');
 		$this->call('BeneficiariosBeneficiariosCategoriasNacer');
 		$this->call('BeneficiariosBeneficiariosCeb');
@@ -118,12 +118,13 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosIndigenas');
 		$this->call('BeneficiariosBeneficiariosParientes');
 		$this->call('BeneficiariosBeneficiariosPeriodos');
-		$this->call('BeneficiariosBeneficiariosScore');
-		/*$this->call('PrestacionesRechazosMigracion');
-		$this->call('PrestacionesP');*/
+		$this->call('BeneficiariosBeneficiariosScore');*/
+		/*$this->call('PrestacionesRechazosMigracion');*/
+		$this->call('PrestacionesP');
 		$this->call('ComprobantesC');
 		/*$this->call('FondosCodigosGasto');
-		$this->call('FondosSubCodigosGasto');*/
+		$this->call('FondosSubCodigosGasto');
+		$this->call('FondosFondosRechazos');*/
 		$this->call('FondosA');
 		/*$this->call('PucoObrasSociales');
 		$this->call('PucoObrasSocialesProvinciales');

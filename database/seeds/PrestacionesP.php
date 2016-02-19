@@ -25,10 +25,10 @@ class PrestacionesP extends Seeder
 
 			\DB::statement(" INSERT INTO prestaciones.prestaciones(estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables)
 	(
-		SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables::jsonb
+		SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,clave_beneficiario,tipo_documento,clase_documento,numero_documento,orden,lote,datos_reportables::text
 	FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
 	    'SELECT estado,efector,numero_comprobante,codigo_prestacion,subcodigo_prestacion,precio_unitario,fecha_prestacion,b.clave_beneficiario,p.tipo_documento,p.clase_documento,p.numero_documento,orden,lote,datos_reportables::text
-		    FROM prestaciones.p_" . $prov . " p INNER JOIN beneficiarios.beneficiarios b ON p.clave_beneficiario = b.clave_beneficiario LIMIT 100')		
+		    FROM prestaciones.p_" . $prov . " p INNER JOIN beneficiarios.beneficiarios b ON p.clave_beneficiario = b.clave_beneficiario')		
 	    AS migracion(estado character(1),
 			  efector character varying(14),
 			  numero_comprobante character varying(50),
@@ -42,7 +42,7 @@ class PrestacionesP extends Seeder
 			  numero_documento character varying(14),
 			  orden smallint,
 			  lote integer,
-			  datos_reportables character varying)					
+			  datos_reportables text)					
 	);");
 			
 		}

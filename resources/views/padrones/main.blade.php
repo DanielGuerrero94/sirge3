@@ -44,7 +44,7 @@
 				<h2 class="box-title">Administrar lotes</h2>
 				<div class="box-tools pull-right">
 					@if ($lotes_pendientes != 0)
-					<span class="label label-warning">{{ $lotes_pendientes }} lotes(s) pendientes</span>
+					<span class="label label-warning">{{ $lotes_pendientes }} lote(s) pendiente(s)</span>
 					@else
 					<span class="label label-success">No hay lotes pendientes</span>
 					@endif

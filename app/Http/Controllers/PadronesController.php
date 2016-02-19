@@ -145,7 +145,7 @@ class PadronesController extends Controller
 			$r->file('file')->move($destino , $nombre_archivo);
 		} catch (FileException $e){
 			$s->delete();
-			return response("Ha ocurrido un error" , 422);
+			return response("Ha ocurrido un error: ". $e->getMessage() , 422);
 		}
 		if ($s->save()){
 			switch ($r->id_padron) {
