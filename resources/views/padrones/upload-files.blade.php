@@ -130,8 +130,7 @@
     $('#errores-div').hide();
 
     $('#fileupload').bind('fileuploadsubmit', function (e, data) {
-		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }} , id_sss : $('#id_sss').val() }
-		console.log(data.formData);
+		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }} , id_sss : $('#id_sss').val() }		
 	});
 
     $('#fileupload').fileupload({
@@ -176,8 +175,7 @@
         fail : function (e, data){
 			var html = '<li>Ha ocurrido un error al subir el archivo</li>';
 			$('#errores-form').html(html);
-			$('#errores-div').show();
-			console.log(data);
+			$('#errores-div').show();			
         }
 
     }).prop('disabled', !$.support.fileInput)

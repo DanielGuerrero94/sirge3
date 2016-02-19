@@ -130,6 +130,28 @@ return [
             'schema'   => 'solicitudes',
         ],
 
+        'puco' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'puco',
+        ],
+
+        'indicadores' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'indicadores',
+        ],
+
         'datawarehouse' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST_DW', 'localhost'),

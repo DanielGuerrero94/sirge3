@@ -17,7 +17,7 @@ use App\Models\Lote;
 use App\Models\Subida;
 use App\Models\SubidaOsp;
 use App\Models\PUCO\Osp;
-use App\Models\PUCO\ProcesoPuco as Puco;
+use App\Models\PUCO\ProcesoPuco as Pucop;
 
 class OspController extends Controller
 {
@@ -152,17 +152,18 @@ class OspController extends Controller
 	 * @return bool
 	 */
 	public function actualizarProceso($lote , $codigo) {
-		$p = Puco::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+		$p = Pucop::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
 				 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
 				 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
 				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
 				 ->where('periodo' , date('Ym'))
 				 ->where('codigo_osp' , $codigo)
 				 ->get();
+		
 		if ($p->count()){
-			$np = Puco::find($p[0]->lote);
+			$np = Pucop::find($p[0]->lote);
 		} else {
-			$np = new Puco;
+			$np = new Pucop;
 		}
 
 		$np->lote = $lote;
@@ -245,7 +246,7 @@ class OspController extends Controller
 	 * @return bool
 	 */
 	public function checkPeriodo($codigo) {
-		$p = Puco::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+		$p = Pucop::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
 				 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
 				 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
 				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
