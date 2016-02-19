@@ -40,7 +40,7 @@ class PadronesController extends Controller
 	 * 
 	 * @return null
 	 */
-	public function getMain($id){
+	public function getMain($id){		
 
 		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
 		
@@ -81,7 +81,8 @@ class PadronesController extends Controller
 	 *
 	 * @return string
 	 */
-	protected function getName($id , $route = FALSE){
+	protected function getName($id , $route = FALSE){			
+
 		switch ($id) {
 			case 1:
 				$p = 'prestaciones'; break;
@@ -129,8 +130,10 @@ class PadronesController extends Controller
 	 *
 	 * @return json
 	 */
-	public function postUpload(Request $r){
+	public function postUpload(Request $r){		
+
 		$nombre_archivo = uniqid() . '.txt';
+
 		$destino = $this->getName($r->id_padron , TRUE);
 		$s = new Subida;
 

@@ -86,11 +86,11 @@ class DatabaseSeeder extends Seeder {
 		$this->call('GeoRegiones');
 		$this->call('SistemaParametros');
 		$this->call('SistemaModulos');
-		$this->call('SistemaModulosMenu');*/
+		$this->call('SistemaModulosMenu');
 		$this->call('SistemaSubidas');
 		$this->call('SistemaLotes');
 		$this->call('SistemaLotesAceptados');
-		$this->call('SistemaLotesRechazados');
+		$this->call('SistemaLotesRechazados');*/
 		/*$this->call('PssLineasCuidado');
 		$this->call('PssModulosCCC');
 		$this->call('PssTipoPrestacion');			

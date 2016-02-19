@@ -76,6 +76,7 @@ Route::get('solicitud-final/{id}/{hash}' , 'SolicitudController@finalizarSolicit
 Route::get('padron/{id}' , 'PadronesController@getMain');
 Route::get('subir-padron/{id}' , 'PadronesController@getUpload');
 Route::post('subir-padron' , 'PadronesController@postUpload');
+Route::post('subir-padron/{id}' , 'PadronesController@postUpload');
 Route::get('listar-archivos/{id}' , 'PadronesController@listadoArchivos');
 Route::get('listar-archivos-table/{id}' , 'PadronesController@listadoArchivosTabla');
 Route::get('eliminar-padron/{archivo}' , 'PadronesController@eliminarArchivo');

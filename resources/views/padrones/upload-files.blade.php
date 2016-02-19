@@ -93,6 +93,7 @@
 		if({{Auth::user()->id_entidad}} != 1){
 			$('#codigo_osp option:enabled').each(function (){
 				$("#codigo_osp option[value='"+$(this).val()+"']").attr('selected', 'selected');
+				$("#codigo_osp").trigger('change');
 			});		
 		}	
 	}
@@ -130,17 +131,19 @@
 
     $('#fileupload').bind('fileuploadsubmit', function (e, data) {
 		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }} , id_sss : $('#id_sss').val() }
+		console.log(data.formData);
 	});
 
     $('#fileupload').fileupload({
         url: 'subir-padron',
         dataType: 'json',
+        maxChunkSize: 800000000, 
         add: function(e, data) {
         	$('#errores-div').hide();
             var uploadErrors = [];
             var acceptFileTypes = /^text\/plain$/i;
         	
-            if(data.originalFiles[0]['size'] > 1024 * 1024 * 1024) {
+            if(data.originalFiles[0]['size'] > 1024 * 1024 * 1024 * 80) {
 				uploadErrors.push('Tamaño de archivo demasiado grande. Máximo : 25mb');
             }
 
@@ -174,6 +177,7 @@
 			var html = '<li>Ha ocurrido un error al subir el archivo</li>';
 			$('#errores-form').html(html);
 			$('#errores-div').show();
+			console.log(data);
         }
 
     }).prop('disabled', !$.support.fileInput)
