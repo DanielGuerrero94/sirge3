@@ -24,7 +24,7 @@ class LoteRechazado extends Model {
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
 
 	/**
 	 * Obtener el lote dueño del lote aceptado
