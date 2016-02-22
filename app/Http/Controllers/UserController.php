@@ -87,7 +87,8 @@ class UserController extends Controller
             'provincias' => $provincias,
             'entidades' => $entidades,
             'areas' => $areas,
-            'menues' => $menues
+            'menues' => $menues,
+            'back' => 'ajustes'
         ];
         return view ('admin.usuarios.edit' , $data);
     }
@@ -183,7 +184,8 @@ class UserController extends Controller
             'usuario' => $usuario,
             'provincias' => $provincias,
             'areas' => $areas,
-            'entidades' => $entidades
+            'entidades' => $entidades,
+            'back' => 'ajustes'
         ];
         return view('user.edit' , $data);
     }
@@ -207,11 +209,11 @@ class UserController extends Controller
             $user->id_entidad = $r->entidad;
             $user->id_area = $r->area;
             $user->fecha_nacimiento = $r->fecha_nacimiento;
-            $user->ocupacion = $r->ocupacion;
-            $user->facebook = $r->fb;
+            $user->ocupacion = $r->ocupacion;            
+            $user->facebook = $r->fb;    
             $user->twitter = $r->tw;
             $user->linkedin = $r->ln;
-            $user->google = $r->gp;
+            $user->google = $r->gp;                                            
             $user->skype = $r->skype;
             $user->telefono = $r->telefono;
             $user->mensaje = $r->mensaje;

@@ -11,7 +11,7 @@ class LogsLogins extends Seeder
      */
     public function run()
     {
-        \DB::statement(" INSERT INTO logs.logins(id,id_usuario,fecha_login,ip)
+        \DB::statement(" INSERT INTO logs.logins(id_inicio,id_usuario,fecha_login,ip)
 	(
 		SELECT *
 		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',

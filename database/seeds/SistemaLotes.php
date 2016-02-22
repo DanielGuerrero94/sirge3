@@ -13,7 +13,7 @@ class SistemaLotes extends Seeder {
 		\DB::statement(" INSERT INTO sistema.lotes(lote,id_subida,id_usuario,id_provincia,id_estado,registros_in,registros_out,inicio,fin)
 	(
 		SELECT lote,id_subida,id_usuario,id_provincia,case 
-																when id_estado = 'PENDIENTE' then 1
+																when id_estado = 'PROCESADO' then 1
 																when id_estado = 'CERRADO' then 3
 																when id_estado = 'ELIMINADO' then 4
 																else 2 end

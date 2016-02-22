@@ -24,17 +24,19 @@ class UserEditProfileRequest extends Request
      */
     public function rules()
     {
+        
+
         return [
             'nombre' => 'required|min:3|max:60',
             'email' => 'required|email',
             'provincia' => 'required',
             'entidad' => 'required',
             'fecha_nacimiento' => 'required|date_format:d/m/Y',
-            'ocupacion' => 'required|max:30',
-            'fb' => 'url',
-            'tw' => 'url',
-            'ln' => 'url',
-            'gp' => 'url',
+            'ocupacion' => 'max:30',
+            'fb' => 'min:3|max:60',
+            'tw' => 'min:3|max:60',
+            'ln' => 'min:3|max:60',
+            'gp' => 'min:3|max:60',
             'skype' => 'max:200',
             'telefono' => 'max:20',
         ];

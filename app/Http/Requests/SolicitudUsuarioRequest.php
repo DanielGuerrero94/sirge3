@@ -31,13 +31,13 @@ class SolicitudUsuarioRequest extends Request
             'sede' => 'required',
             'fecha_nacimiento' => 'required|date_format:d/m/Y',
             'ocupacion' => 'required|max:100',
-            'fb' => 'url',
-            'tw' => 'url',
-            'ln' => 'url',
-            'gp' => 'url',
+            'fb' => 'min:3|max:60',
+            'tw' => 'min:3|max:60',
+            'ln' => 'min:3|max:60',
+            'gp' => 'min:3|max:60',
             'skype' => 'max:200',
             'telefono' => 'max:20',
-            'pass' => 'required|min:6|max:30'
+            'pass' => 'required|min:6|max:60'
         ];
     }
 }

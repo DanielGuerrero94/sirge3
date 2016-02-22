@@ -297,7 +297,7 @@
 	$(document).ready(function(){
 
 		$('#fecha-nacimiento').inputmask('99/99/9999');
-		$('#telefono').inputmask('(999) 9999 - 9999')
+		$('#telefono').inputmask('99999999999')
 
         $('#pass').pwstrength();
 

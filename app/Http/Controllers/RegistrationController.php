@@ -55,7 +55,7 @@ class RegistrationController extends Controller
         $user->google = $r->gp;
         $user->skype = $r->skype;
         $user->telefono = $r->telefono;
-        $user->password = bcrypt($r->pass);
+        $user->password = bcrypt(md5($r->pass));
         
         if ($user->save()){
             Mail::send('emails.reminder', ['usuario' => $user], function ($m) use ($user) {

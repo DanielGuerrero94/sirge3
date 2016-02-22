@@ -82,7 +82,7 @@
 								<div class="form-group">
 	                        		<div class="input-group">
 									 	<span class="input-group-addon" id="fb"><i class="fa fa-facebook"></i></span>
-									 	<input type="text" class="form-control" name="fb" value="{{ $usuario->facebook }}" aria-describedby="fb">
+									 	<input type="text" class="form-control" id="fb" name="fb" value="{{ $usuario->facebook }}" aria-describedby="fb">
 									</div>
 	                        	</div>
 							</div>
@@ -90,7 +90,7 @@
 								<div class="form-group">
 	                        		<div class="input-group">
 									 	<span class="input-group-addon" id="tw"><i class="fa fa-twitter"></i></span>
-									 	<input type="text" class="form-control" name="tw" value="{{ $usuario->twitter }}" aria-describedby="tw">
+									 	<input type="text" class="form-control" id="tw" name="tw" value="{{ $usuario->twitter }}" aria-describedby="tw">
 									</div>
 	                        	</div>
 							</div>
@@ -98,7 +98,7 @@
 								<div class="form-group">
 	                        		<div class="input-group">
 									 	<span class="input-group-addon" id="g+"><i class="fa fa-google-plus"></i></span>
-									 	<input type="text" class="form-control" name="gp" value="{{ $usuario->google }}" aria-describedby="g+">
+									 	<input type="text" class="form-control" id="gp" name="gp" value="{{ $usuario->google }}" aria-describedby="g+">
 									</div>
 	                        	</div>
 							</div>
@@ -116,7 +116,7 @@
 								<div class="form-group">
 	                        		<div class="input-group">
 									 	<span class="input-group-addon" id="ln"><i class="fa fa-linkedin"></i></span>
-									 	<input type="text" class="form-control" name="ln" value="{{ $usuario->linkedin }}" aria-describedby="ln">
+									 	<input type="text" class="form-control" id="ln" name="ln" value="{{ $usuario->linkedin }}" aria-describedby="ln">
 									</div>
 	                        	</div>
 							</div>
@@ -155,7 +155,7 @@
 	$(document).ready(function(){
 
 		$('#fecha-nacimiento').inputmask('99/99/9999');
-		$('#telefono').inputmask('(999) 9999 - 9999');
+		$('#telefono').inputmask('99999999999');
 		$('#errores-div').hide();
 
 		$('.pass').click(function(){
@@ -184,13 +184,15 @@
 		            fecha_nacimiento : {
 		                required: true
 		            },
-		            ocupacion : {
-		                required: true,
+		            ocupacion : {		                
 		                minlength: 8,
 		                maxlength: 100
 		            }
 		        },
 				submitHandler : function(form){
+					
+					console.log($(form).serialize());
+
 					$.ajax({
 						method : 'post',
 						data : $(form).serialize(),
@@ -205,6 +207,12 @@
 							} else {
 								$('#modal-text').html('Se han modificado los datos');
 								$('.modal').modal();
+
+								$('.modal .modal-dialog button').on('click', function(){
+									$.get('{{ $back }}' , function(data){
+										$('.content-wrapper').html(data);
+									});	
+								})						
 							}
 						},
 						error : function(data){

@@ -119,31 +119,31 @@ class DatabaseSeeder extends Seeder {
 		$this->call('BeneficiariosBeneficiariosParientes');
 		$this->call('BeneficiariosBeneficiariosPeriodos');
 		$this->call('BeneficiariosBeneficiariosScore');*/
-		/*$this->call('PrestacionesRechazosMigracion');*/
+		/*$this->call('PrestacionesRechazosMigracion');
 		$this->call('PrestacionesP');
-		$this->call('ComprobantesC');
+		$this->call('ComprobantesC');¡/
 		/*$this->call('FondosCodigosGasto');
 		$this->call('FondosSubCodigosGasto');
-		$this->call('FondosFondosRechazos');*/
-		$this->call('FondosA');
+		$this->call('FondosFondosRechazos');
+		$this->call('FondosA');*/
 		/*$this->call('PucoObrasSociales');
 		$this->call('PucoObrasSocialesProvinciales');
-		$this->call('PucoResumenPuco');*/
+		$this->call('PucoResumenPuco');
 		$this->call('CompromisoAnualMetasDatosReportables');
 		$this->call('CompromisoAnualMetasDependeciasSanitarias');
 		$this->call('CompromisoAnualMetasDescentralizacion');
 		$this->call('CompromisoAnualMetasFacturacion');
 		$this->call('DdjjBackup');
 		$this->call('DdjjDoiu9');
-		$this->call('DdjjSirge');
+		$this->call('DdjjSirge');*/
 		/*$this->call('IndicadoresIndicadoresDescripcion');
 		$this->call('IndicadoresIndicadoresMedicaRangos');
 		$this->call('IndicadoresIndicadoresMedica');
 		$this->call('IndicadoresIndicadoresPriorizados');
 		$this->call('IndicadoresMetasEfectoresPriorizados');*/
-		$this->call('LogsLogins');			
+		/*$this->call('LogsLogins');			
 		$this->call('EfectoresAddendas');
-		$this->call('EfectoresEfectoresAddendas');
+		$this->call('EfectoresEfectoresAddendas');*/
 		/*$this->call('DiccionariosDiccionario');		*/
 /*		$this->call('EstadisticasGraficos');
 		$this->call('EstadisticasReportes');*/
