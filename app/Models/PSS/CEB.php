@@ -11,7 +11,7 @@ class CEB extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'pss.codigos_grupos';
+	protected $table = 'pss.codigos_ceb';
 
 	/**
 	 * Devuelve el grupo etario

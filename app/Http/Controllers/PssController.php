@@ -257,6 +257,7 @@ class PssController extends Controller
 		}
 		])->find($id);
 
+		$array['ceb'] = array();
 
 		foreach ($codigo->grupo as $prestacion){
 			$array['grupos'][] = $prestacion->grupoEtario->descripcion;
