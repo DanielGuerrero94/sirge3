@@ -50,9 +50,9 @@
 					<div class="btn-group " role="group">
 					 	<button type="button" class="back btn btn-info">Atrás</button>
 					 	@if ($usuario->activo == 'S')
-						<button id-usuario="{{ $usuario->id_usuario }}" type="button" class="block btn btn-danger">Bloquear</button>
+						<button id="estado-bloqueo" id-usuario="{{ $usuario->id_usuario }}" type="button" class="block btn btn-danger">Bloquear</button>
 						@else
-						<button id-usuario="{{ $usuario->id_usuario }}" type="button" class="unblock btn btn-success">Desbloquear</button>
+						<button id="estado-bloqueo" id-usuario="{{ $usuario->id_usuario }}" type="button" class="unblock btn btn-success">Desbloquear</button>
 						@endif
 						<button id-usuario="{{ $usuario->id_usuario }}" type="button" class="save btn btn-info">Guardar</button>
 					</div>
@@ -99,6 +99,11 @@
 			$.post('edit-usuario/' + id , $('#form-edit-user').serialize() , function(data){
 				$('#modal-text').html(data);
 				$('.modal').modal();
+				$('.modal .modal-dialog button').on('click', function(){
+					$.get('usuarios' , function(data){
+						$('.content-wrapper').html(data);
+					});
+				});
 			});
 		});
 
@@ -107,6 +112,11 @@
 			$.post('unblock-usuario/' + id , $('#form-edit-user').serialize() , function(data){
 				$('#modal-text').html(data);
 				$('.modal').modal();
+				$('.modal .modal-dialog button').on('click', function(){
+					$.get('usuarios' , function(data){
+						$('.content-wrapper').html(data);
+					});
+				});
 			});
 		})
 

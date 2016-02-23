@@ -10,6 +10,7 @@
 <body>
     <div style="margin: 10%;">
         <div class="row">
+            <input id='volver' type='button' style='position:absolute;top:5px;left:5px;' class='btn btn-primary btn-wd btn-sm' name='volver' value='INICIO' />   
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="panel panel-info">
                     <div class="panel-heading">
@@ -37,13 +38,17 @@
     <script src="{{ asset ("/bower_components/admin-lte/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$.backstretch([
+		/*$.backstretch([
 			"http://i.imgur.com/TKZpSPq.jpg"
           , "http://i.imgur.com/wvAoHzO.jpg"
           , "http://i.imgur.com/cjBRlew.jpg"
           , "http://i.imgur.com/2konMTs.jpg"
           , "http://i.imgur.com/7MyX5Vg.jpg"
-		], {duration: 3000, fade: 750});
+		], {duration: 3000, fade: 750});*/
+
+        $('#volver').on('click',function(){
+            window.location.href = '/sirge3/public';
+        });
    	});
 	</script>
 </body>

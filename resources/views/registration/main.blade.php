@@ -15,7 +15,10 @@
 	<div class="image-container set-full-height">
     <!--   Big container   -->
     <div class="container">
-        <div class="row">
+        <div class="row">                    
+                <input id='volver' type='button' style='position:absolute;top:5px;left:5px;' class='btn btn-primary btn-fill btn-wd btn-sm' name='volver' value='INICIO' />            
+        </div>
+
 	    <div class="col-sm-8 col-sm-offset-2">
             <!-- Wizard container -->   
             <div class="wizard-container"> 
@@ -308,6 +311,10 @@
           , "http://i.imgur.com/2konMTs.jpg"
           , "http://i.imgur.com/7MyX5Vg.jpg"
 		], {duration: 3000, fade: 750});
+
+        $('#volver').on('click',function(){
+            window.location.href = '/sirge3/public';
+        });
    	});
 	</script>
 </body>

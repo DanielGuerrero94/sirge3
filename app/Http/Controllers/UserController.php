@@ -142,6 +142,7 @@ class UserController extends Controller
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
                 $m->to($u->email , $u->nombre);
                 $m->to('gustavo.hekel@gmail.com', $u->nombre);
+                $m->to('rodrigo.cadaval.sumar@gmail.com', $u->nombre);
                 $m->subject('Usuario habilitado');
             });
 
