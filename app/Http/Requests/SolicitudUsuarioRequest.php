@@ -30,7 +30,7 @@ class SolicitudUsuarioRequest extends Request
             'provincia' => 'required',
             'sede' => 'required',
             'fecha_nacimiento' => 'required|date_format:d/m/Y',
-            'ocupacion' => 'required|max:100',
+            'cargo' => 'required|max:50',
             'fb' => 'min:3|max:60',
             'tw' => 'min:3|max:60',
             'ln' => 'min:3|max:60',

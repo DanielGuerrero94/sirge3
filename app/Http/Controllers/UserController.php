@@ -209,7 +209,7 @@ class UserController extends Controller
             $user->id_entidad = $r->entidad;
             $user->id_area = $r->area;
             $user->fecha_nacimiento = $r->fecha_nacimiento;
-            $user->ocupacion = $r->ocupacion;            
+            $user->cargo = $r->cargo;            
             $user->facebook = $r->fb;    
             $user->twitter = $r->tw;
             $user->linkedin = $r->ln;
@@ -314,7 +314,7 @@ class UserController extends Controller
 
                 //return json_encode($user);
                 
-                $user->password = bcrypt($user->password);
+                $user->password = bcrypt(md5($user->password));
 
                 if ($user->save()){
                     $ok = 1;

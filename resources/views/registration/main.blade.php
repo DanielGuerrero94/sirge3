@@ -160,7 +160,7 @@
                                 <div class="col-sm-4">
                                 	<div class="form-group">
                                 		<label>Ocupación</label>
-                                		<input class="form-control" type="text" name="ocupacion">
+                                		<input class="form-control" type="text" name="cargo">
                                 	</div>
                                 </div>
                             </div>

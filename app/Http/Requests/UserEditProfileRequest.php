@@ -32,7 +32,7 @@ class UserEditProfileRequest extends Request
             'provincia' => 'required',
             'entidad' => 'required',
             'fecha_nacimiento' => 'required|date_format:d/m/Y',
-            'ocupacion' => 'max:30',
+            'cargo' => 'max:50',
             'fb' => 'min:3|max:60',
             'tw' => 'min:3|max:60',
             'ln' => 'min:3|max:60',

@@ -48,7 +48,7 @@ class RegistrationController extends Controller
         $user->id_menu = 2;
         $user->ruta_imagen = 'default-avatar.png';
         $user->fecha_nacimiento = $r->fecha_nacimiento;
-        $user->ocupacion = $r->ocupacion;
+        $user->cargo = $r->cargo;
         $user->facebook = $r->fb;
         $user->twitter = $r->tw;
         $user->linkedin = $r->ln;

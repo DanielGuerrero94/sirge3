@@ -81,7 +81,7 @@
 								<div class="form-group">
 									<label class="col-md-5 control-label">Ocupación</label>
 									<div class="col-md-7">
-										<p class="form-control-static">{{ $usuario->ocupacion }}</p>
+										<p class="form-control-static">{{ $usuario->cargo }}</p>
 									</div>
 								</div>
 

@@ -50,7 +50,7 @@
 								<!--- OCUPACION -->
 								<div class="form-group">
 									<label for="ocupacion">Ocupación</label>
-									<input class="form-control" type="text" name="ocupacion" value="{{ $usuario->ocupacion }}">
+									<input class="form-control" type="text" name="cargo" value="{{ $usuario->cargo }}">
 								</div>
 							</div>
 						</div>
@@ -184,7 +184,7 @@
 		            fecha_nacimiento : {
 		                required: true
 		            },
-		            ocupacion : {		                
+		            cargo : {		                
 		                minlength: 8,
 		                maxlength: 100
 		            }
