@@ -32,7 +32,7 @@
 						<div class="col-md-4 text-center" style="margin-bottom:80px;">
 							<img style="height: 120px;" src="{{ asset("/dist/img/usuarios/") . '/' . $usuario->ruta_imagen }}" class="img-circle img-responsive center-block" alt="Responsive image">
 							<h4>{{$usuario->nombre}}</h4>
-							<h5>{{$usuario->ocupacion}}</h5>
+							<h5>{{$usuario->cargo}}</h5>
 							<div class="text-right">
 								<a href="{{strlen($usuario->google) ? $usuario->google : '#'}}" class="btn btn-xs btn-danger"><i class="fa fa-google-plus"></i></a>
 								<a href="{{strlen($usuario->facebook) ? $usuario->facebook : '#'}}" class="btn btn-xs btn-primary"><i class="fa fa-facebook "></i></a>
