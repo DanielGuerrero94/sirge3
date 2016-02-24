@@ -167,11 +167,11 @@
 		                  					<div class="col-sm-8">
 		                    					<select class="form-control" id="categoria" name="categoria">
 		                    						<option value="">Seleccione...</option>
-		                    						@foreach($categorias as $categoria)
-		                    							@if ($efector->id_categorizacion == $categoria->id_categorizacion)
-		                    								<option selected="selected" value="{{ $categoria->id_categorizacion }}"> {{ $categoria->descripcion }} </option>
+		                    						@foreach($categorias as $unaCategoria)
+		                    							@if ($efector->id_categorizacion == $unaCategoria->id_categorizacion)
+		                    								<option selected="selected" value="{{ $unaCategoria->id_categorizacion }}"> {{ $unaCategoria->descripcion }} </option>
 		                    							@else
-		                    								<option value="{{ $categoria->id_categorizacion }}"> {{ $categoria->descripcion }} </option>
+		                    								<option value="{{ $unaCategoria->id_categorizacion }}"> {{ $unaCategoria->descripcion }} </option>
 		                    							@endif
 		                    						@endforeach
 		                    					</select>
@@ -808,11 +808,11 @@ $(document).ready(function() {
 				maxlength : 8
 			},
 			numero_compromiso : {
-				required : true,
-				minlength : 3
+				//required : true,
+				minlength : 2
 			},
 			firmante_compromiso : {
-				required : true,
+				//required : true,
 				minlength : 8
 			},
 			indirecto : {
@@ -828,11 +828,11 @@ $(document).ready(function() {
 				required : true
 			},
 			convenio_firmante : {
-				required : true,
+				//required : true,
 				minlength : 8
 			},
 			convenio_numero : {
-				required : true,
+				//required : true,
 				minlength : 3
 			},
 			convenio_fsus : {

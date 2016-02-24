@@ -502,7 +502,7 @@ class EfectoresController extends Controller
 
       $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
       $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
-      $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
+      $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();      
       $provincias = Provincia::all();
       $departamentos = Departamento::all();
       $localidades = Localidad::all();
@@ -527,6 +527,8 @@ class EfectoresController extends Controller
                 }
                 ])
         ->where('cuie' , $cuie)->firstOrFail();
+
+        //return json_encode($efector);
 
       if (Auth::user()->id_entidad != 1){
         if (Auth::user()->id_provincia != $efector->geo->provincia->id_provincia){
