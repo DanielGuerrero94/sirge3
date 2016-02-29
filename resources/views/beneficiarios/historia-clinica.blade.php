@@ -4,7 +4,7 @@
 	<div class="col-md-8">
 		<div class="box box-info">
 			<div class="box-header">
-				<h2 class="box-title">Historia Cl&iacute;nica del beneficiario: {{ $beneficiario->nombre . ' ' . $beneficiario->apellido}}</h2>
+				<h2 class="box-title">Datos del beneficiario: {{ $beneficiario->nombre . ' ' . $beneficiario->apellido}}</h2>
 			</div>
 			<div class="box-body">
 				<form class="form-horizontal">
