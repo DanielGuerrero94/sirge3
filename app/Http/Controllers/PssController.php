@@ -330,7 +330,7 @@ class PssController extends Controller
 	 * @return json
 	 */
 	public function getLineasTabla(){
-		$lineas = LineaCuidado::select('descripcion','id_linea_cuidado');
+		$lineas = LineaCuidado::select('descripcion','id_linea_cuidado')->where('descripcion','!=','ANEXO');
 		return Datatables::of($lineas)
 			->addColumn('action' , function($linea){
 				return '<button linea="'. $linea->id_linea_cuidado .'" class="ver btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
