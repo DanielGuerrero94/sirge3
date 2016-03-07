@@ -14,6 +14,7 @@ use App\Models\CA\MetaDescentralizacion as M1;
 use App\Models\CA\MetaFacturacion as M2;
 use App\Models\CA\MetaDatoReportable as M3;
 use App\Models\CA\MetaDependenciaSanitaria as M4;
+use App\Models\Scheduler;
 
 class CompromisoController extends Controller
 {
@@ -113,12 +114,20 @@ class CompromisoController extends Controller
 	 */
 	public function getDescentralizacion($periodo = null){
 
+		$dt = new \DateTime();
+
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 			$vista = 'compromiso-anual.descentralizacion-periodo';
 		} else {
-			$dt = new \DateTime();
-			$dt->modify('-1 month');
+
+			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
+
+	        foreach ($periodos as $unPeriodo) {
+	            $periodo = $unPeriodo->max;
+	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
+	        }        
+			
 			$vista = 'compromiso-anual.descentralizacion-uec';
 		}
 
@@ -176,6 +185,8 @@ class CompromisoController extends Controller
 			$estado = '';
 		}		
 
+		$dt->modify('+1 month');
+
 		$data = [
 			'page_title' => 'Descentralización',
 			'categorias' => json_encode($categorias),
@@ -229,12 +240,20 @@ class CompromisoController extends Controller
 	 * @return null
 	 */
 	public function getFacturacion($periodo = null){
+		
+		$dt = new \DateTime();
+
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 			$vista = 'compromiso-anual.facturacion-periodo';
 		} else {
-			$dt = new \DateTime();
-			$dt->modify('-1 month');
+			
+			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
+
+	        foreach ($periodos as $unPeriodo) {
+	            $periodo = $unPeriodo->max;
+	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
+			}
 			$vista = 'compromiso-anual.facturacion-uec';
 		}
 
@@ -284,7 +303,9 @@ class CompromisoController extends Controller
 		}
 		else{
 			$estado = '';
-		}		
+		}
+
+		$dt->modify('+1 month');		
 
 		$data = [
 			'page_title' => 'Facturación descentralizada',
@@ -339,12 +360,20 @@ class CompromisoController extends Controller
 	 * @return null
 	 */
 	public function getDatos($periodo = null){
+		
+		$dt = new \DateTime();
+
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 			$vista = 'compromiso-anual.datos-periodo';
 		} else {
-			$dt = new \DateTime();
-			$dt->modify('-1 month');
+			
+			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
+
+	        foreach ($periodos as $unPeriodo) {
+	            $periodo = $unPeriodo->max;
+	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
+	        }    
 			$vista = 'compromiso-anual.datos-uec';
 		}
 
@@ -395,6 +424,8 @@ class CompromisoController extends Controller
 		else{
 			$estado = '';
 		}	
+
+		$dt->modify('+1 month');
 
 		$data = [
 			'page_title' => 'Datos reportables',
@@ -449,12 +480,20 @@ class CompromisoController extends Controller
 	 * @return null
 	 */
 	public function getDependencia($periodo = null){
+		
+		$dt = new \DateTime();
+
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 			$vista = 'compromiso-anual.dependencia-periodo';
 		} else {
-			$dt = new \DateTime();
-			$dt->modify('-1 month');
+			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
+
+	        foreach ($periodos as $unPeriodo) {
+	            $periodo = $unPeriodo->max;
+	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
+	         }
+	            
 			$vista = 'compromiso-anual.dependencia-uec';
 		}
 
@@ -505,6 +544,8 @@ class CompromisoController extends Controller
 		else{
 			$estado = '';
 		}	
+
+		$dt->modify('+1 month');
 
 		$data = [
 			'page_title' => 'Dependencias Sanitarias',
