@@ -38,10 +38,27 @@ class CeiController extends Controller
 	 */
 	public function getFiltros(){
 
+		$periodos = Resultado::select('periodo' , DB::raw('round((count(*) / 1728 :: numeric * 100) ,2) as r'))
+							->groupBy('periodo')
+							->take(3)
+							->get();
+
+		foreach ($periodos as $periodo){
+			$dt = \DateTime::createFromFormat('Ym' , $periodo->periodo);
+			$periodo->periodo = ucwords(strftime("%b %Y" , $dt->getTimeStamp()));
+
+			if ($periodo->r < 100){
+				$periodo->css = 'bg-yellow';
+			} else {
+				$periodo->css = 'bg-lime';
+			}
+		}
+
 		$data = [
 			'page_title' => 'Resumen C.E.I.',
 			'provincias' => Provincia::orderBy('id_provincia')->get(),
-			'grupos' => Grupo::all()
+			'grupos' => Grupo::all(),
+			'periodos' => $periodos
 		];
 
 		return view('cei.filtros' , $data);
@@ -193,5 +210,14 @@ class CeiController extends Controller
 
 		return view('cei.detalle-provincia' , $data);
 
+	}
+
+	/**
+	 * Devuelve la vista para descargar reportes
+	 *
+	 * @return null
+	 */
+	public function getReportes(){
+		return 1;
 	}
 }

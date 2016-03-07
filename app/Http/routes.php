@@ -184,6 +184,7 @@ Route::get('cei-filtros' , 'CeiController@getFiltros');
 Route::get('cei-lineas-cuidado/{grupo}' , 'CeiController@getLineas');
 Route::get('cei-resumen/{periodo}/{linea}' , 'CeiController@getResumen');
 Route::get('cei-resumen/{periodo}/{indicador}/{provincia}' , 'CeiController@getDetalleProvincia');
+Route::get('cei-reportes' , 'CeiController@getReportes');
 
 /**
  * ANALISIS PRESTACIONES

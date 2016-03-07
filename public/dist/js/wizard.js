@@ -26,7 +26,7 @@ $(document).ready(function(){
             fecha_nacimiento : {
                 required: true
             },
-            ocupacion : {
+            cargo : {
                 required: true,
                 minlength: 8,
                 maxlength: 100
