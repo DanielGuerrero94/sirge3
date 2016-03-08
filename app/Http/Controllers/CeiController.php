@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Mail;
 use Auth;
+use Datatables;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,9 @@ use App\Models\CEI\Grupo;
 use App\Models\CEI\Linea;
 use App\Models\CEI\Resultado;
 use App\Models\CEI\Indicador;
+use App\Models\CEI\Detalle;
+use App\Models\CEI\Tipo;
+
 
 class CeiController extends Controller
 {
@@ -218,6 +222,81 @@ class CeiController extends Controller
 	 * @return null
 	 */
 	public function getReportes(){
-		return 1;
+
+		$data = [
+			'page_title' => 'Resultados C.E.I.'
+		];
+
+		return view('cei.reportes' , $data);
+	}
+
+	/**
+	 * Devuelve el objeto para el Datatable
+	 *
+	 * @return json
+	 */
+	public function getReportesTabla(){
+
+		$detalles = Detalle::select(
+				'id' 
+				, 'nombre' 
+				, DB::raw("case when (edad_max = '0 years') then edad_min else (edad_min :: interval - edad_max :: interval + '1 year') :: text	end as edad_min") 
+				, DB::raw("edad_min :: interval + '1 year' as edad_max"));
+		
+		return Datatables::of($detalles)
+			->addColumn('action' , function($detalle){
+				return '<button id="'. $detalle->id .'" class="ver-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';
+			})
+			->make(true);
+	}
+
+	/**
+	 * Devuelve la vista con el detalle de los cálculos
+	 * @param int $id
+	 * 
+	 * @return null
+	 */
+	public function getReporte($id){
+
+		$periodos = Resultado::select('periodo')->groupBy('periodo')->lists('periodo');
+		$tipos = Tipo::orderBy('id')->get();
+		$detalle = Detalle::findOrFail($id);
+
+		foreach ($periodos as $keyp => $periodo){
+
+			foreach ($tipos as $keyt => $tipo){
+
+				$indicador = Indicador::where('indicador' , $id)->where('tipo' , $tipo->id)->firstOrFail();
+				$registros = Resultado::where('indicador' , $indicador->id)
+							->where('periodo' , $periodo)
+							->get();
+
+				foreach ($registros as $registro) {
+					if ($registro->resultados->denominador == 0) {
+						$promedio[] = 0;
+					} else {
+						$promedio[] = round(($registro->resultados->beneficiarios_puntuales / $registro->resultados->denominador) * 100,2);
+					}
+				}
+
+				$array_final[$tipo->id]['resultados'][$keyp]['periodo'] = $periodo;
+				$array_final[$tipo->id]['resultados'][$keyp]['valor'] = round(array_sum($promedio) / count($promedio),2);
+				$array_final[$tipo->id]['tipo'] = $tipo->descripcion;
+				$array_final[$tipo->id]['css'] = $tipo->css;
+				$array_final[$tipo->id]['indicador'] = $indicador->id;
+				
+			}
+
+		}
+
+		$objeto = json_decode(json_encode($array_final));
+
+		$data = [
+			'page_title' => $detalle->nombre,
+			'objetos' => $objeto
+		];
+
+		return view ('cei.reporte-detalle' , $data);
+
 	}
 }
