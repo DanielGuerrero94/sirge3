@@ -290,6 +290,7 @@ class CeiController extends Controller
 				$array_final[$tipo->id]['resultados'][$keyp]['periodo'] = $periodo;
 				$array_final[$tipo->id]['resultados'][$keyp]['valor'] = round(array_sum($promedio) / count($promedio),2);
 				$array_final[$tipo->id]['tipo'] = $tipo->descripcion;
+				$array_final[$tipo->id]['id_tipo'] = $tipo->id;
 				$array_final[$tipo->id]['css'] = $tipo->css;
 				$array_final[$tipo->id]['icon'] = $tipo->icon;
 				$array_final[$tipo->id]['indicador'] = $indicador->id;
@@ -309,32 +310,58 @@ class CeiController extends Controller
 
 	}
 
+	/**
+	 * Arma el excel para descargar
+	 * @param object $objeto
+	 *
+	 * @return array
+	 */
+	protected function armaArray ($indicadores){
+
+		
+
+		return $final;
+
+	}
 
 	/**
 	 * Descarga toda la información asociada a una línea de cuidado
 	 * @param int $id
+	 * @param int $periodo
+	 * @param int $tipo
 	 *
 	 * @return resource
 	 */
-	public function getLineaDownload($id){
+	public function getLineaDownload($id , $periodo = null , $tipo = null){
 
 		$indicadores = Indicador::select('cei.indicadores.*' , 'cei.indicadores_tipo.descripcion')
 								->join('cei.indicadores_tipo' , 'cei.indicadores.tipo' , '=' , 'cei.indicadores_tipo.id')
-								->where('indicador' , $id)
-								->get();
+								->where('indicador' , $id);
+
+		if (isset($tipo)){
+			$indicadores->where('tipo' , $tipo);
+		}
+
+	 	$indicadores = $indicadores->get();
 
 		foreach ($indicadores as $indicador){
 
 			$resultados = Resultado::where('indicador' , $indicador->id)
 									->orderBy('periodo')
-									->orderBy('provincia')
-									->get();
+									->orderBy('provincia');
+			if (isset ($periodo)){
+				$resultados->where('periodo' , $periodo);
+			}
+			$resultados = $resultados->get();
 			$resultados->tipo = $indicador->descripcion;
 			$final[] = $resultados;
+			$detalle = Detalle::where('id' , $indicador->indicador)->firstOrFail();
 		}
 
+
 		$data = [
-			'resultados' => $final
+			'resultados' => $final,
+			'linea_cuidado' => $detalle->nombre
 		];
 
 		// return view('cei.excel-template' , $data);
@@ -342,6 +369,10 @@ class CeiController extends Controller
 		
 		Excel::create('testfile', function($excel) use ($data) {
 			$excel->sheet('New sheet', function($sheet) use ($data) {
+				$sheet->setHeight(1, 20);
+				$sheet->setColumnFormat([
+              		'A' => '@'
+            	]);
 				$sheet->loadView('cei.excel-template' , $data);
 			});
 		})->store('xls');
@@ -349,15 +380,5 @@ class CeiController extends Controller
 		return response()->download('../storage/exports/testfile.xls');
 	}
 
-	/**
-	 * Descarga la información asociada a una línea de cuidado, período y tipo de indicador
-	 * @param int $linea
-	 * @param int $periodo
-	 * @param int $tipo
-	 *
-	 * @return resource
-	 */
-	public function getLineaPeriodoDownload($linea , $periodo , $tipo){
-		
-	}
+	
 }

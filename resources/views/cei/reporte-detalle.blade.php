@@ -23,7 +23,7 @@
 				                	<div class="progress-bar" style="width: {{$resultado->valor}}%"></div>
 				              	</div>
 				                <span style="text-align: right;" class="progress-description">
-				                	<span><a style="color: white !important;" href=""><i class="fa fa-cloud-download"></i></a></span>
+				                	<span><a style="color: white !important;" href="cei-reportes-download/{{$objeto->indicador}}/{{$resultado->periodo}}/{{$objeto->id_tipo}}"><i class="fa fa-cloud-download"></i></a></span>
 				                </span>
 				            </div>
 				          </div>
