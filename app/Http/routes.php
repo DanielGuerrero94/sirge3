@@ -187,6 +187,8 @@ Route::get('cei-resumen/{periodo}/{indicador}/{provincia}' , 'CeiController@getD
 Route::get('cei-reportes' , 'CeiController@getReportes');
 Route::get('cei-reportes-table' , 'CeiController@getReportesTabla');
 Route::get('cei-reportes/{id}' , 'CeiController@getReporte');
+Route::get('cei-reportes-download/{id}' , 'CeiController@getLineaDownload');
+Route::get('cei-reportes-download/{id}/{periodo}' , 'CeiController@getLineaPeriodoDownload');
 
 /**
  * ANALISIS PRESTACIONES

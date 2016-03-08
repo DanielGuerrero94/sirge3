@@ -15,6 +15,7 @@
 	                    <th>Edad mínima</th>
 	                    <th>Edad máxima</th>
 	                    <th>Detalles</th>
+	                    <th>Descargar</th>
 	                  </tr>
 	                </thead>
 	            </table>
@@ -35,6 +36,7 @@
                 { data: 'edad_min' },
                 { data: 'edad_max' },
                 { data: 'action' },
+                { data: 'download' }
             ]
         });
 
@@ -44,6 +46,13 @@
         		$('.content-wrapper').html(data);
         	});
         });
+
+        // $('#table').on('click' , '.download-indicador' ,function(data){
+        // 	var id = $(this).attr('id');
+        // 	$.get('cei-reportes-download/' + id , function(data){
+        // 		$('.content-wrapper').html(data);
+        // 	});
+        // });
 
 	})
 </script>

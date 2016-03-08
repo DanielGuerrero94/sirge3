@@ -13,7 +13,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="info-box bg-{{$objeto->css}}">
-				        	<span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
+				        	<span class="info-box-icon"><i class="fa {{$objeto->icon}}"></i></span>
 
 				            <div class="info-box-content">
 				        		<span class="info-box-text">Período: {{$resultado->periodo}} </span>
@@ -22,8 +22,8 @@
 				              	<div class="progress">
 				                	<div class="progress-bar" style="width: {{$resultado->valor}}%"></div>
 				              	</div>
-				                <span class="progress-description">
-				                	
+				                <span style="text-align: right;" class="progress-description">
+				                	<span><a style="color: white !important;" href=""><i class="fa fa-cloud-download"></i></a></span>
 				                </span>
 				            </div>
 				          </div>
@@ -31,12 +31,23 @@
 					</div>
 					@endforeach
 				</div>
+				<div class="box-footer">
+					<div class="btn-group" role="group">
+						<button class="back btn btn-info">Atrás</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	@endforeach
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
+		
+		$('.back').click(function(){
+			$.get('cei-reportes' , function(data){
+				$('.content-wrapper').html(data);
+			})
+		});
 
 	})
 </script>
