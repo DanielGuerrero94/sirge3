@@ -40,7 +40,7 @@
 
         $('#table').on('click' , '.ver-indicador' ,function(data){
         	var id = $(this).attr('id');
-        	$.get('efectores-detalle/' + id + '/efectores-listado' , function(data){
+        	$.get('cei-reportes/' + id , function(data){
         		$('.content-wrapper').html(data);
         	});
         });
