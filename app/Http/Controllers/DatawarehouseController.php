@@ -106,16 +106,157 @@ class DatawarehouseController extends Controller
     */
 
     /**
-     * Trunca y actualiza la tabla de FC001
+     * Busca el archivo sql correspondiente y actualiza la tabla de FC001
      *     
      * 
      */
     public function Fc001()
     {   
-        $sql = file_get_contents(__DIR__ . '/queries_guardadas/fc_001.sql');        
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_001.sql');        
+        $this->run_multiple_statements($sql);
+    }
 
+    /**
+     * Trunca y actualiza la tabla de FC002
+     *     
+     * 
+     */
+    public function Fc002()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_002.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC003
+     *     
+     * 
+     */
+    public function Fc003()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_003.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC004
+     *     
+     * 
+     */
+    public function Fc004()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_004.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC005
+     *     
+     * 
+     */
+    public function Fc005()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_005.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC006
+     *     
+     * 
+     */
+    public function Fc006()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_006.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC007
+     *     
+     * 
+     */
+    public function Fc007()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_007.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC008
+     *     
+     * 
+     */
+    public function Fc008()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_008.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de FC009
+     *     
+     * 
+     */
+    public function Fc009()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_009.sql');        
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de AF001
+     *     
+     * 
+     */
+    public function Af001()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/af_001.sql');                
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de CA16001
+     *     
+     * 
+     */
+    public function Ca16001()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/ca_16_001.sql');                
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de CEB001
+     *     
+     * 
+     */
+    public function Ceb001()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/ceb_001.sql');                
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Trunca y actualiza la tabla de CEB002
+     *     
+     * 
+     */
+    public function Ceb002()
+    {   
+        $sql = file_get_contents(__DIR__ . 'app/SQL/ceb_002.sql');                
+        $this->run_multiple_statements($sql);
+    }
+
+    /**
+     * Ejecuta los statements de la query enviada
+     *     
+     * 
+     */
+    public function run_multiple_statements($statement)
+    {          
         // split the statements, so DB::statement can execute them.
-        $statements = array_filter(array_map('trim', explode(';', $sql)));
+        $statements = array_filter(array_map('trim', explode(';', $statement)));
 
         foreach ($statements as $stmt) {
             DB::connection('datawarehouse')->statement($stmt);

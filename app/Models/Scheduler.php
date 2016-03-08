@@ -11,7 +11,7 @@ class Scheduler extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'scheduler.automatizacion';
+	protected $table = 'scheduler.migracion_beneficiarios';
 
 	/**
 	 * Primary key asociated with the table.
