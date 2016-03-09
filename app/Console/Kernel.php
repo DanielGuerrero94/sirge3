@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {    
 
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute()->sendOutputTo('/home/vnc/log_scheduler.txt');        
-        $periodo_a_automatizar = Scheduler::select(DB::raw('min(periodo)'))->where('estado',0)->first()->min;        
+        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;        
 
         $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas', [$periodo_a_automatizar])->everyMinute()
         ->when(function () {                    
