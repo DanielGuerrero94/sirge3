@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
-use DB;
-use App\Models\Scheduler;
+use App\Http\Controllers\Controller;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
-        \App\Console\Commands\CommandScheduler::class        
+        \App\Console\Commands\TestCommand::class
     ];
 
     /**
@@ -27,8 +27,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {    
+        //$schedule->command('test:run')->everyMinute();
+        
+        $schedule->call('App\Http\Controllers\HomeController@test', ['Alejandro'])->everyMinute();
+        $schedule->call('App\Http\Controllers\HomeController@test', ['Javier'])->everyMinute();
+        /*
+        */
 
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute()->sendOutputTo('/home/vnc/log_scheduler.txt');        
+        /*
         $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;        
 
         $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas', [$periodo_a_automatizar])->everyMinute()
@@ -49,6 +56,7 @@ class Kernel extends ConsoleKernel
                     }
 
             })->sendOutputTo('/home/vnc/log_scheduler.txt');
+        */
         //$schedule->call('App\Http\Controllers\HomeController@test', ['Rodrigo'])->everyMinute();
 
         /*$schedule->call(function ($periodo_a_automatizar) {            

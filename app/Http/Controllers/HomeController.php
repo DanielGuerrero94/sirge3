@@ -24,13 +24,18 @@ use App\Models\Dw\IndecPoblacionPais as Indec;
 
 class HomeController extends Controller
 {
+
+    public function test($nombre){
+        DB::table('test')->insert(['mensaje' => 'Hola cómo te va ' . $nombre . '?, sos bastante gay!']);
+    }
+
     /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
     public function __construct(){
-        $this->middleware('auth');
+        //$this->middleware('auth');
         setlocale(LC_TIME, 'es_ES.UTF-8');
     }
 
