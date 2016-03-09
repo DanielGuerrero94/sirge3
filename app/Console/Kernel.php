@@ -29,19 +29,30 @@ class Kernel extends ConsoleKernel
     {    
 
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute()->sendOutputTo('/home/vnc/log_scheduler.txt');        
-        $periodo_actual = date('Ym');
-        $dt = \DateTime::createFromFormat('Ym' , $periodo_actual);        
-        $dt->modify('-1 month');
-        $periodo_a_automatizar = $dt->format('Ym');
-        $data = ['periodo_a_automatizar' => $periodo_a_automatizar];
+        $periodo_a_automatizar = Scheduler::select(DB::raw('min(periodo)'))->where('estado',0)->first()->min;        
 
-        $schedule->call(function ($periodo_a_automatizar) {            
+        $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas', [$periodo_a_automatizar])->everyMinute()
+        ->when(function () {                    
+            
+                    
 
-            $unSchedule = new Scheduler;        
-            $unSchedule->contexto = 'Probando el Scheduler';
-            $unSchedule->estado = 0;
-            $unSchedule->periodo = $periodo_a_automatizar;        
-            $unSchedule->save();            
+                    $estado = Scheduler::select('estado')
+                                ->where('contexto','migracion_beneficiarios')
+                                ->where('periodo',$periodo_a_automatizar)
+                                ->first()->estado;                    
+                    
+                    if($estado == 0){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+
+            })->sendOutputTo('/home/vnc/log_scheduler.txt');
+        //$schedule->call('App\Http\Controllers\HomeController@test', ['Rodrigo'])->everyMinute();
+
+        /*$schedule->call(function ($periodo_a_automatizar) {            
+
 
         },$data)->everyMinute()->when(function () {                    
             
@@ -64,7 +75,7 @@ class Kernel extends ConsoleKernel
                         return false;
                     }
 
-            })->sendOutputTo('/home/vnc/log_scheduler.txt');
+            })->sendOutputTo('/home/vnc/log_scheduler.txt');*/
 
     }
 }

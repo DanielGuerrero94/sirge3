@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Models\Tarea.php;
+use App\Models\TareasResultado.php;
 use App\Models\Dw\FC\Fc001.php;
 use App\Models\Dw\FC\Fc002.php;
 use App\Models\Dw\FC\Fc003.php;
@@ -106,14 +108,49 @@ class DatawarehouseController extends Controller
     */
 
     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function ejecutarTodas($periodo)
+    {
+        $this->Fc001($periodo);
+    }
+
+    private function cargarComienzoTarea($nombre_function, $periodo){
+        
+        return json_encode(TareasResultado::where('nombre',$nombre_function)->first()->nombre);
+
+        if(! TareasResultado::where('nombre',$nombre_function)->first()->nombre){
+            $tarea = new TareasResultado();
+            $tarea->periodo = $periodo;
+            $tarea->tarea = Tarea::where('nombre',$nombre_function)->first()->nombre;
+            $tarea->finalizado = 0;
+            $saved = $tarea->save();
+            if(!$saved){
+                App::abort(500, 'Error');
+            }    
+        }        
+    }
+
+    private function cargarFinalTarea($nombre_function, $periodo){
+        $tarea = TareasResultado::where('tarea',Tarea::where('nombre',$nombre_function)->get()->nombre)
+                                ->where('periodo',$periodo)
+                                ->update(['finalizado'=> 1]);       
+    }        
+
+    /**
      * Busca el archivo sql correspondiente y actualiza la tabla de FC001
      *     
      * 
      */
-    public function Fc001()
-    {   
+    public function Fc001($periodo)
+    {           
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_001.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -121,10 +158,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc002()
+    public function Fc002($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_002.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);        
     }
 
     /**
@@ -132,10 +171,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc003()
+    public function Fc003($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_003.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -143,10 +184,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc004()
+    public function Fc004($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_004.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -154,10 +197,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc005()
+    public function Fc005($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_005.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -165,10 +210,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc006()
+    public function Fc006($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_006.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -176,10 +223,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc007()
+    public function Fc007($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_007.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -187,10 +236,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc008()
+    public function Fc008($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_008.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -198,10 +249,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Fc009()
+    public function Fc009($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/fc_009.sql');        
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -209,10 +262,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Af001()
+    public function Af001($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/af_001.sql');                
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -220,10 +275,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Ca16001()
+    public function Ca16001($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/ca_16_001.sql');                
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -231,10 +288,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Ceb001()
+    public function Ceb001($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/ceb_001.sql');                
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -242,10 +301,12 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function Ceb002()
+    public function Ceb002($periodo)
     {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
         $sql = file_get_contents(__DIR__ . 'app/SQL/ceb_002.sql');                
         $this->run_multiple_statements($sql);
+        $this->cargarFinalTarea(__FUNCTION__, $periodo);
     }
 
     /**
@@ -259,7 +320,9 @@ class DatawarehouseController extends Controller
         $statements = array_filter(array_map('trim', explode(';', $statement)));
 
         foreach ($statements as $stmt) {
-            DB::connection('datawarehouse')->statement($stmt);
+            if(! DB::connection('datawarehouse')->statement($stmt)){
+                App::abort(500, 'Error');
+            }
         }
     }
 }
