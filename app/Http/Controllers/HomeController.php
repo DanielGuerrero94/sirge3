@@ -15,7 +15,7 @@ use App\Models\Modulo;
 use App\Models\Usuario;
 use App\Models\Efector;
 use App\Models\Lote;
-use App\Models\Indicador;
+use App\Models\Scheduler;
 
 use App\Models\Dw\CEB\Ceb002;
 use App\Models\Dw\FC\Fc001;
@@ -35,7 +35,7 @@ class HomeController extends Controller
      * @return void
      */
     public function __construct(){
-        //$this->middleware('auth');
+        $this->middleware('auth');
         setlocale(LC_TIME, 'es_ES.UTF-8');
     }
 
@@ -243,21 +243,7 @@ class HomeController extends Controller
      * @return int
      */
     protected function getBeneficiariosTotal(){
-        $dt = new \DateTime();
-        $dt->modify('-1 month');
-        $periodo = $dt->format('Ym');
-
-        /** 
-        TEMPORAL INICIO
-        **/
-        $periodos = Indicador::select(DB::raw('max(periodo)'))->get();
-
-        foreach ($periodos as $unPeriodo) {
-            $periodo = $unPeriodo->max;
-        }                      
-        /** 
-        FIN 
-        **/
+        $periodo = Scheduler::select(DB::raw('max(periodo)'))->first()->max;
         return round (Ceb002::where('periodo' , $periodo)->sum('beneficiarios_registrados') / 1000000 , 2);
     }
 
@@ -419,22 +405,7 @@ class HomeController extends Controller
      * @return json
      */
     protected function getDataMap(){
-
-        $dt = new \DateTime();
-        $dt->modify('-1 month');
-        $periodo = $dt->format('Ym');
-
-        /** 
-        TEMPORAL INICIO
-        **/
-        $periodos = Indicador::select(DB::raw('max(periodo)'))->get();
-
-        foreach ($periodos as $unPeriodo) {
-            $periodo = $unPeriodo->max;
-        }  
-        /** 
-        FIN 
-        **/
+        $periodo = Scheduler::select(DB::raw('max(periodo)'))->first()->max;
         $provincias = Indec::leftJoin('geo.geojson' , 'indec.poblacion.id_provincia' , '=' , 'geo.geojson.id_provincia')
                 ->leftJoin('estadisticas.ceb_002' , function($q) use ($periodo){
                     $q->on('geo.geojson.id_provincia' , '=' , 'estadisticas.ceb_002.id_provincia')
