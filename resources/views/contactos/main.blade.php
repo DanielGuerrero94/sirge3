@@ -33,6 +33,13 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#listado-contactos').slimScroll({
+		height : '470px',
+		position: 'left',
+    	railVisible: true,
+    	alwaysVisible: true
+	})
+
 	$('#busqueda').click(function(event){
 		var query = $('#busqueda-contacto').val();
 		if (! query.length) { query = 'ALL'; }
