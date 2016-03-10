@@ -42,7 +42,7 @@ class PadronesController extends Controller
 	 */
 	public function getMain($id){		
 
-		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
+		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->where('id_usuario' , Auth::user()->id_usuario)->count();
 		
 		$lotes_pendientes = Lote::join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
 							->where('id_padron' , $id)
