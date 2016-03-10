@@ -42,6 +42,7 @@ class DdjjController extends Controller
 	 * @return null
 	 */
 	public function getListadoPendientes($padron){
+		
 		$pendientes = DB::table('sistema.lotes as l')
 				->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
 				->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
@@ -50,6 +51,7 @@ class DdjjController extends Controller
 					$q->select(DB::raw('unnest(lote)'))
 					->from('ddjj.sirge');
 				})
+				->where('l.id_provincia' , Auth::user()->id_provincia)
 				->count();
 
 		$data = [
