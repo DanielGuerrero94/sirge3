@@ -35,7 +35,6 @@ $(document).ready(function(){
 
 	$('#listado-contactos').slimScroll({
 		height : '470px',
-		position: 'left',
     	railVisible: true,
     	alwaysVisible: true
 	})
