@@ -230,6 +230,7 @@ class PrestacionesController extends Controller
 								$this->_resumen['rechazados'] ++;
 								$this->_error['lote'] = $lote;
 								$this->_error['registro'] = json_encode($prestacion_raw);
+								$this->_error['created_at'] = date("Y-m-d H:i:s");
 								if ($e->getCode() == 23505){
 									$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 								} else {
@@ -257,6 +258,7 @@ class PrestacionesController extends Controller
 								$this->_error['lote'] = $lote;
 								$this->_error['registro'] = json_encode($prestacion_raw);
 								$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
+								$this->_error['created_at'] = date("Y-m-d H:i:s");
 								Rechazo::insert($this->_error);
 							}
 							break;

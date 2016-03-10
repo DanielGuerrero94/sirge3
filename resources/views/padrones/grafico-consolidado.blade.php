@@ -28,7 +28,7 @@
 
 		$('.g1').highcharts({
 			title: {
-	            text: 'Evolución facturación',
+	            text: 'Evolución',
 	        },
 	        xAxis: {
 	            categories: {!! $categorias !!}
