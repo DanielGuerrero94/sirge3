@@ -243,7 +243,7 @@ class HomeController extends Controller
      * @return int
      */
     protected function getBeneficiariosTotal(){
-        $periodo = Scheduler::select(DB::raw('max(periodo)'))->first()->max;
+        $periodo = Ceb002::select(DB::raw('max(periodo)'))->first()->max;
         return round (Ceb002::where('periodo' , $periodo)->sum('beneficiarios_registrados') / 1000000 , 2);
     }
 
@@ -405,7 +405,8 @@ class HomeController extends Controller
      * @return json
      */
     protected function getDataMap(){
-        $periodo = Scheduler::select(DB::raw('max(periodo)'))->first()->max;
+        $periodo = Ceb002::select(DB::raw('max(periodo)'))->first()->max;
+
         $provincias = Indec::leftJoin('geo.geojson' , 'indec.poblacion.id_provincia' , '=' , 'geo.geojson.id_provincia')
                 ->leftJoin('estadisticas.ceb_002' , function($q) use ($periodo){
                     $q->on('geo.geojson.id_provincia' , '=' , 'estadisticas.ceb_002.id_provincia')
