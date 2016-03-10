@@ -36,7 +36,11 @@ $(document).ready(function(){
 	$('#listado-contactos').slimScroll({
 		height : '470px',
     	railVisible: true,
-    	alwaysVisible: true
+    	position: 'left',
+    	alwaysVisible: true,
+    	railColor: '#f39c12',
+    	color: '#00c0ef',
+    	distance: '5px',
 	})
 
 	$('#busqueda').click(function(event){
