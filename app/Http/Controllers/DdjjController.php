@@ -51,7 +51,7 @@ class DdjjController extends Controller
 					$q->select(DB::raw('unnest(lote)'))
 					->from('ddjj.sirge');
 				})
-				// ->where('l.id_provincia' , Auth::user()->id_provincia)
+				->where('l.id_provincia' , Auth::user()->id_provincia)
 				->count();
 
 		$data = [
