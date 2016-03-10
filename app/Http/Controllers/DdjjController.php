@@ -43,6 +43,7 @@ class DdjjController extends Controller
 	 */
 	public function getListadoPendientes($padron){
 		
+		/*
 		$pendientes = DB::table('sistema.lotes as l')
 				->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
 				->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
@@ -51,13 +52,13 @@ class DdjjController extends Controller
 					$q->select(DB::raw('unnest(lote)'))
 					->from('ddjj.sirge');
 				})
-				->where('l.id_provincia' , Auth::user()->id_provincia)
 				->count();
+		*/
 
 		$data = [
 			'page_title' => 'Declaración de lotes para DDJJ',
 			'padron' => $padron,
-			'pendientes' => $pendientes
+		//	'pendientes' => $pendientes
 		];
 		return view('padrones.ddjj' , $data);
 	}
@@ -77,6 +78,7 @@ class DdjjController extends Controller
 					$q->select(DB::raw('unnest(lote)'))
 					->from('ddjj.sirge');
 				})
+				->where('l.id_provincia' , Auth::user()->id_provincia)
 				->select('l.*' , 'a.fecha_aceptado');
 
 		return Datatables::of($lotes)
