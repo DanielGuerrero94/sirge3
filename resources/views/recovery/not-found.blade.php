@@ -34,7 +34,7 @@
 	<!-- Bootstrap 3.3.2 JS -->
 	<script src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}"></script>
 	<!-- Backstrech -->
-    <script src="{{ asset ("/bower_components/admin-lte/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
+    <script src="{{ asset ("/plugins/backstrech/jquery.backstretch.min.js") }}"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$.backstretch([
