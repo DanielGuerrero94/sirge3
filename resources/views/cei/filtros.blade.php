@@ -5,7 +5,7 @@
 		<div class="col-md-4">
 			@foreach ($periodos as $periodo)
 			<div class="info-box {{$periodo->css}}">
-        	<span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
+        	<span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
             <div class="info-box-content">
         		<span class="info-box-text">Período: {{$periodo->periodo}} - {{ $periodo->periodo_fin }}</span>
