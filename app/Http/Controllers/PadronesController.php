@@ -42,11 +42,12 @@ class PadronesController extends Controller
 	 */
 	public function getMain($id){		
 
-		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->count();
+		$archivos_pendientes = Subida::where('id_estado' , 1)->where('id_padron' , $id)->where('id_usuario' , Auth::user()->id_usuario)->count();
 		
 		$lotes_pendientes = Lote::join('sistema.subidas' , 'sistema.lotes.id_subida' , '=' , 'sistema.subidas.id_subida')
 							->where('id_padron' , $id)
 							->where('sistema.lotes.id_estado' , 1);
+
 		$lotes_no_declarados = DB::table('sistema.lotes as l')
 			->join('sistema.subidas as s' , 'l.id_subida' , '=' , 's.id_subida')
 			->join('sistema.lotes_aceptados as a' , 'l.lote' , '=' , 'a.lote')
@@ -54,13 +55,15 @@ class PadronesController extends Controller
 			->whereNotIn('l.lote' , function($q){
 					$q->select(DB::raw('unnest(lote)'))
 					->from('ddjj.sirge');
-				})
-			->count();
+				});
+			
 
 		if (Auth::user()->id_entidad == 2) {
 			$lotes_pendientes = $lotes_pendientes->where('id_provincia' , Auth::user()->id_provincia)->count();
+			$lotes_no_declarados = $lotes_no_declarados->where('id_provincia' , Auth::user()->id_provincia)->count();
 		} else {
 			$lotes_pendientes = $lotes_pendientes->count();
+			$lotes_no_declarados = $lotes_no_declarados->count();
 		}
 
 		// return $lotes_pendientes;

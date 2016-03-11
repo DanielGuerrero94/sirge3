@@ -15,7 +15,7 @@ use App\Models\Modulo;
 use App\Models\Usuario;
 use App\Models\Efector;
 use App\Models\Lote;
-use App\Models\Indicador;
+use App\Models\Scheduler;
 
 use App\Models\Dw\CEB\Ceb002;
 use App\Models\Dw\FC\Fc001;
@@ -24,6 +24,11 @@ use App\Models\Dw\IndecPoblacionPais as Indec;
 
 class HomeController extends Controller
 {
+
+    public function test($nombre){
+        DB::table('test')->insert(['mensaje' => 'Hola cómo te va ' . $nombre . '?, sos bastante gay!']);
+    }
+
     /**
      * Create a new authentication controller instance.
      *
@@ -238,21 +243,7 @@ class HomeController extends Controller
      * @return int
      */
     protected function getBeneficiariosTotal(){
-        $dt = new \DateTime();
-        $dt->modify('-1 month');
-        $periodo = $dt->format('Ym');
-
-        /** 
-        TEMPORAL INICIO
-        **/
-        $periodos = Indicador::select(DB::raw('max(periodo)'))->get();
-
-        foreach ($periodos as $unPeriodo) {
-            $periodo = $unPeriodo->max;
-        }                      
-        /** 
-        FIN 
-        **/
+        $periodo = Ceb002::select(DB::raw('max(periodo)'))->first()->max;
         return round (Ceb002::where('periodo' , $periodo)->sum('beneficiarios_registrados') / 1000000 , 2);
     }
 
@@ -414,22 +405,8 @@ class HomeController extends Controller
      * @return json
      */
     protected function getDataMap(){
+        $periodo = Ceb002::select(DB::raw('max(periodo)'))->first()->max;
 
-        $dt = new \DateTime();
-        $dt->modify('-1 month');
-        $periodo = $dt->format('Ym');
-
-        /** 
-        TEMPORAL INICIO
-        **/
-        $periodos = Indicador::select(DB::raw('max(periodo)'))->get();
-
-        foreach ($periodos as $unPeriodo) {
-            $periodo = $unPeriodo->max;
-        }  
-        /** 
-        FIN 
-        **/
         $provincias = Indec::leftJoin('geo.geojson' , 'indec.poblacion.id_provincia' , '=' , 'geo.geojson.id_provincia')
                 ->leftJoin('estadisticas.ceb_002' , function($q) use ($periodo){
                     $q->on('geo.geojson.id_provincia' , '=' , 'estadisticas.ceb_002.id_provincia')

@@ -1,9 +1,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 	
+	/*
 	.row-even {
 		background-color: #abcdef;
 	}
+	*/
 
 	.table-header {
 		font-size: 10px; 
@@ -96,7 +98,7 @@
 		@if ($key % 2 == 0)
 		<tr>
 		@else
-		<tr class="row-even">
+		<tr>
 		@endif
 			<td>{{$efector->cuie  or '' }}</td>
 			<td>{{$efector->siisa  or '' }}</td>

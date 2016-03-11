@@ -459,7 +459,7 @@ class EfectoresController extends Controller
      * @return string
      */
     public function baja(Request $r){
-        $e = Efector::find($r->id);
+        $e = Efector::findOrFail($r->id);
         $e->id_estado = 4;
         if ($e->save()){
             return 'Se ha dado la baja definitiva del efector : ' . $e->nombre;

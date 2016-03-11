@@ -30,7 +30,7 @@ class ContactosController extends Controller
     public function index(){
         $data = [
             'page_title' => 'Contactos SUMAR',
-            'contactos' => Usuario::with('provincia')->orderBy('id_usuario')->get()
+            'contactos' => Usuario::with('provincia')->orderBy('nombre')->where('activo' , 'S')->get()
         ];
     	return view('contactos.main' , $data);
     }
@@ -44,9 +44,9 @@ class ContactosController extends Controller
     public function listado($nombre) {
         
         if ($nombre == 'ALL'){
-            $contactos = Usuario::with('provincia')->where('activo','S')->orderBy('id_usuario')->get();  
+            $contactos = Usuario::with('provincia')->where('activo','S')->orderBy('nombre')->get();  
         } else {
-            $contactos = Usuario::with('provincia')->where('activo','S')->where('nombre' , 'ilike' , "%{$nombre}%")->orderBy('id_usuario')->get();
+            $contactos = Usuario::with('provincia')->where('activo','S')->where('nombre' , 'ilike' , "%{$nombre}%")->orderBy('nombre')->get();
         }
 
         $data = ['contactos' => $contactos];

@@ -5,6 +5,7 @@ namespace App\Console;
 use DB;
 use App\Http\Controllers\Controller;
 use App\Models\Scheduler;
+use App\Http\Controllers\Controller;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,7 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
-        \App\Console\Commands\CommandScheduler::class        
+        \App\Console\Commands\TestCommand::class
     ];
 
     /**
@@ -27,18 +28,13 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {    
-
-        //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
-        /*Scheduler::where('contexto','migracion_beneficiarios')
-                  ->where('periodo',201601)
-                  ->update(['estado' => 0]);*/
-
+    {                    
+        //$schedule->call('App\Http\Controllers\HomeController@test', ['Alejandro'])->everyMinute();
+        
         $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;                
         
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
-
-        //$schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas',[$periodo_a_automatizar])->everyMinute();
+        
        /* ->when(function ($periodo_a_automatizar) {                                                
 
                     $estado = Scheduler::select('estado')
@@ -53,6 +49,6 @@ class Kernel extends ConsoleKernel
                         return false;
                     }
 
-        })->sendOutputTo('/home/vnc/log_scheduler.txt');*/
+        });*/
     }
 }
