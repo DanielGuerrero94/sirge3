@@ -33,7 +33,7 @@ class PasswordController extends Controller
 
         if (! count($user)) {
 
-            
+            return view('recovery.not-found');
 
         } else {
 
