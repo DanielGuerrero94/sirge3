@@ -8,7 +8,7 @@
         	<span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
 
             <div class="info-box-content">
-        		<span class="info-box-text">Período: {{$periodo->periodo}}</span>
+        		<span class="info-box-text">Período: {{$periodo->periodo}} - {{ $periodo->periodo_fin }}</span>
              	<span class="info-box-number">{{$periodo->r}}%</span>
 
               	<div class="progress">
