@@ -83,7 +83,6 @@
 				<div class="box-footer">
 					<div class="btn-group" role="group">
 						<button class="ver btn btn-info">Ver resumen</button>
-						<button class="download btn btn-info">Descargar Información</button>
 					</div>
 				</div>
 			</div>
