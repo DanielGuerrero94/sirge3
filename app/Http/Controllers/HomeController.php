@@ -472,7 +472,7 @@ class HomeController extends Controller
      */
     public function about(){
 
-        $sistemas = Usuario::where('id_area' , 1)->where('id_entidad', 1)->where('activo' , 'S')->where('usuario','<>','administrador')->orderBy('id')->get();
+        $sistemas = Usuario::where('id_area' , 1)->where('id_entidad', 1)->where('activo' , 'S')->where('usuario','<>','administrador')->orderBy('id_usuario')->get();
         $data = [
             'page_title' => 'Acerca nuestro',
             'usuarios' => $sistemas
