@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use DB;
+use App\Http\Controllers\Controller;
 use App\Models\Scheduler;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -28,13 +29,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {    
 
-        //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute()->sendOutputTo('/home/vnc/log_scheduler.txt');        
-        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;        
+        //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
+        /*Scheduler::where('contexto','migracion_beneficiarios')
+                  ->where('periodo',201601)
+                  ->update(['estado' => 0]);*/
 
-        $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas', [$periodo_a_automatizar])->everyMinute()
-        ->when(function () {                    
-            
-                    
+        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;                
+        
+        //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
+
+        //$schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas',[$periodo_a_automatizar])->everyMinute();
+       /* ->when(function ($periodo_a_automatizar) {                                                
 
                     $estado = Scheduler::select('estado')
                                 ->where('contexto','migracion_beneficiarios')
@@ -48,34 +53,6 @@ class Kernel extends ConsoleKernel
                         return false;
                     }
 
-            })->sendOutputTo('/home/vnc/log_scheduler.txt');
-        //$schedule->call('App\Http\Controllers\HomeController@test', ['Rodrigo'])->everyMinute();
-
-        /*$schedule->call(function ($periodo_a_automatizar) {            
-
-
-        },$data)->everyMinute()->when(function () {                    
-            
-                    $periodo_actual = date('Ym');
-                    $dt = \DateTime::createFromFormat('Ym' , $periodo_actual);        
-                    $dt->modify('-1 month');
-                    $periodo_a_automatizar = $dt->format('Ym');
-
-                    $row = Scheduler::select('estado')
-                                ->where('contexto','migracion_beneficiarios')
-                                ->where('periodo',$periodo_a_automatizar)
-                                ->get();
-
-                    $estado = $row[0]->estado;
-                    
-                    if($estado == 0){
-                        return true;
-                    }
-                    else{
-                        return false;
-                    }
-
-            })->sendOutputTo('/home/vnc/log_scheduler.txt');*/
-
+        })->sendOutputTo('/home/vnc/log_scheduler.txt');*/
     }
 }
