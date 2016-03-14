@@ -72,7 +72,7 @@
 							<div class="col-md-6">
 								<!--- MENSAJE PERSONAL -->
 								<div class="form-group">
-									<label for="mensaje">Mensaje peronsal</label>
+									<label for="mensaje">Mensaje personal</label>
 									<input id="mensaje" class="form-control" type="text" name="mensaje" value="{{ $usuario->mensaje }}">
 								</div>
 							</div>
