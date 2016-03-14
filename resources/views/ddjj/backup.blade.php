@@ -57,7 +57,7 @@
 						        {{ session('status') }}
 						    </div>
 						@endif
-						Desde esta opción usted podrá generar la DDJJ correspondiente a la DOIU Nº 9 de información priorizada.
+						Desde esta opción usted podrá generar la DDJJ correspondiente al backup del periodo deseado.
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
