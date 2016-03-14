@@ -190,7 +190,7 @@ class FondosController extends Controller
 						if ($e->getCode() == 23505){
 							$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 						} else {
-							$this->_error['motivos'] = '{"' . $e->getCode() . '" : ["' . json_encode($e->getMessage()) . '"]}';
+							$this->_error['motivos'] = json_encode($e);
 						}
 						Rechazo::insert($this->_error);
 					}
