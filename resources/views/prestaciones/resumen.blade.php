@@ -92,7 +92,7 @@
 	            { data: 'id_provincia', name: 'id_provincia' },
 	            { data: 'codigo_prestacion', name: 'codigo_prestacion' },
 	            { data: 'grupo_etario', name: 'grupo_etario' },
-	            { data: 'cantidad' }
+	            { data: 'cantidad', name: 'cantidad' , searchable: false }
 	        ]
 	    });
 		
