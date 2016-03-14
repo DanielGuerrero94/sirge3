@@ -57,7 +57,7 @@
 						        {{ session('status') }}
 						    </div>
 						@endif
-						Desde esta opción usted podrá generar la DDJJ correspondiente a la DOIU Nº 9 de información priorizada.
+						Desde esta opción usted podrá generar la DDJJ correspondiente al backup del periodo deseado.
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
@@ -75,7 +75,7 @@
 						<h2 class="box-title">Consolidado</h2>
 					</div>
 					<div class="box-body">
-						Aquí podrá ver el estado de la generación de la DOIU Nº 9 por jurisdicción.
+						Aquí podrá ver el estado de la generación del Backup por jurisdicción.
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
