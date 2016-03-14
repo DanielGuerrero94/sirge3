@@ -52,6 +52,9 @@ class CeiController extends Controller
 			$dt = \DateTime::createFromFormat('Ym' , $periodo->periodo);
 			$periodo->periodo = ucwords(strftime("%b %Y" , $dt->getTimeStamp()));
 
+			$dt->modify('11 months');
+			$periodo->periodo_fin = ucwords(strftime("%b %Y" , $dt->getTimeStamp()));
+
 			if ($periodo->r < 100){
 				$periodo->css = 'bg-yellow';
 			} else {
@@ -63,7 +66,8 @@ class CeiController extends Controller
 			'page_title' => 'Resumen C.E.I.',
 			'provincias' => Provincia::orderBy('id_provincia')->get(),
 			'grupos' => Grupo::all(),
-			'periodos' => $periodos
+			'periodos' => $periodos,
+
 		];
 
 		return view('cei.filtros' , $data);
@@ -311,20 +315,6 @@ class CeiController extends Controller
 	}
 
 	/**
-	 * Arma el excel para descargar
-	 * @param object $objeto
-	 *
-	 * @return array
-	 */
-	protected function armaArray ($indicadores){
-
-		
-
-		return $final;
-
-	}
-
-	/**
 	 * Descarga toda la información asociada a una línea de cuidado
 	 * @param int $id
 	 * @param int $periodo
@@ -367,7 +357,7 @@ class CeiController extends Controller
 		// return view('cei.excel-template' , $data);
 
 		
-		Excel::create('testfile', function($excel) use ($data) {
+		Excel::create('resultados-cei', function($excel) use ($data) {
 			$excel->sheet('New sheet', function($sheet) use ($data) {
 				$sheet->setHeight(1, 20);
 				$sheet->setColumnFormat([
@@ -377,7 +367,7 @@ class CeiController extends Controller
 			});
 		})->store('xls');
 
-		return response()->download('../storage/exports/testfile.xls');
+		return response()->download('../storage/exports/resultados-cei.xls');
 	}
 
 	

@@ -6,6 +6,7 @@ use Auth;
 use Datatables;
 use DB;
 use Excel;
+use Mail;
 
 use Illuminate\Http\Request;
 
@@ -226,6 +227,14 @@ class EfectoresController extends Controller
             }
         });
         if (is_null($result)){
+
+          Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
+              $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+              $m->to('sistemasuec@gmail.com');
+              $m->to('gustavo.hekel@gmail.com');
+              $m->subject('Solicitud de alta de efector!');
+          });
+          
           return 'Se ha solicitado el alta del efector ' . $ef->nombre;
         } else {
           return 'Ha ocurrido un error';

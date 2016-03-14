@@ -31,8 +31,6 @@
             </div> 
             <div class="content">
                 <div class="main">
-                    <h4 class="text-center">Experiencia</h4>
-                    <p>Miemrbo del Programa SUMAR / Plan Nacer desde Octubre de 2012.</p>
                     <h4 class="text-center">Cumpleaños</h4>
                     <p class="text-center"><i class="fa fa-birthday-cake"></i> {{ date ('d M', strtotime($usuario->fecha_nacimiento)) }}</p>
                 </div>

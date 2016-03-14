@@ -30,12 +30,22 @@ class PasswordController extends Controller
     {
     	Usuario::where('email' , '=' , $r->email)->update(['password' => bcrypt(md5('Homero'))]);
     	$user = Usuario::where('email' , '=' , $r->email)->get();
-    	Mail::send('emails.new_password', ['usuario' => $user[0]], function ($m) use ($user) {
-            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-            $m->to($user[0]->email, $user[0]->nombre);
-            $m->subject('Cambio de contraseña');
-        });
-        return view('recovery.aviso');
+
+        if (! count($user)) {
+
+            return view('recovery.not-found');
+
+        } else {
+
+        	Mail::send('emails.new_password', ['usuario' => $user[0]], function ($m) use ($user) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to($user[0]->email, $user[0]->nombre);
+                $m->subject('Cambio de contraseña');
+            });
+            return view('recovery.aviso');
+
+        }
+
     }
 
     /**

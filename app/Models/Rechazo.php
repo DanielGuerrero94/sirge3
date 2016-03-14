@@ -35,6 +35,7 @@ class Rechazo extends Model
      */
     public function getRegistroAttribute($value)
     {
-        return implode(';' , json_decode($value , TRUE));
+        // return implode(';' , json_decode($value , TRUE));
+        return $value;
     }
 }

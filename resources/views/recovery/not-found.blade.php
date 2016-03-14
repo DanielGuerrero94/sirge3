@@ -14,12 +14,12 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4>Le hemos envíado un mail</h4>
+                            <h4>No se ha encontrado el email ingresado</h4>
                         </div>
                     </div>
                     <div class="panel-body">
                         <p class="text-center">
-                            Por favor revise su casilla de correo.<br/>
+                            El correo que está intentando ingresar no se encuentra registrado.<br/>
                             Ante cualquier consulta puede enviar un mail a: <br/>
                             sistemasuec@gmail.com
                         </p>

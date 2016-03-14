@@ -6,7 +6,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Listado de códigos del P.S.S.</h2>
 				<div class="box-tools pull-right">
-					<a class="btn btn-warning" href="pss-descargar-tabla"><i class="fa fa-download"></i> Descargar P.S.S.</a>					
+					<!-- <a class="btn btn-warning" href="pss-descargar-tabla"><i class="fa fa-download"></i> Descargar P.S.S.</a>					 -->
 				</div>
 			</div>
 			<div class="box-body">

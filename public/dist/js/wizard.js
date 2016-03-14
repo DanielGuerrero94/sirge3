@@ -7,12 +7,12 @@ $(document).ready(function(){
         rules : {
             nombre : {
                 required: true,
-                minlength: 4,
+                minlength: 3,
                 maxlength: 30
             },
             apellido : {
                 required: true,
-                minlength: 4,
+                minlength: 3,
                 maxlength: 30
             },
             email : {
