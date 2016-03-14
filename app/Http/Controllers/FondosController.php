@@ -119,7 +119,7 @@ class FondosController extends Controller
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
 		try {
-			$fh = fopen ('../storage/uploads/fondos/' . $info->nombre_actual , 'r');
+			$fh = fopen ('../storage/uploads/fondos/' . $info->nombre_actual , 'rb');
 		} catch (ErrorException $e) {
 			return false;
 		}
