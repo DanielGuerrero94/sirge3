@@ -148,7 +148,7 @@ return [
          * Manual Application Providers
          */
         'Collective\Html\HtmlServiceProvider',
-        'Barryvdh\DomPDF\ServiceProvider',
+        Barryvdh\DomPDF\ServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         'Maatwebsite\Excel\ExcelServiceProvider',
 
@@ -201,7 +201,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
-        'PDF'       => 'Barryvdh\DomPDF\Facade',
+        'PDF'       => Barryvdh\DomPDF\Facade::class,
         'Datatables'=> Yajra\Datatables\Datatables::class,
         'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
 
