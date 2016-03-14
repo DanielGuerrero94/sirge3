@@ -28,7 +28,7 @@ class ComprobantesController extends Controller
 			'fecha_recepcion' => 'required|date_format:Y-m-d',
 			'fecha_notificacion' => 'required|date_format:Y-m-d',
 			'fecha_liquidacion' => 'required|date_format:Y-m-d',
-			'fecha_debito_bancario' => 'required|date_format:Y-m-d',
+			'fecha_debito_bancario' => 'date_format:Y-m-d',
 			'importe' => 'required|numeric',
 			'importe_pagado' => 'required|numeric',
 			'factura_debitada' => 'max:50',
