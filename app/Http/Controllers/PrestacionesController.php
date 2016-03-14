@@ -37,7 +37,7 @@ class PrestacionesController extends Controller
 			'fecha_prestacion' => 'required|date_format:Y-m-d',
 			'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
 			'tipo_documento' => 'exists:sistema.tipo_documento,tipo_documento',
-			'clase_documento' => 'in:P,A',
+			'clase_documento' => 'in:P,A,C',
 			'numero_documento' => 'max:8',
 			'orden' => 'required|numeric',
 			'efector' => 'required|exists:efectores.efectores,cuie'
