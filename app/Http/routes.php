@@ -13,7 +13,7 @@
 use App\Models\Rechazo;
 
 Route::get('testr' , function(){
-	$r = Rechazo::where('lote' , 4885)->take(200)->get();
+	$r = Rechazo::where('lote' , 4885)->get();
 	return json_encode($r);
 });
 
