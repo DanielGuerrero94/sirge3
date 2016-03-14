@@ -119,7 +119,7 @@ class FondosController extends Controller
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
 		try {
-			$fh = fopen ('../storage/uploads/fondos/' . $info->nombre_actual , 'r');
+			$fh = fopen ('../storage/uploads/fondos/' . $info->nombre_actual , 'rb');
 		} catch (ErrorException $e) {
 			return false;
 		}
@@ -190,7 +190,7 @@ class FondosController extends Controller
 						if ($e->getCode() == 23505){
 							$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 						} else {
-							$this->_error['motivos'] = '{"' . $e->getCode() . '" : ["' . $e->getMessage() . '"]}';
+							$this->_error['motivos'] = json_encode($e);
 						}
 						Rechazo::insert($this->_error);
 					}
