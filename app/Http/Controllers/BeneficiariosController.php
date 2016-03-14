@@ -61,8 +61,8 @@ class BeneficiariosController extends Controller
      *
      * @return json
      */
-    public function busquedaBeneficiario($valor){
-        if(count($valor) == 16){
+    public function busquedaBeneficiario($valor){        
+        if(strlen($valor) == 16){
             $benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','numero_documento','clave_beneficiario')
         ->where('clave_beneficiario',$valor);
         return Datatables::of($benefs)
