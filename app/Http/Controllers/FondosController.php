@@ -170,31 +170,40 @@ class FondosController extends Controller
 		while (!feof($fh)){
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
 			if (count($linea) != 1){
-				$fondo_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
-				$v = Validator::make($fondo_raw , $this->_rules);
-				if ($v->fails()) {
-					$this->_resumen['rechazados'] ++;
-					$this->_error['lote'] = $lote;
-					$this->_error['registro'] = json_encode($fondo_raw);
-					$this->_error['motivos'] = json_encode($v->errors());
-					$this->_error['created_at'] = date("Y-m-d H:i:s");					
-					Rechazo::insert($this->_error);
-				} else {
-					try {
-						Fondo::insert($fondo_raw);
-						$this->_resumen['insertados'] ++;
-					} catch (QueryException $e) {
+				if(strpos($linea[4],'.')){
+					$fondo_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
+					$v = Validator::make($fondo_raw , $this->_rules);
+					if ($v->fails()) {
 						$this->_resumen['rechazados'] ++;
 						$this->_error['lote'] = $lote;
 						$this->_error['registro'] = json_encode($fondo_raw);
-						if ($e->getCode() == 23505){
-							$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-						} else {
-							$this->_error['motivos'] = json_encode($e);
-						}
+						$this->_error['motivos'] = json_encode($v->errors());
+						$this->_error['created_at'] = date("Y-m-d H:i:s");					
 						Rechazo::insert($this->_error);
-					}
-				}
+					} else {
+						try {
+							Fondo::insert($fondo_raw);
+							$this->_resumen['insertados'] ++;
+						} catch (QueryException $e) {
+							$this->_resumen['rechazados'] ++;
+							$this->_error['lote'] = $lote;
+							$this->_error['registro'] = json_encode($fondo_raw);
+							if ($e->getCode() == 23505){
+								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+							} else {
+								$this->_error['motivos'] = json_encode($e);
+							}
+							Rechazo::insert($this->_error);
+						}
+					}	
+				}								
+			}else{
+					$this->_resumen['rechazados'] ++;
+					$this->_error['lote'] = $lote;
+					$this->_error['registro'] = json_encode($linea);
+					$this->_error['motivos'] = json_encode('No ha ingresado un codigo gasto correcto en la linea');
+					$this->_error['created_at'] = date("Y-m-d H:i:s");					
+					Rechazo::insert($this->_error);
 			}
 		}
 		$this->actualizaLote($lote , $this->_resumen);
