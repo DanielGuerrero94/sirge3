@@ -145,7 +145,7 @@ class FondosController extends Controller
 			$codigos[1],
 			$linea[5],
 			$linea[6],
-			utf8_encode($linea[7]),
+			$linea[7],
 			$lote
 		];
 
