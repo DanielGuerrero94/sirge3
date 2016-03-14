@@ -36,7 +36,7 @@
 	<p style="font-weight: bold">
 		SEÑOR <br/>
 		COORDINADOR NACIONAL DEL PROGRAMA SUMAR <br />
-		DR. MARTIN SABIGNOSO
+		DR. EDUARDO MARTINEZ
 	</p>
 	<p>
 		De mi mayor consideración:
