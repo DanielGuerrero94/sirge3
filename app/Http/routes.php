@@ -10,6 +10,13 @@
 |
  */
 
+use App\Models\Rechazo;
+
+Route::get('testr' , function(){
+	$r = Rechazo::where('lote' , 4885)->take(200)->get();
+	return json_encode($r);
+});
+
 //	Main route ...
 Route::get('/' , 'HomeController@index');
 
