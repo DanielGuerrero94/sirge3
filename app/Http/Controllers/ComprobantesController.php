@@ -169,6 +169,7 @@ class ComprobantesController extends Controller
 							$this->_resumen['rechazados'] ++;
 							$this->_error['lote'] = $lote;
 							$this->_error['registro'] = json_encode($comprobante_raw);
+							$this->_error['created_at'] = date("Y-m-d H:i:s");
 							if ($e->getCode() == 23505){
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 							} else {
