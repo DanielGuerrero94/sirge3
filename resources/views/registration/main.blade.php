@@ -92,7 +92,7 @@
                         </div>
                         <div class="tab-pane" id="about">
                           <div class="row">
-                              <h4 class="info-text"> Empezemos con información básica</h4>
+                              <h4 class="info-text"> Empecemos con información básica</h4>
                               <div class="col-sm-10 col-sm-offset-1">
                                   <div class="form-group">
                                     <label for="nombre">Nombre</label>
