@@ -153,6 +153,11 @@ class ComprobantesController extends Controller
 				array_push($linea, $lote);
 				if(count($this->_data) == count($linea)){
 					$comprobante_raw = array_combine($this->_data, $linea);
+
+					if (is_null($comprobante_raw['fecha_debito_bancario'])){
+						$comprobante_raw['fecha_debito_bancario'] = '1900-01-01';
+					}
+
 					$v = Validator::make($comprobante_raw , $this->_rules);
 					if ($v->fails()) {
 						$this->_resumen['rechazados'] ++;
