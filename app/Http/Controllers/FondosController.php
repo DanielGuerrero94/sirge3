@@ -27,7 +27,7 @@ class FondosController extends Controller
 			'numero_comprobante' => 'max:50',
 			'codigo_gasto' => 'required|exists:fondos.codigos_gasto,codigo_gasto',
 			'subcodigo_gasto' => 'required|exists:fondos.subcodigos_gasto,subcodigo_gasto',
-			'efector_cesion' => 'required_if:codigo_gasto,6',
+			'efector_cesion' => 'required_if:codigo_gasto,7',
 			'monto' => 'required|numeric',
 			'concepto' => 'max:200'
 		],
