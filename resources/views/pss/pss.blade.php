@@ -39,7 +39,7 @@
                 { data: 'objeto'},
                 { data: 'diagnostico'},
                 { data: 'descripcion_grupal'},
-                { data: 'action'}
+                { data: 'action' , searchable: false}
             ]
         });
 
