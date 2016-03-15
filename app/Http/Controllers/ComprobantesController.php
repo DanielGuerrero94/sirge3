@@ -173,7 +173,7 @@ class ComprobantesController extends Controller
 							if ($e->getCode() == 23505){
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 							} else {
-								$this->_error['motivos'] = json_encode($e);
+								$this->_error['motivos'] = json_encode($e->errorInfo);
 							}
 							Rechazo::insert($this->_error);
 						}
