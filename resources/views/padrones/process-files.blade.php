@@ -81,6 +81,7 @@
 		});
 
 		$('#archivos-table').on('click' , '.procesar' , function(){
+			$('.procesar').prop('disabled', true);
 			$('#errores-div').hide();
 			var id = $(this).attr('id-subida');
 			$.ajax({
