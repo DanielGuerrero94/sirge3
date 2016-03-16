@@ -179,7 +179,7 @@ class EfectoresController extends Controller
 
         $ca = new Convenio([
             'numero_compromiso' => $r->numero_compromiso,
-            'numero_convenio' => $r->convenio_numero,
+            '' => $r->convenio_numero,
             'firmante' => $r->convenio_firmante,
             'nombre_tercer_administrador' => $r->nombre_admin,
             'codigo_tercer_administrador' => $r->cuie_admin,
@@ -696,7 +696,7 @@ class EfectoresController extends Controller
           $ca = new Convenio;
           $ca->id_efector = $ef->id_efector;
         }
-        $ca->numero_convenio = $r->convenio_numero;
+        $ca->numero_compromiso = $r->convenio_numero;
         $ca->firmante = $r->convenio_firmante;
         $ca->nombre_tercer_administrador = $r->nombre_admin;
         $ca->codigo_tercer_administrador = $r->cuie_admin;
