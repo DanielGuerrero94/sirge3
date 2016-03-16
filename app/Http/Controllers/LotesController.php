@@ -294,6 +294,7 @@ class LotesController extends Controller
 					$q->select(DB::raw('unnest(lote)'))
 					->from('ddjj.sirge');
 				})
+			->where('l.id_provincia' , $user->id_provincia)
 			->get();
 
 		foreach ($lotes as $key => $lote){
