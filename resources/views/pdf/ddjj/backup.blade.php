@@ -52,7 +52,7 @@ mismas se encuentran a disposición de cualquier autoridad competente que las re
   </p>
   <div class="footer">
     <div style="margin-left:60%; width: 40%; text-align: left;">
-      <p style="border-top: 1px solid; text-align: center;">Firma y sello del Coordinador Ejecutivo</p>
+      <p style="border-top: 1px solid; text-align: center;">Firma y sello del Responsable del Área de Sistemas Informáticos</p>
     </div>
     <hr />
     <div class="page">
