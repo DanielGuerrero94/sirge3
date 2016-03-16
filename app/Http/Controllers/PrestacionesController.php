@@ -38,7 +38,7 @@ class PrestacionesController extends Controller
 			'clave_beneficiario' => 'required|exists:beneficiarios.beneficiarios,clave_beneficiario',
 			'tipo_documento' => 'exists:sistema.tipo_documento,tipo_documento',
 			'clase_documento' => 'in:P,A,C',
-			'numero_documento' => 'max:8',
+			'numero_documento' => 'max:14',
 			'orden' => 'required|numeric',
 			'efector' => 'required|exists:efectores.efectores,cuie'
 		],
