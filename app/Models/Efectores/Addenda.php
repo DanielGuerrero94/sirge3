@@ -25,7 +25,7 @@ class Addenda extends Model
 	 *
 	 * @var bool
 	 */
-	public $timestamps = false;
+	public $timestamps = true;
 
 	/**
 	 * Devuelve el tipo de addenda
