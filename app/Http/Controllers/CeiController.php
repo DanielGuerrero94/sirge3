@@ -506,5 +506,5 @@ class CeiController extends Controller
 
     		echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
     	}
-	
+    }
 }
