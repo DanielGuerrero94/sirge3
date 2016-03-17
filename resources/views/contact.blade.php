@@ -37,11 +37,11 @@
 								<label for="email">Email</label>
 								<input type="text" name="email" id="email" class="form-control" value="{{Auth::user()->email}}" readonly="readonly">
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label for="cuerpo">Mensaje</label>
 								<textarea class="form-control" name="cuerpo" id="cuerpo"></textarea>
-							</div>
-							<button class="submit btn btn-primary">Enviar</button>
+							</div> -->
+							<button class="submit btn btn-primary" style="margin-top: 3%;">Enviar una solicitud</button>
 						</form>
 					</div>
 				</div>
@@ -87,9 +87,15 @@
 	    }
     	initialize();
 
-    	$('.submit').click(function(){
+    	$('form').submit(function(e){
+			
+			e.preventDefault();
 
-    		$('form').validate({
+			$.get('nueva-solicitud' , function(data){
+				$('.content-wrapper').html(data);
+			});
+	
+    		/*$('form').validate({
     			rules : {
     				cuerpo : {
     					required : true,
@@ -103,7 +109,8 @@
     					$('form').trigger('reset');
     				})
     			}
-    		})
+    		})*/
+
     	})
 
 	});
