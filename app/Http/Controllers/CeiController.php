@@ -23,6 +23,7 @@ use App\Models\CEI\Indicador;
 use App\Models\CEI\Detalle;
 use App\Models\CEI\Tipo;
 use App\Models\CEI\Calculo;
+use App\Models\CEI\Denominador;
 use App\Models\Beneficiario;
 
 
