@@ -481,7 +481,9 @@ $(document).ready(function() {
 	
 	$('.finish').hide();
 	$('#errores-div').hide();
-	
+
+	$('.error').css('color', 'red');
+
 	$('#tel').inputmask('9999 9999 9999')
 
 	$('#integrante').change(function(){
