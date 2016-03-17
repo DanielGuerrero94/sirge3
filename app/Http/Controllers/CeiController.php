@@ -380,7 +380,7 @@ class CeiController extends Controller
      * @param $id_categoria
      * @return json
      */
-    public function getIndicadorCeiInicial($periodo , $id_indicador){
+    public function getIndicadorCei($periodo , $id_indicador){
 
     	$periodo_del = str_replace('-', '', $periodo);
 
