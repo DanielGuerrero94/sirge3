@@ -219,7 +219,16 @@ class OspController extends Controller
 						$bulk = [];
 					}
 				}
-			} else {
+			} 
+			else if(count($linea) == 1 && $linea[0] == ''){
+				$this->_resumen['rechazados'] ++;
+				$this->_error['lote'] = $lote;
+				$this->_error['registro'] = json_encode($linea);
+				$this->_error['motivos'] = '{"registro invalido" : ["Linea en blanco"]}';
+				$this->_error['created_at'] = date("Y-m-d H:i:s");
+				Rechazo::insert($this->_error);
+			}	
+			else {
 				$this->_resumen['rechazados'] ++;
 				$this->_error['lote'] = $lote;
 				$this->_error['registro'] = json_encode($linea);
