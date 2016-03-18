@@ -39,7 +39,13 @@ Route::get('inicio' , 'HomeController@inicio');
  * DASHBOARD
  */
 Route::get('dashboard' , 'HomeController@dashboard');
-Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
+
+// PROTECTED
+Route::group(array('before' => 'auth'), function()
+{
+   Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
+});
+
 
 /**
  * SOLICITUDES
@@ -414,3 +420,10 @@ Route::get('excel' , 'EfectoresController@generarTabla');
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/
+
+
+// AUTH FILTER
+Route::filter('auth', function()
+{
+    if (Auth::guest()) header("Refresh:0; url=login");
+});

@@ -8,6 +8,9 @@
     width: 108px;
     display:inline-block;
 }
+.error {
+	color:red;
+}
 </style>
 <div class="row">
 	<form id="alta-efector">

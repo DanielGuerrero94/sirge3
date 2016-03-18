@@ -7,6 +7,9 @@
     width: 150px;
     display:inline-block;
 }
+.error {
+	color:red;
+}
 </style>
 <div class="row">
 	<form id="alta-efector">
@@ -480,8 +483,8 @@
 $(document).ready(function() {
 	
 	$('.finish').hide();
-	$('#errores-div').hide();
-	
+	$('#errores-div').hide();	
+
 	$('#tel').inputmask('9999 9999 9999')
 
 	$('#integrante').change(function(){
