@@ -405,6 +405,7 @@ class CeiController extends Controller
     	$calculo = Calculo::find($id_indicador);
 
     	foreach ($provincias as $provincia) {
+    		ob_start();
 			
 			foreach ($calculo->numerador->prestaciones as $prestacion){
 				$codigos = implode ('_' , $prestacion->codigos);
@@ -508,5 +509,6 @@ class CeiController extends Controller
 
     		echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
     	}
+		ob_end_flush();
     }
 }
