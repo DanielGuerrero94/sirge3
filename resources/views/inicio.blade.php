@@ -145,7 +145,10 @@ $(document).ready(function(){
                     var month2 = d2.getMonth()+1;
                     var day2 = d2.getDate();
 
-                    if(d.getFullYear() < d2.getFullYear()){
+                    if(value == null || value == ''){
+                        return true;
+                    }
+                    else if(d.getFullYear() < d2.getFullYear()){
                         return true;
                     }
                     else if(d.getFullYear() == d2.getFullYear() && month < month2){
@@ -166,7 +169,7 @@ $(document).ready(function(){
                 volume: 0.8
             },
             {
-                name: "beer_can_opening",
+                name: "branch_break",
                 volume: 0.8
             },
             {
