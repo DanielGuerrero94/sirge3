@@ -648,21 +648,21 @@ class EfectoresController extends Controller
         }
       }
 
-      if (strlen($r->tel)){
-        try {
-          $te = Telefono::where('id_efector' , $ef->id_efector)->firstOrFail();
-        } catch (ModelNotFoundException $e){
-          $te = new Telefono;
-          $te->id_efector = $ef->id_efector;
-        }
-        $te->numero_telefono = $r->tel;
-        $te->observaciones = $r->obs_tel;
-        if ($te->save()){
-          $update = true;
-        } else {
-          return 'Ha fallado la actualización de datos';
-        }
+      
+      try {
+        $te = Telefono::where('id_efector' , $ef->id_efector)->firstOrFail();
+      } catch (ModelNotFoundException $e){
+        $te = new Telefono;
+        $te->id_efector = $ef->id_efector;
       }
+      $te->numero_telefono = $r->tel;
+      $te->observaciones = $r->obs_tel;
+      if ($te->save()){
+        $update = true;
+      } else {
+        return 'Ha fallado la actualización de datos';
+      }
+      
 
       if (strlen($r->correo)){
         try {
