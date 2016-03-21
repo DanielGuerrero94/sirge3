@@ -117,6 +117,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/dist/js/jquery.bootstrap.wizard.js") }}"></script>
 <!-- Typeahead -->
 <script type="text/javascript" src="{{ asset ("/dist/js/typeahead.js") }}"></script>
+<!-- Sounds -->
+<script type="text/javascript" src="{{ asset ("/dist/js/ion.sound.js") }}"></script>
 <!-- SlimScroll -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- AdminLTE App -->
@@ -132,6 +134,50 @@ $(document).ready(function(){
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    $.validator.addMethod("lessThan", function(value, element, param) {
+                    var d = new Date(value);
+                    var month = d.getMonth()+1;
+                    var day = d.getDate();
+
+                    var d2 = new Date(param);
+                    var month2 = d2.getMonth()+1;
+                    var day2 = d2.getDate();
+
+                    if(d.getFullYear() < d2.getFullYear()){
+                        return true;
+                    }
+                    else if(d.getFullYear() == d2.getFullYear() && month < month2){
+                        return true;
+                    }
+                    else if(d.getFullYear() == d2.getFullYear() && month == month2 && day <= day2){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }                                
+    });
+
+    ion.sound({
+        sounds: [
+            {
+                name: "bell_ring",
+                volume: 0.8
+            },
+            {
+                name: "beer_can_opening",
+                volume: 0.8
+            },
+            {
+                name: "button_tiny",
+                volume: 0.8,
+                preload: false
+            }
+        ],
+        volume: 0.8,
+        path: "/sirge3/public/dist/sounds/",
+        preload: true
     });
 
     $(document).on({
@@ -161,6 +207,15 @@ $(document).ready(function(){
                 if (m > 0) {
                     $('.new-messages').html(m);
                     $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
+                    $.ajax({
+                        method : 'get',
+                        url : 'sonido-notificacion',                        
+                        success : function(data){
+                            if(data == 1){
+                                ion.sound.play("branch_break");
+                            }
+                        }                        
+                    });                    
                 } else {
                     $('.new-messages').html('');
                     $('.new-messages-text').html('Usted no tiene mensajes nuevos');
