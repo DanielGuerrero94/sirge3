@@ -610,10 +610,21 @@ class EfectoresController extends Controller
         return 'Ha fallado la actualización de datos';
       }
 
-      $de = Descentralizacion::find($ef->id_efector);
-      $de->internet = $r->internet_efector;
-      $de->factura_descentralizada = $r->factura_descentralizada;
-      $de->factura_on_line = $r->factura_on_line;
+      
+      if(Descentralizacion::find($ef->id_efector)){
+          $de = Descentralizacion::find($ef->id_efector);
+          $de->internet = $r->internet_efector;
+          $de->factura_descentralizada = $r->factura_descentralizada;
+          $de->factura_on_line = $r->factura_on_line;
+      }
+      else{
+          $de = new Descentralizacion();
+          $de->id_efector = $ef->id_efector;
+          $de->internet = $r->internet_efector;
+          $de->factura_descentralizada = $r->factura_descentralizada;
+          $de->factura_on_line = $r->factura_on_line;
+      }
+      
       if ($de->save()){
         $update = true;
       } else {
