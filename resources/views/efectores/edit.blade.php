@@ -501,10 +501,6 @@
 								    				<option selected="selected" value="N">NO</option>
 								    			@endif
 								    		@endif
-								    		@else 
-								    			<option name="internet_efector" value="S">SI</option>
-							    				<option name="internet_efector" value="N">NO</option>
-								    		@endif
 							    			</select>
 						    			</div>
 						    		</div>
@@ -521,10 +517,6 @@
 								    				<option selected="selected" value="N">NO</option>
 								    			@endif
 								    		@endif
-								    		@else 
-								    			<option name="factura_descentralizada" value="S">SI</option>
-							    				<option name="factura_descentralizada" value="N">NO</option>
-								    		@endif
 							    			</select>
 						    			</div>
 						    		</div>
@@ -540,10 +532,6 @@
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
 								    			@endif
-								    		@endif
-								    		@else 
-								    			<option name="factura_on_line" value="S">SI</option>
-							    				<option name="factura_on_line" value="N">NO</option>
 								    		@endif
 							    			</select>
 						    			</div>
