@@ -84,6 +84,72 @@ class InboxController extends Controller{
     }
 
     /**
+     * Obtengo la cantidad de conversaciones no leidas
+     *
+     * @return int
+     */
+    public function notificacion (){
+        $user = Auth::user()->id_usuario;                      
+
+       $mensajes = DB::select("
+            select count (*) as mensaje_no_notificado
+            from (
+                select
+                    count (*)
+                from
+                    chat.conversaciones c inner join
+                    chat.mensajes m on c.id = m.id_conversacion
+                where
+                    c.usuarios @> '{{$user}}'
+                    and m.id_usuario <> $user
+                    and leido = 'N'                    
+                group by c.id ) a");
+        
+        $retornar = 0;
+
+        if($mensajes[0]->mensaje_no_notificado){
+            $id_conversaciones = DB::select("
+                select
+                    distinct(c.id)
+                from
+                    chat.conversaciones c inner join
+                    chat.mensajes m on c.id = m.id_conversacion
+                where
+                    c.usuarios @> '{{$user}}'
+                    and m.id_usuario <> $user
+                    and leido = 'N'
+            ");            
+           
+            foreach ($id_conversaciones[0] as $id_conversacion) {
+                          
+                $conversacion = Conversacion::find($id_conversacion);
+
+                $array_conversacion = explode(',',str_replace('}', '', str_replace('{', '', $conversacion->usuarios)));                
+
+                foreach ($array_conversacion as $usuario => $value){
+                    if($value <> $user){
+                        $mensajero = $value;
+                    }
+                }
+
+                if(Mensaje::where('id_usuario',$mensajero)
+                        ->where('id_conversacion',$id_conversacion)
+                        ->where('notificado',0)->first() )
+                {
+
+                    Mensaje::where('id_usuario',$mensajero)
+                        ->where('id_conversacion',$id_conversacion)
+                        ->where('notificado',0)
+                        ->update(['notificado' => 1]); 
+
+                    $retornar = 1;
+                }                          
+            }                                   
+        }        
+        return $retornar;
+    }
+
+    /**
      * Actualizo todos los mensajes como leídos cuando se abre la conversación
      *
      * @return null
