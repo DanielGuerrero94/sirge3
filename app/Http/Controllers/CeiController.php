@@ -386,7 +386,9 @@ class CeiController extends Controller
 
     	$periodo_del = str_replace('-', '', $periodo);
 
-    	Resultado::where('indicador' , $id_indicador)->where('periodo' , $periodo_del)->delete();
+    	$res = Resultado::where('indicador' , $id_indicador)->where('periodo' , $periodo_del)->delete();
+
+    	// return json_encode($res);
 
     	$indicador = Indicador::join('cei.indicadores_detalle' , 'cei.indicadores.indicador' , '=' , 'cei.indicadores_detalle.id')
     						->where('cei.indicadores.id' , $id_indicador)
