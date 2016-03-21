@@ -501,6 +501,10 @@
 								    				<option selected="selected" value="N">NO</option>
 								    			@endif
 								    		@endif
+								    		@else 
+								    			<option name="internet_efector" value="S">SI</option>
+							    				<option name="internet_efector" value="N">NO</option>
+								    		@endif
 							    			</select>
 						    			</div>
 						    		</div>
@@ -517,6 +521,10 @@
 								    				<option selected="selected" value="N">NO</option>
 								    			@endif
 								    		@endif
+								    		@else 
+								    			<option name="factura_descentralizada" value="S">SI</option>
+							    				<option name="factura_descentralizada" value="N">NO</option>
+								    		@endif
 							    			</select>
 						    			</div>
 						    		</div>
@@ -532,6 +540,10 @@
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
 								    			@endif
+								    		@endif
+								    		@else 
+								    			<option name="factura_on_line" value="S">SI</option>
+							    				<option name="factura_on_line" value="N">NO</option>
 								    		@endif
 							    			</select>
 						    			</div>
@@ -652,7 +664,7 @@
 						    			<div class="form-group">
 		                      				<label for="fecha_firma" class="col-sm-5 control-label">Fecha firma</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" name="fecha_firma" type="text" class="form-control fecha_firma" placeholder="dd/mm/aaaa">
+		                    					<input type="text" id="fecha_firma" name="fecha_firma" type="text" class="form-control fecha_firma" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -697,11 +709,21 @@ $(document).ready(function() {
 	
 	$('.finish').hide();
 	$('#errores-div').hide();
+
+	var d = new Date();
+
+	var month = d.getMonth()+1;
+	var day = d.getDate();
+
+	var fechaActual = d.getFullYear() + '/' +
+	    (month<10 ? '0' : '') + month + '/' +
+	    (day<10 ? '0' : '') + day;
 	
 	$('#tel').inputmask({
 		mask : '9999 9999 9999',
 		placeholder : ''
 	});
+
 		
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
 
@@ -849,6 +871,14 @@ $(document).ready(function() {
 			},
 			correo : {
 				email : true
+			},
+			fecha_firma: {
+				lessThan: fechaActual
+			}
+		},
+		messages : {
+			fecha_firma: {
+				lessThan: 'El valor ingresado es una fecha mayor a la actual'
 			}
 		},
 		submitHandler : function(form){
