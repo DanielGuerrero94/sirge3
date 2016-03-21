@@ -165,8 +165,8 @@ $(document).ready(function(){
     ion.sound({
         sounds: [
             {
-                name: "bell_ring",
-                volume: 0.8
+                name: "button_push",
+                volume: 0.9
             },
             {
                 name: "branch_break",
@@ -218,7 +218,7 @@ $(document).ready(function(){
                                 ion.sound.play("branch_break");
                             }
                         }                        
-                    });             */       
+                    });             */
                 } else {
                     $('.new-messages').html('');
                     $('.new-messages-text').html('Usted no tiene mensajes nuevos');
@@ -227,11 +227,26 @@ $(document).ready(function(){
         })
     }
 
+    function getNotifications(){
+
+        $.ajax({
+                global : false,
+                method : 'get',
+                url : 'sonido-notificacion',                        
+                success : function(data){
+                    if(data == 1){
+                        ion.sound.play("button_push");
+                    }
+                }                        
+        });             
+    }
+
     function newMessages(){
-        setInterval(function(){ getMessages() } , 10000);
+        setInterval(function(){ getMessages(); getNotifications(); } , 10000);
     }
 
     getMessages();
+    getNotifications();
     newMessages();
 
     $.extend( true, $.fn.dataTable.defaults, {
