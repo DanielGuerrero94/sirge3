@@ -207,7 +207,7 @@ $(document).ready(function(){
                 if (m > 0) {
                     $('.new-messages').html(m);
                     $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
-                    $.ajax({
+                    /*$.ajax({
                         method : 'get',
                         url : 'sonido-notificacion',                        
                         success : function(data){
@@ -215,7 +215,7 @@ $(document).ready(function(){
                                 ion.sound.play("branch_break");
                             }
                         }                        
-                    });                    
+                    });             */       
                 } else {
                     $('.new-messages').html('');
                     $('.new-messages-text').html('Usted no tiene mensajes nuevos');
