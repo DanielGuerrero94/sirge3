@@ -24,6 +24,7 @@ use App\Models\CEI\Detalle;
 use App\Models\CEI\Tipo;
 use App\Models\CEI\Calculo;
 use App\Models\CEI\Denominador;
+use App\Models\CEI\Oportuno;
 use App\Models\Beneficiario;
 
 
@@ -422,8 +423,7 @@ class CeiController extends Controller
 	    	} else {
 	    		$beneficiarios = Beneficiario::whereBetween('fecha_nacimiento' , [$fechas['min'],$fechas['max']])	
 	    									->where('id_provincia_alta' , $provincia->id_provincia)
-	    									->lists('clave_beneficiario')
-	    									->toArray();
+	    									->lists('clave_beneficiario');
 	    	}
 	    	
 	    	$super_objeto['beneficiarios_oportunos'] = count($beneficiarios);
@@ -513,4 +513,264 @@ class CeiController extends Controller
     	}
 		ob_end_flush();
     }
+
+
+    /**
+     * Método abstracto para el calculo de la mayoría
+     * de los indicadores CEI categoria normal.
+     *
+     * @param $linea_cuidado integer
+     * @param $periodo string
+     * @return json
+     */
+    public function nuevoCalculoOld ($linea_cuidado , $periodo){
+
+    	$periodo_del = str_replace('-', '', $periodo);
+
+    	$indicador = Detalle::findOrFail($linea_cuidado);
+
+    	$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+    	$dt->modify('first day of this month');
+    	$dt->modify("- $indicador->edad_min");
+    	$fechas['min'] = $dt->format('Y-m-d');
+
+    	$dt->modify("+ $indicador->edad_max");
+    	$dt->modify('last day of this month');
+    	$fechas['max'] = $dt->format('Y-m-d');
+
+    	// echo 'Fechas: ' . json_encode($fechas) , '<br />';
+
+		$indicadores = Indicador::where('indicador' , $linea_cuidado)->where('tipo' , 1)->orderBy('tipo' , 'asc')->get();
+
+		foreach ($indicadores as $indicador) {
+			switch ($indicador->tipo) {
+				case 1:
+
+					// echo "Inicial<br/>";
+
+					$provincias = Provincia::orderBy('id_provincia')->where('id_provincia' , '08')->get();
+			    	$calculo = Calculo::findOrFail($indicador->indicador);
+			    	$obj = array();
+
+			    	// return json_encode($calculo);
+
+			    	foreach ($provincias as $provincia) {
+			    		
+			    		// ob_start();
+						
+						foreach ($calculo->numerador->prestaciones as $prestacion){
+							$codigos = implode ('_' , $prestacion->codigos);
+							$super_objeto['prestaciones']['codigos'][$codigos] = 0;
+						}
+
+				    	if (isset ($calculo->numerador->sexo)){
+				    		$beneficiarios = Beneficiario::whereBetween('fecha_nacimiento' , [$fechas['min'],$fechas['max']])	
+				    									->where('id_provincia_alta' , $provincia->id_provincia)
+				    									->where('sexo' , $calculo->numerador->sexo)
+				    									->lists('clave_beneficiario');
+				    	} else {
+				    		$beneficiarios = Beneficiario::whereBetween('fecha_nacimiento' , [$fechas['min'],$fechas['max']])	
+				    									->where('id_provincia_alta' , $provincia->id_provincia)
+				    									->lists('clave_beneficiario');
+					  	}
+				    	
+				    	$super_objeto['beneficiarios_oportunos'] = count($beneficiarios);
+
+				    	// return json_encode($super_objeto);
+
+				    	/*
+				    	foreach ($beneficiarios as $key => $beneficiario){
+
+				    		$cantidad_prestaciones = 0;
+				    		if (isset ($calculo->denominador->prestaciones)) {
+				    			foreach ($calculo->denominador->prestaciones as $prestacion){
+
+				    				$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+					    			$dt->modify('first day of this month');
+					    			$fechas['min_prestacion'] = $dt->format('Y-m-d');
+					    			$dt->modify("+ $prestacion->lapso");
+					    			$fechas['max_prestacion'] = $dt->format('Y-m-d');
+
+					    			$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+					    								->whereIn('codigo_prestacion' , $prestacion->codigos)
+					    								->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+					    								->groupBy('codigo_prestacion')
+					    								->lists('codigo_prestacion');
+					    			
+				    				return json_encode($existe);
+
+					    			if (! count($existe)) {
+					    				unset($beneficiarios[$key]);
+					    			} else {
+					    				return json_encode($existe);
+					    			}
+
+				    			}
+
+				    			$super_objeto['denominador'] = count($beneficiarios);
+				    		} else if (isset ($calculo->denominador->id)){
+				    			$denominador = Denominador::where('indicador' , $indicador->indicador)
+				    									->where('id_provincia' , $provincia->id_provincia)
+				    									->firstOrFail();
+				    			$super_objeto['denominador'] = $denominador->denominador;
+				    		}
+			    		}
+			    		*/
+
+			    		foreach ($beneficiarios as $key => $beneficiario) {
+
+				    		foreach ($calculo->numerador->prestaciones as $prestacion){
+
+				    			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+				    			$dt->modify('first day of this month');
+				    			$fechas['min_prestacion'] = $dt->format('Y-m-d');
+				    			$dt->modify("+ $prestacion->lapso");
+				    			$fechas['max_prestacion'] = $dt->format('Y-m-d');
+							
+				    			$existe = Prestacion::select('codigo_prestacion' , DB::raw('count(*) as cantidad'))
+				    								->where('clave_beneficiario' , $beneficiario)
+				    								->whereIn('codigo_prestacion' , $prestacion->codigos)
+				    								->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+				    								->groupBy('codigo_prestacion')
+				    								->get();
+				    			
+				    			// count($existe);
+				    			// echo json_encode($existe);
+
+				    			if (count($existe)) {
+				    				$obj['beneficiarios'][$key]['clave_beneficiario'] = $beneficiario;
+				    				$obj['beneficiarios'][$key]['prestaciones'][] = $existe;
+				    			}
+
+
+								/*
+								$codigos = implode ('_' , $prestacion->codigos);
+									
+								if ($existe)
+									$super_objeto['prestaciones']['codigos'][$codigos] ++;
+
+				    			$cantidad_prestaciones += $existe;
+
+				    			if (! isset($calculo->numerador->cantidad)) {
+					    			if (! $existe) {
+					    				unset($beneficiarios[$key]);
+					    			}
+				    			}
+				    			*/
+
+				    		}
+
+				    		if (isset ($calculo->numerador->cantidad)){
+				    			if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
+				    				unset($beneficiarios[$key]);
+				    			}
+				    		}
+				    	}
+	    				
+	    				return '<pre>' . json_encode($obj , JSON_PRETTY_PRINT) . '</pre>';
+				    	
+
+			    		$super_objeto['beneficiarios_puntuales'] = count($beneficiarios);
+
+
+			    		/*
+			    		$r = new Resultado;
+			    		$r->indicador = $id_indicador;
+			    		$r->provincia = $provincia->id_provincia;
+			    		$r->periodo = str_replace('-', '', $periodo);
+			    		$r->resultados = json_encode($super_objeto);
+			    		$r->save();
+			    		*/
+
+			    		// echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
+			    	}
+
+				
+				case 2:
+					echo "Minima<br/>";
+					break;
+
+				case 3:
+					echo "Adecuada<br/>";
+					break;
+
+				default:	
+			}
+		}
+    }
+
+    public function nuevoCalculo($linea_cuidado , $periodo){
+
+    	/**
+    	 *
+    	 * Primero realizo el cálculo de beneficiarios potenciales
+    	 *
+    	 */
+
+    	$periodo_del = str_replace('-', '', $periodo);
+
+    	Oportuno::where('linea_cuidado' , $linea_cuidado)->where('periodo' , $periodo_del)->delete();
+
+    	$detalle = Detalle::findOrFail($linea_cuidado);
+    	$indicador = Indicador::where('indicador' , $linea_cuidado)->where('tipo' , 1)->orderBy('tipo' , 'asc')->firstOrFail();
+    	$provincias = Provincia::orderBy('id_provincia')->get();
+    	$calculo = Calculo::findOrFail($indicador->indicador);
+
+    	$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+    	$dt->modify('first day of this month');
+    	$dt->modify("- $detalle->edad_min");
+    	$fechas['min'] = $dt->format('Y-m-d');
+
+    	$dt->modify("+ $detalle->edad_max");
+    	$dt->modify('last day of this month');
+    	$fechas['max'] = $dt->format('Y-m-d');
+
+
+    	foreach ($provincias as $provincia) {
+
+	    	if (isset ($calculo->numerador->sexo)){
+				$beneficiarios = Beneficiario::whereBetween('fecha_nacimiento' , [$fechas['min'],$fechas['max']])	
+											->where('id_provincia_alta' , $provincia->id_provincia)
+											->where('sexo' , $calculo->numerador->sexo)
+											->lists('clave_beneficiario');
+			} else {
+				$beneficiarios = Beneficiario::whereBetween('fecha_nacimiento' , [$fechas['min'],$fechas['max']])	
+											->where('id_provincia_alta' , $provincia->id_provincia)
+											->lists('clave_beneficiario');
+			}
+
+			foreach ($beneficiarios as $key => $beneficiario) {
+
+				foreach ($calculo->numerador->prestaciones as $prestacion){
+
+					$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+					$dt->modify('first day of this month');
+					$fechas['min_prestacion'] = $dt->format('Y-m-d');
+					$dt->modify("+ $prestacion->lapso");
+					$fechas['max_prestacion'] = $dt->format('Y-m-d');
+				
+					$existe = Prestacion::select('codigo_prestacion' , DB::raw('count(*) as cantidad'))
+										->where('clave_beneficiario' , $beneficiario)
+										->whereIn('codigo_prestacion' , $prestacion->codigos)
+										->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+										->groupBy('codigo_prestacion')
+										->get();
+					
+					if (count($existe)) {
+						$obj['beneficiarios'][$key]['clave_beneficiario'] = $beneficiario;
+						$obj['beneficiarios'][$key]['prestaciones'][] = $existe;
+					}
+				}
+			}
+
+			$op = new Oportuno;
+			$op->provincia = $provincia->id_provincia;
+			$op->linea_cuidado = $linea_cuidado;
+			$op->periodo = $periodo_del;
+			$op->beneficiarios = json_encode($obj);
+			$op->save();
+    	}
+		
+    }
+
 }
