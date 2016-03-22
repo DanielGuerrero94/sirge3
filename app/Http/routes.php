@@ -198,6 +198,7 @@ Route::get('cei-indicador/{periodo}/{id_indicador}' , 'CeiController@getIndicado
 
 Route::get('cei-indicador-test/{linea}/{periodo}' , 'CeiController@nuevoCalculo');
 Route::get('cei-indicador-test-1/{linea}/{periodo}' , 'CeiController@getTipoDos');
+Route::get('cei-indicador-new/{periodo}/{indicador}' , 'CeiController@getIndicadorCeiNew');
 
 /**
  * ANALISIS PRESTACIONES
