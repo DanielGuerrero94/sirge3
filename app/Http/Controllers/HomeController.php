@@ -302,7 +302,7 @@ class HomeController extends Controller
                     ->whereIn('id_padron' , [4,5,6])
                     ->where('sistema.lotes.id_estado' , 3)
                     ->whereBetween('fin' , [$min , $max])
-                    ->groupBy('sistema.subidas.id_padron')
+                    // ->groupBy('sistema.subidas.id_padron')
                     ->select('sistema.subidas.id_padron')
                     ->get();
             return round (sizeof($lotes) * 100 / 30 , 2);

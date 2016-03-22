@@ -197,6 +197,7 @@ Route::get('cei-reportes-download/{id}/{periodo?}/{tipo?}' , 'CeiController@getL
 Route::get('cei-indicador/{periodo}/{id_indicador}' , 'CeiController@getIndicadorCei');
 
 Route::get('cei-indicador-test/{linea}/{periodo}' , 'CeiController@nuevoCalculo');
+Route::get('cei-indicador-test-1/{linea}/{periodo}' , 'CeiController@getTipoDos');
 
 /**
  * ANALISIS PRESTACIONES
