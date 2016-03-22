@@ -431,6 +431,8 @@ class HomeController extends Controller
      */
     public function dashboard(){
 
+        return $this->getPorcentajeIn(4);
+
         $visitas = $this->getVisitas();
         $efectores = $this->getAltasEfectores();
         $usuarios = $this->getAltasUsuarios();
