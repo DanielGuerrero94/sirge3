@@ -204,7 +204,7 @@ class ProfeController extends Controller
 			if (count($linea) == 12){
 				array_push($linea, $lote);
 				$profe_raw = array_combine($this->_data, $linea);
-				$profe_raw['tipo_documento'] = strtoupper($profe_raw['tipo_documento']);
+				$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc(strtoupper($profe_raw['tipo_documento']));
 				$v = Validator::make($profe_raw , $this->_rules);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;
@@ -215,7 +215,7 @@ class ProfeController extends Controller
 					Rechazo::insert($this->_error);
 				} else {
 					$this->_resumen['insertados'] ++;
-					$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc($profe_raw['tipo_documento']);
+					$profe_raw['tipo_documento'] = $profe_raw['tipo_documento'];
 					$profe_raw['nombre_apellido'] = $this->sanitizeNombreApellido($profe_raw['nombre_apellido']);
 					$bulk[] = $profe_raw;
 					if (sizeof($bulk) % 4000 == 0){
