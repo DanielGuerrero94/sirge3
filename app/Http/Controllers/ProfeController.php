@@ -24,7 +24,7 @@ class ProfeController extends Controller
 {
     private 
 		$_rules = [
-			'tipo_documento' => 'required|in:DU,LE,LI,LC,CI',
+			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			'numero_documento' => 'required|min:5',
 			'nombre_apellido' => 'required|max:255',
 			'sexo' => 'required|in:F,M',
@@ -204,12 +204,14 @@ class ProfeController extends Controller
 			if (count($linea) == 12){
 				array_push($linea, $lote);
 				$profe_raw = array_combine($this->_data, $linea);
+				$profe_raw['tipo_documento'] = strtoupper($profe_raw['tipo_documento']);
 				$v = Validator::make($profe_raw , $this->_rules);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($profe_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
+					$this->_error['created_at'] = date("Y-m-d H:i:s");
 					Rechazo::insert($this->_error);
 				} else {
 					$this->_resumen['insertados'] ++;
