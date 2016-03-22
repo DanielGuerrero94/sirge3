@@ -23,7 +23,8 @@ class OspController extends Controller
 {
     private 
 		$_rules = [
-			'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
+			'tipo_documento' => 'required|exists:sistema.tipo_documento.tipo_documento',
+			//'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
 			'numero_documento' => 'required|numeric|min:9999',
 			'nombre_apellido' => 'required|max:255',
 			// 'sexo' => 'required|in:F,M',
@@ -146,6 +147,21 @@ class OspController extends Controller
 	}
 
 	/**
+	 * Limpia el tipo de afiliado
+	 * @param string $data
+	 *
+	 * @return string
+	 */
+	protected function sanitizeTipoAfiliado($data){		
+		if ($data <> 'T' && $data <> 'A') {
+			return 'A';
+		}
+		else{
+			return $data;
+		}	
+	}
+
+	/**
 	 * Actualiza el proceso
 	 * @param int $lote
 	 *
@@ -201,6 +217,8 @@ class OspController extends Controller
 				$osp_raw = array_combine($this->_data, $linea);
 				$osp_raw['tipo_documento'] = $this->sanitizeTipoDoc($osp_raw['tipo_documento']);
 				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido($osp_raw['nombre_apellido']);
+				$osp_raw['tipo_afiliado'] = $this->sanitizeTipoAfiliado($osp_raw['tipo_afiliado']);
+
 
 				$v = Validator::make($osp_raw , $this->_rules);
 				if ($v->fails()) {
