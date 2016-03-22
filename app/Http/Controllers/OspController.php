@@ -129,7 +129,8 @@ class OspController extends Controller
 	protected function sanitizeTipoDoc($tipo){
 		$tipos = ['DU'];
 
-		if (in_array($tipo, $tipos)){
+		if (in_array(strtoupper($tipo), $tipos))
+		{
 			return 'DNI';
 		} else {
 			return trim($tipo);
@@ -215,7 +216,7 @@ class OspController extends Controller
 			if (count($linea) == 8){
 				array_push($linea, $lote);
 				$osp_raw = array_combine($this->_data, $linea);
-				$osp_raw['tipo_documento'] = $this->sanitizeTipoDoc($osp_raw['tipo_documento']);
+				$osp_raw['tipo_documento'] = strtoupper($this->sanitizeTipoDoc($osp_raw['tipo_documento']));
 				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido($osp_raw['nombre_apellido']);
 				$osp_raw['tipo_afiliado'] = $this->sanitizeTipoAfiliado($osp_raw['tipo_afiliado']);
 
