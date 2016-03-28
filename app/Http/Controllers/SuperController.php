@@ -41,7 +41,7 @@ class SuperController extends Controller
 			'sexo',
 			'fecha_nacimiento',
 			'tipo_beneficiario',
-			'codigo_parentesco',
+			'codigo_parentezco',
 			'codigo_postal',
 			'id_provincia',
 			'cuil_titular',
