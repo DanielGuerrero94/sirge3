@@ -230,6 +230,7 @@ class SuperController extends Controller
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($sss_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
+					$this->_error['created_at'] = date("Y-m-d H:i:s");
 					Rechazo::insert($this->_error);
 				} else {
 					$sss_raw['tipo_documento'] = $this->sanitizeTipoDoc($sss_raw['tipo_documento']);
@@ -252,6 +253,7 @@ class SuperController extends Controller
 						$this->_resumen['rechazados'] ++;
 						$this->_error['lote'] = $lote;
 						$this->_error['registro'] = json_encode($sss_raw);
+						$this->_error['created_at'] = date("Y-m-d H:i:s");
 						$this->_error['motivos'] = '{"periodo invalido" : ["El ultimo periodo reportado es mayor a 4 meses"]}';
 						Rechazo::insert($this->_error);		
 					}
@@ -260,6 +262,7 @@ class SuperController extends Controller
 				$this->_resumen['rechazados'] ++;
 				$this->_error['lote'] = $lote;
 				$this->_error['registro'] = json_encode($linea);
+				$this->_error['created_at'] = date("Y-m-d H:i:s");
 				$this->_error['motivos'] = '{"registro invalido" : ["El número de campos es incorrecto"]}';
 				Rechazo::insert($this->_error);
 			}

@@ -565,6 +565,8 @@ class CeiController extends Controller
 											->lists('clave_beneficiario');
 			}
 
+			$beneficiarios_oportunos = count($beneficiarios);
+
 			foreach ($beneficiarios as $key => $beneficiario) {
 
 				foreach ($calculo->numerador->prestaciones as $prestacion){
@@ -586,10 +588,13 @@ class CeiController extends Controller
 				}
 			}
 
+			// return json_encode($obj);
+
 			$op = new Oportuno;
 			$op->provincia = $provincia->id_provincia;
 			$op->linea_cuidado = $linea_cuidado;
 			$op->periodo = $periodo_del;
+			$op->beneficiarios_oportunos = $beneficiarios_oportunos;
 			$op->beneficiarios = json_encode($obj);
 			$op->save();
 
@@ -598,59 +603,7 @@ class CeiController extends Controller
 		
     }
 
-    public function getTipoDos ($linea_cuidado , $periodo){
-
-    	$periodo_del = str_replace('-', '', $periodo);
-
-    	$provincias = Oportuno::where('linea_cuidado' , $linea_cuidado)->where('periodo' , $periodo_del)->get();
-    	$indicador = Indicador::where('indicador' , $linea_cuidado)->where('tipo' , 2)->orderBy('tipo' , 'asc')->firstOrFail();
-    	$calculo = Calculo::findOrFail($indicador->id);
-
-    	// echo json_encode($calculo);
-
-    	foreach ($provincias as $provincia){
-			
-			foreach ($provincia->beneficiarios as $key => $beneficiario) {
-
-				foreach ($calculo->numerador->prestaciones as $prestacion){
-
-					$dt = \DateTime::createFromFormat('Y-m' , $periodo);
-					$dt->modify('first day of this month');
-					$fechas['min_prestacion'] = $dt->format('Y-m-d');
-					$dt->modify("+ $prestacion->lapso");
-					$fechas['max_prestacion'] = $dt->format('Y-m-d');
-
-				
-					$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-										->whereIn('codigo_prestacion' , $prestacion->codigos)
-										->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-										->count();
-					
-					$codigos = implode ('_' , $prestacion->codigos);
-					
-					if ($existe)
-						$super_objeto['prestaciones']['codigos'][$codigos] ++;
-
-					$cantidad_prestaciones += $existe;
-
-					if (! isset($calculo->numerador->cantidad)) {
-		  				if (! $existe) {
-				 			unset($beneficiarios[$key]);
-		  		  		}
-					}
-
-				}
-
-				if (isset ($calculo->numerador->cantidad)){
-					if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
-						unset($beneficiarios[$key]);
-					}
-				}
-			}
-    	}
-    }
-
-
+    
     /**
      * Método abstracto para el calculo de la mayoría
      * de los indicadores CEI categoria normal.
@@ -704,6 +657,8 @@ class CeiController extends Controller
 
 	    	foreach ($oportunos as $oportuno){
 
+	    		// return json_encode($oportuno);
+
 	    		$oportuno = $oportuno->beneficiarios;
 
 	    		$super_objeto['beneficiarios_oportunos'] = count($oportuno);
@@ -748,9 +703,13 @@ class CeiController extends Controller
 
 			foreach ($oportunos as $oportuno) {
 
-				foreach ($oportuno->beneficiarios as $key => $beneficiario) {
+				$oportuno = $oportuno->beneficiarios;
+
+				foreach ($oportuno as $key => $beneficiario) {
 
 					foreach ($calculo->numerador->prestaciones as $prestacion){
+
+						// return json_encode($calculo);
 
 						$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 						$dt->modify('first day of this month');
@@ -787,11 +746,9 @@ class CeiController extends Controller
 				}
 
 
-   				$super_objeto['beneficiarios_puntuales'] = count($oportuno->beneficiarios);
+   				$super_objeto['beneficiarios_puntuales'] = count($oportuno);
 
 			}
-
-
 
     		/*
     		$r = new Resultado;
