@@ -5,7 +5,7 @@
 	<div class="box-footer" style="display: block;">
 	  <form id="form-mensaje">
 	    <div class="input-group">
-	      <input type="text" name="message" placeholder="Escribir mensaje ..." class="form-control">
+	      <input type="text" name="message" placeholder="Escribir mensaje ..." class="form-control" autocomplete="off">
 	      <span class="input-group-btn">
 	        <button type="submit" class="btn btn-warning btn-flat">Enviar</button>
 	      </span>
