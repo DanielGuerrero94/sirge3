@@ -588,6 +588,10 @@ class CeiController extends Controller
 				}
 			}
 
+			if (! isset ($obj)){
+				$obj[] = NULL;
+			}
+
 			// return json_encode($obj);
 
 			$op = new Oportuno;
@@ -632,7 +636,7 @@ class CeiController extends Controller
     	$dt->modify('last day of this month');
     	$fechas['max'] = $dt->format('Y-m-d');
 
-    	$provincias = Provincia::orderBy('id_provincia')->where('id_provincia' , '01')->get();
+    	$provincias = Provincia::orderBy('id_provincia')->get();
     	$calculo = Calculo::find($id_indicador);
 
     	foreach ($provincias as $provincia) {
@@ -653,18 +657,15 @@ class CeiController extends Controller
 			// 								->lists('clave_beneficiario');
 			// }
 
-	    	$oportunos = Oportuno::where('linea_cuidado' , $indicador->indicador)->where('periodo' , $periodo_del)->where('provincia' , '01')->get();
+	    	$oportunos = Oportuno::where('linea_cuidado' , $indicador->indicador)->where('periodo' , $periodo_del)->where('provincia' , $provincia->id_provincia)->get();
 
 	    	foreach ($oportunos as $oportuno){
 
 	    		// return json_encode($oportuno);
+	    		$super_objeto['beneficiarios_oportunos'] = $oportuno->beneficiarios_oportunos;
 
 	    		$oportuno = $oportuno->beneficiarios;
 
-	    		$super_objeto['beneficiarios_oportunos'] = count($oportuno);
-
-	    		echo '<pre>' , count($oportuno) , '</pre>';
-	    		
 	    		foreach ($oportuno as $key => $beneficiario) {
 
 		    		$cantidad_prestaciones = 0;
@@ -683,7 +684,7 @@ class CeiController extends Controller
 			    								->count();
 
 			    			if (! $existe) {
-			    				unset($oportuno->beneficiarios[$key]);
+			    				unset($oportuno[$key]);
 			    			}
 
 		    			}
@@ -696,8 +697,6 @@ class CeiController extends Controller
 		    			$super_objeto['denominador'] = $denominador->denominador;
 		    		}
 	    		}
-
-	    		echo '<pre>' , count($oportuno) , '</pre>';
 
     		}
 
