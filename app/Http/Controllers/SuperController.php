@@ -239,6 +239,7 @@ class SuperController extends Controller
 
 					$limite_inferior = new \DateTime();
 					$limite_inferior->modify('-4 months');
+					$limite_inferior->modify('first day of this month');
 					$periodo_reportado = \DateTime::createFromFormat('Ym' , $sss_raw['ultimo_aporte']);
 
 					if ($limite_inferior >= $periodo_reportado || (int)$sss_raw['codigo_os'] == 500807){
