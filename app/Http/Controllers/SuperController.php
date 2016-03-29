@@ -238,7 +238,7 @@ class SuperController extends Controller
 					$sss_raw['fecha_nacimiento'] = $fnac->format('Y-m-d');
 
 					$limite_inferior = new \DateTime();
-					$limite_inferior->modify('-4 months');
+					$limite_inferior->modify('-5 months');
 					$limite_inferior->modify('first day of this month');
 
 					$periodo_reportado = \DateTime::createFromFormat('Ym' , $sss_raw['ultimo_aporte']);
@@ -256,7 +256,7 @@ class SuperController extends Controller
 						$this->_error['lote'] = $lote;
 						$this->_error['registro'] = json_encode($sss_raw);
 						$this->_error['created_at'] = date("Y-m-d H:i:s");
-						$this->_error['motivos'] = '{"periodo invalido" : ["El ultimo periodo reportado es mayor a 4 meses"]}';
+						$this->_error['motivos'] = '{"periodo invalido" : ["El ultimo periodo reportado es mayor a 5 meses"]}';
 						Rechazo::insert($this->_error);		
 					}
 				 }
