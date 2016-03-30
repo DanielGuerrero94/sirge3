@@ -155,9 +155,9 @@ class PucoController extends Controller
 			) to '/var/www/sirge3/storage/swap/puco.txt' 
 			");
 
-		$puco = file_get_contents('/var/www/sirge3/storage/swap/puco.txt');
+		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
-		file_put_contents('/var/www/sirge3/storage/swap/puco2.txt', $puco);
+		file_put_contents('/var/www/html/sirge3/storage/swap/puco2.txt', $puco);
 
 		/*
 		$puco = Storage::get('sirg3/puco/puco.txt');
