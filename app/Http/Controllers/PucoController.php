@@ -157,6 +157,8 @@ class PucoController extends Controller
 
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
+		$puco = preg_replace('/[^A-Za-z0-9\-]/', '', $puco);
+		
 		file_put_contents('/var/www/html/sirge3/storage/swap/puco2.txt', $puco);
 
 		/*
