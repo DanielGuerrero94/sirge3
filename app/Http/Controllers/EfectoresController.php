@@ -269,10 +269,10 @@ class EfectoresController extends Controller
                 $l = 'E';
                 break;
             case '07':
-                $l = 'Y';
+                $l = 'J';
                 break;
             case '08':
-                $l = 'F';
+                $l = 'L';
                 break;
             case '09':
                 $l = 'M';
@@ -281,7 +281,7 @@ class EfectoresController extends Controller
                 $l = 'A';
                 break;
             case '11':
-                $l = 'J';
+                $l = 'Y';
                 break;
             case '12':
                 $l = 'D';
@@ -302,10 +302,10 @@ class EfectoresController extends Controller
                 $l = 'U';
                 break;
             case '18':
-                $l = 'P';
+                $l = 'F';
                 break;
             case '19':
-                $l = 'L';
+                $l = 'P';
                 break;
             case '20':
                 $l = 'N';
