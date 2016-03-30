@@ -152,7 +152,7 @@ class PucoController extends Controller
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || case when tipo_afiliado = 'T' then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_osp union all
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || lpad (codigo_os :: text , 6 , '0') || case when codigo_parentesco :: int = 0 then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_sss union all
 				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || 'N' || rpad (nombre_apellido , 30 , ' ') from puco.beneficiarios_profe
-			) to '/var/www/sirge3/storage/swap/puco.txt' 
+			) to '/var/www/html/sirge3/storage/swap/puco.txt' 
 			");
 
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
