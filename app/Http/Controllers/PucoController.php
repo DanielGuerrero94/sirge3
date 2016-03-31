@@ -162,7 +162,8 @@ class PucoController extends Controller
 		unset($puco);
 		unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
-		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip /var/www/html/sirge3/storage/swap/PUCO_" . date('Y-m') . ".txt";
+		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip PUCO_" . date('Y-m') . ".txt";
+		return $sys;
 		exec($sys);
 
 		$zh = fopen("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
