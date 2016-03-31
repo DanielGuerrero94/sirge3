@@ -25,7 +25,7 @@ class OspController extends Controller
 		$_rules = [
 			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			//'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
-			'numero_documento' => 'required|numeric|min:9999',
+			'numero_documento' => 'required|numeric|digits:5,8',
 			'nombre_apellido' => 'required|max:255',
 			// 'sexo' => 'required|in:F,M',
 			'tipo_afiliado' => 'required|in:T,A',
