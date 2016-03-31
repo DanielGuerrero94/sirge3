@@ -57,7 +57,7 @@ class PucoController extends Controller
 	 * @return string
 	 */
 	protected function password ($length = 6) {
-		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&.?";
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$?";
 		$password = substr( str_shuffle( $chars ), 0, $length );
 		return $password;
 	}
@@ -163,7 +163,6 @@ class PucoController extends Controller
 		unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
 		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip PUCO_" . date('Y-m') . ".txt";
-		return $sys;
 		exec($sys);
 
 		$zh = fopen("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
