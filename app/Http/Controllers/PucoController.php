@@ -145,6 +145,7 @@ class PucoController extends Controller
 	 * @return string
 	 */
 	public function generar() {
+		
 		$password = $this->password();
 
 		DB::statement("
