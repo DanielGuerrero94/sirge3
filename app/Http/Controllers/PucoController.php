@@ -160,14 +160,18 @@ class PucoController extends Controller
 		
 		file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt', $puco);
 		unset($puco);
+		unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
-		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip *";
+		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip PUCO_" . date('Y-m') . ".txt";
 		exec($sys);
 
 		$zh = fopen("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
 		file_put_contents("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip', $zh);
+		
 		$this->actualizarPuco($password , $this->getBeneficiarios(date('Ym')));
 		$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
+		
+		unlink('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt');
 
 		/*
 		$puco = Storage::get('sirg3/puco/puco.txt');
