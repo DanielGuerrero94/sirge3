@@ -26,118 +26,44 @@ use App\Models\Dw\CA\CA16001.php;
 
 class DatawarehouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    
+   public function ejecutarTodas($periodo)
+    {                        
+        if(! Tarea::where('estado',1)->first() ){
+            $this->Fc001($periodo);
+            $this->Fc002($periodo);
+            $this->Fc003($periodo);
+            $this->Fc004($periodo);
+            $this->Fc005($periodo);
+            $this->Fc006($periodo);
+            $this->Fc007($periodo);
+            $this->Fc008($periodo);
+            $this->Fc009($periodo);            
+        }        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    protected function cargarComienzoTarea($nombre_function, $periodo){               
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /*if (! str_contains($sql, ['DELETE', 'TRUNCATE'])) {
-            throw new Exception('Invalid sql file. This will not empty the tables first.');
-        }
-    */
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function ejecutarTodas($periodo)
-    {
-        $this->Fc001($periodo);
-    }
-
-    private function cargarComienzoTarea($nombre_function, $periodo){
-        
-        return json_encode(TareasResultado::where('nombre',$nombre_function)->first()->nombre);
-
-        if(! TareasResultado::where('nombre',$nombre_function)->first()->nombre){
+        if(! TareasResultado::where('tarea',Tarea::where('nombre',$nombre_function)->first()->id)
+                            ->where('periodo',$periodo)->first() )
+        {
             $tarea = new TareasResultado();
             $tarea->periodo = $periodo;
-            $tarea->tarea = Tarea::where('nombre',$nombre_function)->first()->nombre;
+            $tarea->tarea = Tarea::where('nombre',$nombre_function)->first()->id;
             $tarea->finalizado = 0;
+            $tarea->tiempo_de_ejecucion = 0;
             $saved = $tarea->save();
             if(!$saved){
                 App::abort(500, 'Error');
             }    
-        }        
+        }
     }
 
-    private function cargarFinalTarea($nombre_function, $periodo){
-        $tarea = TareasResultado::where('tarea',Tarea::where('nombre',$nombre_function)->get()->nombre)
+    protected function cargarFinalTarea($nombre_function, $periodo, $start){
+         
+        $tarea = TareasResultado::where('tarea',Tarea::where('nombre',$nombre_function)->first()->id)
                                 ->where('periodo',$periodo)
-                                ->update(['finalizado'=> 1]);       
+                                ->update(['finalizado'=> 1, 'tiempo_de_ejecucion' => (microtime(true) - $start)]);       
     }        
 
     /**
@@ -148,9 +74,19 @@ class DatawarehouseController extends Controller
     public function Fc001($periodo)
     {           
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_001.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)                    
+                        ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            //$sql = file_get_contents($_SERVER['DOCUMENT_ROOT'] . 'app/SQL/fc_001.sql');
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc001::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]);
+        }                 
     }
 
     /**
@@ -161,9 +97,17 @@ class DatawarehouseController extends Controller
     public function Fc002($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_002.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);        
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc002::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]);         
+        } 
     }
 
     /**
@@ -174,9 +118,17 @@ class DatawarehouseController extends Controller
     public function Fc003($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_003.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc003::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start); 
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]);
+        } 
     }
 
     /**
@@ -187,9 +139,17 @@ class DatawarehouseController extends Controller
     public function Fc004($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_004.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc004::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -200,9 +160,17 @@ class DatawarehouseController extends Controller
     public function Fc005($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_005.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc005::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -213,9 +181,17 @@ class DatawarehouseController extends Controller
     public function Fc006($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_006.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc006::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -226,9 +202,17 @@ class DatawarehouseController extends Controller
     public function Fc007($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_007.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc007::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -239,9 +223,17 @@ class DatawarehouseController extends Controller
     public function Fc008($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_008.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc008::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -252,9 +244,17 @@ class DatawarehouseController extends Controller
     public function Fc009($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/fc_009.sql');        
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Fc009::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -265,9 +265,17 @@ class DatawarehouseController extends Controller
     public function Af001($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/af_001.sql');                
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Af001::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -278,9 +286,17 @@ class DatawarehouseController extends Controller
     public function Ca16001($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/ca_16_001.sql');                
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Ca16001::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -291,9 +307,17 @@ class DatawarehouseController extends Controller
     public function Ceb001($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/ceb_001.sql');                
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Ceb001::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -304,9 +328,17 @@ class DatawarehouseController extends Controller
     public function Ceb002($periodo)
     {   
         $this->cargarComienzoTarea(__FUNCTION__, $periodo);
-        $sql = file_get_contents(__DIR__ . 'app/SQL/ceb_002.sql');                
-        $this->run_multiple_statements($sql);
-        $this->cargarFinalTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
+            Ceb002::truncate();
+            $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
     }
 
     /**
@@ -317,12 +349,13 @@ class DatawarehouseController extends Controller
     public function run_multiple_statements($statement)
     {          
         // split the statements, so DB::statement can execute them.
-        $statements = array_filter(array_map('trim', explode(';', $statement)));
+        $statements = array_filter(array_map('trim', explode(';', $statement)));                
+ 
 
-        foreach ($statements as $stmt) {
-            if(! DB::connection('datawarehouse')->statement($stmt)){
-                App::abort(500, 'Error');
+        foreach ($statements as $stmt) {            
+            if(! DB::connection('datawarehouse')->getPdo()->exec($stmt)){
+                echo "Error en la conexion o query";
             }
         }
-    }
+     }
 }

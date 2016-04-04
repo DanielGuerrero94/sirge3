@@ -30,8 +30,12 @@ class Kernel extends ConsoleKernel
     {                    
         //$schedule->call('App\Http\Controllers\HomeController@test', ['Alejandro'])->everyMinute();
         
-        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;                
-        
+        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
+
+        //$schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas', [$periodo_a_automatizar])->everyMinute();
+
+        $schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('1:00');
+
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
         
        /* ->when(function ($periodo_a_automatizar) {                                                
