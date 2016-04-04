@@ -707,14 +707,14 @@ $(document).ready(function() {
 	$('.finish').hide();
 	$('#errores-div').hide();
 
-	var d = new Date();
+	/*var d = new Date();
 
 	var month = d.getMonth()+1;
 	var day = d.getDate();
 
 	var fechaActual = d.getFullYear() + '/' +
 	    (month<10 ? '0' : '') + month + '/' +
-	    (day<10 ? '0' : '') + day;
+	    (day<10 ? '0' : '') + day;*/
 	
 	$('#tel').inputmask({
 		mask : '9999 9999 9999',
@@ -868,10 +868,10 @@ $(document).ready(function() {
 			},
 			correo : {
 				email : true
-			},
+			}/*,
 			fecha_firma: {
-				lessThan: fechaActual
-			}
+				date: fechaActual
+			}*/
 		},
 		messages : {
 			fecha_firma: {
