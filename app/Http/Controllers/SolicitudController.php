@@ -18,6 +18,7 @@ use App\Models\Solicitudes\Tipo;
 use App\Models\Solicitudes\Prioridad;
 use App\Models\Solicitudes\Operador;
 use App\Models\Solicitud;
+use App\Models\Usuario;
 
 class SolicitudController extends Controller
 {
@@ -77,8 +78,18 @@ class SolicitudController extends Controller
         $s->tipo = $r->tipo_solicitud;
         $s->descripcion_solicitud = $r->descripcion;
         if ($s->save()){
+            
+            $s->usuario_solicitante;
+            $user = Usuario::select('nombre','usuario','email','id_usuario','id_provincia')->with(['provincia'])->where('id_usuario',$s->usuario_solicitante)->first();        
+            Mail::send('emails.new-solicitud', ['usuario' => $user], function ($m) use ($user) {
+                  $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                  //$m->to('sirgeweb@gmail.com');
+                  $m->to('rodrigo.cadaval.sumar@gmail.com');                  
+                  $m->subject('Nuevo requerimiento!');
+            });
+
             return 'Se ha enviado su solicitud. Nos estaremos comunicando con usted a la brevedad. Muchas gracias';
-        }
+        }        
     }
 
     /**

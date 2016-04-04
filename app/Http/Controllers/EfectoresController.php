@@ -230,8 +230,9 @@ class EfectoresController extends Controller
 
           Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
               $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-              $m->to('sistemasuec@gmail.com');
-              $m->to('gustavo.hekel@gmail.com');
+              $m->to('sirgeweb@gmail.com');
+              $m->to('rodrigo.cadaval.sumar@gmail.com');
+              $m->to('maxi-mail@hotmail.com');              
               $m->subject('Solicitud de alta de efector!');
           });
           
@@ -404,7 +405,16 @@ class EfectoresController extends Controller
         $e = Efector::where('cuie' , $r->cuie)->get()[0];
         $e->id_estado = 3;
         if ($e->save()){
-            return 'Se ha solicitado la baja del efector ' . $r->cuie;
+            
+            Mail::send('emails.down-efector', ['efector' => $e], function ($m) use ($e) {
+              $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+              $m->to('sirgeweb@gmail.com');
+              $m->to('rodrigo.cadaval.sumar@gmail.com');
+              $m->to('maxi-mail@hotmail.com');              
+              $m->subject('Solicitud de baja de efector!');
+            });
+            
+            return 'Se ha solicitado la baja del efector ' . $e->cuie;
         }
     }
 
