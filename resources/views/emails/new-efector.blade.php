@@ -70,7 +70,7 @@ background-color: #f6f6f6;
                     Hay <strong style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">1 solicitud</strong> pendiente.
                   </td>
                 </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                    Por favor revise las información brindada para el efector {{ $efector->cuie }} y en caso de ser correcta proceda a habilitarlo.
+                    Por favor revise la información brindada para el efector {{ $efector->cuie }} y en caso de ser correcta proceda a habilitarlo.
                   </td>
                 </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                     Gracias por utilizar SIRGe Web.
