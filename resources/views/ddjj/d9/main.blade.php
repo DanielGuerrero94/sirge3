@@ -42,7 +42,7 @@
 							<div class="col-md-10 col-md-offset-1">
 								<p>
 									3. Con fecha <input type="text" name="fecha_sirge" id="fecha_sirge" class="fecha form-control" /> se remiti&oacute; al &Aacute;rea Sistemas Inform&aacute;ticos de la UEC
-									la Declaraci&oacute;n Jurada de Prestaciones, Comprobantes y Uso de Fondos realizado por los efectores correspondientes al 
+									la Declaraci&oacute;n Jurada de Prestaciones, Comprobantes y Uso de fondos realizado por los efectores correspondientes al 
 									Sistema de reportes de Gesti&oacute;n (SIRGE), actualizando con los datos correspondientes al per&iacute;odo <input type="text" name="periodo_sirge" id="periodo_sirge" class="periodo form-control" /><br />
 								</p>
 							</div>
