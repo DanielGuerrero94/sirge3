@@ -66,7 +66,7 @@
 			</li>
 			<li>
 				Con fecha {{ $ddjj->fecha_reporte_bimestral }} se remitió al Área Planificación Estratégica de la UEC, el Reporte bimestral de Prestaciones del SPS del Programa SUMAR y 
-				el Reporte bimestral de Uso de Fonos del SPS del Programa SUMAR correspondientes al bimestre Nº {{ $ddjj->bimestre }} del año {{ $ddjj->anio_bimestre }}.
+				el Reporte bimestral de Uso de Fondos del SPS del Programa SUMAR correspondientes al bimestre Nº {{ $ddjj->bimestre }} del año {{ $ddjj->anio_bimestre }}.
 			</li>
 		</ol>
 	</p>
