@@ -103,6 +103,8 @@ Route::post('eliminar-lote' , 'LotesController@eliminarLote');
 #	RECHAZOS
 Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
+Route::get('rechazos-lote-descargar/{lote}' , 'RechazosController@descargarRechazos');
+Route::get('test-curl/{lote}' , 'RechazosController@curlRechazo');
 
 /**
  * DICCIONARIO

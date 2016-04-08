@@ -5,6 +5,11 @@
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Registros rechazados</h2>
+				@if ((int)$lote->estado->id_estado != 4)
+				<!-- <div class="box-tools pull-right">
+					<a class="btn btn-warning" href="rechazos-lote-descargar/{{ $lote->lote }}"><i class="fa fa-download"></i> Descargar rechazos</a>	
+				</div> -->
+				@endif
 			</div>
 			<div class="box-body">
 				<div class="alert alert-danger" id="errores-div">
@@ -34,7 +39,7 @@
 		$('#errores-div').hide();
 
 		$('.back').click(function(){
-			$.get('detalle-lote/{{ $lote }}' , function(data){
+			$.get('detalle-lote/{{ $lote->lote }}' , function(data){
 				$('.content-wrapper').html(data);
 			})
 		});
@@ -42,7 +47,7 @@
 		var dt = $('#rechazos-table').DataTable({
 			processing: true,
             serverSide: true,
-            ajax : 'rechazos-lote-table/{{ $lote }}',
+            ajax : 'rechazos-lote-table/{{ $lote->lote }}',
             columns: [
                 { data: 'registro'},
                 { data: 'motivos'}

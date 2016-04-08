@@ -234,8 +234,11 @@ class LotesController extends Controller
 	 * @return null
 	 */
 	public function getRechazos($lote){
+
+		$lote = Lote::findOrFail($lote);
+
 		$data = [
-			'page_title' => 'Listado de rechazos lote : ' . $lote,
+			'page_title' => 'Listado de rechazos lote : ' . $lote->lote,
 			'lote' => $lote
 		];
 		return view('padrones.rechazos' , $data);
