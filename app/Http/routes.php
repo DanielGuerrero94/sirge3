@@ -418,6 +418,8 @@ Route::get('phpinfo' , function(){
 	phpinfo();
 });
 
+Route::get('informe-mensual' , 'ReportesController@getReporteSirge');
+
 
 /********************************************************************************
  *								 	TEST ROUTES 								*

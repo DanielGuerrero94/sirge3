@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use DB;
 use Datatables;
+use PDF;
 
 use Illuminate\Http\Request;
 
@@ -92,5 +93,19 @@ class ReportesController extends Controller
     public function getReporte1Tabla(){
         $prestaciones = Fc001::join('geo.provincias as p' , 'estadisticas.fc_001.id_provincia' , '=' , 'p.id_provincia');
         return Datatables::of($prestaciones)->make(true);
+    }
+
+    /**
+     * Devuelve el reporte mensual del SIRGe Web
+     * @param 
+     *
+     * @return
+     */
+    public function getReporteSirge(){
+
+        $pdf = PDF::loadView('pdf.informes.informe_mensual');
+        return $pdf->stream();
+
+
     }
 }
