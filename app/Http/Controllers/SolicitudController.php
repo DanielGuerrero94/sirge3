@@ -80,10 +80,11 @@ class SolicitudController extends Controller
         if ($s->save()){
             
             $s->usuario_solicitante;
-            $user = Usuario::select('nombre','usuario','email','id_usuario','id_provincia')->with(['provincia'])->where('id_usuario',$s->usuario_solicitante)->first();        
+            $user = Usuario::select('nombre','usuario','email','id_usuario','id_provincia','id_entidad')->with(['provincia','entidad'])->where('id_usuario',$s->usuario_solicitante)->first();        
             Mail::send('emails.new-solicitud', ['usuario' => $user], function ($m) use ($user) {
                   $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-                  //$m->to('sirgeweb@gmail.com');
+                  $m->to('javier.minsky@gmail.com');
+                  $m->to('sirgeweb@gmail.com');
                   $m->to('rodrigo.cadaval.sumar@gmail.com');                  
                   $m->subject('Nuevo requerimiento!');
             });
