@@ -551,7 +551,7 @@ class EfectoresController extends Controller
         //return json_encode($efector);
 
       if (Auth::user()->id_entidad != 1){
-        if (Auth::user()->id_provincia != $efector->geo->provincia->id_provincia){
+        if ((Auth::user()->id_provincia != $efector->geo->provincia->id_provincia) && (substr($e->cuie,0,1) != $this->getLetra(Auth::user()->id_provincia))){        
           return response('Está tratando de editar un efector que no pertenece a su jurisdicción' , 422);
         }
       }
