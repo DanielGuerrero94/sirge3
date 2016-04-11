@@ -231,6 +231,7 @@ class EfectoresController extends Controller
           Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
               $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
               $m->to('sirgeweb@gmail.com');
+              $m->to('javier.minsky@gmail.com');
               $m->to('rodrigo.cadaval.sumar@gmail.com');
               $m->to('maxi-mail@hotmail.com');              
               $m->subject('Solicitud de alta de efector!');
