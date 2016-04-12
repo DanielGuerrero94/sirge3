@@ -103,7 +103,6 @@ Route::post('eliminar-lote' , 'LotesController@eliminarLote');
 #	RECHAZOS
 Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
-Route::get('rechazos-lote-descargar/{lote}' , 'RechazosController@descargarRechazos');
 
 /**
  * DICCIONARIO
@@ -427,7 +426,8 @@ Route::get('excel' , 'EfectoresController@generarTabla');
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/
-Route::get('rechazos/{lote}' , 'RechazosController@curlRechazo');
+Route::get('rechazos/{lote}' , 'RechazosController@descargarRechazos');
+Route::get('rechazos-curl/{lote}' , 'RechazosController@curlRechazo');
 
 /********************************************************************************
  *								 	AUTH FILTER									*

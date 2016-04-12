@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Lote;
 use App\Models\Rechazo;
+use App\Models\AccesoWS;
 
 class RechazosController extends Controller
 {
@@ -28,6 +29,11 @@ class RechazosController extends Controller
 	 * @return json
 	 */
 	public function descargarRechazos($lote){
+		
+		$acc = new AccesoWS;
+		$acc->ws = 1;
+		$acc->save();
+
 		$rechazos = Rechazo::select('lote' , 'registro' , 'motivos' , 'created_at')->where('lote' , $lote)->get();
 
 		if (! count($rechazos)){
@@ -53,7 +59,7 @@ class RechazosController extends Controller
 		$ch = curl_init();
 
 		// Establecer URL y otras opciones apropiadas
-		curl_setopt($ch, CURLOPT_URL, "http://localhost/sirge3/public/rechazos-lote-descargar/$lote");
+		curl_setopt($ch, CURLOPT_URL, "http://localhost/sirge3/public/rechazos/$lote");
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 
