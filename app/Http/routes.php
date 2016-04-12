@@ -104,7 +104,6 @@ Route::post('eliminar-lote' , 'LotesController@eliminarLote');
 Route::get('rechazos-lote/{lote}' , 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}' , 'LotesController@getRechazosTabla');
 Route::get('rechazos-lote-descargar/{lote}' , 'RechazosController@descargarRechazos');
-Route::get('test-curl/{lote}' , 'RechazosController@curlRechazo');
 
 /**
  * DICCIONARIO
@@ -420,19 +419,19 @@ Route::get('phpinfo' , function(){
 
 Route::get('informe-mensual' , 'ReportesController@getReporteSirge');
 
-
 /********************************************************************************
  *								 	TEST ROUTES 								*
  ********************************************************************************/
 Route::get('excel' , 'EfectoresController@generarTabla');
 
-
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/
+Route::get('rechazos/{lote}' , 'RechazosController@curlRechazo');
 
-
-// AUTH FILTER
+/********************************************************************************
+ *								 	AUTH FILTER									*
+ ********************************************************************************/
 Route::filter('auth', function()
 {
     if (Auth::guest()) header("Refresh:0; url=login");

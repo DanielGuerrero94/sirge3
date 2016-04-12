@@ -28,7 +28,18 @@ class RechazosController extends Controller
 	 * @return json
 	 */
 	public function descargarRechazos($lote){
-		return response()->json(Rechazo::where('lote' , $lote)->get());
+		$rechazos = Rechazo::select('lote' , 'registro' , 'motivos' , 'created_at')->where('lote' , $lote)->get();
+
+		if (! count($rechazos)){
+			return response()->json(['mensaje' => 'El lote seleccionado fue eliminado o no posee rechazos']);
+		}
+
+		foreach ($rechazos as $key => $rechazo){
+			$rechazos[$key]['registro'] = json_decode($rechazo['registro']);
+			$rechazos[$key]['motivos'] = json_decode($rechazo['motivos']);
+		}
+
+		return response()->json($rechazos);
 	}
 
 	/**
@@ -42,18 +53,17 @@ class RechazosController extends Controller
 		$ch = curl_init();
 
 		// Establecer URL y otras opciones apropiadas
-		curl_setopt($ch, CURLOPT_URL, "http://localhost/sirge3/public/rechazos-lote-descargar/5300");
+		curl_setopt($ch, CURLOPT_URL, "http://localhost/sirge3/public/rechazos-lote-descargar/$lote");
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 
-		// Capturar la URL y pasarla al navegador
-		$rechazos = json_decode(curl_exec($ch));
+		// Capturar la URL y pasarla a una variable
+		$rechazos = json_decode(curl_exec($ch) , true);
 
 		// Cerrar el recurso cURL y liberar recursos del sistema
 		curl_close($ch);
 
-		foreach ($rechazos as $rechazo){
-			echo '<pre>' , json_encode($rechazo , JSON_PRETTY_PRINT) . '</pre><br/>';
-		}
+		return response()->json($rechazos);
+		
 	}
 }
