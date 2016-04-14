@@ -7,7 +7,7 @@
 				<h2 class="box-title">Registros rechazados</h2>
 				@if ((int)$lote->estado->id_estado != 4)
 				<!-- <div class="box-tools pull-right">
-					<a class="btn btn-warning" href="rechazos-lote-descargar/{{ $lote->lote }}"><i class="fa fa-download"></i> Descargar rechazos</a>	
+					<a class="btn btn-warning" href="rechazos/{{ $lote->lote }}"><i class="fa fa-download"></i> Descargar rechazos</a>	
 				</div> -->
 				@endif
 			</div>
