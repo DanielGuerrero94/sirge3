@@ -7,6 +7,7 @@ use Datatables;
 use DB;
 use Excel;
 use Mail;
+use ZipArchive;
 
 use Illuminate\Http\Request;
 
@@ -795,6 +796,11 @@ class EfectoresController extends Controller
           $s->loadView('efectores.tabla' , $data);
         });
       })->store('xls');
+
+      $zip = new ZipArchive();
+      $zip->open('../storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
+      $zip->addFile('../storage/exports/Efectores_SUMAR.xls', 'Efectores_SUMAR.xls');      
+      $zip->close();
     }
 
     /**
@@ -803,7 +809,7 @@ class EfectoresController extends Controller
      * @return null
      */
     public function descargarTabla(){
-      return response()->download('../storage/exports/Efectores_SUMAR.xls');
+      return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
     }
 
 }
