@@ -285,7 +285,7 @@
 						    			<div class="form-group">
 		                      				<label for="codigo_postal" class="col-sm-3 control-label">C.P.</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="codigo_postal" name="codigo_postal" placeholder="XXX9999X">
+		                    					<input type="text" class="form-control" id="codigo_postal" name="codigo_postal" placeholder="XXX9999X" value="{{ $efector->codigo_postal or '' }}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -293,7 +293,7 @@
 						    			<div class="form-group">
 		                      				<label for="ciudad" class="col-sm-2 control-label">Ciudad</label>
 		                  					<div class="col-sm-10">
-		                    					<input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="...">
+		                    					<input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="..." value="{{ $efector->geo->ciudad or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
