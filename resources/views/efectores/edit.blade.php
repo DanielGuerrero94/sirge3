@@ -677,7 +677,7 @@
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
-					 	<button type="button" class="back btn btn-info">Atrás</button>
+					 	<button type="button" class="back btn btn-info">Volver a inicio</button>
 					 	<button type="submit" class="finish btn btn-warning">Modificar</button>
 					</div>
 				</div>
@@ -813,7 +813,7 @@ $(document).ready(function() {
 			},
 			direccion : {
 				required : true,
-				minlength : 8,
+				minlength : 5,
 				maxlength : 500
 			},
 			provincia : {
