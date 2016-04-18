@@ -31,10 +31,13 @@
 	{{ $nombre_padron }} reportadas por los efectores desde la última presentación hasta el día de la fecha, detalladas en el siguiente cuadro</p>
 
 	<p><b><u>INFORMACIÓN DE {{ $nombre_padron }}</u></b></p>
-	<div style="width: 70%; margin-left: 15%;">
+	<div style="width: 100%; margin-left: 1%;">
 		<table class="table table-condensed table-bordered">
 			<tr class="active" style="text-align:center;">
 				<th>Lote</th>
+				@if ($padron == 4)
+				<th>Obra Social</th>
+				@endif
 				<th>Ingresados</th>
 				<th>Modificados</th>
 				<th>Rechazados</th>
@@ -42,6 +45,9 @@
 		@foreach ($lotes as $lote)
 			<tr style="text-align:right;">
 				<td>{{ $lote->lote }}</td>
+				@if ($padron == 4)
+				<td>{{ $lote->nombre }}</td>				
+				@endif
 				<td>{{ number_format($lote->registros_in) }}</td>
 				<td>{{ number_format($lote->registros_mod) }}</td>
 				<td>{{ number_format($lote->registros_out) }}</td>
@@ -49,6 +55,9 @@
 		@endforeach
 			<tr class="active">
 				<td>Totales</td>
+				@if ($padron == 4)
+				<td></td>
+				@endif
 				<td class="resumen">{{ number_format($resumen['in']) }}</td>
 				<td class="resumen">{{ number_format($resumen['mod']) }}</td>
 				<td class="resumen">{{ number_format($resumen['out']) }}</td>

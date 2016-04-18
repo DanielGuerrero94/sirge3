@@ -17,9 +17,12 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Geo\Provincia;
 use App\Models\Geo\GeoJson;
+use App\Models\Lote;
 use App\Models\DDJJ\Sirge as DDJJSirge;
 use App\Models\DDJJ\DOIU9 as D9;
 use App\Models\DDJJ\Backup;
+use App\Models\PUCO\Osp;
+use App\Models\PUCO\ObraSocial;
 use App\Models\Efector;
 use App\Models\Parametro;
 
@@ -157,13 +160,29 @@ class DdjjController extends Controller
 			'in' => 0,
 			'out' => 0,
 			'mod' => 0
-		];
+		];		
 
-		$lotes = DDJJSirge::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , DB::raw('any(ddjj.sirge.lote)'))
+		if($padron == 4){	
+
+			$ddjj = DDJJSirge::where('id_impresion',$id)->select(DB::raw('array_to_json(lote) as array_lotes'))->first();
+			$array_lotes = [];
+			$array_lotes = json_decode($ddjj->array_lotes);	
+			
+
+			$lotes = DDJJSirge::join('sistema.lotes','sistema.lotes.lote', '=' , DB::raw('any(ddjj.sirge.lote)'))						
+					->leftJoin('sistema.subidas_osp','sistema.subidas_osp.id_subida','=','sistema.lotes.id_subida')
+					->leftJoin('puco.obras_sociales','puco.obras_sociales.codigo_osp','=','sistema.subidas_osp.codigo_osp')
+					->whereIn('sistema.lotes.lote',$array_lotes)
+					->select('*')										
+					->get();			
+		}
+		else{
+			$lotes = Lote::join('ddjj.sirge' , 'sistema.lotes.lote' , '=' , DB::raw('any(ddjj.sirge.lote)'))						
 			->where('id_impresion' , $id)
 			->get();
-		
-		foreach ($lotes as $key => $lote){
+		}
+				
+		foreach ($lotes as $key => $lote){				 			
 			$resumen['in'] += $lote->registros_in;
 			$resumen['out'] += $lote->registros_out;
 			$resumen['mod'] += $lote->registros_mod;
@@ -172,13 +191,15 @@ class DdjjController extends Controller
 		$data = [
 			'lotes' => $lotes,
 			'nombre_padron' => $this->getNombrePadron($padron),
+			'padron' => $padron,			
 			'resumen' => $resumen,
 			'jurisdiccion' => Provincia::where('id_provincia' , Auth::user()->id_provincia)->firstOrFail(),
 			'ddjj' => DDJJSirge::findOrFail($id)
 		];
 
-		$pdf = PDF::loadView('pdf.ddjj.sirge' , $data);
+		$pdf = PDF::loadView('pdf.ddjj.sirge' , $data);		
     	return $pdf->download("ddjj-sirge-$id.pdf");
+    	//return view('pdf.ddjj.sirge' , $data);
 	}
 
 	/** 
