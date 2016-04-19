@@ -63,7 +63,7 @@
 
 	@foreach($meses as $mes)
 	
-	<div class="col-md-4">
+	<div class="col-md-5">
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Período : {{ $mes['periodo'] }}</h2>
@@ -140,7 +140,7 @@ $(document).ready(function(){
 				data : {!!$mes['data']!!},
 				mapData: Highcharts.maps['countries/ar/ar-all'],
 				joinBy: 'hc-key',
-				name: 'DOIU 9',
+				name: 'OSP',
 				states: {
 					hover: {
 						color: '#BADA55'
