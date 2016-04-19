@@ -36,8 +36,9 @@ class PucoController extends Controller
 	public function getGenerar(){
 		$data = [
 			'page_title' => 'Generar PUCO ' . date('M y'),
-			'puco_ready' => $this->checkPuco()
-			//,'meses' => $this->reportesEnPeriodo()
+			'puco_ready' => $this->checkPuco(),
+			'meses' => $this->reportesEnPeriodo(),
+			'periodo' => date('M y')
 		];
 		return view('puco.generar' , $data);
 	}
@@ -213,9 +214,8 @@ class PucoController extends Controller
 
 		$dt = new \DateTime();
 
-		for ($i = 0 ; $i < 6 ; $i++){
-			
-			$dt->modify('-1 month');
+		for ($i = 0 ; $i < 1 ; $i++){
+						
 			$p = $dt->format('Y-m');
 
 			$meses[$i]['periodo'] = $p;
@@ -234,9 +234,7 @@ class PucoController extends Controller
 						  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
 						  ->select('geo.geojson.*', DB::raw('case when registros_in is not null then 1 else 0 end as existe'))
 						  ->groupBy(['geo.geojson.id_provincia','geo.geojson.geojson_provincia',DB::raw('case when registros_in is not null then 1 else 0 end')])
-						  ->toSql();
-
-						  var_dump($djs);
+						  ->get();						  
 
 			foreach ($djs as $key => $dj) {
 				$meses[$i]['data'][$key]['value'] = $dj->existe;
