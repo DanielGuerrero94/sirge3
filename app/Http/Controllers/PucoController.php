@@ -37,6 +37,7 @@ class PucoController extends Controller
 		$data = [
 			'page_title' => 'Generar PUCO ' . date('M y'),
 			'puco_ready' => $this->checkPuco()
+			//,'meses' => $this->reportesEnPeriodo()
 		];
 		return view('puco.generar' , $data);
 	}
@@ -201,5 +202,50 @@ class PucoController extends Controller
 			'page_title' => 'Búsqueda de personas en PUCO'
 		];
 		return view('puco.consultas' , $data);
+	}
+
+	/**
+	 * Consolidado DOIU 9
+	 *
+	 * @return null
+	 */
+	public function reportesEnPeriodo(){
+
+		$dt = new \DateTime();
+
+		for ($i = 0 ; $i < 6 ; $i++){
+			
+			$dt->modify('-1 month');
+			$p = $dt->format('Y-m');
+
+			$meses[$i]['periodo'] = $p;
+			$meses[$i]['class'] = $i;
+
+			$djs = Provincia::leftJoin('sistema.subidas_osp' , 'sistema.subidas_osp.codigo_osp' , '=' , 'puco.obras_sociales_provinciales.codigo_osp')
+						  ->leftJoin('sistema.subidas' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+						  ->leftJoin('sistema.lotes' , function ($j) {
+					  	  		$j->on('sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+					  	  		  ->where('sistema.lotes.id_estado' ,'=' , 3);
+						  })
+						  ->leftJoin('puco.procesos_obras_sociales' , function($j){
+						  		$j->on('sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote');
+						  })->leftJoin('puco.obras_sociales' , 'puco.obras_sociales_provinciales.codigo_osp' , '=' , 'puco.obras_sociales.codigo_osp')
+						  ->leftJoin('geo.geojson','geo.geojson.id_provincia','=','sistema.lotes.id_provincia')
+						  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
+						  ->select('geo.geojson.*', DB::raw('case when registros_in is not null then 1 else 0 end as existe'))
+						  ->groupBy(['geo.geojson.id_provincia','geo.geojson.geojson_provincia',DB::raw('case when registros_in is not null then 1 else 0 end')])
+						  ->toSql();
+
+						  var_dump($djs);
+
+			foreach ($djs as $key => $dj) {
+				$meses[$i]['data'][$key]['value'] = $dj->existe;
+				$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+			}
+
+			$meses[$i]['data'] = json_encode($meses[$i]['data']);					
+		}
+
+		return $meses;
 	}
 }
