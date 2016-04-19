@@ -56,7 +56,7 @@
 						<!-- DETALLE PROBLEMA -->
 						<label class="col-md-5 control-label">Detalle requerimiento : </label>
 						<div class="col-md-7">
-							<p class="form-control-static">
+							<p class="form-control-static" style="white-space: pre-wrap;">
 								{{ $solicitud->descripcion_solicitud }}
 							</p>
 						</div>
