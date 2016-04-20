@@ -749,14 +749,12 @@ class CeiController extends Controller
 
 			}
 
-    		/*
     		$r = new Resultado;
     		$r->indicador = $id_indicador;
     		$r->provincia = $provincia->id_provincia;
     		$r->periodo = str_replace('-', '', $periodo);
     		$r->resultados = json_encode($super_objeto);
     		$r->save();
-    		*/
 
     		echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
     	}
