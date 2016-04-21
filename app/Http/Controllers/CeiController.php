@@ -739,7 +739,7 @@ class CeiController extends Controller
 
 					if (isset ($calculo->numerador->cantidad)){
 						if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
-							unset($beneficiario->beneficiarios[$key]);
+								unset($oportuno[$key]);
 						}
 					}
 				}
