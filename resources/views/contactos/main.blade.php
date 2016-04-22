@@ -23,6 +23,8 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+
+	$('#busqueda-contacto').focus();	
 	
 	$('#listado-contactos').on('click' , '.usuario' , function(event){
 		event.preventDefault();
@@ -49,6 +51,12 @@ $(document).ready(function(){
 		$.get('listado/' + query , function(data){
 			$('#listado-contactos').html(data);
 		});	
+	});
+
+	$(document).keypress(function(e) {
+	    if(e.which == 13) {
+	        $('#busqueda').trigger( "click" );
+	    }
 	});
 
 	$('#card-profile').on('click' , '#enviar-mensaje' , function(){
