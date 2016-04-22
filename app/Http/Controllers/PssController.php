@@ -361,7 +361,11 @@ class PssController extends Controller
 			*/
 		}
 
-		return json_encode($data);
+		if(isset($facturacion[0])){
+			return json_encode($data);	
+		}
+		return json_encode("");	
+		
 	}
 
 	/**
@@ -472,7 +476,10 @@ class PssController extends Controller
         	}
         }
 
-        return json_encode($data);
+        if(isset($regiones[0])){
+			return json_encode($data);	
+		}
+		return json_encode("");	
 
 	}
 
@@ -567,7 +574,7 @@ class PssController extends Controller
 	 * @return null
 	 */
 	public function getDetalleLinea($id){
-		$linea = LineaCuidado::find($id);
+		$linea = LineaCuidado::find($id);		
 
 		$data = [
 			'page_title' => $linea->descripcion,
