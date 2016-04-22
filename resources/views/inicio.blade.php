@@ -165,7 +165,7 @@ $(document).ready(function(){
     ion.sound({
         sounds: [
             {
-                name: "button_push",
+                name: "water_droplet_3",
                 volume: 0.9
             },
             {
@@ -235,7 +235,7 @@ $(document).ready(function(){
                 url : 'sonido-notificacion',                        
                 success : function(data){
                     if(data == 1){
-                        ion.sound.play("button_push");
+                        ion.sound.play("water_droplet_3");
                     }
                 }                        
         });             
