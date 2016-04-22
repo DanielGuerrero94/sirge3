@@ -621,7 +621,7 @@ class CeiController extends Controller
 
     	$periodo_del = str_replace('-', '', $periodo);
 
-    	// $res = Resultado::where('indicador' , $id_indicador)->where('periodo' , $periodo_del)->delete();
+    	$res = Resultado::where('indicador' , $id_indicador)->where('periodo' , $periodo_del)->delete();
 
     	$indicador = Indicador::join('cei.indicadores_detalle' , 'cei.indicadores.indicador' , '=' , 'cei.indicadores_detalle.id')
     						->where('cei.indicadores.id' , $id_indicador)
@@ -739,7 +739,7 @@ class CeiController extends Controller
 
 					if (isset ($calculo->numerador->cantidad)){
 						if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
-							unset($beneficiario->beneficiarios[$key]);
+								unset($oportuno[$key]);
 						}
 					}
 				}
@@ -749,14 +749,12 @@ class CeiController extends Controller
 
 			}
 
-    		/*
     		$r = new Resultado;
     		$r->indicador = $id_indicador;
     		$r->provincia = $provincia->id_provincia;
     		$r->periodo = str_replace('-', '', $periodo);
     		$r->resultados = json_encode($super_objeto);
     		$r->save();
-    		*/
 
     		echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
     	}
