@@ -420,7 +420,7 @@
 						    			<div class="form-group">
 		                      				<label for="cuie_admin" class="col-sm-5 control-label">Código 3er. administrador</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="cuie_admin" name="cuie_admin" placeholder="999999" value="{{ $efector->convenio->nombre_tercer_administrador or ''}}">
+		                    					<input type="text" class="form-control" id="cuie_admin" name="cuie_admin" placeholder="999999" value="{{ $efector->convenio->codigo_tercer_administrador or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -428,7 +428,7 @@
 						    			<div class="form-group">
 		                      				<label for="nombre_admin" class="col-sm-5 control-label">Nombre 3er. administrador</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="nombre_admin" name="nombre_admin" placeholder="..." value="{{ $efector->convenio->codigo_tercer_administrador or ''}}">
+		                    					<input type="text" class="form-control" id="nombre_admin" name="nombre_admin" placeholder="..." value="{{ $efector->convenio->nombre_tercer_administrador or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
