@@ -444,6 +444,7 @@ class CompromisoController extends Controller
 
 		$periodos = CA::where('id_provincia' , $id)
 					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
+					->orderBy('periodo')
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Datos reportables';
@@ -561,6 +562,7 @@ class CompromisoController extends Controller
 
 		$periodos = CA::where('id_provincia' , $id)
 					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
+					->orderBy('periodo')
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Dependencias Sanitarias';
