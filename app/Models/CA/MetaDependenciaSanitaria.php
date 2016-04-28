@@ -11,7 +11,7 @@ class MetaDependenciaSanitaria extends Model
      *
      * @var string
      */
-    //protected $connection = 'datawarehouse';
+    protected $connection = 'datawarehouse';
     
     /**
 	 * The table associated with the model.

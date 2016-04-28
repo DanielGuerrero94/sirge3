@@ -137,7 +137,7 @@ class CompromisoController extends Controller
                                          ->where('periodo','=',$period); 
                                 })
 					->where('year',$dt->format('Y'))
-					->orderBy('m.id_provincia')->get();								
+					->orderBy('m.id_provincia')->get();							
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
