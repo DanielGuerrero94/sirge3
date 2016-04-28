@@ -31,7 +31,7 @@
             ajax : 'pss-lineas-table',
             columns: [
                 { data: 'descripcion'},
-                { data: 'action'}
+                { data: 'action', orderable: false , searchable: false}
             ]
         });
 
