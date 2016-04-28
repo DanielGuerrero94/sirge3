@@ -121,18 +121,14 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.descentralizacion-periodo';
 		} else {
 
-			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
-
-	        foreach ($periodos as $unPeriodo) {
-	            $periodo = $unPeriodo->max;
-	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
-	        }        
-			
+			$periodo = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
+            $dt = \DateTime::createFromFormat('Ym' , $periodo);
+      		
 			$vista = 'compromiso-anual.descentralizacion-uec';
 		}
 
 		$series = array();
-		$period = $dt->format('Ym');
+		$period = $dt->format('Ym');		
 
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');		
 		$provincias = CA::join('compromiso_anual.metas_descentralizacion as m', function($join) use ($period)
@@ -141,9 +137,7 @@ class CompromisoController extends Controller
                                          ->where('periodo','=',$period); 
                                 })
 					->where('year',$dt->format('Y'))
-					->orderBy('m.id_provincia')->get();
-
-						
+					->orderBy('m.id_provincia')->get();								
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
@@ -194,7 +188,7 @@ class CompromisoController extends Controller
 			'periodo_calculado' => $dt->format('Y-m'),
 			'estado' => $estado,
 			'back' => 'ca-periodo-form/ca-16-descentralizacion/ca-16-descentralizacion'
-		];		
+		];				
 
 		return view($vista , $data);
 	}
@@ -214,6 +208,7 @@ class CompromisoController extends Controller
 
 		$periodos = CA::where('id_provincia' , $id)
 					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
+					->orderBy('periodo')
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Descentralización';
@@ -248,12 +243,9 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.facturacion-periodo';
 		} else {
 			
-			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
+			$periodo = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
+            $dt = \DateTime::createFromFormat('Ym' , $periodo);
 
-	        foreach ($periodos as $unPeriodo) {
-	            $periodo = $unPeriodo->max;
-	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
-			}
 			$vista = 'compromiso-anual.facturacion-uec';
 		}
 
@@ -334,6 +326,7 @@ class CompromisoController extends Controller
 
 		$periodos = CA::where('id_provincia' , $id)
 					->where(DB::raw('substring(periodo::text,1,4)::integer'), '=', $year)
+					->orderBy('periodo')
 					->get();
 		foreach ($periodos as $periodo){
 			$chart[0]['name'] = 'Facturación';
@@ -368,12 +361,9 @@ class CompromisoController extends Controller
 			$vista = 'compromiso-anual.datos-periodo';
 		} else {
 			
-			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
+			$periodo = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
+            $dt = \DateTime::createFromFormat('Ym' , $periodo);
 
-	        foreach ($periodos as $unPeriodo) {
-	            $periodo = $unPeriodo->max;
-	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
-	        }    
 			$vista = 'compromiso-anual.datos-uec';
 		}
 
@@ -487,12 +477,9 @@ class CompromisoController extends Controller
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
 			$vista = 'compromiso-anual.dependencia-periodo';
 		} else {
-			$periodos = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->get();
-
-	        foreach ($periodos as $unPeriodo) {
-	            $periodo = $unPeriodo->max;
-	            $dt = \DateTime::createFromFormat('Ym' , $periodo);
-	         }
+			
+			$periodo = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
+            $dt = \DateTime::createFromFormat('Ym' , $periodo);
 	            
 			$vista = 'compromiso-anual.dependencia-uec';
 		}

@@ -68,9 +68,9 @@
 								<div class="col-md-6">
 									<p class="form-control-static">
 										@if ($beneficiario->activo == 'S')
-										<span class="label label-danger">NO</span>
-										@else
 										<span class="label label-success">SI</span>
+										@else
+										<span class="label label-danger">NO</span>
 										@endif
 									</p>
 								</div>
