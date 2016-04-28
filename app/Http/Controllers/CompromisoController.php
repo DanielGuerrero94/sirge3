@@ -252,9 +252,12 @@ class CompromisoController extends Controller
 		$series = array();
 
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
-		$provincias = CA::join('compromiso_anual.metas_facturacion as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , intval($dt->format('Ym')))
-						->where('year',intval($dt->format('Y')))
+		$provincias = CA::join('compromiso_anual.metas_facturacion as m', function($join) use ($periodo)
+                                {
+                                    $join->on('indicadores.ca_16_001.id_provincia','=','m.id_provincia')
+                                         ->where('periodo','=',$periodo); 
+                                })
+						->where('year',$dt->format('Y'))
 						->orderBy('m.id_provincia')->get();
 
 		foreach ($provincias as $key => $provincia){
@@ -267,7 +270,7 @@ class CompromisoController extends Controller
 			$series[1]['name'] = 'Meta 1º cuatrimestre';
 			$series[1]['data'][] = (float)$provincia->primer_cuatrimestre;
 			$series[1]['marker']['lineWidth'] = 0;
-			$series[1]['marker']['fillColor'] = '#00a65a';
+			$series[1]['marker']['fillColor'] = '#d33724';
 			$series[1]['marker']['radius'] = 3;
 			$series[1]['marker']['symbol'] = 'circle';
 
@@ -280,10 +283,10 @@ class CompromisoController extends Controller
 			$series[2]['marker']['symbol'] = 'circle';
 
 			$series[3]['type'] = 'scatter';
-			$series[3]['name'] = 'Meta 2º cuatrimestre';
+			$series[3]['name'] = 'Meta 3º cuatrimestre';
 			$series[3]['data'][] = (float)$provincia->tercer_cuatrimestre;
 			$series[3]['marker']['lineWidth'] = 0;
-			$series[3]['marker']['fillColor'] = '#d33724';
+			$series[3]['marker']['fillColor'] = '#00a65a';
 			$series[3]['marker']['radius'] = 3;
 			$series[3]['marker']['symbol'] = 'circle';
 		}
@@ -370,8 +373,11 @@ class CompromisoController extends Controller
 		$series = array();
 
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
-		$provincias = CA::join('compromiso_anual.metas_datos_reportables as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , intval($dt->format('Ym')))
+		$provincias = CA::join('compromiso_anual.metas_datos_reportables as m', function($join) use ($periodo)
+                                {
+                                    $join->on('indicadores.ca_16_001.id_provincia','=','m.id_provincia')
+                                         ->where('periodo','=',$periodo); 
+                                })
 						->where('year',$dt->format('Y'))
 						->orderBy('m.id_provincia')->get();
 
@@ -385,7 +391,7 @@ class CompromisoController extends Controller
 			$series[1]['name'] = 'Meta 1º cuatrimestre';
 			$series[1]['data'][] = (float)$provincia->primer_cuatrimestre;
 			$series[1]['marker']['lineWidth'] = 0;
-			$series[1]['marker']['fillColor'] = '#00a65a';
+			$series[1]['marker']['fillColor'] = '#d33724';
 			$series[1]['marker']['radius'] = 3;
 			$series[1]['marker']['symbol'] = 'circle';
 
@@ -401,7 +407,7 @@ class CompromisoController extends Controller
 			$series[3]['name'] = 'Meta 3º cuatrimestre';
 			$series[3]['data'][] = (float)$provincia->tercer_cuatrimestre;
 			$series[3]['marker']['lineWidth'] = 0;
-			$series[3]['marker']['fillColor'] = '#d33724';
+			$series[3]['marker']['fillColor'] = '#00a65a';
 			$series[3]['marker']['radius'] = 3;
 			$series[3]['marker']['symbol'] = 'circle';
 		}
@@ -488,8 +494,11 @@ class CompromisoController extends Controller
 		$series = array();
 
 		$categorias = Provincia::orderBy('id_provincia')->lists('descripcion');
-		$provincias = CA::join('compromiso_anual.metas_dependencias_sanitarias as m' , 'indicadores.ca_16_001.id_provincia' , '=' , 'm.id_provincia')
-						->where('periodo' , intval($dt->format('Ym')))
+		$provincias = CA::join('compromiso_anual.metas_dependencias_sanitarias as m', function($join) use ($periodo)
+                                {
+                                    $join->on('indicadores.ca_16_001.id_provincia','=','m.id_provincia')
+                                         ->where('periodo','=',$periodo); 
+                                })
 						->where('year',$dt->format('Y'))
 						->orderBy('m.id_provincia')->get();
 
@@ -503,7 +512,7 @@ class CompromisoController extends Controller
 			$series[1]['name'] = 'Meta 1º cuatrimestre';
 			$series[1]['data'][] = (float)$provincia->primer_cuatrimestre;
 			$series[1]['marker']['lineWidth'] = 0;
-			$series[1]['marker']['fillColor'] = '#00a65a';
+			$series[1]['marker']['fillColor'] = '#d33724';
 			$series[1]['marker']['radius'] = 3;
 			$series[1]['marker']['symbol'] = 'circle';
 
@@ -519,7 +528,7 @@ class CompromisoController extends Controller
 			$series[3]['name'] = 'Meta 3º cuatrimestre';
 			$series[3]['data'][] = (float)$provincia->tercer_cuatrimestre;
 			$series[3]['marker']['lineWidth'] = 0;
-			$series[3]['marker']['fillColor'] = '#d33724';
+			$series[3]['marker']['fillColor'] = '#00a65a';
 			$series[3]['marker']['radius'] = 3;
 			$series[3]['marker']['symbol'] = 'circle';
 		}
