@@ -30,7 +30,7 @@
             <div class="col-md-7">
                 <div class="box box-info">
                     <div class="box-header">
-                        <h2 class="box-title">DR Reportados en periodo porcentual</h2>
+                        <h2 class="box-title">Datos Reportados en periodo porcentual</h2>
                     </div>
                     <div class="box-body">
                         <div id="container"></div>
