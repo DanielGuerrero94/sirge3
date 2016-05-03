@@ -310,7 +310,7 @@ class PadronesController extends Controller
 		$consolidado = $this->insertDummy();
 
 		$dt = new \DateTime();
-		$dt->modify('-7 months');
+		$dt->modify('-6 months');
 
 		for ($i = 0 ; $i < 6 ; $i ++) {
 
@@ -330,11 +330,12 @@ class PadronesController extends Controller
 								->groupBy(DB::raw('2'))
 								->orderBy(DB::raw('2'))
 								->orderBy(DB::raw('1'))
-								->get();
+								->get();											
+
 
 			foreach ($prestaciones as $prestacion){
 				$consolidado[$prestacion->id_provincia]['prestaciones'][$i] = $prestacion->c;
-			}
+			}			
 
 			$comprobantes = Lote::join('sistema.subidas as s' , 'sistema.lotes.id_subida' , '=' , 's.id_subida')
 								->where('id_padron' , 3)
@@ -364,7 +365,7 @@ class PadronesController extends Controller
 
 			foreach ($fondos as $fondo){
 				$consolidado[$fondo->id_provincia]['fondos'][$i] = $fondo->c;
-			}
+			}			
 		}
 
 		$data = [
@@ -397,13 +398,13 @@ class PadronesController extends Controller
 	public function graficarPadron($padron , $provincia){
 
 		$meses = $this->getMesesArray(24);
-		$aux = $this->generarDummy($meses);
-		
+		$aux = $this->generarDummy($meses);				
+
 		$dt = new \DateTime();
 		$dt->modify('last day of this month');
 		$max = $dt->format('Y-m-d');
 		$dt->modify('first day of this month');
-		$dt->modify("-24 months");
+		$dt->modify("-23 months");
 		$min = $dt->format('Y-m-d');
 
 		$prestaciones = Lote::join('sistema.subidas as s' , 'sistema.lotes.id_subida' , '=' , 's.id_subida')
@@ -417,12 +418,13 @@ class PadronesController extends Controller
 							->orderBy(DB::raw('2'))
 							->orderBy(DB::raw('1'))
 							->get();
+																		
 
 		foreach ($prestaciones as $prestacion){
 			$dt = \DateTime::createFromFormat('Ym' , $prestacion->periodo);
 			$pd = ucwords(strftime("%b %y" , $dt->getTimeStamp()));
 			$aux[$pd] = $prestacion->c;
-		}
+		}		
 
 		foreach ($aux as $a){
 			$series[0]['name'] = 'Registros reportados';
