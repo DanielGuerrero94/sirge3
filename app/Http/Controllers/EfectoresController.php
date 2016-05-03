@@ -549,7 +549,7 @@ class EfectoresController extends Controller
                 ])
         ->where('cuie' , $cuie)->firstOrFail();
 
-        //return json_encode($efector);
+      //return json_encode($efector);
 
       if (Auth::user()->id_entidad != 1){
         if ((Auth::user()->id_provincia != $efector->geo->provincia->id_provincia) && (substr($e->cuie,0,1) != $this->getLetra(Auth::user()->id_provincia))){        
@@ -614,12 +614,21 @@ class EfectoresController extends Controller
         return 'Ha fallado la actualización de datos';
       }
 
-      $re = Referente::where('id_efector' , $ef->id_efector)->firstOrFail();
-      $re->nombre = $r->refer;
+      if(Referente::find($ef->id_efector)){
+        $re = Referente::where('id_efector' , $ef->id_efector)->firstOrFail();
+        $re->nombre = $r->refer;
+      } 
+      else{
+         $re = new Referente();
+         $re->id_efector = $ef->id_efector;
+         $re->nombre = $r->refer;
+      }
+      
       if ($re->save()){
-        $update = true;
-      } else {
-        return 'Ha fallado la actualización de datos';
+          $update = true;
+      } 
+      else {
+          return 'Ha fallado la actualización de datos';
       }
 
       
