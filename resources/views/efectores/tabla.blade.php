@@ -107,9 +107,9 @@
 			<td>{{$efector->tipo->descripcion  or '' }}</td>
 			<td>{{$efector->geo->id_provincia or '' }}</td>
 			<td>{{$efector->geo->provincia->descripcion or '' }}</td>
-			<td>{{$efector->geo->id_departamento or '' }}</td>
+			<td>{{$efector->geo->departamento->id_departamento or '' }}</td>
 			<td>{{$efector->geo->departamento->nombre_departamento or '' }}</td>
-			<td>{{$efector->geo->id_localidad or '' }}</td>
+			<td>{{$efector->geo->localidad->id_localidad or '' }}</td>
 			<td>{{$efector->geo->localidad->nombre_localidad or '' }}</td>
 			<td>{{$efector->geo->ciudad or '' }}</td>
 			<td>{{$efector->codigo_postal or '' }}</td>

@@ -792,7 +792,7 @@ class EfectoresController extends Controller
         //->where('id_estado' , 1)
         //->take(50)
         ->orderBy('cuie' , 'asc')
-        ->get();
+        ->get();        
       
       $data = ['efectores' => $efectores];
 
@@ -804,7 +804,8 @@ class EfectoresController extends Controller
             ]);
           $s->loadView('efectores.tabla' , $data);
         });
-      })->store('xls');
+      })
+      ->store('xls');
 
       $zip = new ZipArchive();
       $zip->open('../storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
