@@ -6,6 +6,8 @@ use DB;
 use App\Models\Scheduler;
 use Illuminate\Console\Command;
 
+use App\Http\Controllers\Controller;
+
 class CommandScheduler extends Command
 {
     /**
@@ -13,7 +15,8 @@ class CommandScheduler extends Command
      *
      * @var string
      */
-    protected $signature = 'scheduler:execute {periodo}';
+    //protected $signature = 'scheduler:execute {periodo}';
+    protected $signature = 'scheduler:execute';
 
     /**
      * The console command description.
@@ -39,12 +42,14 @@ class CommandScheduler extends Command
      */
     public function handle()
     {
-        $schedule = new Scheduler;
+        /*$schedule = new Scheduler;
         
         $schedule->contexto = 'Probando el Scheduler';
         $schedule->estado = 0;
         $schedule->periodo = $this->argument('periodo');        
 
-        $schedule->save();
+        $schedule->save();*/
+        //RechazosController::generarRechazosLote();
+        app('App\Http\Controllers\RechazosController')->generarRechazosLote();
     }
 }

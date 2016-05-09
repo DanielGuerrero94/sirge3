@@ -426,7 +426,9 @@ Route::get('excel' , 'EfectoresController@generarTabla');
 /********************************************************************************
  *								 	WS ROUTES 									*
  ********************************************************************************/
-Route::get('rechazos/{lote}' , 'RechazosController@descargarRechazos');
+Route::get('descarger-rechazos/{lote}' , 'RechazosController@descargarExcelRechazos');
+Route::get('rechazos-generar/{lote}' , 'RechazosController@generarExcelRechazos');
+Route::get('ver-rechazos/{lote}' , 'RechazosController@verRechazos');
 Route::get('rechazos-curl/{lote}' , 'RechazosController@curlRechazo');
 
 /********************************************************************************
