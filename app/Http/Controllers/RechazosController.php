@@ -216,7 +216,7 @@ class RechazosController extends Controller
      * @return null
      */
     public function descargarExcelLote($lote){
-      return response()->download('storage/exports/rechazos/'.$lote.'.zip');
+      return response()->download('../storage/exports/rechazos/'.$lote.'.zip');
     }
 
     /**
