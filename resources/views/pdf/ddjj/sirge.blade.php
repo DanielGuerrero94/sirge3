@@ -19,7 +19,7 @@
 <body>
 	<!-- <img src="{{ asset("/var/www/html/sirge3/public/dist/img/header-sumar.png") }}" style="width: 100%;"> -->
 	<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
-	<hr />
+	
 	<p class="resumen"><b>{{ $jurisdiccion->descripcion }} , {{ $ddjj->fecha_impresion }}</b></p>
 	<p><b>SEÑOR</b></p>
 	<p><b>COORDINADOR DEL ÁREA SISTEMAS INFORMÁTICOS</b></p>
@@ -64,9 +64,7 @@
 			</tr>
 		</table>
 	</div>
-	<p>Sin otro particular saludo a Ud. con mi consideración más distinguida</p>
-	<br />
-	<br />
+	<p>Sin otro particular saludo a Ud. con mi consideración más distinguida</p>		
 	<br />
 	<br />
 	<br />

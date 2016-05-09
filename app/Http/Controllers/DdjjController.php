@@ -179,6 +179,7 @@ class DdjjController extends Controller
 		else{
 			$lotes = Lote::join('ddjj.sirge' , 'sistema.lotes.lote' , '=' , DB::raw('any(ddjj.sirge.lote)'))						
 			->where('id_impresion' , $id)
+			->select('sistema.lotes.lote','registros_in','registros_out','registros_mod')
 			->get();
 		}
 				
