@@ -36,7 +36,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('1:00');
 
-        //$schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->everyMinute();
+        $schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->hourly();
+        //->twiceDaily(1, 13);
 
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
         

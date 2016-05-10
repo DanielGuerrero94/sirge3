@@ -195,12 +195,14 @@ class RechazosController extends Controller
     {                                
         if( Tarea::where('estado',1)->count() == 0 && GenerarRechazoLote::where('estado',1)->count() == 0)
         {
-            $lotes = Lote::whereIn('id_estado',[2,3])
-            		 ->where('inicio','>','2016-05-01')
-            		 //->where('lote','>',5550)
+            $ultimos_lotes_generados = GenerarRechazoLote::lists('lote');
+
+            $lotes = Lote::whereIn('id_estado',[1,3])            		 
+            		 ->where('inicio','>','2016-05-01')            		 
             		 ->where('sistema.lotes.registros_out','>',0)
+            		 ->whereNotIn('lote',$ultimos_lotes_generados)  		 
             		 ->orderBy('lote' , 'asc')
-            		 ->lists('lote');            
+            		 ->lists('lote');
 
 			Tarea::where('nombre','rechazos_lotes')->update(['estado' => 1]);
             foreach ($lotes as $key => $lote) {
@@ -215,8 +217,7 @@ class RechazosController extends Controller
      * @lote integer
      * @return null
      */
-    public function descargarExcelLote($lote){
-      echo "Lote descargado con éxito";
+    public function descargarExcelLote($lote){      
       return response()->download('../storage/exports/rechazos/'.$lote.'.zip');
     }
 
