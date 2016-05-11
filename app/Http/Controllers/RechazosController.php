@@ -108,7 +108,7 @@ class RechazosController extends Controller
 
 	  	try {
 	  		if(!isset($padron)){
-	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion.");	
+	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");	
 	  		}    		
 		} catch(Exception $e) {
 		    return response()->json($e->getMessage());		    
@@ -164,7 +164,7 @@ class RechazosController extends Controller
 
 	  	try {
 	  		if(!isset($padron)){
-	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion.");	
+	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");	
 	  		}    		
 		} catch(Exception $e) {
 		    return response()->json($e->getMessage());
