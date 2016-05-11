@@ -8,6 +8,8 @@ use DB;
 use Excel;
 use Mail;
 use ZipArchive;
+use Exception;
+use App;
 
 use Illuminate\Http\Request;
 
@@ -88,24 +90,34 @@ class RechazosController extends Controller
      */
     public function generarExcelRechazos($lote){
 
+       $rechazo = GenerarRechazoLote::where('lote',$lote)->get();        
+
+	   if(! $rechazo->isEmpty())                            
+	   {
+	       return response()->json([ 'Estado' => 'Generacion rechazada por excel ya existente', 'lote' => $lote, 'registros_rechazados' => $rechazo[0]->registros ]);
+	   }
+	    
+      $start = microtime(true);
+
       $padron = Lote::join('sistema.subidas','sistema.subidas.id_subida','=','sistema.lotes.id_subida')      
       ->where('lote',$lote)
-      ->whereIn('sistema.lotes.id_estado',[1,3])    
-      ->where('sistema.lotes.registros_out','>',0)
-      ->select('id_padron')      
+      ->whereIn('sistema.lotes.id_estado',[1,3])
+      ->where('sistema.lotes.registros_out','>',0)      
+      ->select('id_padron','registros_out')     
       ->first();
 
 	  	try {
 	  		if(!isset($padron)){
-	  			throw new Exception("Este lote no está ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condición.");	
+	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion.");	
 	  		}    		
 		} catch(Exception $e) {
-		    return json_encode($e->getMessage());
+		    return response()->json($e->getMessage());		    
 		}
 
+	  $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
+
       $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
-      //->take(10)
-      ->get();      
+      ->get();
 
       $id_padron = $padron->id_padron;
 
@@ -120,14 +132,18 @@ class RechazosController extends Controller
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
-      ->store('xls', storage_path('exports/rechazos/'))
-      ->export('xls');
+      ->store('xls', storage_path('exports/rechazos/'));
+      //->export('xls');
 
       $zip = new ZipArchive();
-      $zip->open('../storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
-      $zip->addFile('../storage/exports/rechazos/'.$lote.'.xls', $lote.'.xls');      
-      $zip->close();
-      unlink('../storage/exports/rechazos/'.$lote.'.xls');      
+      $zip->open('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
+      $zip->addFile('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls', $lote.'.xls');      
+      $zip->close();      
+      unlink('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls');
+
+      $this->cargarFinalExcelRechazo($lote, $start);
+      return $this->descargarExcelLote($lote);
+
     }
 
     /**
@@ -148,10 +164,10 @@ class RechazosController extends Controller
 
 	  	try {
 	  		if(!isset($padron)){
-	  			throw new Exception("Este lote no está ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condición.");	
+	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion.");	
 	  		}    		
 		} catch(Exception $e) {
-		    return json_encode($e->getMessage());
+		    return response()->json($e->getMessage());
 		}
 
 	  $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
@@ -218,7 +234,7 @@ class RechazosController extends Controller
      * @return null
      */
     public function descargarExcelLote($lote){      
-      return response()->download('../storage/exports/rechazos/'.$lote.'.zip');
+      return response()->download('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.zip');
     }
 
     /**
@@ -239,7 +255,7 @@ class RechazosController extends Controller
             $tarea->registros = $registros;
             $saved = $tarea->save();
             if(!$saved){
-                App::abort(500, 'Error');
+                App::abort(500, 'Error al guardar registro en la base');
             }    
         }
     }
