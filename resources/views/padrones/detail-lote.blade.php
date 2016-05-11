@@ -10,6 +10,15 @@
 					<button lote="{{$lote->lote}}" class="view-rechazos btn btn-sm btn-warning"><i class="fa fa-pencil-square-o"></i> Ver rechazos</button>
 					@else
 					<span class="label label-success">No hay registros rechazados</span>
+					@endif					
+					@if ($lote->registros_out != 0)
+						@if ($lote->registros_out != 0 && $descarga_disponible)
+						<a class="btn btn-success" href="descargar-rechazos/{{ $lote->lote }}"><i class="fa fa-download"></i> Descargar rechazos</a>	
+						@else
+						<a class="btn btn-success" href="descargar-rechazos/{{ $lote->lote }}" disabled><i class="fa fa-download"></i> Descargar rechazos</a>	 
+						@endif
+					@else
+					<span class="label label-success">No hay registros rechazados</span>
 					@endif
 				</div>
 			</div>
@@ -140,7 +149,6 @@
 				$('.content-wrapper').html(data);
 			});
 		});
-
 	});
 </script>
 @endsection

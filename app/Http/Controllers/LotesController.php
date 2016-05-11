@@ -19,6 +19,7 @@ use App\Models\Lote;
 use App\Models\LoteAceptado;
 use App\Models\LoteRechazado;
 use App\Models\Rechazo;
+use App\Models\GenerarRechazoLote;
 use App\Models\DDJJ\Sirge as DDJJSirge;
 use App\Models\Geo\Provincia;
 use App\Models\Prestacion;
@@ -87,10 +88,13 @@ class LotesController extends Controller
 	 * @return null
 	 */
 	public function detalleLote($lote){
-		$lote = Lote::with(['estado' , 'archivo' , 'usuario' , 'provincia'])->findOrFail($lote);
+		$nro_lote = $lote;
+		$lote = Lote::with(['estado' , 'archivo' , 'usuario' , 'provincia'])->findOrFail($nro_lote);
+		GenerarRechazoLote::find($nro_lote) ? $descarga_disponible = TRUE : $descarga_disponible = FALSE; 
 		
 		$data = [
 			'page_title' => 'Detalle lote ' . $lote->lote,
+			'descarga_disponible' => $descarga_disponible,
 			'lote' => $lote
 		];
 
