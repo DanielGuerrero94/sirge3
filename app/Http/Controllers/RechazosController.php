@@ -177,10 +177,10 @@ class RechazosController extends Controller
       ;
 
       $zip = new ZipArchive();
-      $zip->open('storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
-      $zip->addFile('storage/exports/rechazos/'.$lote.'.xls', $lote.'.xls');      
-      $zip->close();
-      unlink('storage/exports/rechazos/'.$lote.'.xls');
+      $zip->open('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
+      $zip->addFile('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls', $lote.'.xls');      
+      $zip->close();      
+      unlink('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls');
 
       $this->cargarFinalExcelRechazo($lote, $start);
     }
