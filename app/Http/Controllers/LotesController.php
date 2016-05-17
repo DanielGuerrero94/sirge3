@@ -90,7 +90,7 @@ class LotesController extends Controller
 	public function detalleLote($lote){
 		$nro_lote = $lote;
 		$lote = Lote::with(['estado' , 'archivo' , 'usuario' , 'provincia'])->findOrFail($nro_lote);
-		GenerarRechazoLote::find($nro_lote) ? $descarga_disponible = TRUE : $descarga_disponible = FALSE; 
+		GenerarRechazoLote::where('lote', $nro_lote)->where('estado',2)->first() ? $descarga_disponible = TRUE : $descarga_disponible = FALSE; 
 		
 		$data = [
 			'page_title' => 'Detalle lote ' . $lote->lote,
