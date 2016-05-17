@@ -156,6 +156,7 @@
 					{{--*/ $data_add[$k][] = $ad->fecha_addenda /*--}}
 				@endforeach
 				<td>{{ json_encode($data_add , JSON_UNESCAPED_SLASHES) }}</td>
+				<?php $data_add = ''; ?>
 			@else
 				<td></td>
 			@endif

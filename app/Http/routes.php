@@ -438,3 +438,8 @@ Route::filter('auth', function()
 {
     if (Auth::guest()) header("Refresh:0; url=login");
 });
+
+/**
+ * COMPONENTES
+ */
+Route::get('componentes-ceb' , 'ComponentesController@getResumenODP1');
