@@ -30,7 +30,10 @@
 					<h4>Importante!</h4>
 					<p>Los gráficos de la izquierda corresponden a los resultados del O.D.P 1 calculada en el período {{$periodo_calculado}}</p>
 				</div>
-			</div>			
+			</div>						
+		</div>
+		</br>
+		<div class="row">
 			<div class="col-md-12">
 				<div class="box box-warning">
 					<div class="box-header">

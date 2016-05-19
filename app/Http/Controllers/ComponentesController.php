@@ -455,29 +455,6 @@ class ComponentesController extends Controller
 
         $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
 
-        $resultado = Ceb004::where('periodo' , $periodo);
-
-        if(isset($provincia)){
-            $resultado->where('id_provincia' , $provincia)
-            ->groupBy('id_provincia');            
-
-            $provincia = Provincia::find($provincia);
-            $data['A']['entidad'] =  $provincia->descripcion;                      
-        }
-        else{
-            $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
-            $data['A']['entidad'] =  'País'; 
-        }
-
-        $resultado = $resultado->first();        
-
-        $data['A']['titulo'] = 'Niños, adolescentes y mujeres adultas';
-        $data['A']['periodo'] = $periodo;
-        $data['A']['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
-        $data['A']['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
-        $data['A']['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
-        $data['A']['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;
-
         $resultado = Ceb005::where('periodo' , $periodo);
 
         if(isset($provincia)){
@@ -485,21 +462,44 @@ class ComponentesController extends Controller
             ->groupBy('id_provincia');            
 
             $provincia = Provincia::find($provincia);
-            $data['B']['entidad'] =  $provincia->descripcion;                      
+            $data[0]['entidad'] =  $provincia->descripcion;                      
         }
         else{
             $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
-            $data['B']['entidad'] =  'País'; 
+            $data[0]['entidad'] =  'País'; 
+        }
+
+        $resultado = $resultado->first();        
+
+        $data[0]['titulo'] = 'Niños, adolescentes y mujeres adultas';
+        $data[0]['periodo'] = $periodo;
+        $data[0]['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
+        $data[0]['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
+        $data[0]['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
+        $data[0]['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;
+
+        $resultado = Ceb004::where('periodo' , $periodo);
+
+        if(isset($provincia)){
+            $resultado->where('id_provincia' , $provincia)
+            ->groupBy('id_provincia');            
+
+            $provincia = Provincia::find($provincia);
+            $data[1]['entidad'] =  $provincia->descripcion;                      
+        }
+        else{
+            $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
+            $data[1]['entidad'] =  'País'; 
         }
 
         $resultado = $resultado->first();
 
-        $data['B']['titulo'] = 'Hombres adultos';
-        $data['B']['periodo'] = $periodo;   
-        $data['B']['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
-        $data['B']['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
-        $data['B']['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
-        $data['B']['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;   
+        $data[1]['titulo'] = 'Hombres adultos';
+        $data[1]['periodo'] = $periodo;   
+        $data[1]['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
+        $data[1]['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
+        $data[1]['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
+        $data[1]['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;   
 
         //return var_dump(array('data' => json_encode($data)));
 
