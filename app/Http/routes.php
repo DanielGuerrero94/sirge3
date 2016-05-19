@@ -443,3 +443,5 @@ Route::filter('auth', function()
  * COMPONENTES
  */
 Route::get('componentes-ceb' , 'ComponentesController@getResumenODP1');
+Route::get('ceb-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvincia');
+Route::get('componentes-control-embarazadas' , 'ComponentesController@getResumenODP1Prueba');
