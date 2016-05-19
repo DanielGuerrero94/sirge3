@@ -276,18 +276,18 @@ class ComponentesController extends Controller
             $object->where('id_provincia',$provincia);
         }
 
-        $cantidad_cumplida = round($object->first()->y);
-
-        $data[] = array_merge(array('y' => $cantidad_total - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+        $cantidad_cumplida = round($object->first()->y);        
 
         if($cantidad_para_cumplir > $cantidad_cumplida){
-            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));    
+            $data[] = array_merge(array('y' => $cantidad_total - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge($object->first()->toArray(),array('name' => 'ceb', 'color' => '#00FFFF'));            
         }
         else{
-            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));       
-        }
-
-        $data[] = array_merge($object->first()->toArray(),array('name' => 'ceb', 'color' => '#00FFFF'));        
+            $data[] = array_merge(array('y' => $cantidad_total - $cantidad_cumplida), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));               
+        }         
 
         $superObjeto = [
                         'titulo' => 'Meta: '. $meta . '%',
@@ -328,13 +328,13 @@ class ComponentesController extends Controller
         $data[] = array_merge(array('y' => $cantidad_total - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
 
         if($cantidad_para_cumplir > $cantidad_cumplida){
-            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));    
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge($object->first()->toArray(),array('name' => 'ceb', 'color' => '#00FFFF'));            
         }
         else{
-            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));       
-        }
-
-        $data[] = array_merge($object->first()->toArray(),array('name' => 'ceb', 'color' => '#00FFFF'));        
+            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));               
+        }        
 
         $superObjeto = [
                         'titulo' => 'Meta: '. $meta . '%',
