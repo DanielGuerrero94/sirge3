@@ -21,137 +21,51 @@ use App\Models\TareasResultado;
 
 class ComponentesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     /** 
      * Devuelve la vista del resumen de O.D.P 1
      * @param string $periodo
      *
      * @return null
      */
-    public function getResumenODP1($periodo = null){
+    public function getResumenODP1($periodo = null, $provincia = null){
+       /* $periodo = 201601;
+        $provincia = '05';*/
+
         if(isset($periodo)){
-            $dt = \DateTime::createFromFormat('Y-m' , $periodo);    
+            $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
+            $periodo = $dt->format('Ym');    
         }
         else{
-            $dt = new \DateTime();
-            //$dt->modify('-1 month');           
-            $periodo = $dt->format('Ym');
+            $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
+            $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));                
         }
 
+        if(! isset($provincia)){
+            $provincia = null;
+            $provincia_descripcion = 'Nivel Pais';
+        }
+        else{
+            $datos_provincia = Provincia::find($provincia);            
+            $provincia_descripcion =  $datos_provincia->descripcion;
+        }        
+
         $data = [
-            'page_title' => 'Resumen mensual O.D.P 1, ' . ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
+            'page_title' => 'Resumen mensual O.D.P 1, '.$provincia_descripcion.', '. ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
             /*'progreso_ceb_series' => $this->getProgresoCeb($periodo),
             'progreso_ceb_categorias' => $this->getMesesArray($periodo),
             'distribucion_provincial_categorias' => $this->getProvinciasArray(),
             'distribucion_provincial_series' => $this->getDistribucionProvincial($periodo),*/
-            'map' => $this->getMapSeries(),
-            'treemap_data' => $this->getDistribucionCodigos($periodo),
-            'pie_ceb' => $this->getDistribucionCeb($periodo),
-            'pie_ceb_hombres' => $this->getDistribucionCebHombres($periodo),
-            'distribucion_sexos' => $this->getSexosSeries($periodo),
-            'periodo_calculado' => $periodo
+            'map' => $this->getMapSeries($periodo),
+            'treemap_data' => $this->getDistribucionCodigos($periodo,$provincia),
+            'pie_ceb' => $this->getDistribucionCeb($periodo,$provincia),
+            'pie_ceb_hombres' => $this->getDistribucionCebHombres($periodo,$provincia),
+            'distribucion_sexos' => $this->getSexosSeries($periodo,$provincia),
+            'periodo_calculado' => $periodo,
+            'provincia' => $provincia == null ? 'pais' : $provincia,
+            'provincia_descripcion' => $provincia_descripcion
         ];
 
         return view('componentes.odp1' , $data);
-    }
-
-     /**
-     * Devuelve la info para el grafico de torta
-     * @param string $periodo
-     *
-     * @return json
-     */
-    protected function getDistribucion($provincia = null){
-
-        $dt = new \DateTime();
-        //$dt->modify('-1 month');           
-        $periodo = $dt->format('Ym');
-
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
-        
-        $periodo = str_replace("-", '', $periodo);
-        $grupos = Ceb003::select(DB::raw('substring(grupo_etario from 1 for 1) as name') , DB::raw('sum(cantidad)::int as y'))
-                        ->where('periodo' , $periodo)
-                        ->groupBy(DB::raw(1))
-                        ->orderBy(DB::raw(1))
-                        ->get();
-        
-        return json_encode($grupos);
     }
 
     /**
@@ -159,50 +73,102 @@ class ComponentesController extends Controller
      *
      * @return json
      */
-    public function getDistribucionCodigos($provincia = null){                
+    public function getDistribucionCodigos($periodo, $provincia = null){                
 
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
+        $data = [];
 
-        $i = 0;
-        $regiones = Ceb003::where('periodo' , $periodo)
-                        ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
-                        ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
-                        ->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad) as cantidad'))
-                        ->groupBy('r.id_region')
-                        ->groupBy('r.nombre')
-                        ->get();
-
-        foreach ($regiones as $key => $region){
-            $data[$i]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
-            $data[$i]['id'] = (string)$region->id_region;
-            $data[$i]['name'] = $region->nombre;
-            $data[$i]['value'] = (int)$region->cantidad;
-            $i++;
-        }
-
-        for ($j = 0 ; $j <= 5 ; $j ++){
-            $provincias = Ceb003::where('periodo' , $periodo)
-                            ->where('r.id_region' , $j)
+        if(! isset($provincia)){        
+            $i = 0;
+            $regiones = Ceb003::where('periodo' , $periodo)
                             ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
                             ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
-                            ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad) as cantidad'))
+                            ->select('r.id_region' , 'r.nombre' , DB::raw('sum(cantidad) as cantidad'))
                             ->groupBy('r.id_region')
-                            ->groupBy('p.id_provincia')
-                            ->groupBy('p.nombre')
+                            ->groupBy('r.nombre')
                             ->get();
-            foreach ($provincias as $key => $provincia){
-                $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
-                $data[$i]['name'] = $provincia->nombre;
-                $data[$i]['parent'] = (string)$provincia->id_region;
-                $data[$i]['value'] = (int)$provincia->cantidad;
+
+            foreach ($regiones as $key => $region){
+                $data[$i]['color'] = $this->alter_brightness('#0F467F' , $key * 35);
+                $data[$i]['id'] = (string)$region->id_region;
+                $data[$i]['name'] = $region->nombre;
+                $data[$i]['value'] = (int)$region->cantidad;
                 $i++;
             }
-        }
 
-        for ($k = 1 ; $k <= 24 ; $k ++){
-            $matriz_aux = [];
+            for ($j = 0 ; $j <= 5 ; $j ++){
+                $provincias = Ceb003::where('periodo' , $periodo)
+                                ->where('r.id_region' , $j)
+                                ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
+                                ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                                ->select('r.id_region' , 'p.id_provincia' , 'p.nombre' , DB::raw('sum(cantidad) as cantidad'))
+                                ->groupBy('r.id_region')
+                                ->groupBy('p.id_provincia')
+                                ->groupBy('p.nombre')
+                                ->get();
+                foreach ($provincias as $key => $provincia){
+                    $data[$i]['id'] = $provincia->id_region . "_" . $provincia->id_provincia;
+                    $data[$i]['name'] = $provincia->nombre;
+                    $data[$i]['parent'] = (string)$provincia->id_region;
+                    $data[$i]['value'] = (int)$provincia->cantidad;
+                    $i++;
+                }
+            }
+
+            for ($k = 1 ; $k <= 24 ; $k ++){
+                $matriz_aux = [];
+                $codigos = Ceb003::where('periodo' , $periodo)
+                                ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+                                ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
+                                ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                                ->join('pss.codigos as cg' , 'c003.codigo_prestacion' , '=' , 'cg.codigo_prestacion')
+                                ->select('r.id_region' , 'p.id_provincia' , 'c003.codigo_prestacion' , 'cg.descripcion_grupal' , DB::raw('sum(cantidad) as cantidad'))
+                                ->groupBy('r.id_region')
+                                ->groupBy('p.id_provincia')
+                                ->groupBy('c003.codigo_prestacion')
+                                ->groupBy('cg.descripcion_grupal')
+                                ->orderBy(DB::raw('sum(cantidad)') , 'desc')
+                                ->take(15)
+                                ->get();
+                foreach ($codigos as $key => $codigo){
+                    $matriz_aux[] = $codigo->codigo_prestacion;
+                    $data[$i]['id'] = $codigo->id_region . "_" . $codigo->id_provincia . "_" . $codigo->codigo_prestacion;
+                    $data[$i]['name'] = $codigo->codigo_prestacion;
+                    $data[$i]['parent'] = $codigo->id_region . "_" . $codigo->id_provincia;
+                    $data[$i]['value'] = (int)$codigo->cantidad;
+                    $data[$i]['texto_prestacion'] = $codigo->descripcion_grupal;
+                    $data[$i]['codigo_prestacion'] = true;
+                    $i++;   
+                }
+
+                for ($l = 0 ; $l < count($matriz_aux) ; $l ++){
+                    $grupos = Ceb003::where('periodo' , $periodo)
+                                    ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+                                    ->where('codigo_prestacion' , $matriz_aux[$l])
+                                    ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
+                                    ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                                    ->join('pss.grupos_etarios as g' , 'c003.grupo_etario' , '=' , 'g.sigla')
+                                    ->select('r.id_region' , 'p.id_provincia' , 'c003.codigo_prestacion' , 'g.descripcion' , DB::raw('sum(cantidad) as cantidad'))
+                                    ->groupBy('r.id_region')
+                                    ->groupBy('p.id_provincia')
+                                    ->groupBy('c003.codigo_prestacion')
+                                    ->groupBy('g.descripcion')
+                                    ->get();
+                    foreach ($grupos as $key => $grupo){
+                        $data[$i]['id'] = $grupo->id_region . "_" . $grupo->id_provincia . "_" . $grupo->codigo_prestacion . "_" . $grupo->grupo_etario;
+                        $data[$i]['name'] = $grupo->descripcion;
+                        $data[$i]['parent'] = $grupo->id_region . "_" . $grupo->id_provincia . "_" . $grupo->codigo_prestacion;
+                        $data[$i]['value'] = (int)$grupo->cantidad;
+                        $i++;   
+                    }
+                }
+            }
+        }
+        else{
+
+            $i = 0;
+            $matriz_aux = [];            
             $codigos = Ceb003::where('periodo' , $periodo)
-                            ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+                            ->where('p.id_provincia' , $provincia)
                             ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
                             ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
                             ->join('pss.codigos as cg' , 'c003.codigo_prestacion' , '=' , 'cg.codigo_prestacion')
@@ -216,9 +182,8 @@ class ComponentesController extends Controller
                             ->get();
             foreach ($codigos as $key => $codigo){
                 $matriz_aux[] = $codigo->codigo_prestacion;
-                $data[$i]['id'] = $codigo->id_region . "_" . $codigo->id_provincia . "_" . $codigo->codigo_prestacion;
-                $data[$i]['name'] = $codigo->codigo_prestacion;
-                $data[$i]['parent'] = $codigo->id_region . "_" . $codigo->id_provincia;
+                $data[$i]['id'] = $codigo->codigo_prestacion;
+                $data[$i]['name'] = $codigo->codigo_prestacion;                
                 $data[$i]['value'] = (int)$codigo->cantidad;
                 $data[$i]['texto_prestacion'] = $codigo->descripcion_grupal;
                 $data[$i]['codigo_prestacion'] = true;
@@ -227,7 +192,7 @@ class ComponentesController extends Controller
 
             for ($l = 0 ; $l < count($matriz_aux) ; $l ++){
                 $grupos = Ceb003::where('periodo' , $periodo)
-                                ->where('p.id_provincia' , str_pad($k , 2 , '0' , STR_PAD_LEFT))
+                                ->where('p.id_provincia' , $provincia)
                                 ->where('codigo_prestacion' , $matriz_aux[$l])
                                 ->join('geo.provincias as p' , 'c003.id_provincia' , '=' , 'p.id_provincia')
                                 ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
@@ -239,14 +204,15 @@ class ComponentesController extends Controller
                                 ->groupBy('g.descripcion')
                                 ->get();
                 foreach ($grupos as $key => $grupo){
-                    $data[$i]['id'] = $grupo->id_region . "_" . $grupo->id_provincia . "_" . $grupo->codigo_prestacion . "_" . $grupo->grupo_etario;
+                    $data[$i]['id'] = $grupo->codigo_prestacion . "_" . $grupo->grupo_etario;
                     $data[$i]['name'] = $grupo->descripcion;
-                    $data[$i]['parent'] = $grupo->id_region . "_" . $grupo->id_provincia . "_" . $grupo->codigo_prestacion;
+                    $data[$i]['parent'] = $grupo->codigo_prestacion;
                     $data[$i]['value'] = (int)$grupo->cantidad;
                     $i++;   
                 }
             }
         }
+        
         return json_encode($data);
     }
 
@@ -256,26 +222,21 @@ class ComponentesController extends Controller
      *
      * @return json
      */
-    protected function getDistribucionCebHombres($periodo = null, $provincia = null){
+    protected function getDistribucionCebHombres($periodo, $provincia = null){
         
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
-        
+        $meta = 7;
+
         $object = Ceb004::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);
         if(isset($provincia)){
             $object->where('id_provincia',$provincia);
-        }        
-        
-        $meta = 7;        
-
+        }                                
         $cantidad_total = $object->first()->y;
-
         $cantidad_para_cumplir = round($object->first()->y * $meta / 100);
                 
         $object = Ceb004::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);
         if(isset($provincia)){
             $object->where('id_provincia',$provincia);
         }
-
         $cantidad_cumplida = round($object->first()->y);        
 
         if($cantidad_para_cumplir > $cantidad_cumplida){
@@ -286,7 +247,7 @@ class ComponentesController extends Controller
         else{
             $data[] = array_merge(array('y' => $cantidad_total - $cantidad_cumplida), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
             $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
-            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));               
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));             
         }         
 
         $superObjeto = [
@@ -303,37 +264,32 @@ class ComponentesController extends Controller
      *
      * @return json
      */
-    protected function getDistribucionCeb($periodo = null, $provincia = null){
-        
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
+    protected function getDistribucionCeb($periodo, $provincia = null){
+         
+        $meta = 45;      
         
         $object = Ceb005::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);
         if(isset($provincia)){
             $object->where('id_provincia',$provincia);
-        }        
-        
-        $meta = 45;        
-
+        }                
         $cantidad_total = $object->first()->y;
-
         $cantidad_para_cumplir = round($object->first()->y * $meta / 100);
                 
         $object = Ceb005::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);
         if(isset($provincia)){
             $object->where('id_provincia',$provincia);
         }
-
         $cantidad_cumplida = round($object->first()->y);
 
-        $data[] = array_merge(array('y' => $cantidad_total - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
-
         if($cantidad_para_cumplir > $cantidad_cumplida){
+            $data[] = array_merge(array('y' => $cantidad_total - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
             $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));
             $data[] = array_merge($object->first()->toArray(),array('name' => 'ceb', 'color' => '#00FFFF'));            
         }
         else{
+            $data[] = array_merge(array('y' => $cantidad_total - $cantidad_cumplida), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
             $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
-            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));               
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));             
         }        
 
         $superObjeto = [
@@ -374,9 +330,7 @@ class ComponentesController extends Controller
      *
      * @return json
      */
-    protected function getSexosSeries($periodo = null){
-        
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
+    protected function getSexosSeries($periodo, $provincia = null){                
 
         $grupos = ['A','B','C','D'];
 
@@ -387,8 +341,13 @@ class ComponentesController extends Controller
                             ->whereIn('sexo',['M','F'])
                             ->select('sexo' , DB::raw('sum(cantidad) as c'))
                             ->groupBy('sexo')
-                            ->orderBy('sexo')
-                            ->get();
+                            ->orderBy('sexo');
+                            
+            if(isset($provincia)){
+                $sexos = $sexos->where('id_provincia', $provincia);
+            }            
+            
+            $sexos = $sexos->get();
 
             $data[0]['name'] = 'Hombres';
             $data[1]['name'] = 'Mujeres';
@@ -415,9 +374,7 @@ class ComponentesController extends Controller
      *
      * @return array
      */
-    protected function getMapSeries($periodo = null, $provincia = null){
-
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
+    protected function getMapSeries($periodo){        
 
         $provincias = Ceb002::where('periodo' , $periodo)->groupBy('id_provincia')->orderBy('id_provincia' , 'desc')->lists('id_provincia');
         
@@ -451,21 +408,20 @@ class ComponentesController extends Controller
      *
      * @return null
      */
-    public function getDetalleProvincia($periodo = null, $provincia = null){
-
-        $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
-
+    public function getDetalleProvincia($periodo, $provincia){        
+       
+        $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
+        $periodo = $dt->format('Ym');               
         $resultado = Ceb005::where('periodo' , $periodo);
 
-        if(isset($provincia)){
-            $resultado->where('id_provincia' , $provincia)
-            ->groupBy('id_provincia');            
+        if( $provincia != 'pais' ){
+            $resultado = $resultado->where('id_provincia' , $provincia);                   
 
-            $provincia = Provincia::find($provincia);
-            $data[0]['entidad'] =  $provincia->descripcion;                      
+            $datos_provincia = Provincia::find($provincia);
+            $data[0]['entidad'] =  $datos_provincia->descripcion;                      
         }
         else{
-            $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
+            $resultado = $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
             $data[0]['entidad'] =  'País'; 
         }
 
@@ -480,15 +436,15 @@ class ComponentesController extends Controller
 
         $resultado = Ceb004::where('periodo' , $periodo);
 
-        if(isset($provincia)){
-            $resultado->where('id_provincia' , $provincia)
-            ->groupBy('id_provincia');            
+        if($provincia != 'pais'){
+            $resultado = $resultado->where('id_provincia' , $provincia);
+                       
 
-            $provincia = Provincia::find($provincia);
-            $data[1]['entidad'] =  $provincia->descripcion;                      
+            $datos_provincia = Provincia::find($provincia);
+            $data[1]['entidad'] =  $datos_provincia->descripcion;                      
         }
         else{
-            $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
+            $resultado = $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
             $data[1]['entidad'] =  'País'; 
         }
 

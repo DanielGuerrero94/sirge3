@@ -69,7 +69,7 @@
 	<div class="col-md-8">
 		<div class="box box-danger">
 			<div class="box-header">
-				<h2 class="box-title">Resultados</h2>
+				<h2 class="box-title">Resultados {{ ucfirst(strtolower($provincia_descripcion)) }}</h2>
 			</div>
 			<div class="box-body">				
 				<div id="detalle-ceb"></div>
@@ -105,6 +105,12 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
+
+		$(Highcharts.charts).each(function(i, chart){    
+	        if (chart) {
+	            chart.destroy();
+	        }
+    	});
 					
 		$('.g3').highcharts({
             series: [{
@@ -137,22 +143,7 @@
             title : {
             	text : 'Distribución códigos'
             }
-        });
-
-	    // Radialize the colors
-	    Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
-	        return {
-	            radialGradient: {
-	                cx: 0.5,
-	                cy: 0.3,
-	                r: 0.7
-	            },
-	            stops: [
-	                [0, color],
-	                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-	            ]
-	        };
-	    });
+        });				
 
 		$('.g5').highcharts({
 
@@ -293,10 +284,11 @@
 					events: {
 						click : function(e){
 							var periodo = e.point.periodo;
-							var provincia = e.point.provincia;							
-
-							$("#grafico-ceb").hide();
-							$("#detalle-ceb").load('ceb-resumen/' + periodo  + '/' + provincia);
+							var provincia = e.point.provincia;														
+				    	
+					    	$.get('componentes-ceb/' + periodo + '/' + provincia, function(data){
+								$('.content-wrapper').html(data);
+							});								
 						}
 					}
 				}
@@ -319,10 +311,9 @@
 			}]
 		});
 
-		$.get('ceb-resumen', function(data){
-				$('#detalle-ceb').html(data);
-		});			
-		
+		$.get('ceb-resumen/' + {{ $periodo_calculado }} + '/' + '{{ $provincia }}', function(data){
+					$('#detalle-ceb').html(data);
+		});					
 	});
 </script>
 @endsection
