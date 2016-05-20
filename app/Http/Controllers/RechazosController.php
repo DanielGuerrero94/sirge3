@@ -213,12 +213,14 @@ class RechazosController extends Controller
         {
             $ultimos_lotes_generados = GenerarRechazoLote::lists('lote');
 
-            $lotes = Lote::whereIn('id_estado',[1,3])            		 
-            		 ->where('inicio','>','2016-05-01')            		 
-            		 ->where('sistema.lotes.registros_out','>',0)
-            		 ->whereNotIn('lote',$ultimos_lotes_generados)  		 
-            		 ->orderBy('lote' , 'asc')
-            		 ->lists('lote');
+            $lotes = Lote::join('sistema.subidas','sistema.subidas.id_subida','=','sistema.lotes.id_subida')      
+                 ->whereIn('id_estado',[1,3])            		 
+            		 ->where('inicio','>','2016-05-01')
+                 ->where('sistema.subidas.id_padron','<',5)            		 
+            		 ->where('sistema.lotes.registros_out','>',0)                 
+            		 ->whereNotIn('sistema.lotes.lote',$ultimos_lotes_generados)  		 
+            		 ->orderBy('sistema.lotes.lote' , 'asc')
+            		 ->lists('sistema.lotes.lote');
 
 			Tarea::where('nombre','rechazos_lotes')->update(['estado' => 1]);
             foreach ($lotes as $key => $lote) {
