@@ -214,8 +214,8 @@ class RechazosController extends Controller
             $ultimos_lotes_generados = GenerarRechazoLote::lists('lote');
 
             $lotes = Lote::join('sistema.subidas','sistema.subidas.id_subida','=','sistema.lotes.id_subida')      
-                 ->whereIn('id_estado',[1,3])            		 
-            		 ->where('inicio','>','2016-05-01')
+                 ->whereIn('sistema.lotes.id_estado',[1,3])            		 
+            		 ->where('sistema.lotes.inicio','>','2016-05-01')
                  ->where('sistema.subidas.id_padron','<',5)            		 
             		 ->where('sistema.lotes.registros_out','>',0)                 
             		 ->whereNotIn('sistema.lotes.lote',$ultimos_lotes_generados)  		 
