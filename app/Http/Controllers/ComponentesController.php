@@ -18,6 +18,7 @@ use App\Models\Dw\CEB\Ceb004;
 use App\Models\Dw\CEB\Ceb005;
 use App\Models\Dw\FC\Fc001;
 use App\Models\TareasResultado;
+use App\Models\Geo\Region;
 
 class ComponentesController extends Controller
 {
@@ -460,5 +461,113 @@ class ComponentesController extends Controller
         //return var_dump(array('data' => json_encode($data)));
 
         return view('componentes.ceb-detalle-provincia' , array('data' => $data));
+    }
+
+    public function getEvolucionODP1($tipo){
+        $dt = new \DateTime();
+        $dt->modify('-1 month');
+        $max = strftime("%b %Y" , $dt->getTimeStamp());
+        $dt->modify('-5 months');
+        $min = strftime("%b %Y" , $dt->getTimeStamp());
+
+        $data = [
+            'page_title' => 'Evolución: Período ' . $min . ' - ' . $max ,
+            'series' => $this->getProgresionCebSeries($tipo)
+        ];
+
+        return view('componentes.evolucion' , $data);
+    }
+
+     /**
+     * Devuelve la info para graficar
+     * 
+     * @return json
+     */
+    protected function getProgresionCebSeries($tipo){
+
+        if($tipo == 'A'){
+            $meta = 45;
+            $clase = new Ceb005();
+            $tabla = 'ceb_005';
+        }
+        else{
+            $meta = 7;
+            $clase = new Ceb004();   
+            $tabla = 'ceb_004';
+        }
+
+        $dt = new \DateTime();
+        $dt->modify('-1 month');
+
+        $interval = $this->getDateInterval($dt->format('Y-m'));
+
+        for ($i = 1 ; $i <= 5 ; $i ++){
+            
+            $datos = $clase::select('estadisticas.'.$tabla.'.*' , 'r.*')
+                            ->join('geo.provincias as p' , 'estadisticas.'.$tabla.'.id_provincia' , '=' , 'p.id_provincia')
+                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+                            ->whereBetween('periodo' , [$interval['min'] , $interval['max']])
+                            ->where('r.id_region' , $i)
+                            ->orderBy('periodo')
+                            ->orderBy('p.id_provincia')
+                            ->get();
+
+            foreach ($datos as $key => $registro) {
+                $series['regiones'][$i][$registro->periodo]['name'] = (string)$registro->periodo;
+                $series['regiones'][$i][$registro->periodo]['data'][] = round(($registro->beneficiarios_ceb / $registro->beneficiarios_activos) * 100,2);
+                $otrasSeries['regiones'][$i][$registro->periodo]['name'] = (string)$registro->periodo;
+                $otrasSeries['regiones'][$i][$registro->periodo]['beneficiarios_ceb'][] = $registro->beneficiarios_ceb;
+                $otrasSeries['regiones'][$i][$registro->periodo]['beneficiarios_activos'][] = $registro->beneficiarios_activos;                
+            }                  
+        }
+
+        foreach ($series['regiones'] as $key => $serie){
+            $final['regiones'][$key]['series'] = array_values($serie);
+            $final['regiones'][$key]['elem'] = 'region'.$key;
+            $final['regiones'][$key]['provincias'] = Provincia::where('id_region' , $key)->orderBy('id_provincia')->lists('descripcion');
+        }
+
+        foreach ($otrasSeries['regiones'] as $key => $serie) {            
+            foreach ($serie as $key => $unaSerie) {
+                $array_series[$unaSerie['name']][] = round(array_sum($unaSerie['beneficiarios_ceb']) / array_sum($unaSerie['beneficiarios_activos']) * 100 , 2);                
+            }                        
+        }
+
+        foreach ($array_series as $key => $value) {
+            $final['regiones'][6]['series'][] = array('name' => $key, 'data' => $value);    
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            for ($j=0; $j < Provincia::where('id_region' , $i)->count() ; $j++) {                 
+                $values[] = $meta;
+            }
+           
+            $final['regiones'][$i]['series'][] = array('name' => 'Meta', 'data' => $values,'type' => 'spline');
+            $values = null;
+        
+        }
+
+        
+
+        $final['regiones'][6]['series'][] = array('type' => 'spline', 'name' => 'Meta', 'data' => array($meta,$meta,$meta,$meta,$meta));                
+        $final['regiones'][6]['elem'] = 'region6';
+        $final['regiones'][6]['provincias'] = Region::orderBy('id_region')->lists('descripcion');                       
+
+        return json_decode(json_encode($final));
+    }
+
+    /**
+     * Devuelve el rango de periodos a filtrar
+     *
+     * @return array
+     */
+    protected function getDateInterval($periodo){
+
+        $dt = \DateTime::createFromFormat('Y-m' , $periodo);
+        $interval['max'] = $dt->format('Ym');
+        $dt->modify('-5 months');
+        $interval['min'] = $dt->format('Ym');
+
+        return $interval;
     }
 }

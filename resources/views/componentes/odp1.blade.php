@@ -24,27 +24,36 @@
 	</div>
 
 	<div class="col-md-2">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="callout callout-warning">
-					<h4>Importante!</h4>
-					<p>Los gráficos de la izquierda corresponden a los resultados del O.D.P 1 calculada en el período {{$periodo_calculado}}</p>
-				</div>
-			</div>						
-		</div>
-		</br>
+		
 		<div class="row">
 			<div class="col-md-12">
 				<div class="box box-warning">
 					<div class="box-header">
-						<h2 class="box-title">Progresión nacional</h2>
+						<h2 class="box-title">Evolución 1.A</h2>
 					</div>
 					<div class="box-body">
-						<p>Desde esta opción podrá ver la evolución del O.D.P a nivel nacional</p>
+						<p>Desde esta opción podrá ver la evolución del O.D.P 1.A a nivel nacional y regional</p>
 					</div>
 					<div class="box-footer">
 						<div class="btn-group" role="group">
-							<button type="button" href="ca-provincia-form/ca-16-descentralizacion/ca-16-descentralizacion-progresion" class="detalle btn btn-info">Ver detalles</button>
+							<button type="button" href="componentes-odp1-evolucion/A" class="detalle btn btn-info">Ver detalles</button>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-warning">
+					<div class="box-header">
+						<h2 class="box-title">Evolución 1.B</h2>
+					</div>
+					<div class="box-body">
+						<p>Desde esta opción podrá ver la evolución del O.D.P 1.A a nivel nacional y regional</p>
+					</div>
+					<div class="box-footer">
+						<div class="btn-group" role="group">
+							<button type="button" href="componentes-odp1-evolucion/B" class="detalle btn btn-info">Ver detalles</button>
 						</div>
 					</div>
 				</div>	
@@ -313,7 +322,15 @@
 
 		$.get('ceb-resumen/' + {{ $periodo_calculado }} + '/' + '{{ $provincia }}', function(data){
 					$('#detalle-ceb').html(data);
-		});					
+		});
+
+		$('.detalle').click(function(event){
+	        event.preventDefault();
+	        var modulo = $(this).attr('href');
+	        $.get(modulo, function(data){
+				$('.content-wrapper').html(data);
+			});						
+    	});		
 	});
 </script>
 @endsection
