@@ -299,7 +299,7 @@ Route::get('ddjj-doiu9-consolidado' , 'DdjjController@D9Consolidado');
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 Route::get('ddjj-backup-reimprimir/{id}' , 'DdjjController@getBack');
 Route::get('ddjj-periodo/{tipo}' , [
-		'middleware' => 'uec' , 
+		'middleware' => ['uec','padronesok'] , 
 		'uses' => 'DdjjController@getPeriodo'
 	]);
 Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
@@ -445,3 +445,4 @@ Route::filter('auth', function()
 Route::get('componentes-ceb/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP1');
 Route::get('ceb-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvincia');
 Route::get('componentes-control-embarazadas' , 'ComponentesController@getResumenODP1Prueba');
+Route::get('componentes-odp1-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
