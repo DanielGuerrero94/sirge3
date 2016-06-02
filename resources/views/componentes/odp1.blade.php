@@ -1,7 +1,7 @@
 @extends('content')
 @section('content')
 <div class="row">
-	<div class="col-md-5">
+	<div class="col-md-6">
 		<div class="box box-warning">
 			<div class="box-header">
 				<h2 class="box-title">O.D.P - 1.A</h2>
@@ -12,7 +12,7 @@
 		</div>
 	</div>
 
-	<div class="col-md-5">
+	<div class="col-md-6">
 		<div class="box box-warning">
 			<div class="box-header">
 				<h2 class="box-title">O.D.P - 1.B (Hombres)</h2>
@@ -21,45 +21,7 @@
 				<div class="g5"></div>
 			</div>
 		</div>
-	</div>
-
-	<div class="col-md-2">
-		
-		<div class="row">
-			<div class="col-md-12">
-				<div class="box box-warning">
-					<div class="box-header">
-						<h2 class="box-title">Evolución 1.A</h2>
-					</div>
-					<div class="box-body">
-						<p>Desde esta opción podrá ver la evolución del O.D.P 1.A a nivel nacional y regional</p>
-					</div>
-					<div class="box-footer">
-						<div class="btn-group" role="group">
-							<button type="button" href="componentes-odp1-evolucion/A" class="detalle btn btn-info">Ver detalles</button>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="box box-warning">
-					<div class="box-header">
-						<h2 class="box-title">Evolución 1.B</h2>
-					</div>
-					<div class="box-body">
-						<p>Desde esta opción podrá ver la evolución del O.D.P 1.A a nivel nacional y regional</p>
-					</div>
-					<div class="box-footer">
-						<div class="btn-group" role="group">
-							<button type="button" href="componentes-odp1-evolucion/B" class="detalle btn btn-info">Ver detalles</button>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-	</div>
+	</div>	
 </div>
 
 <div class="row">
@@ -68,6 +30,9 @@
 		<div class="box box-danger">
 			<div class="box-header">
 				<h2 class="box-title">Provincias</h2>
+				<div class="btn-group pull-right">
+					<button type="button" href="componentes-ceb" class="ver-pais btn btn-default">Ver pais</button>
+				</div>
 			</div>
 			<div class="box-body">
 				<div id="mapa-ceb"></div>
@@ -111,6 +76,13 @@
 		</div>
 	</div>
 </div>
+
+<style>
+.g4 text{font-size:13px !important;}
+.g5 text{font-size:13px !important;}
+.g4 text.highcharts-title{font-size:18px !important;}
+.g5 text.highcharts-title{font-size:18px !important;}
+</style>
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -324,13 +296,15 @@
 					$('#detalle-ceb').html(data);
 		});
 
-		$('.detalle').click(function(event){
-	        event.preventDefault();
-	        var modulo = $(this).attr('href');
-	        $.get(modulo, function(data){
-				$('.content-wrapper').html(data);
-			});						
-    	});		
+    	$('[data-toggle="tooltip"]').tooltip(); 
+
+    	$('.ver-pais').on('click', function(event) {
+    		event.preventDefault();
+		 	var redireccion = $(this).attr('href');
+		        $.get(redireccion, function(data){
+					$('.content-wrapper').html(data);
+				});						
+    	});  		
 	});
 </script>
 @endsection

@@ -433,6 +433,8 @@ class ComponentesController extends Controller
         $data[0]['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
         $data[0]['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
         $data[0]['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
+        $data[0]['indicador'] = '1.A';
+        $data[0]['tipo'] = 'A';
         $data[0]['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;
 
         $resultado = Ceb004::where('periodo' , $periodo);
@@ -456,6 +458,8 @@ class ComponentesController extends Controller
         $data[1]['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
         $data[1]['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
         $data[1]['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
+        $data[1]['indicador'] = '1.B';
+        $data[1]['tipo'] = 'B';
         $data[1]['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;   
 
         //return var_dump(array('data' => json_encode($data)));
@@ -467,7 +471,7 @@ class ComponentesController extends Controller
         $dt = new \DateTime();
         $dt->modify('-1 month');
         $max = strftime("%b %Y" , $dt->getTimeStamp());
-        $dt->modify('-5 months');
+        $dt->modify('-4 months');
         $min = strftime("%b %Y" , $dt->getTimeStamp());
 
         $data = [
@@ -513,11 +517,14 @@ class ComponentesController extends Controller
                             ->get();
 
             foreach ($datos as $key => $registro) {
-                $series['regiones'][$i][$registro->periodo]['name'] = (string)$registro->periodo;
-                $series['regiones'][$i][$registro->periodo]['data'][] = round(($registro->beneficiarios_ceb / $registro->beneficiarios_activos) * 100,2);
-                $otrasSeries['regiones'][$i][$registro->periodo]['name'] = (string)$registro->periodo;
-                $otrasSeries['regiones'][$i][$registro->periodo]['beneficiarios_ceb'][] = $registro->beneficiarios_ceb;
-                $otrasSeries['regiones'][$i][$registro->periodo]['beneficiarios_activos'][] = $registro->beneficiarios_activos;                
+                $dateTime = \DateTime::createFromFormat('Ym' , $registro->periodo);
+                $periodo_formato_mesano = strftime("%b %Y" , $dateTime->getTimeStamp());
+                
+                $series['regiones'][$i][$periodo_formato_mesano]['name'] = (string)$periodo_formato_mesano;
+                $series['regiones'][$i][$periodo_formato_mesano]['data'][] = round(($registro->beneficiarios_ceb / $registro->beneficiarios_activos) * 100,2);
+                $otrasSeries['regiones'][$i][$periodo_formato_mesano]['name'] = (string)$periodo_formato_mesano;
+                $otrasSeries['regiones'][$i][$periodo_formato_mesano]['beneficiarios_ceb'][] = $registro->beneficiarios_ceb;
+                $otrasSeries['regiones'][$i][$periodo_formato_mesano]['beneficiarios_activos'][] = $registro->beneficiarios_activos;                
             }                  
         }
 
@@ -565,7 +572,7 @@ class ComponentesController extends Controller
 
         $dt = \DateTime::createFromFormat('Y-m' , $periodo);
         $interval['max'] = $dt->format('Ym');
-        $dt->modify('-5 months');
+        $dt->modify('-4 months');
         $interval['min'] = $dt->format('Ym');
 
         return $interval;
