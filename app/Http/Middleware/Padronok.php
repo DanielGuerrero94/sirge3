@@ -36,11 +36,22 @@ class Padronok
      */
     public function handle($request, Closure $next)
     {        
+        
+
+        if(intval(date('d')) <= 7){
+            $dt = new \DateTime();
+            $dt->modify('-1 month');
+            $dt->modify('first day of this month');
+            $primer_dia = $dt->format('Y-m-d');            
+        }
+        else{
+            $primer_dia = date('Y-m-01');   
+        }
         $query = Lote::join('sistema.subidas','sistema.subidas.id_subida','=','sistema.lotes.id_subida')    
             ->where('sistema.lotes.id_estado',3)
             ->where('sistema.lotes.id_provincia',$this->auth->user()->id_provincia)
-            ->whereBetween('sistema.lotes.created_at',array(date('Y-m-01'), date('Y-m-d')))
-            ->whereIn('sistema.subidas.id_padron',[1,2,3]);            
+            ->whereBetween('sistema.lotes.created_at',array($primer_dia, date('Y-m-d')))
+            ->whereIn('sistema.subidas.id_padron',[1,2,3]);                        
 
         if ($query->count() >= 3){            
             return $next($request);
