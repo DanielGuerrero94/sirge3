@@ -67,8 +67,8 @@
 									<select name="anio_bimestre" id="anio_bimestre" class="form-control">
 										<option value="">Seleccione a&ntilde;o</option>
 										<option value="2015">2015</option>
-										<option value="2015">2016</option>
-										<option value="2015">2017</option>
+										<option value="2016">2016</option>
+										<option value="2017">2017</option>
 									</select>
 								</p>
 							</div>
