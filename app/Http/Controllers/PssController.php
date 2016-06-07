@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Auth;
 use Datatables;
 use DB;
+use Excel;
+use ZipArchive;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Salud;
 use App\Models\PSS\Grupo;
+use App\Models\PSS\Diagnostico;
 use App\Models\PSS\CEB;
 use App\Models\PSS\LineaCuidado;
 use App\Models\PSS\GrupoEtario as Etario;
@@ -719,4 +721,44 @@ class PssController extends Controller
 
 		return view('pss.grupos_detail' , $data);
 	}
+
+	/**
+     * Descarga la tabla de códigos
+     *
+     * @return null
+     */
+    public function generarTabla(){
+
+      $codigos = Salud::join('pss.diagnosticos' , 'pss.diagnosticos.diagnostico' , '=' , 'pss.codigos.diagnostico')
+      				   ->select('codigo_prestacion','tipo','objeto','pss.codigos.diagnostico','descripcion_grupal','descripcion as descripcion_diagnostico')
+      				   ->orderBy('pss.codigos.codigo_prestacion' , 'asc')       				   
+       				   ->get();        
+      
+      $data = ['codigos' => $codigos];
+
+      Excel::create('Pss_CODIGOS' , function ($e) use ($data){
+        $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
+          $s->setHeight(1, 20);
+          $s->setColumnFormat([
+              'B' => '0'
+            ]);
+          $s->loadView('pss.tabla' , $data);
+        });
+      })
+      ->store('xls');
+
+      $zip = new ZipArchive();
+      $zip->open('../storage/exports/PSS_CODIGOS.zip', ZipArchive::CREATE);
+      $zip->addFile('../storage/exports/Pss_CODIGOS.xls', 'Pss_CODIGOS.xls');      
+      $zip->close();
+    }
+
+    /**
+     * Decargar la tabla generada
+     *
+     * @return null
+     */
+    public function descargarTabla(){
+      return response()->download('../storage/exports/PSS_CODIGOS.zip');
+    }
 }
