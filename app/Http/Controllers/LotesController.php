@@ -90,11 +90,28 @@ class LotesController extends Controller
 	public function detalleLote($lote){
 		$nro_lote = $lote;
 		$lote = Lote::with(['estado' , 'archivo' , 'usuario' , 'provincia'])->findOrFail($nro_lote);
-		GenerarRechazoLote::where('lote', $nro_lote)->where('estado',2)->first() ? $descarga_disponible = TRUE : $descarga_disponible = FALSE; 
+		$rechazo = GenerarRechazoLote::where('lote', $nro_lote)->where('estado',2)->first();
+		$rechazo ? $descarga_disponible = TRUE : $descarga_disponible = FALSE;
+		
+		$minutos_faltantes = 0;
+		
+		if(!isset($rechazo)){
+			
+			if($lote->registros_out > 50000){
+				$coef_rendimiento = 45;
+			}
+			else{
+				$coef_rendimiento = 80;	
+			}
+
+			$minutos_de_procesamiento = round((float) ($lote->registros_out / $coef_rendimiento) / 60);
+			$minutos_faltantes = 60 - date("i") + ( $minutos_de_procesamiento == 0 ? 1 : $minutos_de_procesamiento );			
+		}				
 		
 		$data = [
 			'page_title' => 'Detalle lote ' . $lote->lote,
 			'descarga_disponible' => $descarga_disponible,
+			'minutos_faltantes' => intval($minutos_faltantes),
 			'lote' => $lote
 		];
 
