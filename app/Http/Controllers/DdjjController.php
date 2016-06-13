@@ -296,6 +296,36 @@ class DdjjController extends Controller
 	}
 
 	/**
+	 * Devuelve la vista para ingresar el periodo a reportar
+	 * 
+	 * @return null
+	 */
+	public function getPeriodoBackup(){
+
+		$data = [
+			'tipodj' => 'backup',
+			'page_title' => 'Verificación',
+			'ruta_back' => 'ddjj-' . 'backup'
+		];
+		return view('ddjj.periodo' , $data);
+	}
+
+	/**
+	 * Devuelve la vista para ingresar el periodo a reportar
+	 * 
+	 * @return null
+	 */
+	public function getPeriodoDoiu9(){
+
+		$data = [
+			'tipodj' => 'doiu-9',
+			'page_title' => 'Verificación',
+			'ruta_back' => 'ddjj-' . 'doiu-9'
+		];
+		return view('ddjj.periodo' , $data);
+	}
+
+	/**
 	 * Devuelve el número de efectores integrantes
 	 *
 	 * @return int

@@ -176,6 +176,8 @@ Route::get('pss-grupos-detalle/{id}' , 'PssController@getDetalleGrupos');
 Route::get('pss-grupos-codigos-table/{id}' , 'PssController@getGruposCodigosTabla');
 Route::get('pss-descargar-tabla' , 'PssController@descargarTabla');
 Route::get('pss-generar-tabla' , 'PssController@generarTabla');
+Route::get('pss-generar-matriz' , 'PssController@generarMatriz');
+Route::get('pss-descargar-matriz' , 'PssController@descargarMatriz');
 
 /** 
  * ANALISIS CEB
@@ -300,9 +302,13 @@ Route::get('ddjj-doiu9-consolidado' , 'DdjjController@D9Consolidado');
 
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 Route::get('ddjj-backup-reimprimir/{id}' , 'DdjjController@getBack');
-Route::get('ddjj-periodo/{tipo}' , [
+Route::get('ddjj-periodo/doiu-9' , [
 		'middleware' => ['uec','padronok'] , 
-		'uses' => 'DdjjController@getPeriodo'
+		'uses' => 'DdjjController@getPeriodoDoiu9'
+	]);
+Route::get('ddjj-periodo/backup' , [
+		'middleware' => ['uec'] , 
+		'uses' => 'DdjjController@getPeriodoBackup'
 	]);
 Route::post('ddjj-reimpresion/{tipo}/{periodo}/{version}' , 'DdjjController@reimpresion');
 
