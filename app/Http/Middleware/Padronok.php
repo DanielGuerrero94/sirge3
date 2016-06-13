@@ -38,7 +38,7 @@ class Padronok
     {        
         
 
-        if(intval(date('d')) <= 10){
+        if(intval(date('d')) <= 13){
             $dt = new \DateTime();
             $dt->modify('-1 month');
             $dt->modify('first day of this month');
@@ -51,7 +51,10 @@ class Padronok
             ->where('sistema.lotes.id_estado',3)
             ->where('sistema.lotes.id_provincia',$this->auth->user()->id_provincia)
             ->whereBetween('sistema.lotes.created_at',array($primer_dia, date('Y-m-d')))
-            ->whereIn('sistema.subidas.id_padron',[1,2,3]);                        
+            ->whereIn('sistema.subidas.id_padron',[1,2,3]);
+
+            //return var_dump($query->toSql());      
+            //array(2) { [0]=> string(10) "2016-06-01" [1]=> string(10) "2016-06-13" }            
 
         if ($query->count() >= 3){            
             return $next($request);
