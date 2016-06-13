@@ -274,8 +274,8 @@ class RechazosController extends Controller
                  ->update(['estado'=> 2, 'tiempo_de_ejecucion' => (microtime(true) - $start)]);
 
         $objetc_lote = Lote::find($lote);
-        //$u = Usuario::find($objetc_lote->id_usuario);
-        $u = Usuario::find(191);
+        $u = Usuario::find($objetc_lote->id_usuario);
+        //$u = Usuario::find(191);
 
         Mail::send('emails.excel-rechazo', ['usuario' => $u, 'lote' => $lote], function ($m) use ($u) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
