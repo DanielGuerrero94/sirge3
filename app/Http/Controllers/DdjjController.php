@@ -664,7 +664,8 @@ class DdjjController extends Controller
 
 			Mail::send('emails.ddjj-sirge', ['usuario' => $user , 'id' => $b->id_impresion], function ($m) use ($user , $path , $id) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-                $m->to($user->email);
+                $m->to($user->email, $user->nombre);
+                $m->to('rodrigo.cadaval.sumar@gmail.com', $user->nombre);
                 $m->subject('DDJJ BACKUP Nº ' . $id);
                 $m->attach($path);
             });
