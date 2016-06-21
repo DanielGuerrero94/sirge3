@@ -218,8 +218,9 @@ class RechazosController extends Controller
                  ->whereIn('sistema.lotes.id_estado',[1,3])            		 
             		 ->where('sistema.lotes.inicio','>','2016-05-01')
                  ->where('sistema.subidas.id_padron','<',5)            		 
-            		 ->where('sistema.lotes.registros_out','>',0)                 
-            		 ->whereNotIn('sistema.lotes.lote',$ultimos_lotes_generados)  		 
+            		 ->where('sistema.lotes.registros_out','>',0)
+                 ->where('sistema.lotes.registros_out','<',600000)
+            		 ->whereNotIn('sistema.lotes.lote',$ultimos_lotes_generados)	 
             		 ->orderBy('sistema.lotes.lote' , 'asc')
             		 ->lists('sistema.lotes.lote');
 
