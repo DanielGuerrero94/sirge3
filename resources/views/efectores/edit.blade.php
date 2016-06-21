@@ -568,9 +568,9 @@
 						    			<div class="form-group">
 		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->perinatal->fecha_addenda_perinatal }}">
+		                    					<input class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->perinatal->fecha_addenda_perinatal or ''}}" placeholder="dd/mm/aaaa">
 		                  					</div>
-		                    			</div>
+		                    			</div>		                    			
 						    		</div>
 						    		<div class="col-md-4">
 						    			<label for="internet-efector" class="col-sm-6 control-label">Perinatal AC</label>
@@ -603,7 +603,7 @@
 						    			<div class="form-group">
 		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
 		                  					<div class="col-sm-7">
-		                    					<input type="text" class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
