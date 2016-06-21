@@ -178,9 +178,8 @@ class EfectoresController extends Controller
             'pago_indirecto' => $r->indirecto
             ]);
 
-        $ca = new Convenio([
-            'numero_compromiso' => $r->numero_compromiso,
-            '' => $r->convenio_numero,
+        $ca = new Convenio([            
+            'numero_compromiso' => $r->convenio_numero,
             'firmante' => $r->convenio_firmante,
             'nombre_tercer_administrador' => $r->nombre_admin,
             'codigo_tercer_administrador' => $r->cuie_admin,
