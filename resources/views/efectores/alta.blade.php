@@ -306,7 +306,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_fsus" class="col-sm-3 control-label">Suscripción</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="compromiso_fsus" name="compromiso_fsus" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_fsus" name="compromiso_fsus" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -314,7 +314,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_fini" class="col-sm-3 control-label">Inicio</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="compromiso_fini" name="compromiso_fini" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_fini" name="compromiso_fini" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -322,7 +322,7 @@
 						    			<div class="form-group">
 		                      				<label for="compromiso_ffin" class="col-sm-3 control-label">Fin</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="compromiso_ffin" name="compromiso_ffin" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="compromiso_ffin" name="compromiso_ffin" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -361,7 +361,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_fini" class="col-sm-3 control-label">Inicio</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="convenio_fini" name="convenio_fini" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="convenio_fini" name="convenio_fini" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -369,7 +369,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_ffin" class="col-sm-3 control-label">Fin</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="convenio_ffin" name="convenio_ffin" placeholder="dd/mm/aaaa">
+		                    					<input class="form-control" id="convenio_ffin" name="convenio_ffin" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -485,7 +485,9 @@ $(document).ready(function() {
 	$('.finish').hide();
 	$('#errores-div').hide();	
 
-	$('#tel').inputmask('9999 9999 9999')
+	$('#tel').inputmask('9999 9999 9999');
+
+	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin').inputmask('99/99/9999');
 
 	$('#integrante').change(function(){
 		var estado = $(this).val();
