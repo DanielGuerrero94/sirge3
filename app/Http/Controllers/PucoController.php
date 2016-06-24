@@ -223,7 +223,8 @@ class PucoController extends Controller
 		  		$zip->addFile($this->getName($obra_social->id_padron,TRUE).'/'.$obra_social->nombre_actual, $obra_social->codigo_osp.'.txt');
 			}
 		    
-		    $zip->close();		    		    
+		    $zip->close();
+		}		    		    
 	}
 
 	/**
