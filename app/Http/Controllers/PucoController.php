@@ -220,9 +220,11 @@ class PucoController extends Controller
 		    foreach ($p as $obra_social){
 		    	
 		  		$zip->addFile($this->getName($obra_social->id_padron,TRUE).'/'.$obra_social->nombre_actual, ($obra_social->id_padron == 6 ? $obra_social->codigo_osp."_".$obra_social->nombre_original : $obra_social->codigo_osp) .'.txt');
-			}
+			}		    
+		    $zip->close();		    
 		    
-		    $zip->close();
+		    $sys = "chmod 666 /var/www/html/sirge3/storage/swap/OSP-SSS-PROFE_".date('Y-m').".zip";
+			exec($sys);
 		}		    		    
 	}
 
