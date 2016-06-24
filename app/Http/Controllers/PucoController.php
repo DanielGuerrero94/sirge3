@@ -8,6 +8,7 @@ use Datatables;
 use DB;
 use Storage;
 use Mail;
+use ZipArchive;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -80,7 +81,9 @@ class PucoController extends Controller
 						  		$j->on('sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote');
 						  })->leftJoin('puco.obras_sociales' , 'puco.obras_sociales_provinciales.codigo_osp' , '=' , 'puco.obras_sociales.codigo_osp')
 						  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
-						  ->get();
+						  //->toSql()
+						  ;
+		//return var_dump($datos);
 		return Datatables::of($datos)->make(true);
 	}
 
@@ -136,7 +139,7 @@ class PucoController extends Controller
             $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
             $m->to('sistemasuec@gmail.com');
             $m->to('javier.minsky@gmail.com');
-            $m->to('gustavo.hekel@gmail.com');
+            $m->to('rodrigo.cadaval.sumar@gmail.com');
             $m->subject('PUCO ' . date('Ym'));
         });
 	}
@@ -176,6 +179,8 @@ class PucoController extends Controller
 		
 		unlink('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt');
 
+		$this->generarZipACE();
+
 		/*
 		$puco = Storage::get('sirg3/puco/puco.txt');
 		Storage::delete('sirg3/puco/puco.txt');
@@ -194,6 +199,34 @@ class PucoController extends Controller
 	}
 
 	/**
+	 * Genera el zip para mandar al ACE
+	 *
+	 * @return null
+	 */
+	public function generarZipACE(){		
+
+		if(file_exists('/var/www/html/sirge3/storage/exports/PUCO/OSP-SSS-PROFE_'.date('Y-m').'.zip')){
+			unlink('/var/www/html/sirge3/storage/exports/PUCO/OSP-SSS-PROFE_'.date('Y-m').'.zip');
+		}				
+		
+		$zip = new ZipArchive;
+		$res = $zip->open('/var/www/html/sirge3/storage/exports/PUCO/OSP-SSS-PROFE_'.date('Y-m').'.zip', ZipArchive::CREATE);
+		if ($res === TRUE) {
+			$p = Proceso::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+			  ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+			  ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+			  ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*','sistema.subidas.nombre_actual','sistema.subidas.id_padron')
+			  ->where('periodo' , date('Ym'))			
+			  ->get();			  
+
+		    foreach ($p as $obra_social){			
+		  		$zip->addFile($this->getName($obra_social->id_padron,TRUE).'/'.$obra_social->nombre_actual, $obra_social->codigo_osp.'.txt');
+			}
+		    
+		    $zip->close();		    		    
+	}
+
+	/**
 	 * Devuelve la vista de consultas
 	 *
 	 * @return null
@@ -203,6 +236,36 @@ class PucoController extends Controller
 			'page_title' => 'Búsqueda de personas en PUCO'
 		];
 		return view('puco.consultas' , $data);
+	}
+
+	/**
+	 * Devuelve la ruta donde guardar el archivo
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	private function getName($id , $route = FALSE){			
+
+		switch ($id) {
+			case 1:
+				$p = 'prestaciones'; break;
+			case 2 :
+				$p = 'fondos'; break;
+			case 3 :
+				$p = 'comprobantes'; break;
+			case 4 : 
+				$p = 'osp'; break;
+			case 5 :
+				$p = 'profe'; break;
+			case 6 :
+				$p = 'sss'; break;
+			default:
+				break;
+		}
+		if ($route)
+			return '../storage/uploads/' . $p;
+		else
+			return $p;
 	}
 
 	/**

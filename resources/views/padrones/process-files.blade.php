@@ -80,7 +80,11 @@
 			});
 		});
 
-		$('#archivos-table').on('click' , '.procesar' , function(){
+		$('#archivos-table').on('click' , '.procesar' , function(event){
+			
+			event.stopPropagation();
+			event.preventDefault();
+
 			$('.procesar').prop('disabled', true);
 			$('#errores-div').hide();
 			var id = $(this).attr('id-subida');

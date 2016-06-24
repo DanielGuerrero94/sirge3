@@ -225,84 +225,98 @@ class PrestacionesController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		$lote = $this->nuevoLote($id);
-		$fh = $this->abrirArchivo($id);
 		
-		if (!$fh){
-			return response('Error' , 422);
+		if (!isset($_SESSION['posttimer'])){
+			$_SESSION['posttimer'] = 0;
 		}
+    	
+    	if ( (time() - $_SESSION['posttimer']) <= 2)
+        {
+            return '';
+        }
+        else
+        {
+	            $lote = $this->nuevoLote($id);
+				$fh = $this->abrirArchivo($id);
+				
+				if (!$fh){
+					return response('Error' , 422);
+				}
 
-		fgets($fh);
-		while (!feof($fh)){
-			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-			if (count($linea) != 1) {
-				if(count($this->_deben_ingresar) == count($linea)){
-					$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
-					$v = Validator::make($prestacion_raw , $this->_rules);
-					if ($v->fails()) {
-						$this->_resumen['rechazados'] ++;
-						$this->_error['lote'] = $lote;
-						$this->_error['registro'] = json_encode($prestacion_raw);
-						$this->_error['motivos'] = json_encode($v->errors());
-						$this->_error['created_at'] = date("Y-m-d H:i:s");
-						Rechazo::insert($this->_error);
-					} else {
-						$operacion = array_shift($prestacion_raw);
-						switch ($operacion) {
-							case 'A':
-								try {
-									Prestacion::insert($prestacion_raw);
-									$this->_resumen['insertados'] ++;
-								} catch (QueryException $e) {
-									$this->_resumen['rechazados'] ++;
-									$this->_error['lote'] = $lote;
-									$this->_error['registro'] = json_encode($prestacion_raw);
-									$this->_error['created_at'] = date("Y-m-d H:i:s");
-									if ($e->getCode() == 23505){
-										$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-									} else {
-										$this->_error['motivos'] = json_encode($e);
-									}
-									Rechazo::insert($this->_error);
+				fgets($fh);
+				while (!feof($fh)){
+					$linea = explode (';' , trim(fgets($fh) , "\r\n"));
+					if (count($linea) != 1) {
+						if(count($this->_deben_ingresar) == count($linea)){
+							$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
+							$v = Validator::make($prestacion_raw , $this->_rules);
+							if ($v->fails()) {
+								$this->_resumen['rechazados'] ++;
+								$this->_error['lote'] = $lote;
+								$this->_error['registro'] = json_encode($prestacion_raw);
+								$this->_error['motivos'] = json_encode($v->errors());
+								$this->_error['created_at'] = date("Y-m-d H:i:s");
+								Rechazo::insert($this->_error);
+							} else {
+								$operacion = array_shift($prestacion_raw);
+								switch ($operacion) {
+									case 'A':
+										try {
+											Prestacion::insert($prestacion_raw);
+											$this->_resumen['insertados'] ++;
+										} catch (QueryException $e) {
+											$this->_resumen['rechazados'] ++;
+											$this->_error['lote'] = $lote;
+											$this->_error['registro'] = json_encode($prestacion_raw);
+											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											if ($e->getCode() == 23505){
+												$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+											} else {
+												$this->_error['motivos'] = json_encode($e);
+											}
+											Rechazo::insert($this->_error);
+										}
+										break;
+									case 'M':
+										$prestacion = Prestacion::where('numero_comprobante' , $prestacion_raw['numero_comprobante'])
+																->where('codigo_prestacion' , $prestacion_raw['codigo_prestacion'])
+																->where('subcodigo_prestacion' , $prestacion_raw['subcodigo_prestacion'])
+																->where('fecha_prestacion' , $prestacion_raw['fecha_prestacion'])
+																->where('clave_beneficiario' , $prestacion_raw['clave_beneficiario'])
+																->where('orden' , $prestacion_raw['orden']);
+										
+										if ($prestacion->count()){
+											$prestacion = $prestacion->firstOrFail();
+											$prestacion->estado = 'D';
+											if ($prestacion->save()){
+												$this->_resumen['modificados'] ++;
+											}
+										} else {
+											$this->_resumen['rechazados'] ++;
+											$this->_error['lote'] = $lote;
+											$this->_error['registro'] = json_encode($prestacion_raw);
+											$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
+											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											Rechazo::insert($this->_error);
+										}
+										break;
 								}
-								break;
-							case 'M':
-								$prestacion = Prestacion::where('numero_comprobante' , $prestacion_raw['numero_comprobante'])
-														->where('codigo_prestacion' , $prestacion_raw['codigo_prestacion'])
-														->where('subcodigo_prestacion' , $prestacion_raw['subcodigo_prestacion'])
-														->where('fecha_prestacion' , $prestacion_raw['fecha_prestacion'])
-														->where('clave_beneficiario' , $prestacion_raw['clave_beneficiario'])
-														->where('orden' , $prestacion_raw['orden']);
-								
-								if ($prestacion->count()){
-									$prestacion = $prestacion->firstOrFail();
-									$prestacion->estado = 'D';
-									if ($prestacion->save()){
-										$this->_resumen['modificados'] ++;
-									}
-								} else {
-									$this->_resumen['rechazados'] ++;
-									$this->_error['lote'] = $lote;
-									$this->_error['registro'] = json_encode($prestacion_raw);
-									$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
-									$this->_error['created_at'] = date("Y-m-d H:i:s");
-									Rechazo::insert($this->_error);
-								}
-								break;
-						}
+							}
+						} else{
+							$this->_resumen['rechazados'] ++;
+							$this->_error['lote'] = $lote;
+							$this->_error['registro'] = json_encode($linea);
+							$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');
+							$this->_error['created_at'] = date("Y-m-d H:i:s");
+							Rechazo::insert($this->_error);
+						}	
 					}
-				} else{
-					$this->_resumen['rechazados'] ++;
-					$this->_error['lote'] = $lote;
-					$this->_error['registro'] = json_encode($linea);
-					$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');
-					$this->_error['created_at'] = date("Y-m-d H:i:s");
-					Rechazo::insert($this->_error);
-				}	
-			}
-		}
-		$this->actualizaLote($lote , $this->_resumen);
-		$this->actualizaSubida($id);
+				}
+				$this->actualizaLote($lote , $this->_resumen);
+				$this->actualizaSubida($id);
+        }
+    	$_SESSION['posttimer'] = time();		
+		
 		return response()->json($this->_resumen);
 	}
 

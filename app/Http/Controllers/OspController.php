@@ -14,10 +14,13 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Rechazo;
 use App\Models\Lote;
+use App\Models\LoteAceptado;
+use App\Models\LoteRechazado;
 use App\Models\Subida;
 use App\Models\SubidaOsp;
 use App\Models\PUCO\Osp;
 use App\Models\PUCO\ProcesoPuco as Pucop;
+use App\Models\Usuario;
 
 class OspController extends Controller
 {
@@ -169,18 +172,34 @@ class OspController extends Controller
 	 * @return bool
 	 */
 	public function actualizarProceso($lote , $codigo) {
-		$p = Pucop::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
-				 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
-				 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
-				 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
-				 ->where('periodo' , date('Ym'))
-				 ->where('codigo_osp' , $codigo)
-				 ->get();
+
 		
-		if ($p->count()){
-			$np = Pucop::find($p[0]->lote);
-		} else {
-			$np = new Pucop;
+		$p = Pucop::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+			 ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+			 ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+			 ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
+			 ->where('periodo' , date('Ym'))
+			 ->where('codigo_osp' , $codigo)
+			 ->first();
+	
+		if (isset($p->lote)){
+			
+			$np = Pucop::find($p->lote);
+			$lote_o = Lote::find($p->lote);
+			$lote_o->id_estado = 4;
+			$lote_o->save();
+			LoteAceptado::where('lote',$p->lote)->delete();
+			if(!LoteRechazado::where('lote',$p->lote)){
+				$loter = new LoteRechazado();
+				$loter->lote = $p->lote;
+				$loter->id_usuario = Usuario::superAdmin()->id_usuario;
+				$loter->fecha_rechazado = date("Y-m-d H:i:s");
+				$loter->save();
+			}			
+			Osp::where('codigo_os' , $codigo)->where('lote', $p->lote)->delete();
+
+		} else {			
+			$np = new Pucop;			
 		}
 
 		$np->lote = $lote;

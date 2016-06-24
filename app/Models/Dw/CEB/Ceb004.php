@@ -18,5 +18,5 @@ class Ceb004 extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'estadisticas.ceb_004';
+	protected $table = 'estadisticas.ceb_004 as c004';
 }

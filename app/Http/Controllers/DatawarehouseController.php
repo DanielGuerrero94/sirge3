@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Tarea.php;
-use App\Models\TareasResultado.php;
-use App\Models\Dw\FC\Fc001.php;
-use App\Models\Dw\FC\Fc002.php;
-use App\Models\Dw\FC\Fc003.php;
-use App\Models\Dw\FC\Fc004.php;
-use App\Models\Dw\FC\Fc005.php;
-use App\Models\Dw\FC\Fc006.php;
-use App\Models\Dw\FC\Fc007.php;
-use App\Models\Dw\FC\Fc008.php;
-use App\Models\Dw\FC\Fc009.php;
-use App\Models\Dw\UF\Uf001.php;
-use App\Models\Dw\CEB\Ceb001.php;
-use App\Models\Dw\CEB\Ceb002.php;
-use App\Models\Dw\CA\CA16001.php;
+use App\Models\Tarea;
+use App\Models\TareasResultado;
+use App\Models\Dw\FC\Fc001;
+use App\Models\Dw\FC\Fc002;
+use App\Models\Dw\FC\Fc003;
+use App\Models\Dw\FC\Fc004;
+use App\Models\Dw\FC\Fc005;
+use App\Models\Dw\FC\Fc006;
+use App\Models\Dw\FC\Fc007;
+use App\Models\Dw\FC\Fc008;
+use App\Models\Dw\FC\Fc009;
+use App\Models\Dw\UF\Uf001;
+use App\Models\Dw\CEB\Ceb001;
+use App\Models\Dw\CEB\Ceb002;
+use App\Models\Dw\CA\CA16001;
+use App\Models\Dw\CEB\Ceb003;
+use App\Models\Dw\CEB\Ceb004;
+use App\Models\Dw\CEB\Ceb005;
 
 
 
 class DatawarehouseController extends Controller
 {
     
-   public function ejecutarTodas($periodo)
+   public function ejecutarTodas($periodo = null)
     {                        
         if(! Tarea::where('estado',1)->first() ){
             $this->Fc001($periodo);
@@ -38,7 +42,14 @@ class DatawarehouseController extends Controller
             $this->Fc006($periodo);
             $this->Fc007($periodo);
             $this->Fc008($periodo);
-            $this->Fc009($periodo);            
+            $this->Fc009($periodo);
+            $this->Af001($periodo);
+            $this->Ca16001($periodo);
+            $this->Ceb001($periodo);
+            $this->Ceb002($periodo);
+            $this->Ceb003($periodo);
+            $this->Ceb004($periodo);
+            $this->Ceb005($periodo);
         }        
     }
 
@@ -271,7 +282,7 @@ class DatawarehouseController extends Controller
             $start = microtime(true);
             $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
             Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
-            Af001::truncate();
+            Uf001::truncate();
             $this->run_multiple_statements($sql);
             $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
             Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
@@ -291,8 +302,7 @@ class DatawarehouseController extends Controller
         { 
             $start = microtime(true);
             $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
-            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
-            Ca16001::truncate();
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);            
             $this->run_multiple_statements($sql);
             $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
             Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
@@ -313,15 +323,15 @@ class DatawarehouseController extends Controller
             $start = microtime(true);
             $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
             Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
-            Ceb001::truncate();
+            DB::connection('datawarehouse')->table('estadisticas.ceb_001')->truncate();
             $this->run_multiple_statements($sql);
             $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
-            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]);
         } 
     }
 
     /**
-     * Trunca y actualiza la tabla de CEB002
+     * Actualiza la tabla de CEB002
      *     
      * 
      */
@@ -333,9 +343,68 @@ class DatawarehouseController extends Controller
         { 
             $start = microtime(true);
             $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
-            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);
-            Ceb002::truncate();
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);       
             $this->run_multiple_statements($sql);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
+    }
+
+    /**
+     * Actualiza la tabla de CEB003
+     *     
+     * 
+     */
+    public function Ceb003($periodo)
+    {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);            
+            $this->run_multiple_statements($sql, $periodo);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
+    }
+
+    /**
+     * Actualiza la tabla de CEB004
+     *     
+     * 
+     */
+    public function Ceb004($periodo)
+    {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);            
+            $this->run_multiple_statements($sql, $periodo);
+            $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
+        } 
+    }
+
+    /**
+     * Actualiza la tabla de CEB005
+     *     
+     * 
+     */
+    public function Ceb005($periodo)
+    {   
+        $this->cargarComienzoTarea(__FUNCTION__, $periodo);
+        if((TareasResultado::where('tarea',Tarea::where('nombre',__FUNCTION__)->first()->id)
+                            ->where('periodo',$periodo)->first()->finalizado) == 0)
+        { 
+            $start = microtime(true);
+            $sql = Tarea::where('nombre',__FUNCTION__)->first()->query;
+            Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 1]);            
+            $this->run_multiple_statements($sql, $periodo);
             $this->cargarFinalTarea(__FUNCTION__, $periodo, $start);
             Tarea::where('nombre',__FUNCTION__)->update(['estado'=> 2]); 
         } 
@@ -346,16 +415,24 @@ class DatawarehouseController extends Controller
      *     
      * 
      */
-    public function run_multiple_statements($statement)
+    public function run_multiple_statements($statement, $periodo = null)
     {          
         // split the statements, so DB::statement can execute them.
         $statements = array_filter(array_map('trim', explode(';', $statement)));                
- 
-
-        foreach ($statements as $stmt) {            
-            if(! DB::connection('datawarehouse')->getPdo()->exec($stmt)){
-                echo "Error en la conexion o query";
+        
+        /*if(isset($periodo)){
+            foreach ($statements as $stmt) {            
+                if(! DB::connection('datawarehouse')->getPdo()->prepare($stmt)->bindParam(1, $periodo)->exec() ){
+                    echo "Error en la conexion o query";
+                }
             }
-        }
+        } 
+        else{*/
+            foreach ($statements as $stmt) {            
+                if(! DB::connection('datawarehouse')->getPdo()->exec($stmt)){
+                    echo "Error en la conexion o query";
+                }
+            }
+       /* }   */     
      }
 }

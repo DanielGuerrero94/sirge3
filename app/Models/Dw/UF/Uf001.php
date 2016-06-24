@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Dw;
+namespace App\Models\Dw\Uf;
 
 use Illuminate\Database\Eloquent\Model;
 

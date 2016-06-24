@@ -150,6 +150,7 @@ Route::get('puco-estadisticas-table' , 'PucoController@estadisticasTabla');
 Route::get('puco-resumen-table' , 'PucoController@resumenTabla');
 Route::post('puco-generar-archivo' , 'PucoController@generar');
 Route::get('puco-consultas' , 'PucoController@getConsulta');
+Route::get('generar-ace' , 'PucoController@generarZipACE');
 
 /**
  * BENEFICIARIOS
