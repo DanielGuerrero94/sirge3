@@ -205,22 +205,21 @@ class PucoController extends Controller
 	 */
 	public function generarZipACE(){		
 
-		if(file_exists('/var/www/html/sirge3/storage/exports/PUCO/OSP-SSS-PROFE_'.date('Y-m').'.zip')){
-			unlink('/var/www/html/sirge3/storage/exports/PUCO/OSP-SSS-PROFE_'.date('Y-m').'.zip');
-		}				
-		
 		$zip = new ZipArchive;
-		$res = $zip->open('/var/www/html/sirge3/storage/exports/PUCO/OSP-SSS-PROFE_'.date('Y-m').'.zip', ZipArchive::CREATE);
+
+		$res = $zip->open('/var/www/html/sirge3/storage/swap/OSP-SSS-PROFE_'.date('Y-m').'.zip', ZipArchive::CREATE | ZIPARCHIVE::OVERWRITE );	
+		
 		if ($res === TRUE) {
 			$p = Proceso::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
 			  ->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
 			  ->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
-			  ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*','sistema.subidas.nombre_actual','sistema.subidas.id_padron')
+			  ->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*','sistema.subidas.nombre_actual','sistema.subidas.id_padron','sistema.subidas.nombre_original')
 			  ->where('periodo' , date('Ym'))			
-			  ->get();			  
+			  ->get();				  	 
 
-		    foreach ($p as $obra_social){			
-		  		$zip->addFile($this->getName($obra_social->id_padron,TRUE).'/'.$obra_social->nombre_actual, $obra_social->codigo_osp.'.txt');
+		    foreach ($p as $obra_social){
+		    	
+		  		$zip->addFile($this->getName($obra_social->id_padron,TRUE).'/'.$obra_social->nombre_actual, ($obra_social->id_padron == 6 ? $obra_social->codigo_osp."_".$obra_social->nombre_original : $obra_social->codigo_osp) .'.txt');
 			}
 		    
 		    $zip->close();
