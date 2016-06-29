@@ -352,8 +352,8 @@
 						    		<div class="col-md-4">
 						    			<div class="form-group">
 		                      				<label for="convenio_fsus" class="col-sm-3 control-label">Suscripción</label>
-		                  					<div class="col-sm-9">
-		                    					<input type="date" class="form-control" id="convenio_fsus" name="convenio_fsus" placeholder="dd/mm/aaaa">
+		                  					<div class="col-sm-9">		                    					
+		                    					<input class="form-control" id="convenio_fsus" name="convenio_fsus" placeholder="dd/mm/aaaa">
 		                  					</div>
 		                    			</div>
 						    		</div>
