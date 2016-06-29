@@ -22,7 +22,7 @@
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
 	      <h3>{{$total_efectores}}</h3>
-	      <p>EFECTORES</p>
+	      <p>EFECTORES ACTIVOS</p>
 	    </div>
 	    <div class="icon">
 	      <i class="ion ion-ios-medkit"></i>
@@ -37,7 +37,7 @@
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
 	      <h3>{{$total_usuarios}}</h3>
-	      <p>USUARIOS</p>
+	      <p>USUARIOS ACTIVOS</p>
 	    </div>
 	    <div class="icon">
 	      <i class="ion ion-person"></i>
@@ -52,7 +52,7 @@
 	  <div class="small-box bg-aqua">
 	    <div class="inner">
 	      <h3>{{$total_beneficiarios}}</h3>
-	      <p>BENEFICIARIOS</p>
+	      <p>BENEFICIARIOS ACTIVOS</p>
 	    </div>
 	    <div class="icon">
 	      <i class="ion ion-ios-people"></i>
@@ -91,14 +91,14 @@
                           	<span class="inlinesparkline">{{$efectores}}</span>
                           </div>
                           <h5 class="description-header">{{$efectores_total}}</h5>
-                          <span class="description-text">Efectores nuevos</span>
+                          <span class="description-text">Efectores</span>
                         </div><!-- /.description-block -->
                         <div class="description-block">
                           <div class="sparkbar pad" data-color="#fff">
                           	<span class="inlinesparkline">{{$usuarios}}</span>
                           </div>
                           <h5 class="description-header">{{$usuarios_total}}</h5>
-                          <span class="description-text">Usuarios nuevos</span>
+                          <span class="description-text">Usuarios</span>
                         </div><!-- /.description-block -->
                       </div>
 					</div>
