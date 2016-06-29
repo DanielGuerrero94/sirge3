@@ -455,7 +455,7 @@
 				</div>
 				<div class="box-footer">
 					<div class="btn-group " role="group">
-					 	<button class="back btn btn-info">Cancelar alta</button>
+					 	<button class="back btn btn-info">Borrar campos</button>
 					 	<button type="submit" class="finish btn btn-warning">Solicitar alta</button>
 					</div>
 				</div>
