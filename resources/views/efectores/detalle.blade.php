@@ -288,21 +288,19 @@
                 		<p>No hay información de contacto telefónico de este esfector</p>
               		</div>
 					@endif
-					@if (count($efector->referentes))
-					<h4>Referentes</h4>
-						@foreach ($efector->referentes as $r)
+					@if (count($efector->referente))
+					<h4>Referente</h4>						
 							<div class="row">
 								<div class="col-md-12">
 									<!-- NOMBRE -->
 									<div class="form-group">
 										<label class="col-md-1 control-label">Nombre</label>
 										<div class="col-md-11">
-											<p class="form-control-static">{{ $r->nombre }}</p>
+											<p class="form-control-static">{{ $efector->referente->nombre }}</p>
 										</div>
 									</div>
 								</div>
-							</div>
-						@endforeach
+							</div>						
 					@else
 					<div class="callout callout-warning">
                 		<h4>Atención!</h4>
