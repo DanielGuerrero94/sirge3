@@ -107,7 +107,7 @@
 						<div class="col-md-4">
 							<!-- SIISA -->
 							<div class="form-group">
-								<label class="col-md-6 control-label">Cetegoría</label>
+								<label class="col-md-6 control-label">Categoría</label>
 								<div class="col-md-6">
 									<p class="form-control-static">{{ $efector->categoria->sigla }}</p>
 								</div>
@@ -285,7 +285,7 @@
 					@else
 					<div class="callout callout-warning">
                 		<h4>Atención!</h4>
-                		<p>No hay información de contacto telefónico de este esfector</p>
+                		<p>No hay información de contacto telefónico de este efector</p>
               		</div>
 					@endif
 					@if (count($efector->referente))
@@ -304,7 +304,7 @@
 					@else
 					<div class="callout callout-warning">
                 		<h4>Atención!</h4>
-                		<p>No hay referentes asociados a este esfector</p>
+                		<p>No hay referentes asociados a este efector</p>
               		</div>
 					@endif
 					@if (count($efector->internet))
@@ -341,7 +341,7 @@
 					@else
 					<div class="callout callout-danger">
                 		<h4>Atención!</h4>
-                		<p>No hay información de descentralización sobre este esfector</p>
+                		<p>No hay información de descentralización sobre este efector</p>
               		</div>
 					@endif
 				</form>
