@@ -614,6 +614,9 @@ $(document).ready(function() {
 			convenio_ffin : {
 				required : true
 			},
+			refer : {
+				required : true
+			},			
 			correo : {
 				email : true
 			}

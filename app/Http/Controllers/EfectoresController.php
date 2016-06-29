@@ -578,7 +578,7 @@ class EfectoresController extends Controller
 
      * @return string
      */
-    public function postEdit(Request $r){
+    public function postEdit(Request $r){      
 
       $update = false;
       $ef = Efector::where('cuie' , $r->cuie)->firstOrFail();
@@ -613,14 +613,14 @@ class EfectoresController extends Controller
         return 'Ha fallado la actualización de datos';
       }
 
-      if(Referente::find($ef->id_efector)){
+      if(Referente::where('id_efector' , $ef->id_efector)->get()){              
         $re = Referente::where('id_efector' , $ef->id_efector)->firstOrFail();
-        $re->nombre = $r->refer;
+        $re->nombre = $r->refer;        
       } 
       else{
          $re = new Referente();
          $re->id_efector = $ef->id_efector;
-         $re->nombre = $r->refer;
+         $re->nombre = $r->refer;         
       }
       
       if ($re->save()){
@@ -733,8 +733,7 @@ class EfectoresController extends Controller
         $ca->codigo_tercer_administrador = $r->cuie_admin;
         $ca->fecha_suscripcion = $r->convenio_fsus;
         $ca->fecha_inicio = $r->convenio_fini;
-        $ca->fecha_fin = $r->convenio_ffin;
-        $ca->numero_compromiso = $r->numero_compromiso;
+        $ca->fecha_fin = $r->convenio_ffin;        
         if ($ca->save()){
           $update = true;
         } else {

@@ -374,7 +374,7 @@
 						    			<div class="form-group">
 		                      				<label for="convenio_numero" class="col-sm-3 control-label">Número</label>
 		                  					<div class="col-sm-9">
-		                    					<input type="text" class="form-control" id="convenio_numero" name="convenio_numero" placeholder="999999" value="{{ $efector->convenio->numero_convenio or ''}}">
+		                    					<input type="text" class="form-control" id="convenio_numero" name="convenio_numero" placeholder="999999" value="{{ $efector->convenio->numero_compromiso or ''}}">
 		                  					</div>
 		                    			</div>
 						    		</div>
@@ -864,6 +864,9 @@ $(document).ready(function() {
 				required : true
 			},
 			convenio_ffin : {
+				required : true
+			},
+			refer : {
 				required : true
 			},
 			correo : {
