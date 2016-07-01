@@ -15,7 +15,7 @@
 						@if ($lote->registros_out != 0 && $descarga_disponible)
 						<a class="btn btn-success" href="descargar-rechazos/{{ $lote->lote }}"><i class="fa fa-download"></i> Descargar rechazos</a>	
 						@elseif ($lote->estado->descripcion == "ELIMINADO")
-						<div class="btn-group" data-toggle="tooltip" title="La descarga del lote no va a estar disponible ya que fue eliminado antes de poder generar su excel de rechazos" role="group">
+						<div class="btn-group" data-toggle="tooltip" title="La descarga del lote no est&aacute; disponible ya que fue eliminado antes de poder generar su excel de rechazos" role="group">
 						<a href="#" class="detalle btn btn-info" disabled><i class="fa fa-download"></i> Descargar rechazos</a>	
 						@else
 						<div class="btn-group" data-toggle="tooltip" title="La descarga del lote va a estar disponible en {{ $minutos_faltantes }} minutos aproximadamente (rechazos mayores a 30 mil registros pueden tardar más tiempo)." role="group">
