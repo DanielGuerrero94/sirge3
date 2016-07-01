@@ -17,7 +17,7 @@ use App\Models\Lote;
 use App\Models\Rechazo;
 use App\Models\Fondo;
 
-class FondosController extends Controller
+class FondosController extends AbstractPadronesController
 {
     private 
 		$_rules = [
@@ -153,7 +153,7 @@ class FondosController extends Controller
 	}
 
 	/**
-	 * Procesa el archivo de comprobantes
+	 * Procesa el archivo de fondos
 	 * @param int $id
 	 *
 	 * @return json
@@ -165,9 +165,11 @@ class FondosController extends Controller
 		if (!$fh){
 			return response('Error' , 422);
 		}
+		$nro_linea = 1;
 
 		fgets($fh);
 		while (!feof($fh)){
+			$nro_linea++;
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
 			if (count($linea) != 1){
 				if(strpos($linea[4],'.')){
@@ -176,9 +178,9 @@ class FondosController extends Controller
 					if ($v->fails()) {
 						$this->_resumen['rechazados'] ++;
 						$this->_error['lote'] = $lote;
+						$this->_error['created_at'] = date("Y-m-d H:i:s");								
 						$this->_error['registro'] = json_encode($fondo_raw);
 						$this->_error['motivos'] = json_encode($v->errors());
-						$this->_error['created_at'] = date("Y-m-d H:i:s");					
 						Rechazo::insert($this->_error);
 					} else {
 						try {
@@ -188,11 +190,16 @@ class FondosController extends Controller
 							$this->_resumen['rechazados'] ++;
 							$this->_error['lote'] = $lote;
 							$this->_error['registro'] = json_encode($fondo_raw);
-							if ($e->getCode() == 23505){
+							$this->_error['created_at'] = date("Y-m-d H:i:s");
+							if ($e->getCode() == 23505){								
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-							} else {
-								$this->_error['motivos'] = json_encode($e);
+							} else if ($e->getCode() == 22021){
+								$this->_error['registro'] = json_encode(parent::vaciarArray($fondo_raw));
+								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 							}
+							else {								
+								$this->_error['motivos'] = json_encode($e);
+							}							
 							Rechazo::insert($this->_error);
 						}
 					}	
@@ -204,7 +211,7 @@ class FondosController extends Controller
 					$this->_error['motivos'] = json_encode('No ha ingresado un codigo gasto correcto en la linea');
 					$this->_error['created_at'] = date("Y-m-d H:i:s");					
 					Rechazo::insert($this->_error);
-			}
+			}			
 		}
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);

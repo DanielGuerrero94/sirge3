@@ -145,9 +145,11 @@ class ComprobantesController extends Controller
 		if (!$fh){
 			return response('Error' , 422);
 		}
+		$nro_linea = 1;
 
 		fgets($fh);
 		while (!feof($fh)){
+			$nro_linea++;
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
 			if (count($linea) != 1){
 				array_push($linea, $lote);
@@ -177,7 +179,11 @@ class ComprobantesController extends Controller
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
 							if ($e->getCode() == 23505){
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-							} else {
+							} else if ($e->getCode() == 22021){
+								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
+								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+							}
+							else {
 								$this->_error['motivos'] = json_encode($e->errorInfo);
 							}
 							Rechazo::insert($this->_error);

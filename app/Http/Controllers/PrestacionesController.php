@@ -24,7 +24,7 @@ use App\Models\Dw\FC\Fc005;
 
 use App\Models\Geo\Provincia;
 
-class PrestacionesController extends Controller
+class PrestacionesController extends AbstractPadronesController
 {
 	private 
 		$_rules = [
@@ -242,9 +242,11 @@ class PrestacionesController extends Controller
 				if (!$fh){
 					return response('Error' , 422);
 				}
+				$nro_linea = 1;
 
 				fgets($fh);
 				while (!feof($fh)){
+					$nro_linea++;
 					$linea = explode (';' , trim(fgets($fh) , "\r\n"));
 					if (count($linea) != 1) {
 						if(count($this->_deben_ingresar) == count($linea)){
@@ -266,12 +268,15 @@ class PrestacionesController extends Controller
 											$this->_resumen['insertados'] ++;
 										} catch (QueryException $e) {
 											$this->_resumen['rechazados'] ++;
-											$this->_error['lote'] = $lote;
-											$this->_error['registro'] = json_encode($prestacion_raw);
+											$this->_error['lote'] = $lote;											
 											$this->_error['created_at'] = date("Y-m-d H:i:s");
-											if ($e->getCode() == 23505){
+											$this->_error['registro'] = json_encode($prestacion_raw);
+											if ($e->getCode() == 23505){												
 												$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-											} else {
+											} else if ($e->getCode() == 22021){
+												$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
+												$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+											}else {
 												$this->_error['motivos'] = json_encode($e);
 											}
 											Rechazo::insert($this->_error);
