@@ -49,7 +49,8 @@ class LotesController extends Controller
 	public function listadoLotes($id){
 		$data = [
 			'page_title' => 'Administración de Lotes',
-			'id_padron' => $id
+			'id_padron' => $id,
+			'priority' => Auth::user()->id_entidad
 		];
 		return view('padrones.admin-lotes' , $data);
 	}
@@ -169,7 +170,7 @@ class LotesController extends Controller
 	 * @return string
 	 */
 	public function aceptarLote(Request $r){
-		$l = Lote::findOrFail($r->lote);
+		$l = Lote::with('archivo')->findOrFail($r->lote);
 		$l->id_estado = 3;
 		if ($l->save()){
 			$la = new LoteAceptado;
@@ -178,6 +179,7 @@ class LotesController extends Controller
 			$la->fecha_aceptado = 'now';
 			if ($la->save()){
 				$this->uploadFTP($r->lote);
+				
 				return 'Se ha aceptado el lote. Recuerde declararlo para imprimir la DDJJ.';
 			}
 		}

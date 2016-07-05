@@ -14,13 +14,24 @@
 				<table class="table table-hover" id="lotes-table">
 	                <thead>
 	                  <tr>
+	                  @if ($priority == 1)
 	                    <th>Lote</th>
 	                    <th>Fecha</th>
+	                    <th>Provincia</th>
 	                    <th>Registros IN</th>
 	                    <th>Registros OUT</th>
 	                    <th>Registros MOD</th>
 	                    <th>Estado</th>
 	                    <th></th>
+	                  @else
+	                  	<th>Lote</th>
+	                    <th>Fecha</th>	                    
+	                    <th>Registros IN</th>
+	                    <th>Registros OUT</th>
+	                    <th>Registros MOD</th>
+	                    <th>Estado</th>
+	                    <th></th>
+	                  @endif
 	                  </tr>
 	                </thead>
 	            </table>
@@ -45,21 +56,45 @@
 			})
 		});
 
-		var dt = $('#lotes-table').DataTable({
-			processing: true,
-            serverSide: true,
-            ajax : 'listar-lotes-table/{{ $id_padron }}',
-            columns: [
-                { data: 'lote', name: 'lote' },
-                { data: 'inicio' , name: 'inicio'},
-                { data: 'registros_in'},
-                { data: 'registros_out'},
-                { data: 'registros_mod'},
-                { data: 'estado_css' , name: 'estado_css'},
-                { data: 'action' }
-            ],
-            order : [[0,'desc']]
-		});
+		@if ($priority == 1)
+
+			var dt = $('#lotes-table').DataTable({
+				processing: true,
+	            serverSide: true,
+	            ajax : 'listar-lotes-table/{{ $id_padron }}',
+	            columns: [
+	                { data: 'lote', name: 'lote' },
+	                { data: 'inicio' , name: 'inicio'},
+	                { data: 'id_provincia' , name: 'id_provincia'},
+	                { data: 'registros_in'},
+	                { data: 'registros_out'},
+	                { data: 'registros_mod'},
+	                { data: 'estado_css' , name: 'estado_css'},
+	                { data: 'action' }
+	            ],
+	            order : [[0,'desc']]
+			});
+
+		@else 
+
+			var dt = $('#lotes-table').DataTable({
+				processing: true,
+	            serverSide: true,
+	            ajax : 'listar-lotes-table/{{ $id_padron }}',
+	            columns: [
+	                { data: 'lote', name: 'lote' },
+	                { data: 'inicio' , name: 'inicio'},
+	                { data: 'registros_in'},
+	                { data: 'registros_out'},
+	                { data: 'registros_mod'},
+	                { data: 'estado_css' , name: 'estado_css'},
+	                { data: 'action' }
+	            ],
+	            order : [[0,'desc']]
+			});
+
+		@endif
+
 
 		$('#lotes-table').on('click' , '.view-lote' , function(){
 			var lote = $(this).attr('lote');
