@@ -49,8 +49,9 @@ class CeiController extends Controller
 
 		$periodos = Resultado::select('periodo' , DB::raw('round((count(*) / 1728 :: numeric * 100) ,2) as r'))
 							->groupBy('periodo')
+							->orderBy('periodo','desc')
 							->take(3)
-							->get();
+							->get();									
 
 		foreach ($periodos as $periodo){
 			$dt = \DateTime::createFromFormat('Ym' , $periodo->periodo);
