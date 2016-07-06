@@ -61,14 +61,14 @@
 			processing: true,
             serverSide: true,
             ajax : 'listado-ddjj-table/{{ $padron }}',
-            columns: [
-                { data: 'id_impresion' , name : 'id_impresion'},
-                { data: 'fecha_impresion' , name : 'fecha_impresion'},
+            columns: [                               
+                { data: 'id_impresion' , name : 'id_impresion', orderable: false },
+                { data: 'fecha_impresion' , name : 'fecha_impresion', orderable: false , searchable: false},
                 { data: 'lote' , name: 'lote'},
                 { data: 'view'}
                 
             ],
-            order : [[0,'desc']]
+            order : [[1,'desc']]
 		});
 
 	});
