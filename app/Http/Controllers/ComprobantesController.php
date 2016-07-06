@@ -17,7 +17,7 @@ use App\Models\Lote;
 use App\Models\Rechazo;
 use App\Models\Comprobante;
 
-class ComprobantesController extends Controller
+class ComprobantesController extends AbstractPadronesController
 {
 	private 
 		$_rules = [
