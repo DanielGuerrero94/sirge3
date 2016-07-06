@@ -117,6 +117,8 @@ class DdjjController extends Controller
 			->groupBy('ddjj.sirge.id_impresion')
 			->groupBy('ddjj.sirge.lote')
 			->groupBy('sistema.subidas.id_padron')
+			->orderBy('ddjj.sirge.fecha_impresion','desc')
+			->orderBy('ddjj.sirge.id_impresion','desc')
 			->select('ddjj.sirge.*' , 'sistema.subidas.id_padron');
 		if (Auth::user()->id_entidad == 2) {
 			$lotes->where('id_provincia' , Auth::user()->id_provincia);
