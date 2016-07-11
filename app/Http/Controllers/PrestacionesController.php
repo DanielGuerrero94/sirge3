@@ -290,12 +290,28 @@ class PrestacionesController extends AbstractPadronesController
 																->where('clave_beneficiario' , $prestacion_raw['clave_beneficiario'])
 																->where('orden' , $prestacion_raw['orden']);
 										
-										if ($prestacion->count()){
+										if ($prestacion->count()){											
+
 											$prestacion = $prestacion->firstOrFail();
 											$prestacion->estado = 'D';
-											if ($prestacion->save()){
-												$this->_resumen['modificados'] ++;
-											}
+											try {
+												$prestacion->save();
+												$this->_resumen['modificados'] ++;											
+											} catch (QueryException $e) {
+												$this->_resumen['rechazados'] ++;
+												$this->_error['lote'] = $lote;											
+												$this->_error['created_at'] = date("Y-m-d H:i:s");
+												$this->_error['registro'] = json_encode($prestacion_raw);
+												if ($e->getCode() == 23505){												
+													$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
+												} else if ($e->getCode() == 22021){
+													$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
+													$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+												}else {
+													$this->_error['motivos'] = '{"modificacion" : ["Registro no pudo actualizarse"]}';
+												}
+												Rechazo::insert($this->_error);
+											}											
 										} else {
 											$this->_resumen['rechazados'] ++;
 											$this->_error['lote'] = $lote;
