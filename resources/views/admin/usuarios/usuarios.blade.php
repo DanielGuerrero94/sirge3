@@ -11,6 +11,7 @@
                     <table class="table table-hover" id="usuarios-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
                                 <th>Provincia</th>
@@ -32,6 +33,7 @@ $(function() {
         serverSide: true,
         ajax : 'usuarios-table',
         columns: [
+            { data: 'id_usuario', name: 'id_usuario'},
             { data: 'nombre', name: 'nombre'},
             { data: 'email', orderable: false },
             { data: 'provincia.descripcion', name: 'provincia.descripcion', orderable: false },
