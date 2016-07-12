@@ -4,5 +4,5 @@
         SIRGE Web - Unidad Ejecutora Central
     </div>
     <!-- Default to the left -->
-    <strong> <a href="#">Programa SUMAR</a></strong>
+    <strong> <a href="#">Cobertura Universal de Salud - sumar</a></strong>
 </footer>
