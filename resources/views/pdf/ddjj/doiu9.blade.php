@@ -28,15 +28,16 @@
 	<hr />
 	<table style="width: 100%">
 		<tr>
-			<td>FORMULARIO DE ENVÍO DE INFORMACIÓN PRIORIZADA DEL PROGRAMA SUMAR</td>
-			<td>Nº {{ $ddjj->id_provincia}}/{{ $ddjj->periodo_reportado}}</td>
+			<td style="font-size:12px;">FORMULARIO DE INFORMACIÓN PRIORIZADA - COBERTURA UNIVERSAL DE SALUD - SUMAR</td>
+			<td style="font-size:12px;">Nº {{ $ddjj->id_provincia}}/{{ $ddjj->periodo_reportado}}</td>
 		</tr>
 	</table>
 	<p class="lugar-dia-hora"><b>{{ ucwords(strtolower($ddjj->provincia->descripcion)) }} , {{ $fecha_impresion }}</b></p>
 	<p style="font-weight: bold">
-		SEÑOR <br/>
-		COORDINADOR NACIONAL DEL PROGRAMA SUMAR <br />
-		DR. EDUARDO MARTINEZ
+		SEÑOR COORDINADOR NACIONAL<br/>
+		DR. EDUARDO MARTINEZ <br />		 
+		COBERTURA UNIVERSAL DE SALUD - SUMAR
+		
 	</p>
 	<p>
 		De mi mayor consideración:
@@ -53,7 +54,7 @@
 		Por otra parte dejo constancia que:
 		<ol>
 			<li>
-				Se encuentra cargado y autorizado el Tablero de Control del Programa SUMAR con los datos correspondientes al período {{ $ddjj->periodo_tablero_control }}.
+				Se encuentra cargado y autorizado el Tablero de Control con los datos correspondientes al período {{ $ddjj->periodo_tablero_control }}.
 			</li>
 			<li>
 				Con fecha {{ $ddjj->fecha_cuenta_capitas }} se remitió al Área de Supervisión y Auditoría de la Gestión Administrativa y Financiera de la UEC
@@ -65,8 +66,8 @@
 				realizado por los efectores correspondientes al Sistema de Reportes de Gestión (SIRGE), actualizando con los datos correspondientes al período {{ $ddjj->periodo_sirge }}.
 			</li>
 			<li>
-				Con fecha {{ $ddjj->fecha_reporte_bimestral }} se remitió al Área Planificación Estratégica de la UEC, el Reporte bimestral de Prestaciones del SPS del Programa SUMAR y 
-				el Reporte bimestral de Uso de Fondos del SPS del Programa SUMAR correspondientes al bimestre Nº {{ $ddjj->bimestre }} del año {{ $ddjj->anio_bimestre }}.
+				Con fecha {{ $ddjj->fecha_reporte_bimestral }} se remitió al Área Planificación Estratégica de la UEC, el Reporte bimestral de Prestaciones del SPS y 
+				el Reporte bimestral de Uso de Fondos del SPS correspondientes al bimestre Nº {{ $ddjj->bimestre }} del año {{ $ddjj->anio_bimestre }}.
 			</li>
 		</ol>
 	</p>
