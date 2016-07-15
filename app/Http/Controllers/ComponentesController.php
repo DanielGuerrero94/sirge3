@@ -69,6 +69,51 @@ class ComponentesController extends Controller
         return view('componentes.odp1' , $data);
     }
 
+    /** 
+     * Devuelve la vista del resumen de O.D.P 1
+     * @param string $periodo
+     *
+     * @return null
+     */
+    public function getResumenODP2($periodo = null, $provincia = null){
+       /* $periodo = 201601;
+        $provincia = '05';*/
+
+        if(isset($periodo)){
+            $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
+            $periodo = $dt->format('Ym');    
+        }
+        else{
+            $periodo = TareasResultado::select(DB::raw('max(periodo)'))->first()->max;
+            $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));                
+        }
+
+        if(! isset($provincia)){
+            $provincia = null;
+            $provincia_descripcion = 'Nivel Pais';
+        }
+        else{
+            $datos_provincia = Provincia::find($provincia);            
+            $provincia_descripcion =  $datos_provincia->descripcion;
+        }        
+
+        $data = [
+            'page_title' => 'Resumen mensual O.D.P 2, '.$provincia_descripcion.', '. ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
+            /*'progreso_ceb_series' => $this->getProgresoCeb($periodo),
+            'progreso_ceb_categorias' => $this->getMesesArray($periodo),
+            'distribucion_provincial_categorias' => $this->getProvinciasArray(),
+            'distribucion_provincial_series' => $this->getDistribucionProvincial($periodo),*/
+            'map' => $this->getMapSeries($periodo),
+            'pie_cp' => $this->getDistribucionCp($periodo,$provincia),            
+            //'distribucion_sexos' => $this->getSexosSeries($periodo,$provincia),
+            'periodo_calculado' => $periodo,
+            'provincia' => $provincia == null ? 'pais' : $provincia,
+            'provincia_descripcion' => $provincia_descripcion
+        ];
+
+        return view('componentes.odp2' , $data);
+    }
+
     /**
      * Retorna la información para armar el gráfico complicado
      *
@@ -301,6 +346,48 @@ class ComponentesController extends Controller
         return $superObjeto;
     }
 
+    /**
+     * Devuelve la info para el grafico de torta para beneficiarias embarazadas con control prenatal
+     * @param string $periodo
+     *
+     * @return json
+     */
+    protected function getDistribucionCp($periodo, $provincia = null){
+         
+        $meta = 36;      
+        
+        $object = Ceb005::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);
+        if(isset($provincia)){
+            $object->where('id_provincia',$provincia);
+        }                
+        $cantidad_total = $object->first()->y;
+        $cantidad_para_cumplir = round($object->first()->y * $meta / 100);
+                
+        $object = Ceb005::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);
+        if(isset($provincia)){
+            $object->where('id_provincia',$provincia);
+        }
+        $cantidad_cumplida = round($object->first()->y);
+
+        if($cantidad_para_cumplir > $cantidad_cumplida){
+            $data[] = array_merge(array('y' => $cantidad_total - $cantidad_para_cumplir), array('name' => 'sin control', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge($object->first()->toArray(),array('name' => 'actual', 'color' => '#00FFFF'));            
+        }
+        else{
+            $data[] = array_merge(array('y' => $cantidad_total - $cantidad_cumplida), array('name' => 'sin control', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'actual', 'color' => '#00FFFF'));             
+        }        
+
+        $superObjeto = [
+                        'titulo' => 'Meta: '. $meta . '%',
+                        'data' => json_encode($data) 
+                        ];
+     
+        return $superObjeto;
+    }
+
     
      /**
      * Aclara el color base
@@ -467,6 +554,47 @@ class ComponentesController extends Controller
         return view('componentes.ceb-detalle-provincia' , array('data' => $data));
     }
 
+    /**
+     * Devuelve un pequeño detalle del indicador para una provincia y un período
+     * @param int $periodo
+     * @param int $indicador
+     * @param char $provincia
+     *
+     * @return null
+     */
+    public function getDetalleProvinciaODP2($periodo, $provincia){        
+       
+        $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
+        $periodo = $dt->format('Ym');               
+        $resultado = Ceb005::where('periodo' , $periodo);
+
+        if( $provincia != 'pais' ){
+            $resultado = $resultado->where('id_provincia' , $provincia);                   
+
+            $datos_provincia = Provincia::find($provincia);
+            $data['entidad'] =  $datos_provincia->descripcion;                      
+        }
+        else{
+            $resultado = $resultado->select(DB::raw('sum(beneficiarios_registrados) as beneficiarios_registrados'),DB::raw('sum(beneficiarios_activos) as beneficiarios_activos'),DB::raw('sum(beneficiarios_ceb) as beneficiarios_ceb'));
+            $data['entidad'] =  'País'; 
+        }
+
+        $resultado = $resultado->first();        
+
+        $data['titulo'] = 'Control prenatal en embarazadas';
+        $data['periodo'] = $periodo;
+        $data['beneficiarios_registrados'] = number_format($resultado->beneficiarios_registrados);
+        $data['beneficiarios_activos'] = number_format($resultado->beneficiarios_activos);
+        $data['beneficiarios_ceb'] = number_format($resultado->beneficiarios_ceb);
+        $data['indicador'] = '2';
+        $data['tipo'] = 'B';
+        $data['porcentaje_actual'] = round($resultado->beneficiarios_ceb / $resultado->beneficiarios_activos , 2) * 100;
+
+        //return var_dump(array('data' => json_encode($data)));
+
+        return view('componentes.ca-detalle-provincia' , array('data' => $data));
+    }
+
     public function getEvolucionODP1($tipo){
         $dt = new \DateTime();
         $dt->modify('-1 month');
@@ -576,5 +704,14 @@ class ComponentesController extends Controller
         $interval['min'] = $dt->format('Ym');
 
         return $interval;
+    }
+
+     /**
+     * Devuelve el rango de periodos a filtrar
+     *
+     * @return array
+     */
+    protected function getDescripcionIndicador($odp = null){                
+        return view('componentes.descripcion-indicador');
     }
 }
