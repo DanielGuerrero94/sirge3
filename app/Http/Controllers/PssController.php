@@ -729,13 +729,13 @@ class PssController extends Controller
      */
     public function generarTabla(){
 
-      if(file_exists('../storage/exports/Pss_CODIGOS.xlsx')){
-        unlink('../storage/exports/Pss_CODIGOS.xlsx');  
+      if(file_exists('/var/www/html/sirge3/storage/exports/Pss_CODIGOS.xlsx')){
+        unlink('/var/www/html/sirge3/storage/exports/Pss_CODIGOS.xlsx');  
       }
-      if(file_exists('../storage/exports/PSS_CODIGOS.zip')){
-        unlink('../storage/exports/PSS_CODIGOS.zip');  
+      if(file_exists('/var/www/html/sirge3/storage/exports/PSS_CODIGOS.zip')){
+        unlink('/var/www/html/sirge3/storage/exports/PSS_CODIGOS.zip');  
       }
-      
+
       /*$codigos = Salud::join('pss.diagnosticos' , 'pss.diagnosticos.diagnostico' , '=' , 'pss.codigos.diagnostico')
       				   ->select('codigo_prestacion','tipo','objeto','pss.codigos.diagnostico','descripcion_grupal','descripcion as descripcion_diagnostico')
       				   ->orderBy('pss.codigos.codigo_prestacion' , 'asc')       				   
