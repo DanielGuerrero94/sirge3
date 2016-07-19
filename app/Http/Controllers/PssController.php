@@ -755,8 +755,8 @@ class PssController extends Controller
       ->store('xlsx');
 
       $zip = new ZipArchive();
-      $zip->open('../storage/exports/PSS_CODIGOS.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);      
-      $zip->addFile('../storage/exports/Pss_CODIGOS.xlsx', 'Pss_CODIGOS.xlsx');      
+      $zip->open('/var/www/html/sirge3/storage/exports/PSS_CODIGOS.zip', ZipArchive::CREATE);      
+      $zip->addFile('/var/www/html/sirge3/storage/exports/Pss_CODIGOS.xlsx', 'Pss_CODIGOS.xlsx');      
       $zip->close();
     }
 
