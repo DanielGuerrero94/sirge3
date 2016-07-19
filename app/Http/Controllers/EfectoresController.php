@@ -794,8 +794,8 @@ class EfectoresController extends Controller
       
       $data = ['efectores' => $efectores];
 
-      if(file_exists('../storage/exports/Efectores_SUMAR.xls')){
-        unlink('../storage/exports/Efectores_SUMAR.xls');  
+      if(file_exists('../storage/exports/Efectores_SUMAR.xlsx')){
+        unlink('../storage/exports/Efectores_SUMAR.xlsx');  
       }   
 
       Excel::create('Efectores_SUMAR' , function ($e) use ($data){
@@ -807,11 +807,11 @@ class EfectoresController extends Controller
           $s->loadView('efectores.tabla' , $data);
         });
       })
-      ->store('xls');
+      ->store('xlsx');
 
       $zip = new ZipArchive();
       $zip->open('../storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);      
-      $zip->addFile('../storage/exports/Efectores_SUMAR.xls', 'Efectores_SUMAR.xls');      
+      $zip->addFile('../storage/exports/Efectores_SUMAR.xlsx', 'Efectores_SUMAR.xlsx');      
       $zip->close();
     }
 
