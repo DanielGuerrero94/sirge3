@@ -736,6 +736,10 @@ class PssController extends Controller
       
       $data = ['codigos' => $codigos];
 
+      if(file_exists('../storage/exports/Pss_CODIGOS.xls')){
+        unlink('../storage/exports/Pss_CODIGOS.xls');  
+      }
+
       Excel::create('Pss_CODIGOS' , function ($e) use ($data){
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
           $s->setHeight(1, 20);
@@ -748,7 +752,7 @@ class PssController extends Controller
       ->store('xls');
 
       $zip = new ZipArchive();
-      $zip->open('../storage/exports/PSS_CODIGOS.zip', ZipArchive::CREATE);
+      $zip->open('../storage/exports/PSS_CODIGOS.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);      
       $zip->addFile('../storage/exports/Pss_CODIGOS.xls', 'Pss_CODIGOS.xls');      
       $zip->close();
     }

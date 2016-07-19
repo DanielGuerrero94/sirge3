@@ -103,7 +103,7 @@ class EfectoresController extends Controller
                 'internet',
                 'convenio'
                 ])
-        ->find($id);
+        ->find($id);        
 
     	$data = [
     		'page_title' => $efector->nombre,
@@ -794,6 +794,10 @@ class EfectoresController extends Controller
       
       $data = ['efectores' => $efectores];
 
+      if(file_exists('../storage/exports/Efectores_SUMAR.xls')){
+        unlink('../storage/exports/Efectores_SUMAR.xls');  
+      }   
+
       Excel::create('Efectores_SUMAR' , function ($e) use ($data){
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
           $s->setHeight(1, 20);
@@ -806,7 +810,7 @@ class EfectoresController extends Controller
       ->store('xls');
 
       $zip = new ZipArchive();
-      $zip->open('../storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
+      $zip->open('../storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);      
       $zip->addFile('../storage/exports/Efectores_SUMAR.xls', 'Efectores_SUMAR.xls');      
       $zip->close();
     }
