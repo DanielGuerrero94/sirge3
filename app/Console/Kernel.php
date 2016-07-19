@@ -32,8 +32,8 @@ class Kernel extends ConsoleKernel
         
         $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
         
-        $schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('14:31');
-        $schedule->call('App\Http\Controllers\PssController@generarTabla')->dailyAt('15:15');
+        $schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('14:53');
+        $schedule->call('App\Http\Controllers\PssController@generarTabla')->dailyAt('15:50');
         $schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->hourly();
         $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas', [$periodo_a_automatizar])->cron('30 17 21 * * *');        
 
