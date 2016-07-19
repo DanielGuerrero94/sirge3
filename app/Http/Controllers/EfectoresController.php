@@ -796,6 +796,9 @@ class EfectoresController extends Controller
 
       if(file_exists('../storage/exports/Efectores_SUMAR.xlsx')){
         unlink('../storage/exports/Efectores_SUMAR.xlsx');  
+      }
+      if(file_exists('../storage/exports/EFECTORES_SUMAR.zip')){
+        unlink('../storage/exports/EFECTORES_SUMAR.zip');
       }   
 
       Excel::create('Efectores_SUMAR' , function ($e) use ($data){

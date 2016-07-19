@@ -133,14 +133,14 @@ class RechazosController extends Controller
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
-      ->store('xls', storage_path('exports/rechazos/'));
+      ->store('xlsx', storage_path('exports/rechazos/'));
       //->export('xls');
 
       $zip = new ZipArchive();
       $zip->open('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
-      $zip->addFile('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls', $lote.'.xls');      
+      $zip->addFile('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xlsx', $lote.'.xlsx');      
       $zip->close();      
-      unlink('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls');
+      unlink('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xlsx');
 
       $this->cargarFinalExcelRechazo($lote, $start);
       return $this->descargarExcelLote($lote);
@@ -189,15 +189,15 @@ class RechazosController extends Controller
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
-      ->store('xls', storage_path('exports/rechazos/'))
+      ->store('xlsx', storage_path('exports/rechazos/'))
       //->export('xls')
       ;
 
       $zip = new ZipArchive();
       $zip->open('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
-      $zip->addFile('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls', $lote.'.xls');      
+      $zip->addFile('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xlsx', $lote.'.xlsx');      
       $zip->close();      
-      unlink('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xls');
+      unlink('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.xlsx');
 
       $this->cargarFinalExcelRechazo($lote, $start);
     }

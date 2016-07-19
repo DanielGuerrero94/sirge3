@@ -739,6 +739,9 @@ class PssController extends Controller
       if(file_exists('../storage/exports/Pss_CODIGOS.xlsx')){
         unlink('../storage/exports/Pss_CODIGOS.xlsx');  
       }
+      if(file_exists('../storage/exports/PSS_CODIGOS.zip')){
+        unlink('../storage/exports/PSS_CODIGOS.zip');  
+      }
 
       Excel::create('Pss_CODIGOS' , function ($e) use ($data){
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
