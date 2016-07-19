@@ -729,7 +729,14 @@ class PssController extends Controller
      */
     public function generarTabla(){
 
-      $codigos = Salud::join('pss.diagnosticos' , 'pss.diagnosticos.diagnostico' , '=' , 'pss.codigos.diagnostico')
+      if(file_exists('../storage/exports/Pss_CODIGOS.xlsx')){
+        unlink('../storage/exports/Pss_CODIGOS.xlsx');  
+      }
+      if(file_exists('../storage/exports/PSS_CODIGOS.zip')){
+        unlink('../storage/exports/PSS_CODIGOS.zip');  
+      }
+      
+      /*$codigos = Salud::join('pss.diagnosticos' , 'pss.diagnosticos.diagnostico' , '=' , 'pss.codigos.diagnostico')
       				   ->select('codigo_prestacion','tipo','objeto','pss.codigos.diagnostico','descripcion_grupal','descripcion as descripcion_diagnostico')
       				   ->orderBy('pss.codigos.codigo_prestacion' , 'asc')       				   
        				   ->get();        
@@ -757,7 +764,7 @@ class PssController extends Controller
       $zip = new ZipArchive();
       $zip->open('../storage/exports/PSS_CODIGOS.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);      
       $zip->addFile('../storage/exports/Pss_CODIGOS.xlsx', 'Pss_CODIGOS.xlsx');      
-      $zip->close();
+      $zip->close();*/
     }
 
     /**
