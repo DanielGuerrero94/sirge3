@@ -794,10 +794,10 @@ class EfectoresController extends Controller
       
       $data = ['efectores' => $efectores];
 
-      if(file_exists('../storage/exports/Efectores_SUMAR.xlsx')){
+      if(file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx')){
         unlink('../storage/exports/Efectores_SUMAR.xlsx');  
       }
-      if(file_exists('../storage/exports/EFECTORES_SUMAR.zip')){
+      if(file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip')){
         unlink('../storage/exports/EFECTORES_SUMAR.zip');
       }   
 
@@ -813,8 +813,8 @@ class EfectoresController extends Controller
       ->store('xlsx');
 
       $zip = new ZipArchive();
-      $zip->open('../storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);      
-      $zip->addFile('../storage/exports/Efectores_SUMAR.xlsx', 'Efectores_SUMAR.xlsx');      
+      $zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);      
+      $zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx', 'Efectores_SUMAR.xlsx');      
       $zip->close();
     }
 
