@@ -34,7 +34,8 @@ class PucoController extends Controller
 	 *
 	 * @return null
 	 */
-	public function getGenerar(){
+	public function getGenerar(){		
+
 		$data = [
 			'page_title' => 'Generar PUCO ' . date('M y'),
 			'puco_ready' => $this->checkPuco(),
@@ -151,6 +152,30 @@ class PucoController extends Controller
 	 */
 	public function generar() {
 		
+		$datos = Provincia::leftJoin('sistema.subidas_osp' , 'sistema.subidas_osp.codigo_osp' , '=' , 'puco.obras_sociales_provinciales.codigo_osp')
+						  ->leftJoin('sistema.subidas' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+						  ->leftJoin('sistema.lotes' , function ($j) {
+					  	  		$j->on('sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+					  	  		  ->where('sistema.lotes.id_estado' ,'=' , 3);
+						  })
+						  ->leftJoin('puco.procesos_obras_sociales' , function($j){
+						  		$j->on('sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote');
+						  })->leftJoin('puco.obras_sociales' , 'puco.obras_sociales_provinciales.codigo_osp' , '=' , 'puco.obras_sociales.codigo_osp')
+						  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
+						  ->get();
+		$i = 0;
+
+		foreach ($datos as $fila) {
+			$objeto_a_insertar[$i]['lote'] = $fila->lote;
+			$objeto_a_insertar[$i]['id_provincia'] = $fila->id_provincia;
+			$objeto_a_insertar[$i]['nombre'] = $fila->nombre;
+			$objeto_a_insertar[$i]['registros_in'] = $fila->registros_in;
+			$objeto_a_insertar[$i]['periodo'] =  date('Ym');
+			$i++;
+		}
+
+		DB::table('puco.cantidades_mensuales')->insert($objeto_a_insertar);
+		
 		$password = $this->password();
 
 		DB::statement("
@@ -172,7 +197,7 @@ class PucoController extends Controller
 		exec($sys);
 
 		// $zh = fopen("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
-		// file_put_contents("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip', $zh);
+		// file_put_contents("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip', $zh);	
 		
 		$this->actualizarPuco($password , $this->getBeneficiarios(date('Ym')));
 		$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
