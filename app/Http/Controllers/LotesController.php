@@ -155,12 +155,12 @@ class LotesController extends Controller
 	 * @return bool
 	 */
 	protected function uploadFTP($lote) {
-		$l = Lote::with('archivo')->findOrFail($lote);
+		/*$l = Lote::with('archivo')->findOrFail($lote);
 		$ruta = $this->getName($l->archivo->id_padron , TRUE);
 		$fh = fopen($ruta . '/' . $l->archivo->nombre_actual , 'r');
 		if (Storage::put('sirg3/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual , $fh)){
 			unlink('../storage/uploads/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual);
-		}
+		}*/
 	}
 
 	/**
