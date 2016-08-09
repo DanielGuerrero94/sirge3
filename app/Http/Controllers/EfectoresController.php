@@ -58,10 +58,10 @@ class EfectoresController extends Controller
      * @return null
      */
     public function listado(){
-    	$data = [
-    		'page_title' => 'Listado de efectores'
-    	];
-    	return view('efectores.listado' , $data);
+      $data = [
+        'page_title' => 'Listado de efectores'
+      ];
+      return view('efectores.listado' , $data);
     }
 
     /**
@@ -70,11 +70,11 @@ class EfectoresController extends Controller
      * @return json
      */
     public function listadoTabla(){
-    	$hospitals = Efector::with(['estado']);        
+      $hospitals = Efector::with(['estado']);        
         return Datatables::of($hospitals)
-        	->addColumn('label_estado' , function($hospital){
-        		return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
-        	})
+          ->addColumn('label_estado' , function($hospital){
+            return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
+          })
           ->addColumn('action' , function($hospital){
               return '<button id-efector="'. $hospital->id_efector .'" class="ver-efector btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
           })
@@ -88,7 +88,7 @@ class EfectoresController extends Controller
      * @return null
      */
     public function detalle($id , $back){
-    	$efector = Efector::with([
+      $efector = Efector::with([
                 'estado' , 
                 'tipo' , 
                 'categoria' ,
@@ -105,12 +105,12 @@ class EfectoresController extends Controller
                 ])
         ->find($id);        
 
-    	$data = [
-    		'page_title' => $efector->nombre,
-    		'efector' => $efector,
+      $data = [
+        'page_title' => $efector->nombre,
+        'efector' => $efector,
         'back' => $back
-    	];
-    	return view('efectores.detalle' , $data);
+      ];
+      return view('efectores.detalle' , $data);
     }
 
     /**
