@@ -141,6 +141,91 @@ class PrestacionesController extends AbstractPadronesController
 	}
 
 	/**
+	 * Cuenta la cantidad de id reportable 7 subidos
+	 * @param array $linea
+	 *
+	 * @return int
+	 */
+	protected function contarID7Subidos($linea) {
+		$nro = 11;
+		$cantidad = 0;
+
+		while ($nro <= 17) {
+			if($linea[$nro] == '7'){
+				$cantidad++;
+			}
+			$nro = $nro + 2;
+		}
+
+		return $cantidad;
+	}
+
+	/**
+	 * Actualiza el archivo con los datos procesados
+	 * @param array $linea
+	 *
+	 * @return array $linea
+	 */
+	protected function ordenarDatosID7($linea) {
+		$nro = 11;
+		$cantidad = 0;			
+
+		switch ($this->contarID7Subidos($linea)) {
+			case 1:
+				while ($nro <= 17) {
+					if($linea[$nro] == '7'){
+						$nro_inicial = $nro;
+						$split_7 = explode('/', $linea[$nro+1]);
+						$linea[$nro_inicial+1] = array(); 
+
+						foreach ($split_7 as $campo => $valor) {
+							if( strtolower(substr($valor, 0, 2)) == 'od' ){								
+								$linea[$nro_inicial+1]['d'] = $valor; 	
+							}
+							elseif( strtolower(substr($valor, 0, 2)) == 'oi' ){
+								$linea[$nro_inicial+1]['i'] = $valor; 		
+							}							
+						}						
+					}
+					$nro = $nro + 2;
+				}
+				break;
+			case 2:
+				while ($nro <= 17) {
+					if($linea[$nro] == '7'){
+						if ($cantidad == 0) {
+							$nro_inicial = $nro;
+							$valor = $linea[$nro_inicial+1];
+							$linea[$nro_inicial+1] = array();
+						}
+						else{
+							$valor = $linea[$nro+1];
+						}						
+						$cantidad++;						
+
+						if( strtolower(substr($valor, 0, 2)) == 'od' ){
+							$linea[$nro_inicial+1]['d'] = $valor; 	
+						}
+						elseif( strtolower(substr($valor, 0, 2)) == 'oi' ){
+							$linea[$nro_inicial+1]['i'] = $valor; 		
+						}																
+					}
+					if($cantidad > 1){
+						$linea[$nro] = null;
+						$linea[$nro+1] = null;
+					}
+					$nro = $nro + 2;
+				}
+				break;
+			
+			default:
+				# code...
+				break;			
+		}		
+		return $linea;
+	}
+
+	/**
 	 * Actualiza el archivo con los datos procesados
 	 * @param int $id
 	 *
@@ -162,11 +247,15 @@ class PrestacionesController extends AbstractPadronesController
 
 		$datos_reportables = array();
 
-		if($linea[11] != null && $linea[12] != null && $linea[11] != '' && $linea[12] != ''){							
-			$datos_reportables[$linea[11]] = $linea[12];							
+		$linea = $this->ordenarDatosID7($linea);
+
+		if($linea[11] != null && $linea[12] != null && $linea[11] != '' && $linea[12] != ''){								
+			$datos_reportables[$linea[11]] = $linea[12];			
+			
 		}
-		if($linea[13] != null && $linea[14] != null && $linea[13] != '' && $linea[14] != ''){							
-			$datos_reportables[$linea[13]] = $linea[14];
+		if($linea[13] != null && $linea[14] != null && $linea[13] != '' && $linea[14] != ''){
+			
+			$datos_reportables[$linea[13]] = $linea[14];			
 		}
 		if($linea[15] != null && $linea[16] != null && $linea[15] != '' && $linea[16] != ''){							
 			$datos_reportables[$linea[15]] = $linea[16];
