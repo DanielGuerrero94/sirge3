@@ -181,7 +181,7 @@ class PucoController extends Controller
 		
 		$password = $this->password();
 
-		DB::statement("	SELECT * FROM public.copiar_puco_en_servidor(); ");
+		DB::statement("	PERFORM public.copiar_puco_en_servidor(); ");
 		/**
 		*
 		DB::statement("
