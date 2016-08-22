@@ -17,6 +17,7 @@ use App\Models\PUCO\Puco;
 use App\Models\PUCO\ProcesoPuco as Proceso;
 use App\Models\PUCO\Provincia;
 use App\Models\Lote;
+use App\Models\PUCO\Osp;
 
 class PucoController extends Controller
 {
@@ -172,9 +173,11 @@ class PucoController extends Controller
 			$objeto_a_insertar[$i]['registros_in'] = $fila->registros_in;
 			$objeto_a_insertar[$i]['periodo'] =  date('Ym');
 			$i++;
-		}
+		}		
 
 		DB::table('puco.cantidades_mensuales')->insert($objeto_a_insertar);
+
+		Osp::where('numero_documento','46074543')->update(['nombre_apellido' => 'GONZALEZ D AMICO MARIA CLARA']);
 		
 		$password = $this->password();
 
