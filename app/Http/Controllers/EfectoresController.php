@@ -659,7 +659,7 @@ class EfectoresController extends Controller
           $pp->id_efector = $ef->id_efector;
         }
         $pp->addenda_perinatal = $r->addenda_perinatal;
-        $pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal;
+        $pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal <> '' ? $r->fecha_addenda_perinatal : null;
         $pp->perinatal_ac = $r->perinatal_ac;
         if ($pp->save()){
           $update = true;
