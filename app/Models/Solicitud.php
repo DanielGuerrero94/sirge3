@@ -65,7 +65,7 @@ class Solicitud extends Model
      */
     public function getFechaAsignacionAttribute($value)
     {
-        return date('d/m/Y' , strtotime($value));
+        return $value === NULL ? $value : date('d/m/Y' , strtotime($value));
     }
 
     /**
@@ -76,7 +76,7 @@ class Solicitud extends Model
      */
     public function getFechaSolucionAttribute($value)
     {
-        return date('d/m/Y' , strtotime($value));
+        return $value === NULL ? $value : date('d/m/Y' , strtotime($value));
     }
 
     /**

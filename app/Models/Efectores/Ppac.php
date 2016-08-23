@@ -35,6 +35,6 @@ class Ppac extends Model
      */
     public function getFechaAddendaPerinatalAttribute($value)
     {
-        return date('d/m/Y' , strtotime($value));
+        return $value === NULL ? $value : date('d/m/Y' , strtotime($value));
     }
 }
