@@ -25,15 +25,17 @@ use App\Models\Dw\CA\CA16001;
 use App\Models\Dw\CEB\Ceb003;
 use App\Models\Dw\CEB\Ceb004;
 use App\Models\Dw\CEB\Ceb005;
+use App\Models\Scheduler;
 
 
 
 class DatawarehouseController extends Controller
 {
     
-   public function ejecutarTodas($periodo = null)
+   public function ejecutarTodas()
     {                        
         if(! Tarea::where('estado',1)->first() ){
+            $periodo = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
             $this->Fc001($periodo);
             $this->Fc002($periodo);
             $this->Fc003($periodo);
