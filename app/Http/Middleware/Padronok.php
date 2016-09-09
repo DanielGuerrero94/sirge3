@@ -38,7 +38,7 @@ class Padronok
     {        
         
 
-        if(intval(date('d')) <= 26){
+        if(intval(date('d')) <= 11){
             $dt = new \DateTime();
             $dt->modify('-1 month');
             $dt->modify('first day of this month');
