@@ -202,6 +202,7 @@ Route::get('cei-reportes-download/{id}/{periodo?}/{tipo?}' , 'CeiController@getL
 Route::get('cei-indicador/{periodo}/{id_indicador}' , 'CeiController@getIndicadorCei');
 
 Route::get('cei-indicador-test/{linea}/{periodo}' , 'CeiController@nuevoCalculo');
+Route::get('cei-lineas-todas/{periodo}' , 'CeiController@nuevoCalculoCompleto');
 Route::get('cei-indicador-test-1/{linea}/{periodo}' , 'CeiController@getTipoDos');
 Route::get('cei-indicador-new/{periodo}/{indicador}' , 'CeiController@getIndicadorCeiNew');
 
@@ -462,3 +463,17 @@ Route::get('componentes-control-adolescentes/{periodo?}/{provincia?}' , 'Compone
 Route::get('control-embarazadas-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP2');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
+
+
+/**
+ * SIISA WEB SERVICES
+ */
+Route::get('consulta-siisa-renaper/{nrodoc}/{sexo?}' , 'WebServicesController@siisaXMLRequest');
+Route::get('contact' , 'HomeController@getContacto');
+Route::post('contact' , 'HomeController@postContacto');
+
+/**
+ * EXCEPCIONES
+ */
+Route::get('limite-info-priorizada' , 'ExcepcionesController@index');
+Route::post('limite-info-priorizada' , 'ExcepcionesController@edit');
