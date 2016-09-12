@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use App\Models\Lote;
 use App\Models\Subida;
+use App\Models\ExcepcionDDJJ;
 
 class Padronok
 {
@@ -38,7 +39,7 @@ class Padronok
     {        
         
 
-        if(intval(date('d')) <= 15){
+        if(intval(date('d')) <= ExcepcionDDJJ::first()->dia){
             $dt = new \DateTime();
             $dt->modify('-1 month');
             $dt->modify('first day of this month');
