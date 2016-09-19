@@ -203,6 +203,7 @@ Route::get('cei-indicador/{periodo}/{id_indicador}' , 'CeiController@getIndicado
 
 Route::get('cei-indicador-test/{linea}/{periodo}' , 'CeiController@nuevoCalculo');
 Route::get('cei-lineas-todas/{periodo}' , 'CeiController@nuevoCalculoCompleto');
+Route::get('cei-indicadores-todos/{periodo}' , 'CeiController@indicadoresCompleto');
 Route::get('cei-indicador-test-1/{linea}/{periodo}' , 'CeiController@getTipoDos');
 Route::get('cei-indicador-new/{periodo}/{indicador}' , 'CeiController@getIndicadorCeiNew');
 
@@ -469,8 +470,6 @@ Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDesc
  * SIISA WEB SERVICES
  */
 Route::get('consulta-siisa-renaper/{nrodoc}/{sexo?}' , 'WebServicesController@siisaXMLRequest');
-Route::get('contact' , 'HomeController@getContacto');
-Route::post('contact' , 'HomeController@postContacto');
 
 /**
  * EXCEPCIONES

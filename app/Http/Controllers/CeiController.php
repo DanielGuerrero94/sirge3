@@ -9,6 +9,7 @@ use Mail;
 use Auth;
 use Datatables;
 use Excel;
+use App;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -570,6 +571,7 @@ class CeiController extends Controller
 
 			foreach ($beneficiarios as $key => $beneficiario) {
 
+				$coincidence = FALSE;
 				foreach ($calculo->numerador->prestaciones as $prestacion){
 
 					$dt = \DateTime::createFromFormat('Y-m' , $periodo);
@@ -582,10 +584,13 @@ class CeiController extends Controller
 										->whereIn('codigo_prestacion' , $prestacion->codigos)
 										->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
 										->get();
-					
-					if (count($existe)) {
+
+					if($existe){
+				    	$coincidence = TRUE;	
+	    			}										
+				}
+				if ($coincidence) {
 						$obj[] = $beneficiario;
-					}
 				}
 			}
 
@@ -606,7 +611,7 @@ class CeiController extends Controller
 			unset($obj);
     	}
 		
-    }
+    } 
 
     
     /**
@@ -667,37 +672,55 @@ class CeiController extends Controller
 
 	    		$oportuno = $oportuno->beneficiarios;
 
-	    		foreach ($oportuno as $key => $beneficiario) {
+	    		if (isset ($calculo->denominador->id)){
+	    			$denominador = Denominador::where('indicador' , $id_indicador)
+	    									->where('id_provincia' , $provincia->id_provincia)
+	    									->firstOrFail();
+	    			$super_objeto['denominador'] = $denominador->denominador;
+	    		}
+	    		elseif(Indicador::find($id_indicador)->tipo == 3 && Resultado::where('indicador',$id_indicador-1)
+																	->where('provincia',$provincia->id_provincia)
+																	->where('periodo',str_replace('-', '', $periodo))
+																	->first() )
+	    		{
+	    			$super_objeto['denominador'] = Resultado::where('indicador',$id_indicador-1)
+															->where('provincia',$provincia->id_provincia)
+															->where('periodo',str_replace('-', '', $periodo))
+															->first()
+															->resultados
+															->denominador;
+	    		}
+	    		else{
+	    		
+		    		foreach ($oportuno as $key => $beneficiario) {
+			    		
+			    		if (isset ($calculo->denominador->prestaciones)) {
+			    			$coincidence = FALSE;
+			    			foreach ($calculo->denominador->prestaciones as $prestacion){
 
-		    		$cantidad_prestaciones = 0;
-		    		if (isset ($calculo->denominador->prestaciones)) {
-		    			foreach ($calculo->denominador->prestaciones as $prestacion){
+			    				$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+				    			$dt->modify('first day of this month');
+				    			$fechas['min_prestacion'] = $dt->format('Y-m-d');
+				    			$dt->modify("+ $prestacion->lapso");
+				    			$fechas['max_prestacion'] = $dt->format('Y-m-d');
 
-		    				$dt = \DateTime::createFromFormat('Y-m' , $periodo);
-			    			$dt->modify('first day of this month');
-			    			$fechas['min_prestacion'] = $dt->format('Y-m-d');
-			    			$dt->modify("+ $prestacion->lapso");
-			    			$fechas['max_prestacion'] = $dt->format('Y-m-d');
-
-			    			$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-			    								->whereIn('codigo_prestacion' , $prestacion->codigos)
-			    								->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-			    								->count();
-
-			    			if (! $existe) {
-			    				unset($oportuno[$key]);
+				    			$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+				    								->whereIn('codigo_prestacion' , $prestacion->codigos)
+				    								->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+				    								->count();
+				    			if($existe){
+				    				$coincidence = TRUE;	
+				    			}			    			
 			    			}
 
-		    			}
+			    			if (! $coincidence) {
+				    				unset($oportuno[$key]);
+			    			}
 
-		    			$super_objeto['denominador'] = count($oportuno);
-		    		} else if (isset ($calculo->denominador->id)){
-		    			$denominador = Denominador::where('indicador' , $id_indicador)
-		    									->where('id_provincia' , $provincia->id_provincia)
-		    									->firstOrFail();
-		    			$super_objeto['denominador'] = $denominador->denominador;
+			    			$super_objeto['denominador'] = count($oportuno);
+			    		} 
 		    		}
-	    		}
+		    	}
 
     		}
 
@@ -707,6 +730,8 @@ class CeiController extends Controller
 
 				foreach ($oportuno as $key => $beneficiario) {
 
+					$cantidad_prestaciones = 0;
+					$coincidence = FALSE;
 					foreach ($calculo->numerador->prestaciones as $prestacion){
 
 						// return json_encode($calculo);
@@ -724,24 +749,22 @@ class CeiController extends Controller
 											->count();
 						
 						$codigos = implode ('_' , $prestacion->codigos);
-						
-						if ($existe)
-							$super_objeto['prestaciones']['codigos'][$codigos] ++;
+												
+						if($existe){
+			    				$super_objeto['prestaciones']['codigos'][$codigos] ++;
+			    				$coincidence = TRUE;	
+			    		}
 
-						$cantidad_prestaciones += $existe;
-
-						if (! isset($calculo->numerador->cantidad)) {
-			    			if (! $existe) {
-			    				unset($oportuno[$key]);
-			    			}
-						}
-
+						$cantidad_prestaciones += $existe;						
 					}
 
-					if (isset ($calculo->numerador->cantidad)){
+					if (isset ($calculo->numerador->cantidad) && $coincidence){
 						if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
 								unset($oportuno[$key]);
 						}
+					}
+					elseif (!$coincidence) {
+						unset($oportuno[$key]);	
 					}
 				}
 
@@ -760,5 +783,35 @@ class CeiController extends Controller
     		echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
     	}
     }
+
+   /**
+   * Corre todas las lineas de cuidado en el periodo
+   * @param character(7) $periodo
+   *
+   * @return string
+   */
+  public function nuevoCalculoCompleto($periodo){
+    
+  	for ($i= 1; $i < 26; $i++) {
+  		$this->nuevoCalculo($i,$periodo);
+  	}        
+
+    return response()->json("Las lineas de cuidado del CEI para el periodo $periodo fueron procesadas correctamente.");   
+  }
+
+   /**
+   * Corre todos los indicadores en el periodo
+   * @param character(7) $periodo
+   *
+   * @return string
+   */
+  public function indicadoresCompleto($periodo){
+    
+  	for ($i= 3; $i < 73; $i++) {
+  		$this->getIndicadorCeiNew($periodo,$i);
+  	}        
+
+    return response()->json("Los indicadores fueron del CEI para el periodo $periodo fueron procesados correctamente.");   
+  }
 
 }
