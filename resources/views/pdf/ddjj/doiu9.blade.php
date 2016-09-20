@@ -21,7 +21,7 @@
 </head>
 <body>
 <!-- <img src="{{ asset("/dist/img/header-sumar.png") }}" style="width: 100%;"> -->
-<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
+<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
 	<div style="text-align: right">
 		<i>{{ $mensaje->valor }}</i>
 	</div>

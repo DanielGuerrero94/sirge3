@@ -12,7 +12,7 @@
 <body>
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
+			<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
 			<div class="box box-danger">
 				<div class="box-header">
 					<h2 class="box-title">Asignación requerimiento Nº: <b>{{ $solicitud->id }}</b></h2>

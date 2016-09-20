@@ -18,7 +18,7 @@
 	<!-- PAGINA 1 -->
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
+			<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
 			<div class="box box-primary">
 				<div class="box-header">
 					<h2 class="box-title">Reporte Nº: <b>999</b></h2>
@@ -40,7 +40,7 @@
 	<!-- PAGINA 2 -->
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
+			<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="margin-left: 15%; width: 70%;">
 			<div class="box box-primary">
 				<div class="box-header">
 					<h2 class="box-title">Reporte Nº: <b>999</b></h2>
@@ -59,7 +59,7 @@
 	<!-- PAGINA 3 -->
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
+			<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="margin-left: 15%; width: 70%;">
 			<div class="box box-primary">
 				<div class="box-header">
 					<h2 class="box-title">Reporte Nº: <b>999</b></h2>

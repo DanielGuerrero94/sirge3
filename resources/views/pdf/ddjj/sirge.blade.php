@@ -18,7 +18,7 @@
 </head>
 <body>
 	<!-- <img src="{{ asset("/var/www/html/sirge3/public/dist/img/header-sumar.png") }}" style="width: 100%;"> -->
-	<img src="/var/www/html/sirge3/public/dist/img/header-sumar.png" style="width: 100%;">
+	<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
 	
 	<p class="resumen"><b>{{ $jurisdiccion->descripcion }} , {{ $ddjj->fecha_impresion }}</b></p>
 	<p><b>SEÑOR</b></p>
