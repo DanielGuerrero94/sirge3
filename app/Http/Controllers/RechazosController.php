@@ -26,65 +26,65 @@ use App\Models\Tarea;
 class RechazosController extends Controller
 {
     /**
-	 * Create a new authentication controller instance.
-	 *
-	 * @return void
- 	 */
-	public function __construct(){
-		// $this->middleware('auth');
-	}
+   * Create a new authentication controller instance.
+   *
+   * @return void
+   */
+  public function __construct(){
+    // $this->middleware('auth');
+  }
 
-	/**
-	 * Devuelve un csv con los rechazos
-	 * @param int $lote
-	 *
-	 * @return json
-	 */
-	public function verRechazos($lote){
-		
-		$acc = new AccesoWS;
-		$acc->ws = 1;
-		$acc->save();
+  /**
+   * Devuelve un csv con los rechazos
+   * @param int $lote
+   *
+   * @return json
+   */
+  public function verRechazos($lote){
+    
+    $acc = new AccesoWS;
+    $acc->ws = 1;
+    $acc->save();
 
-		$rechazos = Rechazo::select('lote' , 'registro' , 'motivos' , 'created_at')->where('lote' , $lote)->get();
+    $rechazos = Rechazo::select('lote' , 'registro' , 'motivos' , 'created_at')->where('lote' , $lote)->get();
 
-		if (! count($rechazos)){
-			return response()->json(['mensaje' => 'El lote seleccionado fue eliminado o no posee rechazos']);
-		}
+    if (! count($rechazos)){
+      return response()->json(['mensaje' => 'El lote seleccionado fue eliminado o no posee rechazos']);
+    }
 
-		foreach ($rechazos as $key => $rechazo){
-			$rechazos[$key]['registro'] = json_decode($rechazo['registro']);
-			$rechazos[$key]['motivos'] = json_decode($rechazo['motivos']);
-		}
+    foreach ($rechazos as $key => $rechazo){
+      $rechazos[$key]['registro'] = json_decode($rechazo['registro']);
+      $rechazos[$key]['motivos'] = json_decode($rechazo['motivos']);
+    }
 
-		return response()->json($rechazos);
-	}
+    return response()->json($rechazos);
+  }
 
-	/**
-	 * Testeo web service rechazo
-	 * @param int $lote
-	 *
-	 * @return string
-	 */
-	public function curlRechazo($lote){
-		// Crear un nuevo recurso cURL
-		$ch = curl_init();
+  /**
+   * Testeo web service rechazo
+   * @param int $lote
+   *
+   * @return string
+   */
+  public function curlRechazo($lote){
+    // Crear un nuevo recurso cURL
+    $ch = curl_init();
 
-		// Establecer URL y otras opciones apropiadas
-		curl_setopt($ch, CURLOPT_URL, "http://localhost/sirge3/public/rechazos/$lote");
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+    // Establecer URL y otras opciones apropiadas
+    curl_setopt($ch, CURLOPT_URL, "http://localhost/sirge3/public/rechazos/$lote");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 
-		// Capturar la URL y pasarla a una variable
-		$rechazos = json_decode(curl_exec($ch) , true);
+    // Capturar la URL y pasarla a una variable
+    $rechazos = json_decode(curl_exec($ch) , true);
 
-		// Cerrar el recurso cURL y liberar recursos del sistema
-		curl_close($ch);
+    // Cerrar el recurso cURL y liberar recursos del sistema
+    curl_close($ch);
 
-		return response()->json($rechazos);		
-	}
+    return response()->json($rechazos);   
+  }
 
-	/**
+  /**
      * Descarga la tabla de rechazos en el padron
      *
      * @return null
@@ -93,11 +93,11 @@ class RechazosController extends Controller
 
        $rechazo = GenerarRechazoLote::where('lote',$lote)->get();        
 
-	   if(! $rechazo->isEmpty())                            
-	   {
-	       return response()->json([ 'Estado' => 'Generacion rechazada por excel ya existente', 'lote' => $lote, 'registros_rechazados' => $rechazo[0]->registros ]);
-	   }
-	    
+     if(! $rechazo->isEmpty())                            
+     {
+         return response()->json([ 'Estado' => 'Generacion rechazada por excel ya existente', 'lote' => $lote, 'registros_rechazados' => $rechazo[0]->registros ]);
+     }
+      
       $start = microtime(true);
 
       $padron = Lote::join('sistema.subidas','sistema.subidas.id_subida','=','sistema.lotes.id_subida')      
@@ -107,15 +107,15 @@ class RechazosController extends Controller
       ->select('id_padron','registros_out')     
       ->first();
 
-	  	try {
-	  		if(!isset($padron)){
-	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");	
-	  		}    		
-		} catch(Exception $e) {
-		    return response()->json($e->getMessage());		    
-		}
+      try {
+        if(!isset($padron)){
+          throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");  
+        }       
+    } catch(Exception $e) {
+        return response()->json($e->getMessage());        
+    }
 
-	  $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
+    $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
       $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
       ->get();
@@ -128,7 +128,8 @@ class RechazosController extends Controller
         $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
           $s->setHeight(1, 20);
           $s->setColumnFormat([
-              'B' => '0'
+              'B' => '0',
+              'H' => '@'
             ]);
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
@@ -163,15 +164,15 @@ class RechazosController extends Controller
       ->select('id_padron','registros_out')     
       ->first();
 
-	  	try {
-	  		if(!isset($padron)){
-	  			throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");	
-	  		}    		
-		} catch(Exception $e) {
-		    return response()->json($e->getMessage());
-		}
+      try {
+        if(!isset($padron)){
+          throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");  
+        }       
+    } catch(Exception $e) {
+        return response()->json($e->getMessage());
+    }
 
-	  $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
+    $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
       $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
       ->get();
@@ -215,18 +216,18 @@ class RechazosController extends Controller
             $ultimos_lotes_generados = GenerarRechazoLote::lists('lote');
 
             $lotes = Lote::join('sistema.subidas','sistema.subidas.id_subida','=','sistema.lotes.id_subida')      
-                 ->whereIn('sistema.lotes.id_estado',[1,3])            		 
-            		 ->where('sistema.lotes.inicio','>','2016-05-01')
-                 ->where('sistema.subidas.id_padron','<',5)            		 
-            		 ->where('sistema.lotes.registros_out','>',0)
+                 ->whereIn('sistema.lotes.id_estado',[1,3])                
+                 ->where('sistema.lotes.inicio','>','2016-05-01')
+                 ->where('sistema.subidas.id_padron','<',5)                
+                 ->where('sistema.lotes.registros_out','>',0)
                  ->where('sistema.lotes.registros_out','<',600000)
-            		 ->whereNotIn('sistema.lotes.lote',$ultimos_lotes_generados)	 
-            		 ->orderBy('sistema.lotes.lote' , 'asc')
-            		 ->lists('sistema.lotes.lote');
+                 ->whereNotIn('sistema.lotes.lote',$ultimos_lotes_generados)   
+                 ->orderBy('sistema.lotes.lote' , 'asc')
+                 ->lists('sistema.lotes.lote');
 
-			Tarea::where('nombre','rechazos_lotes')->update(['estado' => 1]);
+      Tarea::where('nombre','rechazos_lotes')->update(['estado' => 1]);
             foreach ($lotes as $key => $lote) {
-            	$this->generarExcelRechazosAutomatizado($lote);
+              $this->generarExcelRechazosAutomatizado($lote);
             }
             Tarea::where('nombre','rechazos_lotes')->update(['estado' => 2]);
         }        
