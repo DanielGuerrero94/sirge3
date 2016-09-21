@@ -185,7 +185,8 @@ class RechazosController extends Controller
         $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
           $s->setHeight(1, 20);
           $s->setColumnFormat([
-              'B' => '0'
+              'B' => '0',
+              'H' => '@'
             ]);
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
@@ -286,4 +287,22 @@ class RechazosController extends Controller
                 $m->subject('Excel generado');
         });
     }            
+
+    /**
+     * Elimina todos los txt de lotes rechazados mayores a 1 mes de antiguedad.
+     * 
+     * @return null
+     */
+    protected function eliminarArchivosRechazadosAntiguos(){
+         
+        $lotes_a_eliminar = Lote::where(DB::raw(' fin + interval ''30 days'' '),'<',date('Y-m-d'))
+          ->where('estado',4)
+          ->lists('lote');
+
+        foreach ($lotes_a_eliminar as $key => $lote) {
+
+        }
+
+        
+    }
 }
