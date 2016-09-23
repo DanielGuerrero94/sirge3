@@ -226,7 +226,7 @@ class RechazosController extends Controller
                  ->orderBy('sistema.lotes.lote' , 'asc')
                  ->lists('sistema.lotes.lote');
 
-      Tarea::where('nombre','rechazos_lotes')->update(['estado' => 1]);
+            Tarea::where('nombre','rechazos_lotes')->update(['estado' => 1]);
             foreach ($lotes as $key => $lote) {
               $this->generarExcelRechazosAutomatizado($lote);
             }
@@ -295,12 +295,12 @@ class RechazosController extends Controller
      */
     protected function eliminarArchivosRechazadosAntiguos(){
          
-        $lotes_a_eliminar = Lote::where(DB::raw(' fin + interval ''30 days'' '),'<',date('Y-m-d'))
+        $lotes_a_eliminar = Lote::where(DB::raw(' fin + interval \'30 days\' '),'<',date('Y-m-d'))
           ->where('estado',4)
           ->lists('lote');
 
         foreach ($lotes_a_eliminar as $key => $lote) {
-
+          /**/
         }
 
         
