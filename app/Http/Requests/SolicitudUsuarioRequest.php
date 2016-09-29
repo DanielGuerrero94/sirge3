@@ -26,7 +26,7 @@ class SolicitudUsuarioRequest extends Request
         return [
             'nombre' => 'required|min:3|max:60',
             'apellido' => 'required|min:3|max:60',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:sistema.usuarios,email',
             'provincia' => 'required',
             'sede' => 'required',
             'fecha_nacimiento' => 'required|date_format:d/m/Y',

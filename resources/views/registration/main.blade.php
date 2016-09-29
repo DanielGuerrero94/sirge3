@@ -95,6 +95,12 @@
                               <h4 class="info-text"> Empecemos con información básica</h4>
                               <div class="col-sm-10 col-sm-offset-1">
                                   <div class="form-group">
+                                      <label>Email</label>
+                                      <input type="email" class="form-control" name="email" placeholder="Email ...">
+                                  </div>
+                              </div>
+                              <div class="col-sm-10 col-sm-offset-1">
+                                  <div class="form-group">
                                     <label for="nombre">Nombre</label>
                                     <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre ...">
                                   </div>
@@ -102,13 +108,7 @@
                                     <label for="apellido">Apellido</label>
                                     <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido ...">
                                   </div>
-                              </div>
-                              <div class="col-sm-10 col-sm-offset-1">
-                                  <div class="form-group">
-                                      <label>Email</label>
-                                      <input type="email" class="form-control" name="email" placeholder="Email ...">
-                                  </div>
-                              </div>
+                              </div>                              
                           </div>
                         </div>
                         <div class="tab-pane" id="account">
