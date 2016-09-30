@@ -180,6 +180,7 @@ class WebServicesController extends Controller
     public function cruzarBeneficiariosConSiisa(){
         $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')          
                                   ->where('id_provincia_alta' , '05')
+                                  ->where('clase_documento' , 'P')
                                   ->whereNull('i.nrodocumento')
                                   ->take(10)
                                   ->lists('numero_documento');                    
