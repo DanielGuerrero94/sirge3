@@ -470,6 +470,7 @@ Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDesc
  * SIISA WEB SERVICES
  */
 Route::get('consulta-siisa-renaper/{nrodoc}/{sexo?}' , 'WebServicesController@siisaXMLRequest');
+Route::get('cruce-siisa-sirge' , 'WebServicesController@cruzarBeneficiariosConSiisa');
 
 /**
  * EXCEPCIONES
