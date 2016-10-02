@@ -167,11 +167,11 @@ class WebServicesController extends Controller
                 else{
                     return $valor->{'0'};   
                 }
+            }
+            else{
+                return null;
             }                
-        }
-        elseif($valor == "{}"){
-            return null;
-        }
+        }        
         else{
             if($valor == 'NULL'){
                 return null;
