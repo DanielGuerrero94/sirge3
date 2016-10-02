@@ -160,12 +160,14 @@ class WebServicesController extends Controller
 
     public function convertirEnTexto($valor){
         if(gettype($valor) == "object"){
-            if($valor->{'0'} == ' ' || $valor->{'0'} == ''){
-                return null;
-            }
-            else{
-                return $valor->{'0'};   
-            }       
+            if(isset($valor->{'0'})){
+                if($valor->{'0'} == ' ' || $valor->{'0'} == ''){
+                    return null;
+                }
+                else{
+                    return $valor->{'0'};   
+                }
+            }                
         }
         else{
             if($valor == 'NULL'){
