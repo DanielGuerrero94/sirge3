@@ -169,6 +169,9 @@ class WebServicesController extends Controller
                 }
             }                
         }
+        elseif($valor == "{}"){
+            return null;
+        }
         else{
             if($valor == 'NULL'){
                 return null;
@@ -183,6 +186,7 @@ class WebServicesController extends Controller
         $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')          
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
+                                  //->where('numero_documento','22584419')
                                   ->whereNull('i.nrodocumento')
                                   ->take(1000)
                                   ->lists('numero_documento');                 
