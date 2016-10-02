@@ -182,7 +182,7 @@ class WebServicesController extends Controller
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
                                   ->whereNull('i.nrodocumento')
-                                  ->take(30000)
+                                  ->take(10)
                                   ->lists('numero_documento');                 
 
         foreach ($documentos as $key => $documento){
