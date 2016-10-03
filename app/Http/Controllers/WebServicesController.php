@@ -143,8 +143,14 @@ class WebServicesController extends Controller
                 $url = $url . '&sexo=' . $sexo;
             }
 
-            $response = $client->get($url);
-
+            try {
+                $response = $client->get($url);                
+            } catch (Exception $e) {
+                if($e->getCode() == 500){
+                    return var_dump($nrodoc);
+                }
+                
+            }        
             /*echo $response->getStatusCode();
 
             echo '</br></br>';*/
@@ -188,7 +194,7 @@ class WebServicesController extends Controller
                                   ->where('clase_documento' , 'P')
                                   //->where('numero_documento','22584419')
                                   ->whereNull('i.nrodocumento')
-                                  ->take(1000)
+                                  ->take(30000)
                                   ->lists('numero_documento');                 
 
         foreach ($documentos as $key => $documento){
