@@ -10,6 +10,7 @@ use GuzzleHttp;
 use SimpleXMLElement;
 use App\Models\Beneficiario;
 use App\Models\InscriptosPadronSisa;
+use App\Models\ErrorPadronSisa;
 
 
 class WebServicesController extends Controller
@@ -129,6 +130,12 @@ class WebServicesController extends Controller
         echo json_encode($datos);        
     }
 
+     /**
+     * Devuelve una respuesta enviando los parámetros a consultar en siisa 
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function cruceSiisaXMLRequest($nrdoc, $sexo = null)
     {
         
@@ -164,6 +171,12 @@ class WebServicesController extends Controller
         }
     }
 
+     /**
+     * Devuelve una respuesta enviando los parámetros a consultar en siisa 
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function convertirEnTexto($valor){
         if(gettype($valor) == "object"){
             if(isset($valor->{'0'})){
@@ -188,25 +201,41 @@ class WebServicesController extends Controller
         }
     }
 
+     /**
+     * Busca los documentos de los beneficiarios que no están cruzados con siisa y guarda sus datos.
+     *     
+     * @return "Resultado"
+     */
     public function cruzarBeneficiariosConSiisa(){
-        $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')          
+        $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
+                                  ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')          
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
                                   //->where('numero_documento','22584419')
                                   ->whereNull('i.nrodocumento')
-                                  ->take(30000)
-                                  ->lists('numero_documento');                 
+                                  ->where(function($query) {                                        
+                                        return $query->whereNull('e.numero_documento')
+                                            ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
+                                    })                                  
+                                  ->take(10)
+                                  ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
             $datos_benef = $this->cruceSiisaXMLRequest($documento);
             if($datos_benef){
                 $data = json_decode($datos_benef);
-                if(isset($data->nombre)){          
+                if ($data->resultado == 'OK') {
                     $resultado = $this->guardarDatos($data);
-
                     if($resultado != TRUE){
                         echo $resultado;
                     }                        
+                }
+                else{
+                    try {                        
+                        $this->guardarError($data, $documento);
+                    } catch (Exception $e) {
+                        echo $e->getCode(); 
+                    }
                 }    
             }            
         }
@@ -214,6 +243,12 @@ class WebServicesController extends Controller
         echo "Los beneficiarios se han insertado correctamente";
     }
 
+     /**
+     * Guarda los datos encontrados en el webservice del siisa
+     *
+     * @param  object  $datos
+     * @return json_encode($datos)
+     */
     public function guardarDatos($datos){
         
         
@@ -244,6 +279,30 @@ class WebServicesController extends Controller
         $inscripto->donante = $this->convertirEnTexto($datos->donante);
         try {
             $inscripto->save();
+            return TRUE;
+        } catch (QueryException $e) {
+            return json_encode($e);
+        }                        
+    }
+
+     /**
+     * Guarda el error de la búsqueda del beneficiario.
+     *
+     * @param  object $datos
+     * @return bool
+     */
+    public function guardarError($datos, $documento){
+            
+        if($noEncontrado = ErrorPadronSisa::find($documento)){
+            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);    
+        }
+        else{
+            $noEncontrado = new ErrorPadronSisa();
+            $noEncontrado->numero_documento = $documento;                
+            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);            
+        }            
+        try {
+            $noEncontrado->save();
             return TRUE;
         } catch (QueryException $e) {
             return json_encode($e);
