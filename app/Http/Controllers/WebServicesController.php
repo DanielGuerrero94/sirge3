@@ -110,8 +110,7 @@ class WebServicesController extends Controller
      */
     public function siisaXMLRequest($nrdoc, $sexo = null)
     {
-        
-        //$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc=$nrodoc&usuario=fnunez&clave=fernandonunez';
+        $client = $this->create();
 
         $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';
         
@@ -203,11 +202,15 @@ class WebServicesController extends Controller
      */
     public function cruzarBeneficiariosConSiisa(){
 
-        $client = $this->create();
+        $ch = curl_init();        
 
         set_time_limit(0);
         curl_setopt($ch, CURLOPT_TIMEOUT,30000);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+
+        curl_close($ch);
+
+        $client = $this->create();
 
         $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')          
@@ -219,7 +222,7 @@ class WebServicesController extends Controller
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(10000)
+                                  ->take(10)
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
