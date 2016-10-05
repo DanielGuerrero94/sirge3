@@ -255,8 +255,7 @@ class WebServicesController extends Controller
      * @return json_encode($datos)
      */
     public function guardarDatos($datos){
-        
-        
+                
         $inscripto = new InscriptosPadronSisa();
         $inscripto->id = $this->convertirEnTexto($datos->id);                
         $inscripto->codigosisa = $this->convertirEnTexto($datos->codigoSISA);
