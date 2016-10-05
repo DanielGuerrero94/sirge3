@@ -15,6 +15,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
+use App\Models\ErrorSubida;
 use App\Models\Lote;
 use App\Models\Rechazo;
 use App\Models\Prestacion;
@@ -300,8 +301,8 @@ class PrestacionesController extends AbstractPadronesController
 		$info = Subida::findOrFail($id);
 		try {
 			$fh = fopen ('../storage/uploads/prestaciones/' . $info->nombre_actual , 'r');
-		} catch (ErrorException $e) {
-			return false;
+		} catch (ErrorException $e) {			
+			return array("mensaje" => $e->getMessage());
 		}
 		return $fh;
 	}
@@ -324,13 +325,24 @@ class PrestacionesController extends AbstractPadronesController
             return '';
         }
         else
-        {
-	            $lote = $this->nuevoLote($id);
+        {	            
 				$fh = $this->abrirArchivo($id);
-				
-				if (!$fh){
-					return response('Error' , 422);
+
+				if (is_array($fh)){					
+					$er = new ErrorSubida();
+					$er->id_subida = $id;
+					$er->error = $fh['mensaje'];
+					
+					try {
+						$er->save();	
+					} catch (Exception $e) {
+						return response('Error: ' . $e->getMessage(), 422);
+					}
+
+					return response('Error', 422);
 				}
+
+				$lote = $this->nuevoLote($id);				
 				$nro_linea = 1;
 
 				fgets($fh);
@@ -794,6 +806,4 @@ class PrestacionesController extends AbstractPadronesController
 
         return view('prestaciones.evolucion' , $data);
     }
-
-
 }
