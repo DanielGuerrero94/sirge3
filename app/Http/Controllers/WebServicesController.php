@@ -110,7 +110,7 @@ class WebServicesController extends Controller
      */
     public function siisaXMLRequest($nrdoc, $sexo = null)
     {
-        $client = $this->create();
+        
         //$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc=$nrodoc&usuario=fnunez&clave=fernandonunez';
 
         $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';
@@ -136,19 +136,14 @@ class WebServicesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function cruceSiisaXMLRequest($nrdoc, $sexo = null)
+    public function cruceSiisaXMLRequest($nrdoc, $client)
     {
         
         if(!InscriptosPadronSisa::find($nrdoc)){
-
-            $client = $this->create();
+            
             //$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc=$nrodoc&usuario=fnunez&clave=fernandonunez';
 
-            $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';
-            
-            if($sexo){
-                $url = $url . '&sexo=' . $sexo;
-            }
+            $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
 
             try {
                 $response = $client->get($url);                
@@ -207,6 +202,13 @@ class WebServicesController extends Controller
      * @return "Resultado"
      */
     public function cruzarBeneficiariosConSiisa(){
+
+        $client = $this->create();
+
+        set_time_limit(0);
+        curl_setopt($ch, CURLOPT_TIMEOUT,30000);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+
         $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')          
                                   ->where('id_provincia_alta' , '05')
@@ -221,7 +223,7 @@ class WebServicesController extends Controller
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
-            $datos_benef = $this->cruceSiisaXMLRequest($documento);
+            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);
             if($datos_benef){
                 $data = json_decode($datos_benef);
                 if ($data->resultado == 'OK') {
