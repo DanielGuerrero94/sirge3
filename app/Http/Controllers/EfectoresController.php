@@ -794,8 +794,8 @@ class EfectoresController extends Controller
       
       $data = ['efectores' => $efectores];
 
-      if(file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx')){
-        unlink('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx');  
+      if(file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls')){
+        unlink('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls');  
       }
       if(file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip')){
         unlink('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip');
@@ -805,16 +805,16 @@ class EfectoresController extends Controller
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
           $s->setHeight(1, 20);
           $s->setColumnFormat([
-              'B' => '0'
+              'B' => '@'
             ]);
           $s->loadView('efectores.tabla' , $data);
         });
       })
-      ->store('xlsx');
+      ->store('xls');
 
       $zip = new ZipArchive();
       $zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);      
-      $zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx', 'Efectores_SUMAR.xlsx');      
+      $zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls', 'Efectores_SUMAR.xls');      
       $zip->close();
     }
 

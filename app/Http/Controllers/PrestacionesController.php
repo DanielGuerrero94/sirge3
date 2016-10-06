@@ -371,6 +371,7 @@ class PrestacionesController extends AbstractPadronesController
 											$this->_resumen['rechazados'] ++;
 											$this->_error['lote'] = $lote;											
 											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											$prestacion_raw['operacion'] = 'A';
 											$this->_error['registro'] = json_encode($prestacion_raw);
 											if ($e->getCode() == 23505){												
 												$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
@@ -402,6 +403,7 @@ class PrestacionesController extends AbstractPadronesController
 												$this->_resumen['rechazados'] ++;
 												$this->_error['lote'] = $lote;											
 												$this->_error['created_at'] = date("Y-m-d H:i:s");
+												$prestacion_raw['operacion'] = 'M';
 												$this->_error['registro'] = json_encode($prestacion_raw);
 												if ($e->getCode() == 23505){												
 													$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
@@ -416,6 +418,7 @@ class PrestacionesController extends AbstractPadronesController
 										} else {
 											$this->_resumen['rechazados'] ++;
 											$this->_error['lote'] = $lote;
+											$prestacion_raw['operacion'] = 'M';
 											$this->_error['registro'] = json_encode($prestacion_raw);
 											$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
 											$this->_error['created_at'] = date("Y-m-d H:i:s");
