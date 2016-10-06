@@ -790,6 +790,7 @@ class EfectoresController extends Controller
         //->where('id_estado' , 1)
         //->take(50)
         ->orderBy('cuie' , 'asc')
+        ->take(10)
         ->get();        
       
       $data = ['efectores' => $efectores];
@@ -805,7 +806,7 @@ class EfectoresController extends Controller
         $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
           $s->setHeight(1, 20);
           $s->setColumnFormat([
-              'B' => '@'
+              'B' => '00000000000000'
             ]);
           $s->loadView('efectores.tabla' , $data);
         });
