@@ -235,7 +235,14 @@ class LotesController extends Controller
 		$l = Lote::findOrFail($r->lote);
 		$l->id_estado = 4;
 
-		$s = Subida::findOrFail($l->id_subida);
+		try {
+			$l->save();
+			return 'Se ha rechazado el lote.';
+		} catch (Exception $e) {
+			return response('Error: ' . $e->getMessage(), $e->getCode());
+			
+		}
+		/*$s = Subida::findOrFail($l->id_subida);
 		$this->eliminarRegistros($s->id_padron , $r->lote);
 		$this->eliminarRegistrosRechazados($r->lote);
 		
@@ -247,7 +254,7 @@ class LotesController extends Controller
 			if ($lr->save()){
 				return 'Se ha rechazado el lote.';
 			}
-		}
+		}*/
 	}
 
 	/**
