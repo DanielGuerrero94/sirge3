@@ -130,7 +130,7 @@
 			<td>{{$efector->compromiso->fecha_inicio  or '' }}</td>
 			<td>{{$efector->compromiso->fecha_fin  or '' }}</td>
 			<td>{{$efector->compromiso->pago_indirecto  or '' }}</td>
-			<td>{{$efector->convenio->numero_convenio  or '' }}</td>
+			<td>{{$efector->convenio->numero_compromiso  or '' }}</td>
 			<td>{{$efector->convenio->firmante  or '' }}</td>
 			<td>{{$efector->convenio->nombre_tercer_administrador  or '' }}</td>
 			<td>{{$efector->convenio->codigo_tercer_administrador  or '' }}</td>
