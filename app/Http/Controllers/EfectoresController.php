@@ -789,8 +789,7 @@ class EfectoresController extends Controller
         ])
         //->where('id_estado' , 1)
         //->take(50)
-        ->orderBy('cuie' , 'asc')
-        ->take(10)
+        ->orderBy('cuie' , 'asc')        
         ->get();        
       
       $data = ['efectores' => $efectores];
