@@ -613,7 +613,7 @@ class EfectoresController extends Controller
         return 'Ha fallado la actualización de datos';
       }
 
-      if(Referente::where('id_efector' , $ef->id_efector)->get()){              
+      if(Referente::find($ef->id_efector)){              
         $re = Referente::where('id_efector' , $ef->id_efector)->firstOrFail();
         $re->nombre = $r->refer;        
       } 
