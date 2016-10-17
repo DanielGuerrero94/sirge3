@@ -17,6 +17,7 @@ use App\Models\PUCO\Puco;
 use App\Models\PUCO\ProcesoPuco as Proceso;
 use App\Models\PUCO\Provincia;
 use App\Models\Lote;
+use App\Models\Geo\GeoJson;
 use App\Models\PUCO\Osp;
 
 class PucoController extends Controller
@@ -37,12 +38,14 @@ class PucoController extends Controller
 	 */
 	public function getGenerar(){		
 
+		//return var_dump($this->reportesEnPeriodo());
+
 		$data = [
 			'page_title' => 'Generar PUCO ' . date('M y'),
 			'puco_ready' => $this->checkPuco(),
 			'meses' => $this->reportesEnPeriodo(),
 			'periodo' => date('M y')
-		];
+		];		
 		return view('puco.generar' , $data);
 	}
 
@@ -318,28 +321,51 @@ class PucoController extends Controller
 			$meses[$i]['periodo'] = $p;
 			$meses[$i]['class'] = $i;
 
-			$djs = Provincia::leftJoin('sistema.subidas_osp' , 'sistema.subidas_osp.codigo_osp' , '=' , 'puco.obras_sociales_provinciales.codigo_osp')
+
+			$djs = Provincia::select('sistema.lotes.lote','sistema.lotes.id_provincia','geo.geojson.geojson_provincia')->
+							leftJoin('sistema.subidas_osp' , 'sistema.subidas_osp.codigo_osp' , '=' , 'puco.obras_sociales_provinciales.codigo_osp')
 						  ->leftJoin('sistema.subidas' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
 						  ->leftJoin('sistema.lotes' , function ($j) {
 					  	  		$j->on('sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
 					  	  		  ->where('sistema.lotes.id_estado' ,'=' , 3);
 						  })
-						  ->leftJoin('puco.procesos_obras_sociales' , function($j){
+						  /*->leftJoin('puco.procesos_obras_sociales' , function($j){
 						  		$j->on('sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote');
-						  })->leftJoin('puco.obras_sociales' , 'puco.obras_sociales_provinciales.codigo_osp' , '=' , 'puco.obras_sociales.codigo_osp')
+						  })*/
+						  ->leftJoin('puco.obras_sociales' , 'puco.obras_sociales_provinciales.codigo_osp' , '=' , 'puco.obras_sociales.codigo_osp')
 						  ->leftJoin('geo.geojson','geo.geojson.id_provincia','=','sistema.lotes.id_provincia')
-						  ->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
-						  ->select('geo.geojson.*', DB::raw('case when registros_in is not null then 1 else 0 end as existe'))
-						  ->groupBy(['geo.geojson.id_provincia','geo.geojson.geojson_provincia',DB::raw('case when registros_in is not null then 1 else 0 end')])
-						  ->get();						  
+						  //->where('puco.procesos_obras_sociales.periodo' , '=' , date('Ym'))
+						  ->where('sistema.subidas.id_padron',"=",4)
+						  ->where(DB::raw('extract (year from fin) :: text || lpad (extract (month from fin) :: text, 2 , \'0\')'),'=',date('Ym'))
+						  ->orderBy('id_provincia','asc')
+						  ->get();
+
+			$provincia = 1;
+
+			foreach ($djs as $key => $dj) {				
+				$array_provincias[] = $dj->id_provincia;				
+			}				
 
 			foreach ($djs as $key => $dj) {
-				$meses[$i]['data'][$key]['value'] = $dj->existe;
-				$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+				if(in_array($dj->id_provincia, $array_provincias)){
+					$meses[$i]['data'][$key]['value'] = 1;
+					$meses[$i]['data'][$key]['provincia'] = $dj->id_provincia;
+					$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+				}
+				else{
+					$meses[$i]['data'][$key]['value'] = 0;
+					$meses[$i]['data'][$key]['provincia'] = $dj->id_provincia;
+					$meses[$i]['data'][$key]['hc-key'] = $dj->geojson_provincia;
+				}				
 			}
 
 			$meses[$i]['data'] = json_encode($meses[$i]['data']);					
+			$provincia++;
 		}
+		unset($provincia);
+		unset($array_provincias);
+		unset($djs);
+		unset($dj);
 
 		return $meses;
 	}
