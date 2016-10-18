@@ -18,6 +18,7 @@ use App\Models\Lote;
 use App\Models\PUCO\Provincia as OspProvincias;
 use App\Models\PUCO\Osp;
 use App\Models\Geo\Provincia;
+use App\Models\PUCO\ProcesoPuco as Pucop;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -163,7 +164,21 @@ class PadronesController extends Controller
 					} else {
 						$codigo_final = $r->codigo_osp;
 						$id_archivo = 1;
-						Osp::where('codigo_os' , $r->codigo_osp)->delete();
+						Osp::where('codigo_os' , $r->codigo_osp)->delete();						
+
+						$pucop = Pucop::join('sistema.lotes' , 'sistema.lotes.lote' , '=' , 'puco.procesos_obras_sociales.lote')
+				 			->join('sistema.subidas' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+				 			->join('sistema.subidas_osp' , 'sistema.subidas_osp.id_subida' , '=' , 'sistema.subidas.id_subida')
+				 			->select('puco.procesos_obras_sociales.*' , 'sistema.subidas_osp.*')
+				 			->where('periodo' , date('Ym'))
+				 			->where('codigo_osp' , $r->codigo_osp)
+				 			->first();
+		
+						if (isset($pucop->lote)){
+							$np = Lote::find($pucop->lote);
+							$np->id_estado = 4;
+							$np->save();
+						} 						
 					}
 					break;
 				case 5:
@@ -191,6 +206,7 @@ class PadronesController extends Controller
 				$so->save();
 			}
 
+			unset($s);
 			return response()->json(['file' => $r->file->getClientOriginalName()]); 
 		}
 	}

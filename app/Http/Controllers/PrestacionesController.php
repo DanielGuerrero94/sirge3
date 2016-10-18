@@ -180,11 +180,24 @@ class PrestacionesController extends AbstractPadronesController
 						$linea[$nro_inicial+1] = array(); 
 
 						foreach ($split_7 as $campo => $valor) {
-							if( strtolower(substr($valor, 0, 2)) == 'od' ){								
-								$linea[$nro_inicial+1]['d'] = $valor; 	
+							if( strtolower(substr($valor, 0, 2)) == 'od' ){
+								if(strtolower(substr($valor, 0, 4)) == 'odsi' || strtolower(substr($valor, 0, 4)) == 'odno'){
+									$linea[$nro_inicial+1]['d'] = strtolower(substr($valor, 0, 4)) == 'odsi' ? 'ODPasa' : 'ODNoPasa';
+									$linea[$nro_inicial+1]['i'] = strtolower(substr($valor, 4, 7)) == 'oisi' ? 'OIPasa' : 'OINoPasa'; 	 	
+								}
+								else{
+									$linea[$nro_inicial+1]['d'] = $valor;	
+								}
 							}
 							elseif( strtolower(substr($valor, 0, 2)) == 'oi' ){
-								$linea[$nro_inicial+1]['i'] = $valor; 		
+								if(strtolower(substr($valor, 0, 4)) == 'oisi' || strtolower(substr($valor, 0, 4)) == 'oino'){
+									$linea[$nro_inicial+1]['i'] = strtolower(substr($valor, 0, 4)) == 'oisi' ? 'OIPasa' : 'OINoPasa';
+									$linea[$nro_inicial+1]['d'] = strtolower(substr($valor, 4, 7)) == 'odsi' ? 'ODPasa' : 'ODNoPasa'; 	 	
+								}
+								else{
+									$linea[$nro_inicial+1]['i'] = $valor;
+								}
+								
 							}							
 						}						
 					}
@@ -440,7 +453,11 @@ class PrestacionesController extends AbstractPadronesController
 				$this->actualizaLote($lote , $this->_resumen);
 				$this->actualizaSubida($id);
         }
-    	$_SESSION['posttimer'] = time();		
+    	$_SESSION['posttimer'] = time();
+    	unset($fh);
+    	unset($lote);
+    	unset($nro_linea);
+    	unset($id);
 		
 		return response()->json($this->_resumen);
 	}
