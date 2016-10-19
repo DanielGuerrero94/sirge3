@@ -150,6 +150,9 @@ class WebServicesController extends Controller
                 if($e->getCode() == 500){
                     return var_dump($nrodoc);
                 }
+                else{
+                    return $e->getMessage();   
+                }
                 
             }        
             /*echo $response->getStatusCode();
@@ -222,7 +225,7 @@ class WebServicesController extends Controller
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(50)
+                                  ->take(30000)
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
@@ -242,9 +245,11 @@ class WebServicesController extends Controller
                         echo $e->getCode(); 
                     }
                 }    
-            }            
+            }  
+            unset($datos_benef);
+            unset($data);                      
         }
-
+        unset($documento);
         echo "Los beneficiarios se han insertado correctamente";
     }
 
@@ -283,6 +288,7 @@ class WebServicesController extends Controller
         $inscripto->donante = $this->convertirEnTexto($datos->donante);
         try {
             $inscripto->save();
+            unset($inscripto);
             return TRUE;
         } catch (QueryException $e) {
             return json_encode($e);
@@ -307,6 +313,7 @@ class WebServicesController extends Controller
         }            
         try {
             $noEncontrado->save();
+            unset($noEncontrado);
             return TRUE;
         } catch (QueryException $e) {
             return json_encode($e);
