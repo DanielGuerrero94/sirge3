@@ -178,6 +178,7 @@ class PucoController extends Controller
 			$i++;
 		}		
 
+		DB::table('puco.cantidades_mensuales')->where('periodo','=',date('Ym'))->delete();
 		DB::table('puco.cantidades_mensuales')->insert($objeto_a_insertar);
 
 		Osp::where('numero_documento','46074543')->update(['nombre_apellido' => 'GONZALEZ D AMICO MARIA CLARA']);
