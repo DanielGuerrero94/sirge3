@@ -201,11 +201,13 @@ Route::get('cei-reportes/{id}' , 'CeiController@getReporte');
 Route::get('cei-reportes-download/{id}/{periodo?}/{tipo?}' , 'CeiController@getLineaDownload');
 Route::get('cei-indicador/{periodo}/{id_indicador}' , 'CeiController@getIndicadorCei');
 
-Route::get('cei-indicador-test/{linea}/{periodo}' , 'CeiController@nuevoCalculo');
+Route::get('cei-calculo-linea/{linea}/{periodo}' , 'CeiController@nuevoCalculo');
 Route::get('cei-lineas-todas/{periodo}' , 'CeiController@nuevoCalculoCompleto');
 Route::get('cei-indicadores-todos/{periodo}' , 'CeiController@indicadoresCompleto');
 Route::get('cei-indicador-test-1/{linea}/{periodo}' , 'CeiController@getTipoDos');
 Route::get('cei-indicador-new/{periodo}/{indicador}' , 'CeiController@getIndicadorCeiNew');
+Route::get('cei-excel-linea/{periodo}/{linea}' , 'CeiController@generarExcelLinea');
+Route::get('cei-excel-beneficiarios/{periodo}/{linea}' , 'CeiController@generarExcelLineaBeneficiario');
 
 /**
  * ANALISIS PRESTACIONES
