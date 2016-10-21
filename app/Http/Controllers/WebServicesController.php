@@ -225,7 +225,7 @@ class WebServicesController extends Controller
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(10)
+                                  ->take(30000)
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
