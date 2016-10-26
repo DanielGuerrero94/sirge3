@@ -197,8 +197,7 @@ $(document).ready(function() {
 			indicador : {
 				required : true
 			},
-			linea_base : {
-				required : true,
+			linea_base : {				
 				number : true
 			},			
 			numero_compromiso : {
