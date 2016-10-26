@@ -58,7 +58,7 @@
 						    			<div class="form-group">
 							    			<label for="provincia" class="col-sm-3 control-label">Indicador</label>
 							    			<div class="col-sm-9">
-								    			<select id="provincia" name="provincia" class="form-control">
+								    			<select id="indicador" name="indicador" class="form-control">
 								    				<option value="">Seleccione ...</option>
 								    				@foreach($odp as $unOdp)		    						<option value="{{ $unOdp->id_indicador }}">{{$unOdp->odp . $unOdp->tipo .  ' - ' . $unOdp->descripcion }}</option>
 								    													    					
@@ -190,60 +190,17 @@ $(document).ready(function() {
 	$('#errores-div').hide();
 
 	var $validator = $('form').validate({
-		rules : {
-			siisa : {
-				required : true,
-				digits : true,
-				minlength : 14,
-				maxlength : 14
-			},
-			tipo : {
-				required : true
-			},
-			nombre : {
-				required : true,
-				minlength : 10,
-				maxlength : 200
-			},
-			dep_adm : {
-				required : true
-			},
-			cics : {
-				required : true
-			},
-			rural : {
-				required : true
-			},
-			categoria : {
-				required : true
-			},
-			integrante : {
-				required : true
-			},
-			priorizado : {
-				required : true
-			},
-			compromiso : {
-				required : true
-			},
-			direccion : {
-				required : true,
-				minlength : 6,
-				maxlength : 500
-			},
+		rules : {			
 			provincia : {
 				required : true
 			},
-			departamento : {
+			indicador : {
 				required : true
 			},
-			localidad : {
-				required : true
-			},
-			codigo_postal : {
-				minlength : 4,
-				maxlength : 8
-			},
+			linea_base : {
+				required : true,
+				number : true
+			},			
 			numero_compromiso : {
 				required : true,
 				minlength : 3
@@ -289,7 +246,7 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler : function(form){
-			$.ajax({
+			/*$.ajax({
 				method : 'post',
 				url : 'efectores-alta',
 				data : $(form).serialize(),
@@ -307,7 +264,11 @@ $(document).ready(function() {
 					$('#errores-form').html(html);
 					$('#errores-div').show();
 				}
-			})
+			})*/
+
+			$('#modal-text').html("Los datos han sido cargados correctamente.");
+			$('.modal').modal();
+			$('form').trigger('reset');
 		}
 	});
 	
