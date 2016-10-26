@@ -59,16 +59,15 @@
 
 		var dt = $('#lotes-table').DataTable({
 			processing: true,
-            serverSide: true,
-            ajax : 'listado-ddjj-table/{{ $padron }}',
-            columns: [                               
+            serverSide: true,            
+            ajax : 'listado-ddjj-table/{{ $padron }}',            
+            columns: [            	
                 { data: 'id_impresion' , name : 'id_impresion', orderable: false },
                 { data: 'fecha_impresion' , name : 'fecha_impresion', orderable: false , searchable: false},
                 { data: 'lote' , name: 'lote'},
-                { data: 'view'}
-                
+                { data: 'view'}                
             ],
-            order : [[1,'desc']]
+            order : [[1,'desc']]            
 		});
 
 	});

@@ -18,6 +18,7 @@ use App\Models\Dw\CEB\Ceb004;
 use App\Models\Dw\CEB\Ceb005;
 use App\Models\Dw\FC\Fc001;
 use App\Models\TareasResultado;
+use App\Models\OdpTipo;
 use App\Models\Geo\Region;
 
 class ComponentesController extends Controller
@@ -48,19 +49,21 @@ class ComponentesController extends Controller
         else{
             $datos_provincia = Provincia::find($provincia);            
             $provincia_descripcion =  $datos_provincia->descripcion;
-        }        
+        }
+
+        //return var_dump($this->getDistribucionCebPais($periodo));
 
         $data = [
-            'page_title' => 'Resumen mensual O.D.P 1, '.$provincia_descripcion.', '. ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
+            'page_title' => 'Resumen mensual O.D.P 1, '.$provincia_descripcion.', '. date('Y'),
             /*'progreso_ceb_series' => $this->getProgresoCeb($periodo),
             'progreso_ceb_categorias' => $this->getMesesArray($periodo),
             'distribucion_provincial_categorias' => $this->getProvinciasArray(),
             'distribucion_provincial_series' => $this->getDistribucionProvincial($periodo),*/
             'map' => $this->getMapSeries($periodo),
-            'treemap_data' => $this->getDistribucionCodigos($periodo,$provincia),
-            'pie_ceb' => $this->getDistribucionCeb($periodo,$provincia),
-            'pie_ceb_hombres' => $this->getDistribucionCebHombres($periodo,$provincia),
-            'distribucion_sexos' => $this->getSexosSeries($periodo,$provincia),
+            //'treemap_data' => $this->getDistribucionCodigos($periodo,$provincia),
+            'pie_ceb' => isset($provincia) ? $this->getDistribucionCeb($periodo,$provincia) : $this->getDistribucionCebPais($periodo),
+            'pie_ceb_hombres' => isset($provincia) ? $this->getDistribucionCebHombres($periodo,$provincia) : $this->getDistribucionCebHombresPais($periodo),
+            //'distribucion_sexos' => $this->getSexosSeries($periodo,$provincia),
             'periodo_calculado' => $periodo,
             'provincia' => $provincia == null ? 'pais' : $provincia,
             'provincia_descripcion' => $provincia_descripcion
@@ -98,7 +101,7 @@ class ComponentesController extends Controller
         }        
 
         $data = [
-            'page_title' => 'Resumen mensual O.D.P 2, '.$provincia_descripcion.', '. ucwords(strftime("%B %Y" , $dt->getTimeStamp())),
+            'page_title' => 'Resumen mensual O.D.P 2, '.$provincia_descripcion.', '. date('Y'),
             /*'progreso_ceb_series' => $this->getProgresoCeb($periodo),
             'progreso_ceb_categorias' => $this->getMesesArray($periodo),
             'distribucion_provincial_categorias' => $this->getProvinciasArray(),
@@ -272,17 +275,15 @@ class ComponentesController extends Controller
         
         $meta = 7;
 
-        $object = Ceb004::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);
-        if(isset($provincia)){
-            $object->where('id_provincia',$provincia);
-        }                                
+        $object = Ceb004::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);        
+        $object->where('id_provincia',$provincia);
+                                        
         $cantidad_total = $object->first()->y;
         $cantidad_para_cumplir = round($object->first()->y * $meta / 100);
                 
         $object = Ceb004::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);
-        if(isset($provincia)){
-            $object->where('id_provincia',$provincia);
-        }
+        $object->where('id_provincia',$provincia);
+    
         $cantidad_cumplida = round($object->first()->y);        
 
         if($cantidad_para_cumplir > $cantidad_cumplida){
@@ -304,27 +305,76 @@ class ComponentesController extends Controller
         return $superObjeto;
     }
 
+     /**
+     * Devuelve la info para el grafico de torta para beneficiarios hombres de 20-64
+     * @param string $periodo
+     *
+     * @return json
+     */
+    protected function getDistribucionCebHombresPais($periodo, $provincia = null){
+        
+       $meta = 7;      
+                        
+        for ($i=1; $i < 25; $i++) {
+            $object = Ceb004::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);                 
+            $object->where('id_provincia',str_pad($i, 2, "0", STR_PAD_LEFT));
+            $cantidad_total[$i-1] = $object->first()->y;
+        }        
+
+        $cantidad_para_cumplir = $meta;
+        
+        for ($i=1; $i < 25; $i++) {                 
+            $object = Ceb004::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);        
+            $object->where('id_provincia',str_pad($i, 2, "0", STR_PAD_LEFT));
+            $cantidad_cumplida_provincial[$i-1] = $object->first()->y;
+        }              
+
+        for ($i=1; $i < 25; $i++) {                             
+            $resultados[$i-1] = round( $cantidad_cumplida_provincial[$i-1] / $cantidad_total[$i-1] , 4 );
+        }
+
+        $cantidad_cumplida = round( (array_sum($resultados) / count($resultados)) * 100 , 2);
+
+        //return $cantidad_cumplida;  
+
+        if($cantidad_para_cumplir > $cantidad_cumplida){
+            $data[] = array_merge(array('y' => 100 - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_cumplida),array('name' => 'ceb', 'color' => '#00FFFF'));            
+        }
+        else{
+            $data[] = array_merge(array('y' => 100 - $cantidad_cumplida), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));             
+        }        
+
+        $superObjeto = [
+                        'titulo' => 'Meta: '. $meta . '%',
+                        'data' => json_encode($data) 
+                        ];
+     
+        return $superObjeto;
+    }
+
     /**
      * Devuelve la info para el grafico de torta para beneficiarios sin hombres de 20-64
      * @param string $periodo
      *
      * @return json
      */
-    protected function getDistribucionCeb($periodo, $provincia = null){
+    protected function getDistribucionCeb($periodo, $provincia){
          
         $meta = 45;      
         
-        $object = Ceb005::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);
-        if(isset($provincia)){
-            $object->where('id_provincia',$provincia);
-        }                
-        $cantidad_total = $object->first()->y;
-        $cantidad_para_cumplir = round($object->first()->y * $meta / 100);
+        $object = Ceb005::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);        
+        $object->where('id_provincia',$provincia);
+        $cantidad_total = $object->first()->y;        
+
+        $cantidad_para_cumplir = round( $cantidad_total * $meta / 100);
                 
         $object = Ceb005::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);
-        if(isset($provincia)){
-            $object->where('id_provincia',$provincia);
-        }
+        $object->where('id_provincia',$provincia);
+        
         $cantidad_cumplida = round($object->first()->y);
 
         if($cantidad_para_cumplir > $cantidad_cumplida){
@@ -334,6 +384,57 @@ class ComponentesController extends Controller
         }
         else{
             $data[] = array_merge(array('y' => $cantidad_total - $cantidad_cumplida), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));             
+        }        
+
+        $superObjeto = [
+                        'titulo' => 'Meta: '. $meta . '%',
+                        'data' => json_encode($data) 
+                        ];
+     
+        return $superObjeto;
+    }
+
+    /**
+     * Devuelve la info para el grafico de torta para beneficiarios sin hombres de 20-64
+     * @param string $periodo
+     *
+     * @return json
+     */
+    protected function getDistribucionCebPais($periodo){
+         
+        $meta = 45;      
+                        
+        for ($i=1; $i < 25; $i++) {
+            $object = Ceb005::select(DB::raw('sum(beneficiarios_activos) as y'))->where('periodo',$periodo);                 
+            $object->where('id_provincia',str_pad($i, 2, "0", STR_PAD_LEFT));
+            $cantidad_total[$i-1] = $object->first()->y;
+        }        
+
+        $cantidad_para_cumplir = $meta;
+        
+        for ($i=1; $i < 25; $i++) {                 
+            $object = Ceb005::select(DB::raw('sum(beneficiarios_ceb) as y'))->where('periodo',$periodo);        
+            $object->where('id_provincia',str_pad($i, 2, "0", STR_PAD_LEFT));
+            $cantidad_cumplida_provincial[$i-1] = $object->first()->y;
+        }              
+
+        for ($i=1; $i < 25; $i++) {                             
+            $resultados[$i-1] = round( $cantidad_cumplida_provincial[$i-1] / $cantidad_total[$i-1] , 4 );
+        }
+
+        $cantidad_cumplida = round( (array_sum($resultados) / count($resultados)) * 100 , 2);
+
+        //return $cantidad_cumplida;  
+
+        if($cantidad_para_cumplir > $cantidad_cumplida){
+            $data[] = array_merge(array('y' => 100 - $cantidad_para_cumplir), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir - $cantidad_cumplida),array('name' => 'faltante', 'color' => '#B00000 ', 'sliced' => true, 'selected' => true));
+            $data[] = array_merge(array('y' => $cantidad_cumplida),array('name' => 'ceb', 'color' => '#00FFFF'));            
+        }
+        else{
+            $data[] = array_merge(array('y' => 100 - $cantidad_cumplida), array('name' => 'activos s/ceb', 'color' => '#DCDCDC'));
             $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
             $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'ceb', 'color' => '#00FFFF'));             
         }        
@@ -713,5 +814,36 @@ class ComponentesController extends Controller
      */
     protected function getDescripcionIndicador($odp = null){                
         return view('componentes.descripcion-indicador');
+    }
+
+    /**
+     * Devuelve el rango de periodos a filtrar
+     *
+     * @return array
+     */
+    protected function cargarDatosODP(){                
+        return view('componentes.alta');
+    }
+
+    /**
+     * Devuelvo la vista para el alta de un componente de ODP
+     *
+     * @return null
+     */
+    public function getAlta(){
+       /* $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
+        $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
+        $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();*/
+        $provincias = Provincia::all();
+        $odp = OdpTipo::all();
+        $data = [
+            'page_title' => 'Carga de Datos ODP',
+            //'tipos' => $tipos,
+            //'dependencias' => $dependencias,
+            'odp' => $odp,
+            'provincias' => $provincias
+        ];
+
+        return view('componentes.alta' , $data);
     }
 }

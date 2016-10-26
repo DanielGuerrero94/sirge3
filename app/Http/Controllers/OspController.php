@@ -251,7 +251,7 @@ class OspController extends Controller
 				} else {
 					$this->_resumen['insertados'] ++;
 					$bulk[] = $osp_raw;
-					if (sizeof($bulk) % 6000 == 0){
+					if (sizeof($bulk) % 4000 == 0){
 						Osp::insert($bulk);
 						unset($bulk);
 						$bulk = [];

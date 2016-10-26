@@ -46,14 +46,126 @@
 				<h2 class="box-title">Resultados {{ ucfirst(strtolower($provincia_descripcion)) }}</h2>
 			</div>
 			<div class="box-body">				
-				<div id="detalle-ceb"></div>
+				<div id="detalle-ceb">
+					<div class="row">					
+
+						<div class="col-md-6">
+							<form class="form-horizontal">		
+								<div class="form-group">
+									<div class="col-md-1">
+									</div>
+									<div class="col-md-10">
+										<h4 class="form-control-static">Ceb mujeres, adolescentes y niños</h4>				
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Entidad</label>
+									<div class="col-md-5">
+										<p class="form-control-static">Pa&iacute;s</p>
+									</div>
+								</div>								
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">% Observado Actual</label>
+									<div class="col-md-5">
+										<p class="form-control-static">34.2</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">% Meta Anual</label>
+									<div class="col-md-5">
+										<p class="form-control-static">45</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Planificado Abril 2016</label>
+									<div class="col-md-5">
+										<p class="form-control-static">38</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Planificado Agosto 2016</label>
+									<div class="col-md-5">
+										<p class="form-control-static">44</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Estado a&ntilde;o anterior</label>
+									<div class="btn-group col-md-5" data-toggle="tooltip" title="Desde esta opción podrá ver el estado del último año del O.D.P 1.A a nivel nacional y regional" role="group">
+										<button type="button" href="componentes-odp1-evolucion/A" class="detalle btn btn-info">Ver detalles</button>
+									</div>		
+								</div>
+							</form>
+						</div>
+
+						<div class="col-md-6">
+							<form class="form-horizontal">		
+								<div class="form-group">
+									<div class="col-md-1">
+									</div>
+									<div class="col-md-10">
+										<h4 class="form-control-static">Ceb hombres adultos</h4>				
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Entidad</label>
+									<div class="col-md-5">
+										<p class="form-control-static">Pa&iacute;s</p>
+									</div>
+								</div>								
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">% Observado Actual</label>
+									<div class="col-md-5">
+										<p class="form-control-static">11.3</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">% Meta Anual</label>
+									<div class="col-md-5">
+										<p class="form-control-static">7</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Planificado Abril 2016</label>
+									<div class="col-md-5">
+										<p class="form-control-static">5</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Planificado Agosto 2016</label>
+									<div class="col-md-5">
+										<p class="form-control-static">7</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-7 control-label">Estado a&ntilde;o anterior</label>
+									<div class="btn-group col-md-5" data-toggle="tooltip" title="Desde esta opción podrá ver el estado del último año del O.D.P 1.B a nivel nacional y regional" role="group">
+										<button type="button" href="componentes-odp1-evolucion/B" class="detalle btn btn-info">Ver detalles</button>
+									</div>		
+								</div>
+							</form>
+						</div>						
+
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 
 </div>
 
-<div class="row">
+<!-- <div class="row">
 	<div class="col-md-8">
 		<div class="box box-warning">
 			<div class="box-header">
@@ -75,7 +187,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <style>
 .g4 text{font-size:13px !important;}
@@ -92,39 +204,7 @@
 	            chart.destroy();
 	        }
     	});
-					
-		$('.g3').highcharts({
-            series: [{
-                type: "treemap",
-                layoutAlgorithm: 'squarified',
-                allowDrillToNode: true,
-                dataLabels: {
-                    enabled: false
-                },
-                levelIsConstant: false,
-                levels: [{
-                    level: 1,
-                    dataLabels: {
-                        enabled: true
-                    },
-                    borderWidth: 3
-                }],
-                data : {!! $treemap_data !!},
-                tooltip: {
-                    pointFormatter : function(){
-                        if (this.codigo_prestacion){
-                            return this.texto_prestacion + ' : ' + Highcharts.numberFormat(this.value , '0');
-                        } else {
-                            return Highcharts.numberFormat(this.value , '0');
-                        }
-                    }
-                },
-                turboThreshold : 5000
-            }],
-            title : {
-            	text : 'Distribución códigos'
-            }
-        });				
+							
 
 		$('.g5').highcharts({
 
@@ -192,57 +272,7 @@
 	        	data: {!! $pie_ceb['data'] !!}
 	        	
 	        }]
-	    });
-
-	    $('.g6').highcharts({
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: null
-            },
-            xAxis: [{
-                    categories: ['0-5' , '6-9' , '10-19' , '20-64'],
-                    reversed: false,
-                    labels: {
-                        step: 1
-                    },
-                }, { // mirror axis on right side
-                    opposite: true,
-                    reversed: false,
-                    categories: ['0-5' , '6-9' , '10-19' , '20-64'],
-                    linkedTo: 0,
-                    labels: {
-                        step: 1
-                    },
-                }],
-            yAxis: {
-                title: {
-                    text: null
-                },
-                labels: {
-                	enabled : false,
-                    formatter: function () {
-                        return Math.abs(this.value) + '%';
-                    }
-                }
-            },
-
-            plotOptions: {
-                series: {
-                    stacking: 'normal'
-                }
-            },
-
-            tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + ', edad ' + this.point.category + '</b><br/>' +
-                        'Prestaciones: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
-                }
-            },
-
-            series: {!! $distribucion_sexos !!}
-        });        		
+	    });	    
 
 		$("#mapa-ceb").highcharts('Map', {
 			title : {
@@ -292,9 +322,9 @@
 			}]
 		});
 
-		$.get('ceb-resumen/' + {{ $periodo_calculado }} + '/' + '{{ $provincia }}', function(data){
+		/*$.get('ceb-resumen/' + {{ $periodo_calculado }} + '/' + '{{ $provincia }}', function(data){
 					$('#detalle-ceb').html(data);
-		});
+		});*/
 
     	$('[data-toggle="tooltip"]').tooltip(); 
 

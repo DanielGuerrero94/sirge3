@@ -11,6 +11,7 @@ use SimpleXMLElement;
 use App\Models\Beneficiario;
 use App\Models\InscriptosPadronSisa;
 use App\Models\ErrorPadronSisa;
+use Exception;
 
 
 class WebServicesController extends Controller
@@ -139,29 +140,18 @@ class WebServicesController extends Controller
     {
         
         if(!InscriptosPadronSisa::find($nrdoc)){
-            
-            //$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc=$nrodoc&usuario=fnunez&clave=fernandonunez';
 
             $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
 
             try {
+                //throw new Exception("Error Processing Request", 1);                
                 $response = $client->get($url);                
             } catch (Exception $e) {
-                if($e->getCode() == 500){
-                    return var_dump($nrodoc);
-                }
-                else{
-                    return $e->getMessage();   
-                }
-                
-            }        
-            /*echo $response->getStatusCode();
+                return json_encode(array('error' => 'SI', 'mensaje' => 'Error Code '. $e->getCode() .': ' . $e->getMessage()));                                   
+            }    
 
-            echo '</br></br>';*/
-
-            $datos = get_object_vars(new SimpleXMLElement($response->getBody()));
-
-            return json_encode($datos);        
+                $datos = get_object_vars(new SimpleXMLElement($response->getBody()));                
+            return json_encode($datos);             
         }
         else{
             return null;
@@ -225,13 +215,13 @@ class WebServicesController extends Controller
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(30000)
+                                  ->take(15000)
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
-            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);
-            if($datos_benef){
-                $data = json_decode($datos_benef);
+            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);        
+            $data = json_decode($datos_benef);
+            if(isset($data->resultado)){            
                 if ($data->resultado == 'OK') {
                     $resultado = $this->guardarDatos($data);
                     if($resultado != TRUE){
@@ -245,6 +235,13 @@ class WebServicesController extends Controller
                         echo $e->getCode(); 
                     }
                 }    
+            }
+            else{
+                try {                        
+                    $this->guardarError($data, $documento);
+                } catch (Exception $e) {
+                    echo $e->getCode(); 
+                }                
             }  
             unset($datos_benef);
             unset($data);                      
@@ -309,7 +306,7 @@ class WebServicesController extends Controller
         else{
             $noEncontrado = new ErrorPadronSisa();
             $noEncontrado->numero_documento = $documento;                
-            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);            
+            $noEncontrado->error = isset($datos->error) ? $datos->mensaje : $this->convertirEnTexto($datos->resultado);            
         }            
         try {
             $noEncontrado->save();
