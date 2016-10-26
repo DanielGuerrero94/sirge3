@@ -7,6 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; UTF-8"> 
+    <link rel="shortcut icon" href="{{ asset("/dist/img/logo-cus-apaisado.jpg")}}">
     <title>SIRGe Web</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
