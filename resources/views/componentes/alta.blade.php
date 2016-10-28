@@ -56,7 +56,7 @@
 						    		</div>
 						    		<div class="col-md-8">
 						    			<div class="form-group">
-							    			<label for="provincia" class="col-sm-3 control-label">Indicador</label>
+							    			<label for="indicador" class="col-sm-3 control-label">Indicador</label>
 							    			<div class="col-sm-9">
 								    			<select id="indicador" name="indicador" class="form-control">
 								    				<option value="">Seleccione ...</option>
@@ -103,17 +103,17 @@
 						    		@endforeach --> */ ?>
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="6" class="col-sm-4 control-label">Meta a Abril 2016</label>
+		                      				<label for="4" class="col-sm-4 control-label">Meta a Abril 2016</label>
 		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="6" name="6">
+		                    					<input type="text" class="form-control" id="4" name="4">
 		                  					</div>
 		                    			</div>
 						    		</div>
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="6" class="col-sm-4 control-label">Meta a Agosto 2016</label>
+		                      				<label for="5" class="col-sm-4 control-label">Meta a Agosto 2016</label>
 		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="6" name="6">
+		                    					<input type="text" class="form-control" id="5" name="5">
 		                  					</div>
 		                    			</div>
 						    		</div>						    		
@@ -134,7 +134,7 @@
 						    		@endforeach	 --> */ ?>
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="6" class="col-sm-4 control-label">Meta a Abril 2016</label>
+		                      				<label for="6" class="col-sm-4 control-label">Observado a Abril 2016</label>
 		                  					<div class="col-sm-8">
 		                    					<input type="text" class="form-control" id="6" name="6">
 		                  					</div>
@@ -142,9 +142,9 @@
 						    		</div>
 						    		<div class="col-md-6">
 						    			<div class="form-group">
-		                      				<label for="6" class="col-sm-4 control-label">Meta a Agosto 2016</label>
+		                      				<label for="7" class="col-sm-4 control-label">Observado a Agosto 2016</label>
 		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="6" name="6">
+		                    					<input type="text" class="form-control" id="7" name="7">
 		                  					</div>
 		                    			</div>
 						    		</div>									    		
@@ -199,60 +199,25 @@ $(document).ready(function() {
 			},
 			linea_base : {				
 				number : true
-			},			
-			numero_compromiso : {
-				required : true,
-				minlength : 3
 			},
-			firmante_compromiso : {
-				required : true,
-				minlength : 8
+			@foreach(array('4','5','6','7') as $ind)
+			'{{$ind}}' : {
+				required: true,				
+				number : true
 			},
-			indirecto : {
-				required : true
-			},
-			compromiso_fsus : {
-				required : true
-			},
-			compromiso_fini : {
-				required : true
-			},
-			compromiso_ffin : {
-				required : true
-			},
-			convenio_firmante : {
-				required : true,
-				minlength : 8
-			},
-			convenio_numero : {
-				required : true,
-				minlength : 3
-			},
-			convenio_fsus : {
-				required : true
-			},
-			convenio_fini : {
-				required : true
-			},
-			convenio_ffin : {
-				required : true
-			},
-			refer : {
-				required : true
-			},			
-			correo : {
-				email : true
-			}
+			@endforeach
+
 		},
 		submitHandler : function(form){
-			/*$.ajax({
+			$.ajax({
 				method : 'post',
-				url : 'efectores-alta',
+				url : 'carga-odp',
 				data : $(form).serialize(),
 				success : function(data){
-					$('#modal-text').html(data);
+					console.log(data);
+					/*$('#modal-text').html(data);
 					$('.modal').modal();
-					$('form').trigger('reset');
+					$('form').trigger('reset');*/
 				},
 				error : function(data){
 					var html = '';
@@ -263,11 +228,11 @@ $(document).ready(function() {
 					$('#errores-form').html(html);
 					$('#errores-div').show();
 				}
-			})*/
+			})
 
-			$('#modal-text').html("Los datos han sido cargados correctamente.");
+			/*$('#modal-text').html("Los datos han sido cargados correctamente.");
 			$('.modal').modal();
-			$('form').trigger('reset');
+			$('form').trigger('reset');*/
 		}
 	});
 	

@@ -830,7 +830,7 @@ class ComponentesController extends Controller
      *
      * @return null
      */
-    public function getAlta(){
+    public function getCarga(){
        /* $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
         $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
         $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();*/
@@ -845,5 +845,15 @@ class ComponentesController extends Controller
         ];
 
         return view('componentes.alta' , $data);
+    }
+
+    /**
+     * Devuelvo la vista para el alta de un componente de ODP
+     *
+     * @return null
+     */
+    public function postCarga(Request $r){ 
+        return json_encode(array($r->{'4'}, $r->{'5'}, $r->{'6'},$r->{'7'}, $r->indicador));       
+        return json_encode($r);        
     }
 }

@@ -463,7 +463,8 @@ Route::get('componentes-metas-ca/{periodo?}/{provincia?}' , 'ComponentesControll
 Route::get('componentes-control-ninos/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP2');
 Route::get('componentes-mujeres-cu/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP2');
 Route::get('componentes-control-adolescentes/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP2');
-Route::get('carga-datos-odp' , 'ComponentesController@getAlta');
+Route::get('carga-datos-odp' , 'ComponentesController@getCarga');
+Route::post('carga-odp' , 'ComponentesController@postCarga');
 Route::get('control-embarazadas-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP2');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
