@@ -222,30 +222,32 @@ class WebServicesController extends Controller
                                   //->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
-            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);        
-            $data = json_decode($datos_benef);
-            if(isset($data->resultado)){            
-                if ($data->resultado == 'OK') {
-                    $resultado = $this->guardarDatos($data);
-                    if($resultado != TRUE){
-                        echo $resultado;
-                    }                        
+            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);
+            if($datos_benef){
+                $data = json_decode($datos_benef);
+                if(isset($data->resultado)){            
+                    if ($data->resultado == 'OK') {
+                        $resultado = $this->guardarDatos($data);
+                        if($resultado != TRUE){
+                            echo $resultado;
+                        }                        
+                    }
+                    else{
+                        try {                        
+                            $this->guardarError($data, $documento);
+                        } catch (Exception $e) {
+                            echo $e->getCode(); 
+                        }
+                    }    
                 }
                 else{
                     try {                        
                         $this->guardarError($data, $documento);
                     } catch (Exception $e) {
                         echo $e->getCode(); 
-                    }
-                }    
+                    }                
+                }  
             }
-            else{
-                try {                        
-                    $this->guardarError($data, $documento);
-                } catch (Exception $e) {
-                    echo $e->getCode(); 
-                }                
-            }  
             unset($datos_benef);
             unset($data);                      
         }
