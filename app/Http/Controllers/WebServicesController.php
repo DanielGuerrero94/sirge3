@@ -216,10 +216,7 @@ class WebServicesController extends Controller
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
                                   ->take(15000)
-                                  ->toSql();
-
-        return var_dump($documentos);
-                                  //->lists('beneficiarios.beneficiarios.numero_documento');                 
+                                  ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
             $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);
