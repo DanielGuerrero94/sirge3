@@ -222,8 +222,7 @@ class WebServicesController extends Controller
         foreach ($documentos as $key => $documento){
             $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);                        
             if($datos_benef && $datos_benef <> '{}'){                                                             
-                $data = (array) json_decode($datos_benef);
-                $data['resultado'] = 'OK';
+                $data = (array) json_decode($datos_benef);                
                 $data = (object) $data;                                                                 
                 if(isset($data->resultado)){
                     if ($data->resultado == 'OK') {              
