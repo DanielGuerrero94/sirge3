@@ -295,11 +295,8 @@ class WebServicesController extends Controller
      * @param  object $datos
      * @return bool
      */
-    public function guardarError($datos, $documento){
+    public function guardarError($datos, $documento){                
         
-        $datos = (array) $datos;
-        $datos['resultado'] = 'OK';
-        $datos = (object) $datos;        
         $devolver = array();
 
         if($noEncontrado = ErrorPadronSisa::find($documento)){            
