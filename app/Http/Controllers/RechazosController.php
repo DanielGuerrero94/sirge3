@@ -183,9 +183,7 @@ class RechazosController extends Controller
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
-      ->store('xlsx', storage_path('exports/rechazos/'))
-      //->export('xls')
-      ;
+      ->store('xlsx', storage_path('exports/rechazos/'));
 
       $zip = new ZipArchive();
       $zip->open('/var/www/html/sirge3/storage/exports/rechazos/'.$lote.'.zip', ZipArchive::CREATE);
