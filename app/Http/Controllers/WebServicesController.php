@@ -143,7 +143,7 @@ class WebServicesController extends Controller
 
             $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
             
-            return json_decode((object) InscriptosPadronSisa::find($nrdoc));
+            return json_encode(InscriptosPadronSisa::find('10032371'));
             try {
                 //throw new Exception("Error Processing Request", 1);                
                 $response = $client->get($url);                
@@ -220,12 +220,14 @@ class WebServicesController extends Controller
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                 
 
         foreach ($documentos as $key => $documento){
-            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);
-            if($datos_benef){
-                $data = json_decode($datos_benef);
+            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);                        
+            if($datos_benef && $datos_benef <> '{}'){                                                             
+                $data = (array) json_decode($datos_benef);
+                $data['resultado'] = 'OK';
+                $data = (object) $data;                                                                 
                 if(isset($data->resultado)){
                     if ($data->resultado == 'OK') {              
-                        $resultado[] = $this->guardarDatos($data);
+                        $resultado[] = $this->guardarDatos($data); 
                     }
                     else{
                         $error[] = $this->guardarError($data, $documento);                        
@@ -237,12 +239,17 @@ class WebServicesController extends Controller
             }
             unset($datos_benef);
             unset($data);                      
+        }        
+        
+        if($resultado){
+            InscriptosPadronSisa::insert($resultado);
+            unset($resultado);    
         }
-
-        InscriptosPadronSisa::insert($resultado);
-        ErrorPadronSisa::insert($error);
-
-        unset($resultado);
+        if ($error) {
+            ErrorPadronSisa::insert($error);
+            unset($error);
+        }                
+        
         unset($documento);
         echo "Los beneficiarios se han insertado correctamente";
     }
@@ -257,28 +264,28 @@ class WebServicesController extends Controller
                 
         //$inscripto = new InscriptosPadronSisa();
         $inscripto['id'] = $this->convertirEnTexto($datos->id);  
-        $inscripto['codigosisa'] = $this->convertirEnTexto($datos->codigoSISA);
-        $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadoRenaper);
-        $inscripto['padronsisa'] = $this->convertirEnTexto($datos->PadronSISA);
-        $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipoDocumento);
-        $inscripto['nrodocumento'] = $this->convertirEnTexto($datos->nroDocumento);
+        $inscripto['codigosisa'] = $this->convertirEnTexto($datos->codigosisa);
+        $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadorenaper);
+        $inscripto['padronsisa'] = $this->convertirEnTexto($datos->padronsisa);
+        $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipodocumento);
+        $inscripto['nrodocumento'] = $this->convertirEnTexto($datos->nrodocumento);
         $inscripto['apellido'] = $this->convertirEnTexto($datos->apellido);
         $inscripto['nombre'] = $this->convertirEnTexto($datos->nombre);
         $inscripto['sexo'] = $this->convertirEnTexto($datos->sexo);
-        $inscripto['fechanacimiento'] = $this->convertirEnTexto($datos->fechaNacimiento);
-        $inscripto['estadocivil'] = $this->convertirEnTexto($datos->estadoCivil);
+        $inscripto['fechanacimiento'] = $this->convertirEnTexto($datos->fechanacimiento);
+        $inscripto['estadocivil'] = $this->convertirEnTexto($datos->estadocivil);
         $inscripto['provincia'] = $this->convertirEnTexto($datos->provincia);
         $inscripto['departamento'] = $this->convertirEnTexto($datos->departamento);
         $inscripto['localidad'] = $this->convertirEnTexto($datos->localidad);
         $inscripto['domicilio'] = $this->convertirEnTexto($datos->domicilio);
-        $inscripto['pisodpto'] = $this->convertirEnTexto($datos->pisoDpto);
-        $inscripto['codigopostal'] = $this->convertirEnTexto($datos->codigoPostal);
-        $inscripto['paisnacimiento'] = $this->convertirEnTexto($datos->paisNacimiento);
-        $inscripto['provincianacimiento'] = $this->convertirEnTexto($datos->provinciaNacimiento);
-        $inscripto['localidadnacimiento'] = $this->convertirEnTexto($datos->localidadNacimiento);
+        $inscripto['pisodpto'] = $this->convertirEnTexto($datos->pisodpto);
+        $inscripto['codigopostal'] = $this->convertirEnTexto($datos->codigopostal);
+        $inscripto['paisnacimiento'] = $this->convertirEnTexto($datos->paisnacimiento);
+        $inscripto['provincianacimiento'] = $this->convertirEnTexto($datos->provincianacimiento);
+        $inscripto['localidadnacimiento'] = $this->convertirEnTexto($datos->localidadnacimiento);
         $inscripto['nacionalidad'] = $this->convertirEnTexto($datos->nacionalidad);
         $inscripto['fallecido'] = $this->convertirEnTexto($datos->fallecido);
-        $inscripto['fechafallecido'] = $this->convertirEnTexto($datos->fechaFallecido);
+        $inscripto['fechafallecido'] = $this->convertirEnTexto($datos->fechafallecido);
         $inscripto['donante'] = $this->convertirEnTexto($datos->donante);
         return $inscripto;
     }
@@ -290,7 +297,12 @@ class WebServicesController extends Controller
      * @return bool
      */
     public function guardarError($datos, $documento){
-            
+        
+        $datos = (array) $datos;
+        $datos['resultado'] = 'OK';
+        $datos = (object) $datos;        
+        $devolver = array();
+
         if($noEncontrado = ErrorPadronSisa::find($documento)){            
             $noEncontrado->error = $this->convertirEnTexto($datos->resultado);
             try {
@@ -301,9 +313,8 @@ class WebServicesController extends Controller
                 return json_encode($e);
             }                        
         }
-        else{
+        else{            
             //$noEncontrado = new ErrorPadronSisa();
-            $devolver = array();
             $devolver['numero_documento'] = $documento;                
             $devolver['error'] = isset($datos->error) ? $datos->mensaje : $this->convertirEnTexto($datos->resultado);
             return $devolver;            
