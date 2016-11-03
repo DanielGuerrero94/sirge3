@@ -164,15 +164,7 @@ class RechazosController extends Controller
       ->select('id_padron','registros_out')     
       ->first();
 
-      try {
-        if(!isset($padron)){
-          throw new Exception("Este lote no esta ACEPTADO o PENDIENTE. No puede generar lotes en otro tipo de condicion. Tenga en cuenta que tampoco se generan excels de lotes sin rechazos.");  
-        }       
-    } catch(Exception $e) {
-        return response()->json($e->getMessage());
-    }
-
-    $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
+      $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
       $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
       ->get();
