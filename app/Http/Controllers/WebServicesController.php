@@ -142,8 +142,7 @@ class WebServicesController extends Controller
         if(!InscriptosPadronSisa::find($nrdoc)){
 
             $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
-            
-            return json_encode(InscriptosPadronSisa::find('10032371'));
+                        
             try {
                 //throw new Exception("Error Processing Request", 1);                
                 $response = $client->get($url);                
@@ -206,19 +205,20 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
+        $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
+                                  ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')          
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
+                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])
                                   //->where('numero_documento','22584419')
                                   ->whereNull('i.nrodocumento')
                                   ->where(function($query) {                                        
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(15000)                                  
-                                  ->lists('beneficiarios.beneficiarios.numero_documento');                 
-
+                                  ->take(13000)                                  
+                                  ->lists('beneficiarios.beneficiarios.numero_documento');                                         
         foreach ($documentos as $key => $documento){
             $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);                        
             if($datos_benef && $datos_benef <> '{}'){                                                             
@@ -226,7 +226,12 @@ class WebServicesController extends Controller
                 $data = (object) $data;                                                                 
                 if(isset($data->resultado)){
                     if ($data->resultado == 'OK') {              
-                        $resultado[] = $this->guardarDatos($data); 
+                        $resultado[] = $this->guardarDatos($data);
+                        if (sizeof($resultado) % 2000 == 0){
+                            InscriptosPadronSisa::insert($resultado);
+                            unset($resultado);    
+                            $resultado = [];
+                        } 
                     }
                     else{
                         $error[] = $this->guardarError($data, $documento);                        
@@ -240,11 +245,7 @@ class WebServicesController extends Controller
             unset($data);                      
         }        
         
-        if($resultado){
-            InscriptosPadronSisa::insert($resultado);
-            unset($resultado);    
-        }
-        if ($error) {
+        if (isset($error)) {
             ErrorPadronSisa::insert($error);
             unset($error);
         }                
@@ -260,32 +261,36 @@ class WebServicesController extends Controller
      * @return json_encode($datos)
      */
     public function guardarDatos($datos){
+
+        //die(var_dump($datos));
                 
         //$inscripto = new InscriptosPadronSisa();
         $inscripto['id'] = $this->convertirEnTexto($datos->id);  
-        $inscripto['codigosisa'] = $this->convertirEnTexto($datos->codigosisa);
-        $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadorenaper);
-        $inscripto['padronsisa'] = $this->convertirEnTexto($datos->padronsisa);
-        $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipodocumento);
-        $inscripto['nrodocumento'] = $this->convertirEnTexto($datos->nrodocumento);
+        $inscripto['codigosisa'] = $this->convertirEnTexto($datos->codigoSISA);
+        $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadoRenaper);
+        $inscripto['padronsisa'] = $this->convertirEnTexto($datos->PadronSISA);
+        $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipoDocumento);
+        $inscripto['nrodocumento'] = $this->convertirEnTexto($datos->nroDocumento);
         $inscripto['apellido'] = $this->convertirEnTexto($datos->apellido);
         $inscripto['nombre'] = $this->convertirEnTexto($datos->nombre);
         $inscripto['sexo'] = $this->convertirEnTexto($datos->sexo);
-        $inscripto['fechanacimiento'] = $this->convertirEnTexto($datos->fechanacimiento);
-        $inscripto['estadocivil'] = $this->convertirEnTexto($datos->estadocivil);
+        $inscripto['fechanacimiento'] = $this->convertirEnTexto($datos->fechaNacimiento);
+        $inscripto['estadocivil'] = $this->convertirEnTexto($datos->estadoCivil);
         $inscripto['provincia'] = $this->convertirEnTexto($datos->provincia);
         $inscripto['departamento'] = $this->convertirEnTexto($datos->departamento);
         $inscripto['localidad'] = $this->convertirEnTexto($datos->localidad);
         $inscripto['domicilio'] = $this->convertirEnTexto($datos->domicilio);
-        $inscripto['pisodpto'] = $this->convertirEnTexto($datos->pisodpto);
-        $inscripto['codigopostal'] = $this->convertirEnTexto($datos->codigopostal);
-        $inscripto['paisnacimiento'] = $this->convertirEnTexto($datos->paisnacimiento);
-        $inscripto['provincianacimiento'] = $this->convertirEnTexto($datos->provincianacimiento);
-        $inscripto['localidadnacimiento'] = $this->convertirEnTexto($datos->localidadnacimiento);
+        $inscripto['pisodpto'] = $this->convertirEnTexto($datos->pisoDpto);
+        $inscripto['codigopostal'] = $this->convertirEnTexto($datos->codigoPostal);
+        $inscripto['paisnacimiento'] = $this->convertirEnTexto($datos->paisNacimiento);
+        $inscripto['provincianacimiento'] = $this->convertirEnTexto($datos->provinciaNacimiento);
+        $inscripto['localidadnacimiento'] = $this->convertirEnTexto($datos->localidadNacimiento);
         $inscripto['nacionalidad'] = $this->convertirEnTexto($datos->nacionalidad);
         $inscripto['fallecido'] = $this->convertirEnTexto($datos->fallecido);
-        $inscripto['fechafallecido'] = $this->convertirEnTexto($datos->fechafallecido);
+        $inscripto['fechafallecido'] = $this->convertirEnTexto($datos->fechaFallecido);
         $inscripto['donante'] = $this->convertirEnTexto($datos->donante);
+        $inscripto['created_at'] = date('Y-m-d H:i:s');
+        $inscripto['updated_at'] = date('Y-m-d H:i:s');
         return $inscripto;
     }
 
@@ -295,7 +300,7 @@ class WebServicesController extends Controller
      * @param  object $datos
      * @return bool
      */
-    public function guardarError($datos, $documento){                
+    public function guardarError($datos, $documento){             
         
         $devolver = array();
 
@@ -313,6 +318,8 @@ class WebServicesController extends Controller
             //$noEncontrado = new ErrorPadronSisa();
             $devolver['numero_documento'] = $documento;                
             $devolver['error'] = isset($datos->error) ? $datos->mensaje : $this->convertirEnTexto($datos->resultado);
+            $devolver['created_at'] = date('Y-m-d H:i:s');
+            $devolver['updated_at'] = date('Y-m-d H:i:s');
             return $devolver;            
         }                    
     }
