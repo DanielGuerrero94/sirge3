@@ -243,6 +243,11 @@ class WebServicesController extends Controller
             }
             unset($datos_benef);
             unset($data);                      
+        }
+
+        if (sizeof($resultado)){
+            InscriptosPadronSisa::insert($resultado);
+            unset($resultado);
         }        
         
         if (isset($error)) {
