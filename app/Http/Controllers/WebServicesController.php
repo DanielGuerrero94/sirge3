@@ -13,6 +13,7 @@ use App\Models\InscriptosPadronSisa;
 use App\Models\ErrorPadronSisa;
 use Exception;
 use DB;
+use Schema;
 
 
 class WebServicesController extends Controller
@@ -208,22 +209,33 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
+        $cantidad = 10;
+
+        DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");
+
         $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
                                   ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
-                                  ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')          
+                                  ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
+                                  ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')              
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
                                   ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])
                                   //->where('numero_documento','22584419')
                                   ->whereNull('i.nrodocumento')
+                                  ->whereNull('t.numero_documento')
                                   ->where(function($query) {                                        
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(2500)                                  
-                                  ->lists('beneficiarios.beneficiarios.numero_documento');                                         
-        foreach ($documentos as $key => $documento){
-            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);                        
+                                  ->take($cantidad)                                  
+                                  ->select('beneficiarios.beneficiarios.numero_documento')
+                                  ->get()
+                                  ->toArray();        
+                                
+        DB::table("siisa.temporal_migracion_siisa")->insert($documentos);
+
+        foreach ($documentos as $documento){            
+            $datos_benef = $this->cruceSiisaXMLRequest($documento['numero_documento'], $client);                        
             if($datos_benef && $datos_benef <> '{}'){                                                             
                 $data = (array) json_decode($datos_benef);                
                 $data = (object) $data;                                                                 
@@ -262,7 +274,8 @@ class WebServicesController extends Controller
 
         $end = microtime(true) - $start;
 
-        DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo) VALUES (now(), ?)", [$end]);
+        Schema::dropIfExists('siisa.temporal_migracion_siisa');
+        DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo, cantidad) VALUES (now(), ?, ?)", [$end, $cantidad]);
 
         echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end;
     }
