@@ -12,6 +12,7 @@ use App\Models\Beneficiario;
 use App\Models\InscriptosPadronSisa;
 use App\Models\ErrorPadronSisa;
 use Exception;
+use DB;
 
 
 class WebServicesController extends Controller
@@ -203,6 +204,8 @@ class WebServicesController extends Controller
 
         curl_close($ch);
 
+        $start = microtime(true);
+
         $client = $this->create();
 
         $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
@@ -217,7 +220,7 @@ class WebServicesController extends Controller
                                         return $query->whereNull('e.numero_documento')
                                             ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
                                     })                                  
-                                  ->take(13000)                                  
+                                  ->take(2500)                                  
                                   ->lists('beneficiarios.beneficiarios.numero_documento');                                         
         foreach ($documentos as $key => $documento){
             $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);                        
@@ -256,7 +259,12 @@ class WebServicesController extends Controller
         }                
         
         unset($documento);
-        echo "Los beneficiarios se han insertado correctamente";
+
+        $end = microtime(true) - $start;
+
+        DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo) VALUES (now(), ?)", [$end]);
+
+        echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end;
     }
 
      /**
