@@ -141,7 +141,7 @@ class WebServicesController extends Controller
     public function cruceSiisaXMLRequest($nrdoc, $client)
     {
         
-        if(InscriptosPadronSisa::find($nrdoc)){
+        if(!InscriptosPadronSisa::find($nrdoc)){
 
             $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
                         
@@ -209,19 +209,18 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 10;
+        $cantidad = 5000;
 
         DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");
 
         $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
-                                  //->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
+                                  ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')              
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
-                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])
-                                  ->where('beneficiarios.beneficiarios.numero_documento','44213149')
-                                  //->whereNull('i.nrodocumento')
+                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                  
+                                  ->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')
                                   ->whereNull('e.numero_documento')                                  
                                   ->take($cantidad)                                  
