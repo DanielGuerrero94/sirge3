@@ -14,7 +14,7 @@ use App\Models\ErrorPadronSisa;
 use Exception;
 use DB;
 use Schema;
-
+use App\Models\Excepciones;
 
 class WebServicesController extends Controller
 {
@@ -141,7 +141,7 @@ class WebServicesController extends Controller
     public function cruceSiisaXMLRequest($nrdoc, $client)
     {
         
-        if(!InscriptosPadronSisa::find($nrdoc)){
+        if(InscriptosPadronSisa::find($nrdoc)){
 
             $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
                         
@@ -209,46 +209,59 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 5000;
+        $cantidad = 10;
 
         DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");
 
         $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
-                                  ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
+                                  //->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')              
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
                                   ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])
-                                  //->where('numero_documento','22584419')
-                                  ->whereNull('i.nrodocumento')
+                                  ->where('beneficiarios.beneficiarios.numero_documento','44213149')
+                                  //->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')
-                                  ->where(function($query) {                                        
-                                        return $query->whereNull('e.numero_documento')
-                                            ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
-                                    })                                  
+                                  ->whereNull('e.numero_documento')                                  
                                   ->take($cantidad)                                  
                                   ->select('beneficiarios.beneficiarios.numero_documento')
                                   ->get()
-                                  ->toArray();        
-                                
-        DB::table("siisa.temporal_migracion_siisa")->insert($documentos);
+                                  ->toArray();         
+        
+        try {
+            DB::table("siisa.temporal_migracion_siisa")->insert($documentos);
+        } catch (Exception $e) {
+            $excepcion = new Excepciones();
+            $excepcion->clase = (string) get_class();
+            $excepcion->metodo = (string) __FUNCTION__;
+            $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+            $excepcion->save();
+        }                                        
 
-        foreach ($documentos as $documento){            
+        foreach ($documentos as $documento){                    
             $datos_benef = $this->cruceSiisaXMLRequest($documento['numero_documento'], $client);                        
             if($datos_benef && $datos_benef <> '{}'){                                                             
-                $data = (array) json_decode($datos_benef);                
-                $data = (object) $data;                                                                 
-                if(isset($data->resultado)){
+                $data = (array) json_decode($datos_benef);                            
+                $data = (object) $data;                                                            
+                if(isset($data->resultado)){                    
                     if ($data->resultado == 'OK') {              
-                        $resultado[] = $this->guardarDatos($data);
+                        $resultado[] = $this->guardarDatos($data);                       
                         if (sizeof($resultado) % 2000 == 0){
-                            InscriptosPadronSisa::insert($resultado);
-                            unset($resultado);    
+                            try {
+                                InscriptosPadronSisa::insert($resultado);    
+                            } catch (Exception $e) {
+                                $excepcion = new Excepciones();
+                                $excepcion->clase = (string) get_class();
+                                $excepcion->metodo = (string) __FUNCTION__;
+                                $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+                                $excepcion->save();
+                            }            
+                            unset($resultado);
                             $resultado = [];
                         } 
                     }
-                    else{
+                    else{                        
                         $error[] = $this->guardarError($data, $documento);                        
                     }    
                 }
@@ -258,19 +271,34 @@ class WebServicesController extends Controller
             }
             unset($datos_benef);
             unset($data);                      
-        }
-
-        if (sizeof($resultado)){
-            InscriptosPadronSisa::insert($resultado);
+        }        
+        if (isset($resultado) ? sizeof($resultado) : FALSE){
+            try {                
+                InscriptosPadronSisa::insert($resultado);
+            } catch (Exception $e) {                
+                $excepcion = new Excepciones();
+                $excepcion->clase = (string) get_class();
+                $excepcion->metodo = (string) __FUNCTION__;
+                $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+                $excepcion->save();
+            }            
             unset($resultado);
         }        
         
-        if (isset($error)) {
-            ErrorPadronSisa::insert($error);
+        if (isset($resultado) ? sizeof($error) : FALSE){
+            try {
+                ErrorPadronSisa::insert($error);
+            } catch (Exception $e) {
+                $excepcion = new Excepciones();
+                $excepcion->clase = (string) get_class();
+                $excepcion->metodo = (string) __FUNCTION__;
+                $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+                $excepcion->save();
+            }            
             unset($error);
-        }                
-        
+        }                        
         unset($documento);
+        unset($documentos);
 
         $end = microtime(true) - $start;
 
