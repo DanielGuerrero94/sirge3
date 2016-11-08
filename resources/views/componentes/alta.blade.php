@@ -60,7 +60,8 @@
 							    			<div class="col-sm-9">
 								    			<select id="indicador" name="indicador" class="form-control">
 								    				<option value="">Seleccione ...</option>
-								    				@foreach($odp as $unOdp)		    						<option value="{{ $unOdp->id_indicador }}">{{$unOdp->odp . $unOdp->tipo .  ' - ' . $unOdp->descripcion }}</option>
+								    				@foreach($odp as $unOdp)		    						
+								    				<option value="{{ $unOdp->id_indicador }}">{{$unOdp->odp . $unOdp->tipo .  ' - ' . $unOdp->descripcion }}</option>
 								    													    					
 								    				@endforeach
 								    			</select>
@@ -239,6 +240,18 @@ $(document).ready(function() {
 
 	$('.back').click(function(){
 		$('form').trigger('reset');
+	});
+
+	$('#indicador').click(function(){
+		var indicador = $(this).val();	
+
+		$.get('metas-planificadas-odp-indicador/' + indicador , function(data){			
+			$('#planificacion').html(data);
+		});
+
+		$.get('metas-observadas-odp-indicador/' + indicador , function(data){
+			$('#observado').html(data);			
+		});
 	});
 	
   	$('#rootwizard').bootstrapWizard({

@@ -571,7 +571,7 @@ class CeiController extends Controller
 			$beneficiarios_oportunos = count($beneficiarios);
 
 			foreach ($beneficiarios as $key => $beneficiario) {
-
+				
 				$coincidence = FALSE;
 				foreach ($calculo->numerador->prestaciones as $prestacion){
 
