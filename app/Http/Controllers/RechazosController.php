@@ -117,8 +117,7 @@ class RechazosController extends Controller
 
     $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
-      $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
-      ->take(15)->get();
+      $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)->get();
 
       $id_padron = $padron->id_padron;
 
