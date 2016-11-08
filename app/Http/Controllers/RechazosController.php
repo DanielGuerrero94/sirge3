@@ -118,19 +118,19 @@ class RechazosController extends Controller
     $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
       $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
-      ->get();
+      ->take(15)->get();
 
       $id_padron = $padron->id_padron;
 
       $data = ['rechazos' => $rechazos, 'padron' => $padron->id_padron];
 
       Excel::create($lote , function ($e) use ($data, $padron){
-        $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){          
+        $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
           $s->setColumnFormat([
               'B' => '0',
               'H' => '@'
-            ]);
-          $s->setHeight(1, 20);
+            ]); 
+          $s->setHeight(1, 20);          
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
@@ -175,11 +175,11 @@ class RechazosController extends Controller
 
       Excel::create($lote , function ($e) use ($data, $padron){
         $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
-          $s->setHeight(1, 20);
           $s->setColumnFormat([
               'B' => '0',
               'H' => '@'
             ]);
+          $s->setHeight(1, 20);          
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
