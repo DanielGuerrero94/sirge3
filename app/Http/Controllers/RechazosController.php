@@ -125,12 +125,12 @@ class RechazosController extends Controller
       $data = ['rechazos' => $rechazos, 'padron' => $padron->id_padron];
 
       Excel::create($lote , function ($e) use ($data, $padron){
-        $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
-          $s->setHeight(1, 20);
+        $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){          
           $s->setColumnFormat([
               'B' => '0',
               'H' => '@'
             ]);
+          $s->setHeight(1, 20);
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
