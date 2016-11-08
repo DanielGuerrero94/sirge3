@@ -118,7 +118,7 @@ class RechazosController extends Controller
     $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
       $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
-      ->get();
+      ->take(15)->get();
 
       $id_padron = $padron->id_padron;
 
@@ -129,8 +129,8 @@ class RechazosController extends Controller
           $s->setHeight(1, 20);
           $s->setColumnFormat([
               'B' => '0',
-              'H' => '@'
-            ]);
+              'H' => '\PHPExcel_Style_NumberFormat::FORMAT_TEXT'
+            ]);          
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
