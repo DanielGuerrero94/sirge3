@@ -236,6 +236,7 @@ class WebServicesController extends Controller
             $excepcion->metodo = (string) __FUNCTION__;
             $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
             $excepcion->save();
+            unset($excepcion);
         }                                        
 
         foreach ($documentos as $documento){                    
@@ -255,6 +256,7 @@ class WebServicesController extends Controller
                                 $excepcion->metodo = (string) __FUNCTION__;
                                 $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
                                 $excepcion->save();
+                                unset($excepcion);
                             }            
                             unset($resultado);
                             $resultado = [];
@@ -280,6 +282,7 @@ class WebServicesController extends Controller
                 $excepcion->metodo = (string) __FUNCTION__;
                 $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
                 $excepcion->save();
+                unset($excepcion);
             }            
             unset($resultado);
         }        
@@ -293,6 +296,7 @@ class WebServicesController extends Controller
                 $excepcion->metodo = (string) __FUNCTION__;
                 $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
                 $excepcion->save();
+                unset($excepcion);
             }            
             unset($error);
         }                        
