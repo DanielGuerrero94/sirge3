@@ -198,11 +198,9 @@ class WebServicesController extends Controller
     public function cruzarBeneficiariosConSiisa(){
 
         $ch = curl_init();      
-
         set_time_limit(0);
         curl_setopt($ch, CURLOPT_TIMEOUT,30000);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-
         curl_close($ch);
 
         $start = microtime(true);
