@@ -222,7 +222,7 @@ class WebServicesController extends Controller
                                   ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                  
                                   ->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')
-                                  ->whereNull('e.numero_documento')                                  
+                                  ->whereNull('e.numero_documento')                                                                
                                   ->take($cantidad)                                  
                                   ->select('beneficiarios.beneficiarios.numero_documento')
                                   ->get()
@@ -263,11 +263,11 @@ class WebServicesController extends Controller
                         } 
                     }
                     else{                        
-                        $error[] = $this->guardarError($data, $documento);                        
+                        $error[] = $this->guardarError($data, $documento['numero_documento']);                        
                     }    
                 }
                 else{
-                    $error[] = $this->guardarError($data, $documento);                    
+                    $error[] = $this->guardarError($data, $documento['numero_documento']);                    
                 }  
             }
             unset($datos_benef);
@@ -361,8 +361,8 @@ class WebServicesController extends Controller
         
         $devolver = array();
 
-        if($noEncontrado = ErrorPadronSisa::find($documento)){            
-            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);
+        if($noEncontrado = ErrorPadronSisa::find($documento)){                
+            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);                   
             try {
                 $noEncontrado->save();
                 unset($noEncontrado);
