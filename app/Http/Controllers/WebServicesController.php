@@ -207,20 +207,24 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 7500;
+        $cantidad = 2500;
 
         DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");
 
         $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
                                   ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
-                                  ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')              
+                                  ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')       
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
-                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                  
+                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')
-                                  ->whereNull('e.numero_documento')                                                                
+                                  ->where(function($query){
+                                    return $query->where('e.numero_documento','!=','REGISTRO_NO_ENCONTRADO')
+                                                ->orWhere('e.numero_documento',null);
+                                  })
+                                  ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
                                   ->select('beneficiarios.beneficiarios.numero_documento')
                                   ->get()
@@ -303,7 +307,10 @@ class WebServicesController extends Controller
 
         $end = microtime(true) - $start;
 
-        Schema::dropIfExists('siisa.temporal_migracion_siisa');
+        if(DB::table('siisa.temporal_migracion_siisa')->count() <= $cantidad){
+            Schema::dropIfExists('siisa.temporal_migracion_siisa');
+        }
+
         DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo, cantidad) VALUES (now(), ?, ?)", [$end, $cantidad]);
 
         echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end;

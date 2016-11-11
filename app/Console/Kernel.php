@@ -32,10 +32,16 @@ class Kernel extends ConsoleKernel
         
         $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
         
-        $schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('21:30');
+        /*$schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('21:30');
         $schedule->call('App\Http\Controllers\PssController@generarTabla')->dailyAt('22:00');
         $schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->hourly();
-        $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('49 19 31 * * *');        
+        $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('49 19 31 * * *');*/
+        
+
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:00');
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:02');
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:04');
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:06');
 
         //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
         
