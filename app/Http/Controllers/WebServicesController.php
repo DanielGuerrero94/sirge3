@@ -285,7 +285,7 @@ class WebServicesController extends Controller
             unset($resultado);
         }        
         
-        if (isset($resultado) ? sizeof($error) : FALSE){
+        if (isset($error) ? sizeof($error) : FALSE){
             try {
                 ErrorPadronSisa::insert($error);
             } catch (Exception $e) {
