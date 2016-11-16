@@ -208,10 +208,16 @@ class WebServicesController extends Controller
         $client = $this->create();
 
         $cantidad = 2500;
+        $periodo = intval(date('Ym')) - 2;
 
         DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");
 
         $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
+                                  ->join('beneficiarios.periodos as p', function($join) use ($periodo)
+                                  {
+                                       $join->on('beneficiarios.beneficiarios.clave_beneficiario', '=',  'p.clave_beneficiario');
+                                       $join->where('p.periodo','=', $periodo);
+                                  })                        
                                   ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')       
@@ -219,16 +225,12 @@ class WebServicesController extends Controller
                                   ->where('clase_documento' , 'P')
                                   ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
-                                  ->whereNull('t.numero_documento')
-                                  ->where(function($query){
-                                    return $query->where('e.numero_documento','!=','REGISTRO_NO_ENCONTRADO')
-                                                ->orWhere('e.numero_documento',null);
-                                  })
+                                  ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
-                                  ->select('beneficiarios.beneficiarios.numero_documento')
+                                  ->select('beneficiarios.beneficiarios.numero_documento')                                  
                                   ->get()
-                                  ->toArray();         
+                                  ->toArray();                                    
         
         try {
             DB::table("siisa.temporal_migracion_siisa")->insert($documentos);
@@ -265,11 +267,19 @@ class WebServicesController extends Controller
                         } 
                     }
                     else{                        
-                        $error[] = $this->guardarError($data, $documento['numero_documento']);                        
+                        $devolucion = $this->guardarError($data, $documento['numero_documento']);
+                        if($devolucion){
+                            $error[] = $devolucion;    
+                        }
+                        unset($devolucion);                        
                     }    
                 }
                 else{
-                    $error[] = $this->guardarError($data, $documento['numero_documento']);                    
+                    $devolucion = $this->guardarError($data, $documento['numero_documento']);
+                    if($devolucion){
+                        $error[] = $devolucion;    
+                    }
+                    unset($devolucion);
                 }  
             }
             unset($datos_benef);
@@ -365,15 +375,16 @@ class WebServicesController extends Controller
     public function guardarError($datos, $documento){             
         
         $devolver = array();
-
-        if($noEncontrado = ErrorPadronSisa::find($documento)){                
+        $noEncontrado = ErrorPadronSisa::find($documento);
+        
+        if($noEncontrado){                
             $noEncontrado->error = $this->convertirEnTexto($datos->resultado);                   
             try {
                 $noEncontrado->save();
                 unset($noEncontrado);
-                return TRUE;
+                return FALSE;
             } catch (QueryException $e) {
-                return json_encode($e);
+                echo json_encode($e);
             }                        
         }
         else{            
@@ -384,5 +395,15 @@ class WebServicesController extends Controller
             $devolver['updated_at'] = date('Y-m-d H:i:s');
             return $devolver;            
         }                    
+    }
+
+    /**
+     * Borra la tabla temporal
+     *
+     * 
+     * 
+     */
+    public function borrarTablaTemporal(){             
+        Schema::dropIfExists('siisa.temporal_migracion_siisa');        
     }
 }

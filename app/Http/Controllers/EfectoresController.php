@@ -110,6 +110,7 @@ class EfectoresController extends Controller
         'efector' => $efector,
         'back' => $back
       ];
+      //return var_dump($efector);
       return view('efectores.detalle' , $data);
     }
 

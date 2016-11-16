@@ -71,85 +71,10 @@
 						    	</div>						    							    	
 						    </div>
 						    <div class="tab-pane" id="planificacion">
-						    	<div class="row">
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="linea_base" class="col-sm-4 control-label">Linea Base Dic 2015</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="linea_base" name="linea_base" placeholder="Ingrese la linea base con la que finalizó el año anterior ...">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="meta_anual" class="col-sm-4 control-label">Meta Anual</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="meta_anual" name="meta_anual">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    	</div>
-						    	<br />
-						    	<div class="row">
-						    	<?php  /*
-						    		<!-- @foreach($metas_planificadas as $plan)
-						    		<div class="col-md-{{12 / count($metas_planificadas)}}">
-						    			<div class="form-group">
-		                      				<label for="{{$plan->nombre}}" class="col-sm-4 control-label">{{$plan->nombre}}</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="{{$plan->id}}" name="{{$plan->id}}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		@endforeach --> */ ?>
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="4" class="col-sm-4 control-label">Meta a Abril 2016</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="4" name="4">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="5" class="col-sm-4 control-label">Meta a Agosto 2016</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="5" name="5">
-		                  					</div>
-		                    			</div>
-						    		</div>						    		
-						    	</div>						    						    	
+						    						    						    	
 						    </div>
 							<div class="tab-pane" id="observado">
-								<div class="row">
-								<?php  /*
-						    		<!-- @foreach($metas_observadas as $observado)
-						    		<div class="col-md-{{12 / count($metas_observadas)}}">
-						    			<div class="form-group">
-		                      				<label for="{{$observado->nombre}}" class="col-sm-4 control-label">{{$observado->nombre}}</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="{{$observado->id}}" name="{{$observado->id}}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		@endforeach	 --> */ ?>
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="6" class="col-sm-4 control-label">Observado a Abril 2016</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="6" name="6">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="7" class="col-sm-4 control-label">Observado a Agosto 2016</label>
-		                  					<div class="col-sm-8">
-		                    					<input type="text" class="form-control" id="7" name="7">
-		                  					</div>
-		                    			</div>
-						    		</div>									    		
-						    	</div>    	
+								   	
 						    </div>							
 							<ul class="pager wizard">
 								<li class="previous"><a href="javascript:;">Anterior</a></li>
@@ -243,13 +168,15 @@ $(document).ready(function() {
 	});
 
 	$('#indicador').click(function(){
-		var indicador = $(this).val();	
+		var indicador = $(this).val();
+		var provincia = $('#provincia').val();	
 
-		$.get('metas-planificadas-odp-indicador/' + indicador , function(data){			
+		$.get('metas-planificadas-odp-indicador/' + indicador + '/' + provincia, function(data){			
+			console.log(data);
 			$('#planificacion').html(data);
 		});
 
-		$.get('metas-observadas-odp-indicador/' + indicador , function(data){
+		$.get('metas-observadas-odp-indicador/' + indicador + '/' + provincia, function(data){
 			$('#observado').html(data);			
 		});
 	});

@@ -4,26 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class InscriptosPadronSisa extends Model
+class RechazoAlternativo extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'siisa.inscriptos_padron';
-	
+	protected $table = 'logs.rechazos_alternativo';
+
 	/**
 	 * Primary key asociated with the table.
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'nrodocumento';
+	protected $primaryKey = 'lote';
 
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;	
+	public $timestamps = true;
 }

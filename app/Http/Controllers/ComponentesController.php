@@ -18,7 +18,10 @@ use App\Models\Dw\CEB\Ceb004;
 use App\Models\Dw\CEB\Ceb005;
 use App\Models\Dw\FC\Fc001;
 use App\Models\TareasResultado;
-use App\Models\OdpTipo;
+use App\Models\ODP\OdpTipo;
+use App\Models\ODP\MetaDescripcion;
+use App\Models\ODP\MetaResultado;
+use App\Models\ODP\MetaTipo;
 use App\Models\Geo\Region;
 
 class ComponentesController extends Controller
@@ -853,7 +856,172 @@ class ComponentesController extends Controller
      * @return null
      */
     public function postCarga(Request $r){ 
-        return json_encode(array($r->{'4'}, $r->{'5'}, $r->{'6'},$r->{'7'}, $r->indicador));       
-        return json_encode($r);        
+                
+        foreach ($r->all() as $key => $value) {
+            return json_encode($key);            
+        }        
+        return json_encode(array($r->{'4'}, $r->{'5'}, $r->{'6'},$r->{'7'}, $r->indicador));               
+    }
+
+    /**
+     * Devuelvo la vista para el formulario de planificacion y de observado de la provincia
+     *
+     * @return null
+     */
+    public function getFormularioMetasPlanificadas($id_meta, $provincia){ 
+        
+        $id_odp = OdpTipo::find($id_meta);
+
+        $descripciones = MetaDescripcion::select('meta_desc_id','descripcion','meta_tipo','odp')->where('odp',$id_odp->odp)->whereIn('meta_tipo',[2,3,4])->groupBy(['meta_desc_id','descripcion','meta_tipo','odp'])->orderBy('meta_desc_id')->get();
+
+        if(isset(MetaResultado::where('id_tipo_meta',$id_meta)
+                    ->where('year',intval(date('Y')))
+                    ->where('provincia',$provincia)                    
+                    ->first()->detalle)){
+
+            $detalle_resultados = json_decode(MetaResultado::where('id_tipo_meta',$id_meta)
+                    ->where('year',intval(date('Y')))
+                    ->where('provincia',$provincia)                    
+                    ->first()->detalle);        
+        }                    
+
+        $columnas = 0;
+
+        $año_anterior = date('Y', strtotime('-1 year'));        
+
+        $html_view = '<div class="row">';
+        
+        foreach ($descripciones as $descripcion) {
+
+            switch ($descripcion->meta_tipo) {
+                    case 4:
+                        $descripcion->descripcion = $descripcion->descripcion . ' ' . $año_anterior;
+                        break;
+
+                    case 3:
+                        $descripcion->descripcion = $descripcion->descripcion . ' ' . date('Y');
+                        break;
+                    
+                    default:
+                        $descripcion->descripcion = $descripcion->descripcion;
+                        break;
+            }                        
+
+            if(isset($detalle_resultados)){
+                foreach ($detalle_resultados->campos as $resultado) {                  
+                    if($resultado->id == $descripcion->meta_desc_id){                
+                        $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "valor" => $resultado->valor, "descripcion" => $descripcion->descripcion);                        
+                    }                    
+                }
+            }            
+            if(!isset($superObjeto[$descripcion->meta_desc_id])){
+                $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "descripcion" => $descripcion->descripcion);
+            }
+        }        
+        
+        foreach ($superObjeto as $unObjeto) {
+                    
+            if ($columnas == 2) {
+                $html_view .= '</div>';
+                $html_view .= '<br />';                                                                
+                $html_view .= '<div class="row">';
+                $columnas = 0;
+            }
+
+            $id_valor = isset($unObjeto['valor']) ? 'value="'.$unObjeto['valor'] .'"' : '';
+
+            $html_view .= '<div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="'.$unObjeto['id'].'" class="col-sm-4 control-label">'.$unObjeto['descripcion'].'</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="'.$unObjeto['id'].'" name="'.$unObjeto['id'].'" '.$id_valor.' placeholder="Rellene el campo">
+                                    </div>
+                                </div>
+                            </div>';
+            $columnas++;
+        }
+        $html_view .= '</div>';
+
+        return $html_view;
+    }
+
+    /**
+     * Devuelvo la vista para el formulario de planificacion y de observado de la provincia
+     *
+     * @return null
+     */
+    public function getFormularioMetasObservadas($id_meta, $provincia){
+
+        $id_odp = OdpTipo::find($id_meta);
+
+        $descripciones = MetaDescripcion::select('meta_desc_id','descripcion','meta_tipo','odp')->where('odp',$id_odp->odp)->where('meta_tipo',1)->groupBy(['meta_desc_id','descripcion','meta_tipo','odp'])->orderBy('meta_desc_id')->get();
+
+        if(isset(MetaResultado::where('id_tipo_meta',$id_meta)
+                    ->where('year',intval(date('Y')))
+                    ->where('provincia',$provincia)                    
+                    ->first()->detalle)){
+
+            $detalle_resultados = json_decode(MetaResultado::where('id_tipo_meta',$id_meta)
+                    ->where('year',intval(date('Y')))
+                    ->where('provincia',$provincia)                    
+                    ->first()->detalle);        
+        }                    
+
+        $columnas = 0;
+
+        $html_view = '<div class="row">';
+        
+        foreach ($descripciones as $descripcion) {            
+            
+            switch ($descripcion->meta_tipo) {
+                    case 4:
+                        $descripcion->descripcion = $descripcion->descripcion . ' ' . $año_anterior;
+                        break;
+
+                    case 3:
+                        $descripcion->descripcion = $descripcion->descripcion . ' ' . date('Y');
+                        break;
+                    
+                    default:
+                        $descripcion->descripcion = $descripcion->descripcion;
+                        break;
+            }
+
+            if(isset($detalle_resultados)){
+                foreach ($detalle_resultados->campos as $resultado) {                  
+                    if($resultado->id == $descripcion->meta_desc_id){                
+                        $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "valor" => $resultado->valor, "descripcion" => $descripcion->descripcion);
+                    }
+                }
+            }            
+            if(!isset($superObjeto[$descripcion->meta_desc_id])){
+                $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "descripcion" => $descripcion->descripcion);
+            }
+        }        
+        
+        foreach ($superObjeto as $unObjeto) {
+                    
+            if ($columnas == 2) {
+                $html_view .= '</div>';
+                $html_view .= '<br />';                                                                
+                $html_view .= '<div class="row">';
+                $columnas = 0;
+            }
+
+            $id_valor = isset($unObjeto['valor']) ? 'value="'.$unObjeto['valor'] .'"' : '';
+
+            $html_view .= '<div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="'.$unObjeto['id'].'" class="col-sm-4 control-label">'.$unObjeto['descripcion'].'</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="'.$unObjeto['id'].'" name="'.$unObjeto['id'].'" '.$id_valor.' placeholder="Rellene el campo">
+                                    </div>
+                                </div>
+                            </div>';
+            $columnas++;
+        }
+        $html_view .= '</div>';
+
+        return $html_view;    
     }
 }

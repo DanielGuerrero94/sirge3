@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ODP;
 
 use Illuminate\Database\Eloquent\Model;
 
-class InscriptosPadronSisa extends Model
+class OdpTipo extends Model
 {
     /**
 	 * The table associated with the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'siisa.inscriptos_padron';
-	
+	protected $table = 'odp.odp_tipo';
+
 	/**
 	 * Primary key asociated with the table.
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'nrodocumento';
+	protected $primaryKey = 'id_indicador';
 
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;	
+	public $timestamps = false;
 }

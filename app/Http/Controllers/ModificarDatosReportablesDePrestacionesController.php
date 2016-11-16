@@ -15,7 +15,6 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Subida;
-use App\Models\ErrorSubida;
 use App\Models\Lote;
 use App\Models\Rechazo;
 use App\Models\Prestacion;
@@ -25,7 +24,7 @@ use App\Models\Dw\FC\Fc005;
 
 use App\Models\Geo\Provincia;
 
-class PrestacionesController extends AbstractPadronesController
+class ModificarDatosReportablesDePrestacionesPrestacionesController extends AbstractPadronesController
 {
 	private 
 		$_rules = [
@@ -180,24 +179,11 @@ class PrestacionesController extends AbstractPadronesController
 						$linea[$nro_inicial+1] = array(); 
 
 						foreach ($split_7 as $campo => $valor) {
-							if( strtolower(substr($valor, 0, 2)) == 'od' ){
-								if(strtolower(substr($valor, 0, 4)) == 'odsi' || strtolower(substr($valor, 0, 4)) == 'odno'){
-									$linea[$nro_inicial+1]['d'] = strtolower(substr($valor, 0, 4)) == 'odsi' ? 'ODPasa' : 'ODNoPasa';
-									$linea[$nro_inicial+1]['i'] = strtolower(substr($valor, 4, 7)) == 'oisi' ? 'OIPasa' : 'OINoPasa'; 	 	
-								}
-								else{
-									$linea[$nro_inicial+1]['d'] = $valor;	
-								}
+							if( strtolower(substr($valor, 0, 2)) == 'od' ){								
+								$linea[$nro_inicial+1]['d'] = $valor; 	
 							}
 							elseif( strtolower(substr($valor, 0, 2)) == 'oi' ){
-								if(strtolower(substr($valor, 0, 4)) == 'oisi' || strtolower(substr($valor, 0, 4)) == 'oino'){
-									$linea[$nro_inicial+1]['i'] = strtolower(substr($valor, 0, 4)) == 'oisi' ? 'OIPasa' : 'OINoPasa';
-									$linea[$nro_inicial+1]['d'] = strtolower(substr($valor, 4, 7)) == 'odsi' ? 'ODPasa' : 'ODNoPasa'; 	 	
-								}
-								else{
-									$linea[$nro_inicial+1]['i'] = $valor;
-								}
-								
+								$linea[$nro_inicial+1]['i'] = $valor; 		
 							}							
 						}						
 					}
@@ -314,8 +300,8 @@ class PrestacionesController extends AbstractPadronesController
 		$info = Subida::findOrFail($id);
 		try {
 			$fh = fopen ('../storage/uploads/prestaciones/' . $info->nombre_actual , 'r');
-		} catch (ErrorException $e) {			
-			return array("mensaje" => $e->getMessage());
+		} catch (ErrorException $e) {
+			return false;
 		}
 		return $fh;
 	}
@@ -338,24 +324,13 @@ class PrestacionesController extends AbstractPadronesController
             return '';
         }
         else
-        {	            
+        {
+	            $lote = $this->nuevoLote($id);
 				$fh = $this->abrirArchivo($id);
-
-				if (is_array($fh)){					
-					$er = new ErrorSubida();
-					$er->id_subida = $id;
-					$er->error = $fh['mensaje'];
-					
-					try {
-						$er->save();	
-					} catch (Exception $e) {
-						return response('Error: ' . $e->getMessage(), 422);
-					}
-
-					return response('Error', 422);
+				
+				if (!$fh){
+					return response('Error' , 422);
 				}
-
-				$lote = $this->nuevoLote($id);				
 				$nro_linea = 1;
 
 				fgets($fh);
@@ -367,82 +342,79 @@ class PrestacionesController extends AbstractPadronesController
 							$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
 							$v = Validator::make($prestacion_raw , $this->_rules);
 							if ($v->fails()) {
-								$this->_resumen['rechazados'] ++;								
-								$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => $v->errors());		
+								$this->_resumen['rechazados'] ++;
+								$this->_error['lote'] = $lote;
+								$this->_error['registro'] = json_encode($prestacion_raw);
+								$this->_error['motivos'] = json_encode($v->errors());
+								$this->_error['created_at'] = date("Y-m-d H:i:s");
+								Rechazo::insert($this->_error);
 							} else {
 								$operacion = array_shift($prestacion_raw);
 								switch ($operacion) {
-									case 'A':
-										try {
-											Prestacion::insert($prestacion_raw);
-											$this->_resumen['insertados'] ++;
-										} catch (QueryException $e) {
-											$this->_resumen['rechazados'] ++;											
-											$prestacion_raw['operacion'] = 'A';											
-											if ($e->getCode() == 23505){												
-												$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"pkey" : "Registro ya informado"}');
-											} else if ($e->getCode() == 22021){
-												$this->_error['resultado'][] = array("registro" => parent::vaciarArray($prestacion_raw), "motivos" => 'linea->'.$nro_linea . 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.');		
-											}else {
-												$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => $e);
-											}											
-										}
-										break;
 									case 'M':
+											$this->_resumen['rechazados'] ++;
+											$this->_error['lote'] = $lote;											
+											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											$this->_error['registro'] = json_encode($prestacion_raw);
+											$this->_error['motivos'] = '{"modification" : ["Registro queriendo modificar"]}';											
+											Rechazo::insert($this->_error);
+										
+										break;
+									case 'A':
 										$prestacion = Prestacion::where('numero_comprobante' , $prestacion_raw['numero_comprobante'])
 																->where('codigo_prestacion' , $prestacion_raw['codigo_prestacion'])
 																->where('subcodigo_prestacion' , $prestacion_raw['subcodigo_prestacion'])
 																->where('fecha_prestacion' , $prestacion_raw['fecha_prestacion'])
 																->where('clave_beneficiario' , $prestacion_raw['clave_beneficiario'])
-																->where('orden' , $prestacion_raw['orden']);
+																->where('orden' , $prestacion_raw['orden'])
+																->where('datos_reportables', 'LIKE', '%"7":"O%');
 										
 										if ($prestacion->count()){											
-
-											$prestacion = $prestacion->firstOrFail();
-											$prestacion->estado = 'D';
+											$prestacion = $prestacion->firstOrFail();					
+											$prestacion->datos_reportables = $prestacion_raw['datos_reportables'];
 											try {
 												$prestacion->save();
 												$this->_resumen['modificados'] ++;											
 											} catch (QueryException $e) {
-												$this->_resumen['rechazados'] ++;	
-												$prestacion_raw['operacion'] = 'M';												
+												$this->_resumen['rechazados'] ++;
+												$this->_error['lote'] = $lote;											
+												$this->_error['created_at'] = date("Y-m-d H:i:s");
+												$this->_error['registro'] = json_encode($prestacion_raw);
 												if ($e->getCode() == 23505){												
-													$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"pkey" : "Registro a modificar ya informado"}');
+													$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
 												} else if ($e->getCode() == 22021){
-													$this->_error['resultado'][] = array("registro" => parent::vaciarArray($prestacion_raw), "motivos" => 'linea->'.$nro_linea . 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.');	
+													$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
+													$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 												}else {
-													$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"modificacion" : "Registro no pudo actualizarse"}');							
-												}												
+													$this->_error['motivos'] = '{"modificacion" : ["Registro no pudo actualizarse"]}';
+												}
+												Rechazo::insert($this->_error);
 											}											
 										} else {
-											$this->_resumen['rechazados'] ++;											
-											$prestacion_raw['operacion'] = 'M';
-											$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"modificacion" : "Registro a modificar no encontrado"}');						
+											$this->_resumen['rechazados'] ++;
+											$this->_error['lote'] = $lote;
+											$this->_error['registro'] = json_encode($prestacion_raw);
+											$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
+											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											Rechazo::insert($this->_error);
 										}
 										break;
 								}
 							}
 						} else{
-							$this->_resumen['rechazados'] ++;							
-							$this->_error['resultado'][] = array("registro" => $linea, "motivos" => 'La cantidad de columnas ingresadas en la fila no es correcta');							
-						}
-						if(sizeof($this->_error)){
+							$this->_resumen['rechazados'] ++;
 							$this->_error['lote'] = $lote;
-							$this->_error['resultado'] = json_encode($this->_error['resultado']);							
+							$this->_error['registro'] = json_encode($linea);
+							$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
-							Rechazo::insert($this->_error);		
-						}
-						
+							Rechazo::insert($this->_error);
+						}	
 					}
 				}
 				$this->actualizaLote($lote , $this->_resumen);
 				$this->actualizaSubida($id);
         }
-    	$_SESSION['posttimer'] = time();
-    	unset($fh);
-    	unset($lote);
-    	unset($nro_linea);
-    	unset($id);
+    	$_SESSION['posttimer'] = time();		
 		
 		return response()->json($this->_resumen);
 	}
