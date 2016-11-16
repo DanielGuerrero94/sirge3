@@ -232,9 +232,9 @@ return [
         'mongodb' => [
             'driver'   => 'mongodb',
             'host'     => env('DB_HOST_MDB', 'localhost'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE_MDB', 'forge'),
+            'username' => env('DB_USERNAME_MDB', 'forge'),
+            'password' => env('DB_PASSWORD_MDB', ''),
             'charset'  => 'utf8',
             'prefix'   => '',
         ],
