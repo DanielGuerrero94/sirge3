@@ -308,7 +308,7 @@ Route::get('ddjj-doiu9-consolidado' , 'DdjjController@D9Consolidado');
 Route::get('ddjj-backup' , 'DdjjController@getBackup');
 Route::get('ddjj-backup-reimprimir/{id}' , 'DdjjController@getBack');
 Route::get('ddjj-periodo/doiu-9' , [
-		'middleware' => ['uec','padronok'] , 
+		'middleware' => ['uec'] , 
 		'uses' => 'DdjjController@getPeriodoDoiu9'
 	]);
 Route::get('ddjj-periodo/backup' , [
@@ -443,6 +443,7 @@ Route::get('descargar-rechazos/{lote}' , 'RechazosController@descargarExcelLote'
 Route::get('rechazos-generar/{lote}' , 'RechazosController@generarExcelRechazos');
 Route::get('ver-rechazos/{lote}' , 'RechazosController@verRechazos');
 Route::get('rechazos-curl/{lote}' , 'RechazosController@curlRechazo');
+Route::get('convertir-en-json-de-jsons' , 'RechazosController@convertirEnJsonDeJsons');
 
 /********************************************************************************
  *								 	AUTH FILTER									*
@@ -468,8 +469,8 @@ Route::post('carga-odp' , 'ComponentesController@postCarga');
 Route::get('control-embarazadas-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP2');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
-Route::get('metas-planificadas-odp-indicador/{indicador}' , 'ComponentesController@getMetaPlanificadaIndicador');
-Route::get('metas-observadas-odp-indicador/{indicador}' , 'ComponentesController@getMetaObservadaIndicador');
+Route::get('metas-planificadas-odp-indicador/{indicador}/{provincia}' , 'ComponentesController@getFormularioMetasPlanificadas');
+Route::get('metas-observadas-odp-indicador/{indicador}/{provincia}' , 'ComponentesController@getFormularioMetasObservadas');
 
 
 /**
