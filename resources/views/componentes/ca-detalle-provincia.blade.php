@@ -5,49 +5,49 @@
 				<div class="col-md-1">
 				</div>
 				<div class="col-md-10">
-					<h4 class="form-control-static">{{ $data['titulo'] }}</h4>				
+					<h4 class="form-control-static">{{ 'Control prenatal en embarazadas' }}</h4>				
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="col-md-6 control-label">Entidad</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ $data['entidad'] }}</p>
+					<p class="form-control-static">{{ 'País' }}</p>
 				</div>
 			</div>			
 
 			<div class="form-group">
-				<label class="col-md-6 control-label">Beneficarios poblaci&oacute;n objetiva</label>
+				<label class="col-md-6 control-label">% Observado Actual</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ $data['beneficiarios_activos'] }}</p>
+					<p class="form-control-static">{{ '34.1' }}</p>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-6 control-label">Beneficarios que cumplen</label>
+				<label class="col-md-6 control-label">% Meta Anual</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ $data['beneficiarios_ceb'] }}</p>
+					<p class="form-control-static">{{ '36' }}</p>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-6 control-label">% Control prenatal cumplido</label>
+				<label class="col-md-6 control-label">Planificado Abril 2016</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ $data['porcentaje_actual'] }}</p>
+					<p class="form-control-static">{{ '33' }}</p>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-6 control-label">Periodo</label>
+				<label class="col-md-6 control-label">Planificado Agosto 2016</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ $data['periodo'] }}</p>
+					<p class="form-control-static">{{ '36' }}</p>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-6 control-label">Evolución </label>
-				<div class="btn-group col-md-6" data-toggle="tooltip" title="Desde esta opción podrá ver la evolución del último trimestre del O.D.P {{$data['indicador']}} a nivel nacional y regional" role="group">
-					<button type="button" href="componentes-odp1-evolucion/{{$data['tipo']}}" class="detalle btn btn-info">Ver detalles</button>
+				<label class="col-md-6 control-label">Estado a&ntilde;o anterior </label>
+				<div class="btn-group col-md-6" data-toggle="tooltip" title="Desde esta opción podrá ver el estado del último año del O.D.P 2 a nivel nacional y regional" role="group">
+					<button type="button" href="componentes-odp1-evolucion/{{'2'}}" class="detalle btn btn-info">Ver detalles</button>
 				</div>		
 			</div>
 		</form>
