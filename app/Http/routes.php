@@ -469,8 +469,7 @@ Route::post('carga-odp' , 'ComponentesController@postCarga');
 Route::get('control-embarazadas-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP2');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
-Route::get('metas-planificadas-odp-indicador/{indicador}/{provincia}' , 'ComponentesController@getFormularioMetasPlanificadas');
-Route::get('metas-observadas-odp-indicador/{indicador}/{provincia}' , 'ComponentesController@getFormularioMetasObservadas');
+Route::get('metas-odp-indicador/{indicador}/{provincia}/{tipo_meta}' , 'ComponentesController@getFormularioMetas');
 
 
 /**

@@ -18,12 +18,18 @@ class MetaResultado extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'odp';
+	protected $primaryKey = 'id_tipo_meta';
+
+	/**
+	 * [Elijo las columnas que pueden utilizarse via Mass Asignment]
+	 * @var [type]
+	 */
+	protected $fillable = ['id_tipo_meta', 'detalle', 'provincia', 'year'];
 
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var bool
-	 */
+	 */		
 	public $timestamps = false;
 }

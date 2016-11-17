@@ -84,8 +84,7 @@
 					</div>
 				</div>
 				<div class="box-footer">
-					<div class="btn-group " role="group">
-					 	<button class="back btn btn-info">Borrar campos</button>
+					<div class="btn-group " role="group">					 	
 					 	<button type="submit" class="finish btn btn-warning">Cargar datos</button>
 					</div>
 				</div>
@@ -141,9 +140,9 @@ $(document).ready(function() {
 				data : $(form).serialize(),
 				success : function(data){
 					console.log(data);
-					/*$('#modal-text').html(data);
+					$('#modal-text').html(data);
 					$('.modal').modal();
-					$('form').trigger('reset');*/
+					$('form').trigger('reset');
 				},
 				error : function(data){
 					var html = '';
@@ -155,10 +154,7 @@ $(document).ready(function() {
 					$('#errores-div').show();
 				}
 			})
-
-			/*$('#modal-text').html("Los datos han sido cargados correctamente.");
-			$('.modal').modal();
-			$('form').trigger('reset');*/
+			$('form').trigger('reset');
 		}
 	});
 	
@@ -171,12 +167,12 @@ $(document).ready(function() {
 		var indicador = $(this).val();
 		var provincia = $('#provincia').val();	
 
-		$.get('metas-planificadas-odp-indicador/' + indicador + '/' + provincia, function(data){			
+		$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/planificado', function(data){			
 			console.log(data);
 			$('#planificacion').html(data);
 		});
 
-		$.get('metas-observadas-odp-indicador/' + indicador + '/' + provincia, function(data){
+		$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/observado', function(data){
 			$('#observado').html(data);			
 		});
 	});
