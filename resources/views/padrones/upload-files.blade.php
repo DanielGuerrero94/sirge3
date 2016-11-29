@@ -163,8 +163,13 @@
             }
         },
         done: function (e, data) {
-        	console.log(data);
-            $('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
+        	if(data.result.success == 'true'){
+        		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
+        	}
+        	else if(data.result.success == 'false'){
+        		$('#errores-form').html(data.result.errors);
+				$('#errores-div').show();
+        	}        	        	        	            
         },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -173,10 +178,10 @@
                 progress + '%'
             );
         }, 
-        fail : function (e, data){
+        fail : function (e, data){        	
 			var html = '<li>Ha ocurrido un error al subir el archivo</li>';
 			$('#errores-form').html(html);
-			$('#errores-div').show();			
+			$('#errores-div').show();
         }
 
     }).prop('disabled', !$.support.fileInput)
