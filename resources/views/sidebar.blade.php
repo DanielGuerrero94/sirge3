@@ -33,7 +33,7 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="header">
-                <img style="width:160px; height:60px" src="{{ asset ("/dist/img/cus_sumar_solo.png")}}">
+                <img style="width:120px; height:58px" src="{{ asset ("/dist/img/logo-cus-apaisado.jpg")}}">
                 <!-- <img style="width:150px" src="{{ asset ("/dist/img/identidad_msal_header.png")}}"> -->
             </li>
             @foreach ($modulos as $key_padre => $modulo)

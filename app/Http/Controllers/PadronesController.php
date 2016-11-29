@@ -129,12 +129,43 @@ class PadronesController extends Controller
 	}
 
 	/**
+	 * Determina si es posible o no subir un archivo del padrón en cuestión. Para eso,
+	 * chequea que no haya ningún lote pendiente del mismo padrón.
+	 * @param  [smallint] $id [id_padron]
+	 * @return [bool]     [respuesta booleana]
+	 */
+	public function checkNoPending($id){
+		$pending_lotes = Subida::join('sistema.lotes' , 'sistema.subidas.id_subida' , '=' , 'sistema.lotes.id_subida')
+		->where('id_padron',$id)
+		->where('sistema.lotes.id_provincia',Auth::user()->id_provincia)
+		->where('sistema.lotes.id_estado',1)
+		->select('sistema.lotes.lote')
+		->get()
+		->toArray();
+		
+		if(!empty($pending_lotes))
+		{
+			return array('status' => 'error', 'detalle' => json_encode($pending_lotes));
+		}
+		else{
+			return array('status' => 'ok');
+		}
+	}
+
+	/**
 	 * Guarda el archivo en el sistema
 	 * @param $r Request
 	 *
 	 * @return json
 	 */
-	public function postUpload(Request $r){		
+	public function postUpload(Request $r){
+
+		$status = $this->checkNoPending($r->id_padron);
+
+		if($status['status'] == 'error'){
+			return response()->json(['success' => 'false',
+        							 'errors'  => "No puede cargar nuevos archivos habiendo lotes pendientes en el mismo padrón. Dichos lotes son ". $status['detalle'] , 422]);
+		}		
 
 		$nombre_archivo = uniqid() . '.txt';
 
@@ -152,7 +183,8 @@ class PadronesController extends Controller
 			$r->file('file')->move($destino , $nombre_archivo);
 		} catch (FileException $e){
 			$s->delete();
-			return response("Ha ocurrido un error: ". $e->getMessage() , 422);
+			return response()->json(['success' => 'false',
+                							'errors'  => "Ha ocurrido un error: ". $e->getMessage() , 422]);
 		}
 		if ($s->save()){
 			switch ($r->id_padron) {
@@ -160,7 +192,8 @@ class PadronesController extends Controller
 					if ($r->codigo_osp == 0){
 						$s->delete();
 						unlink($destino . '/' . $nombre_archivo);
-						return response("Debe elegir la Obra Social a reportar" , 422);
+						return response()->json(['success' => 'false',
+                							'errors'  => "Debe elegir la Obra Social a reportar" , 422]);
 					} else {
 						$codigo_final = $r->codigo_osp;
 						$id_archivo = 1;
@@ -189,7 +222,8 @@ class PadronesController extends Controller
 					if ($r->id_sss == 0){
 						$s->delete();
 						unlink($destino . '/' . $nombre_archivo);
-						return response("Debe elegir el ID del archivo de la SSS" , 422);
+						return response()->json(['success' => 'false',
+                							'errors'  => 'Debe elegir el ID del archivo de la SSS' , 422]);
 					} else {
 						$id_archivo = $r->id_sss;
 						$codigo_final = 998001;
@@ -207,7 +241,7 @@ class PadronesController extends Controller
 			}
 
 			unset($s);
-			return response()->json(['file' => $r->file->getClientOriginalName()]); 
+			return response()->json(['success' => 'true', 'file' => $r->file->getClientOriginalName()]); 
 		}
 	}
 
