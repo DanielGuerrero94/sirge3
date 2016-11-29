@@ -70,7 +70,7 @@ background-color: #f6f6f6;
                     Estimado usuario, en el adjunto podrá encontrar información con respecto a la solución a la solicitud ingresada. <br />
                     <b>Le solicitamos que nos confirme que la solución es satisfactoria haciendo click en uno de los siguientes enlaces según corresponda:</b><br /><br />
                     <b><a href="http://200.69.210.3/sirge3/public/solicitud-final/{{ $id }}/{{ $hash }}">Confirmar cierre de solicitud desde Internet</a></b><br /><br />
-                    <b><a href="http://192.6.0.37/sirge3/public/solicitud-final/{{ $id }}/{{ $hash }}">Confirmar cierre de solicitud desde UEC (para usuarios en red local)</a></b>
+                    <b><a href="http://192.6.0.200/sirge3/public/solicitud-final/{{ $id }}/{{ $hash }}">Confirmar cierre de solicitud desde UEC (para usuarios en red local)</a></b>
                   </td>
                 </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                     Gracias por utilizar SIRGe Web.

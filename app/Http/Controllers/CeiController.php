@@ -769,38 +769,7 @@ class CeiController extends Controller
 	    		{	    			
 	    			$super_objeto['denominador'] = $oportuno->beneficiarios_cantidad_inicial;
 	    		}
-	    		/*else{
 	    		
-		    		foreach ($oportuno as $key => $beneficiario) {
-			    		
-			    		if (isset ($calculo->denominador->prestaciones)) {
-			    			$coincidence = FALSE;
-			    			foreach ($calculo->denominador->prestaciones as $prestacion){
-
-			    				$dt = \DateTime::createFromFormat('Y-m' , $periodo);
-				    			$dt->modify('first day of this month');
-				    			$fechas['min_prestacion'] = $dt->format('Y-m-d');
-				    			$dt->modify("+ $prestacion->lapso");
-				    			$fechas['max_prestacion'] = $dt->format('Y-m-d');
-
-				    			$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-				    								->whereIn('codigo_prestacion' , $prestacion->codigos)
-				    								->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-				    								->count();
-				    			if($existe){
-				    				$coincidence = TRUE;	
-				    			}			    			
-			    			}
-
-			    			if (! $coincidence) {
-				    				unset($oportuno[$key]);
-			    			}
-
-			    			$super_objeto['denominador'] = count($oportuno);
-			    		} 
-		    		}
-		    	}*/
-
 
 		    	/****
 		    	NUMERADOR DE LOS INDICADORES
@@ -867,55 +836,7 @@ class CeiController extends Controller
    				unset($obj);   				
     		}
 
-			/*foreach ($oportunos as $oportuno) {
-
-				$oportuno = $oportuno->beneficiarios;
-
-				foreach ($oportuno as $key => $beneficiario) {
-
-					$cantidad_prestaciones = 0;
-					$coincidence = FALSE;
-					foreach ($calculo->numerador->prestaciones as $prestacion){
-
-						// return json_encode($calculo);
-
-						$dt = \DateTime::createFromFormat('Y-m' , $periodo);
-						$dt->modify('first day of this month');
-						$fechas['min_prestacion'] = $dt->format('Y-m-d');
-						$dt->modify("+ $prestacion->lapso");
-						$fechas['max_prestacion'] = $dt->format('Y-m-d');
-
-					
-						$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-											->whereIn('codigo_prestacion' , $prestacion->codigos)
-											->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-											->count();
-						
-						$codigos = implode ('_' , $prestacion->codigos);
-												
-						if($existe){
-			    				$super_objeto['prestaciones']['codigos'][$codigos] ++;
-			    				$coincidence = TRUE;	
-			    		}
-
-						$cantidad_prestaciones += $existe;						
-					}
-
-					if (isset ($calculo->numerador->cantidad) && $coincidence){
-						if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
-								unset($oportuno[$key]);
-						}
-					}
-					elseif (!$coincidence) {
-						unset($oportuno[$key]);	
-					}
-				}
-
-
-   				$super_objeto['beneficiarios_puntuales'] = count($oportuno);
-
-			}*/
-
+			
     		$r = new Resultado;
     		$r->indicador = $id_indicador;
     		$r->provincia = $provincia->id_provincia;
@@ -1011,7 +932,11 @@ class CeiController extends Controller
 							->where('periodo' , $periodo)
 							->orderBy('provincia')
 							->get()
-							->toArray();		
+							->toArray();
+
+		if(!$resultado){
+			return FALSE;
+		}		
 
 		$arrayCompleto = array();
 
@@ -1119,27 +1044,29 @@ class CeiController extends Controller
     	    $s->setAutoSize(true);      
         	$s->fromArray($arrayCompletoMinima[0], null, 'A1', false, false);
         });
-        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){
-        	$s->setHeight(1, 20);
-        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'1', function($cells) {
-        		$cells->setBackground('#00004d');
-        		$cells->setFontColor('#ffffff');
-        		$cells->setFont(array(				    
-				    'size'       => '12',
-				    'bold'       =>  true
+        if($arrayCompletoAdecuada){
+	        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){
+	        	$s->setHeight(1, 20);
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'1', function($cells) {
+	        		$cells->setBackground('#00004d');
+	        		$cells->setFontColor('#ffffff');
+	        		$cells->setFont(array(				    
+					    'size'       => '12',
+					    'bold'       =>  true
+					));
+	        	});
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'25', function($cells2) {
+	        		$cells2->setAlignment('center');
+	        		$cells2->setValignment('center');
+	        		$cells2->setFontFamily('Arial');
+	    	    });
+	    	    $s->setColumnFormat(array(
+				    'E2:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'25' => '0'
 				));
-        	});
-        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'25', function($cells2) {
-        		$cells2->setAlignment('center');
-        		$cells2->setValignment('center');
-        		$cells2->setFontFamily('Arial');
-    	    });
-    	    $s->setColumnFormat(array(
-			    'E2:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'25' => '0'
-			));
-    	    $s->setAutoSize(true);      
-        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
-        });        
+	    	    $s->setAutoSize(true);      
+	        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
+	        });
+	    }        
       })               
       ->store('xlsx');
 
@@ -1206,27 +1133,29 @@ class CeiController extends Controller
     	    $s->setAutoSize(true);      
         	$s->fromArray($arrayCompletoMinima[0], null, 'A1', false, false);
         });
-        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){
-        	$s->setHeight(1, 20);
-        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'1', function($cells) {
-        		$cells->setBackground('#00004d');
-        		$cells->setFontColor('#ffffff');
-        		$cells->setFont(array(				    
-				    'size'       => '12',
-				    'bold'       =>  true
+        if($arrayCompletoAdecuada){
+	        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){
+	        	$s->setHeight(1, 20);
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'1', function($cells) {
+	        		$cells->setBackground('#00004d');
+	        		$cells->setFontColor('#ffffff');
+	        		$cells->setFont(array(				    
+					    'size'       => '12',
+					    'bold'       =>  true
+					));
+	        	});
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).$arrayCompletoAdecuada[2], function($cells2) {
+	        		$cells2->setAlignment('center');
+	        		$cells2->setValignment('center');
+	        		$cells2->setFontFamily('Arial');
+	    	    });
+	    	    $s->setColumnFormat(array(
+				    'B2:B'.$arrayCompletoAdecuada[2] => '0'
 				));
-        	});
-        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).$arrayCompletoAdecuada[2], function($cells2) {
-        		$cells2->setAlignment('center');
-        		$cells2->setValignment('center');
-        		$cells2->setFontFamily('Arial');
-    	    });
-    	    $s->setColumnFormat(array(
-			    'B2:B'.$arrayCompletoAdecuada[2] => '0'
-			));
-    	    $s->setAutoSize(true);      
-        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
-        });        
+	    	    $s->setAutoSize(true);      
+	        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
+	        });
+        }        
       })               
       ->store('xlsx');      
 	  
@@ -1296,6 +1225,10 @@ class CeiController extends Controller
 							->orderBy('provincia')
 							->get()
 							->toArray();
+
+		if(!$resultado){
+			return FALSE;
+		}	
 
 		$arrayCompleto = array();
 
