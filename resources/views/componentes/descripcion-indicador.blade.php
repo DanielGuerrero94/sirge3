@@ -6,28 +6,22 @@
 			<div class="form-group">
 				<label class="col-md-3 control-label">Titulo</label>
 				<div class="col-md-9">					
-					<p class="form-control-static">Proporción de embarazadas elegibles recibiendo controles prenatales antes de la semana 13</p>					
+					<p class="form-control-static">{{ $descripcion->titulo }}</p>					
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-3 control-label">Numerador</label>
+				<label class="col-md-3 control-label">Desafio</label>
 				<div class="col-md-9">					
-					<p class="form-control-static">Cantidad de embarazadas que recibieron alguno de los controles prenatales antes de la semana 13. Las prestaciones osibles son:</p>
-					CTC005W78 <br \>
-					CTC006W78 <br \>
-					CTC007O10.0 <br \>
-					CTC007O10.4 <br \>
-					CTC007W84 <br \>
-					CTC022O10.0 <br \>
-					CTC022O10.4
+					<p class="form-control-static"> {!! $descripcion->desafio !!} 
+					</p>					
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-3 control-label">Denominador</label>
+				<label class="col-md-3 control-label">{{ 'Propuesta de abordaje' }}</label>
 				<div class="col-md-9">
-					<p class="form-control-static">Población elegible. Mujeres embarazadas que se encuentran entre la semana 0 y la 13 en el periodo correspondiente.</p>
+					{!! $descripcion->propuesta !!}
 				</div>
 			</div>
 			

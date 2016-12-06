@@ -137,12 +137,11 @@ $(document).ready(function() {
 			$.ajax({
 				method : 'post',
 				url : 'carga-odp',
-				data : $(form).serialize(),
+				data : $(form).serialize() + '&provincia=' + $('#provincia').val() + '&id_tipo_meta=' + $('#indicador').val(),
 				success : function(data){
 					console.log(data);
 					$('#modal-text').html(data);
-					$('.modal').modal();
-					$('form').trigger('reset');
+					$('.modal').modal();					
 				},
 				error : function(data){
 					var html = '';
@@ -154,27 +153,26 @@ $(document).ready(function() {
 					$('#errores-div').show();
 				}
 			})
+			$('.navbar-inner a[href="#generales"]').tab('show');
 			$('form').trigger('reset');
 		}
 	});
 	
 
-	$('.back').click(function(){
-		$('form').trigger('reset');
-	});
-
-	$('#indicador').click(function(){
-		var indicador = $(this).val();
+	$('#indicador,#provincia').click(function(){		
+		var indicador = $('#indicador').val();
 		var provincia = $('#provincia').val();	
+		console.log(indicador + ' - ' + provincia);
 
-		$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/planificado', function(data){			
-			console.log(data);
-			$('#planificacion').html(data);
-		});
-
-		$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/observado', function(data){
-			$('#observado').html(data);			
-		});
+		if($('#provincia').val() != '' && $('#indicador').val() != ''){
+			$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/planificado', function(data){			
+				console.log(data);
+				$('#planificacion').html(data);
+			});
+			$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/observado', function(data){
+				$('#observado').html(data);			
+			});
+		}		
 	});
 	
   	$('#rootwizard').bootstrapWizard({

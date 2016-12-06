@@ -18,7 +18,7 @@ class MetaResultado extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id_tipo_meta';
+	protected $primaryKey = 'id';
 
 	/**
 	 * [Elijo las columnas que pueden utilizarse via Mass Asignment]
@@ -32,4 +32,13 @@ class MetaResultado extends Model
 	 * @var bool
 	 */		
 	public $timestamps = false;
+
+	/**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'detalle' => 'array'
+    ];
 }
