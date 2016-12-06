@@ -1,46 +1,46 @@
 <div class="row">	
 	<div class="col-md-12">
 		<form class="form-horizontal">		
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<div class="col-md-1">
 				</div>
 				<div class="col-md-10">
-					<h4 class="form-control-static">{{ 'Control prenatal en embarazadas' }}</h4>				
+					<h4 class="form-control-static">{{ $data['titulo'] }}</h4>				
 				</div>
-			</div>
+			</div> -->
 
 			<div class="form-group">
 				<label class="col-md-6 control-label">Entidad</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ 'País' }}</p>
+					<p class="form-control-static">{{ $data['entidad'] }}</p>
+				</div>
+			</div>			
+
+			<div class="form-group">
+				<label class="col-md-6 control-label">Linea Base {{ intval(date('Y')) - 1}}</label>
+				<div class="col-md-6">
+					<p class="form-control-static">{{ $data['linea_base'] }}</p>
 				</div>
 			</div>			
 
 			<div class="form-group">
 				<label class="col-md-6 control-label">% Observado Actual</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ '34.1' }}</p>
+					<p class="form-control-static">{{ $data['observado'] }}</p>
 				</div>
-			</div>
+			</div>			
+
+			<div class="form-group">
+				<label class="col-md-6 control-label">Planificado {{ $data['periodo'] }}</label>
+				<div class="col-md-6">
+					<p class="form-control-static">{{ $data['planificado'] }}</p>
+				</div>
+			</div>			
 
 			<div class="form-group">
 				<label class="col-md-6 control-label">% Meta Anual</label>
 				<div class="col-md-6">
-					<p class="form-control-static">{{ '36' }}</p>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-md-6 control-label">Planificado Abril 2016</label>
-				<div class="col-md-6">
-					<p class="form-control-static">{{ '33' }}</p>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-md-6 control-label">Planificado Agosto 2016</label>
-				<div class="col-md-6">
-					<p class="form-control-static">{{ '36' }}</p>
+					<p class="form-control-static">{{ $data['meta'] }}</p>
 				</div>
 			</div>
 

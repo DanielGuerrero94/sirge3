@@ -456,7 +456,8 @@ Route::filter('auth', function()
 /**
  * COMPONENTES
  */
-Route::get('componentes-ceb/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP1');
+Route::get('componentes/{odp}/{provincia?}/{year?}' , 'ComponentesController@getResumenODP');
+
 Route::get('ceb-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvincia');
 Route::get('componentes-odp1-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('componentes-control-embarazadas/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP2');
@@ -466,7 +467,7 @@ Route::get('componentes-mujeres-cu/{periodo?}/{provincia?}' , 'ComponentesContro
 Route::get('componentes-control-adolescentes/{periodo?}/{provincia?}' , 'ComponentesController@getResumenODP2');
 Route::get('carga-datos-odp' , 'ComponentesController@getCarga');
 Route::post('carga-odp' , 'ComponentesController@postCarga');
-Route::get('control-embarazadas-resumen/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP2');
+Route::get('odp-resumen/{odp}/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
 Route::get('metas-odp-indicador/{indicador}/{provincia}/{tipo_meta}' , 'ComponentesController@getFormularioMetas');
