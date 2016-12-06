@@ -125,13 +125,24 @@ $(document).ready(function() {
 			linea_base : {				
 				number : true
 			},
-			@foreach(array('4','5','6','7') as $ind)
-			'{{$ind}}' : {
-				required: true,				
+			@foreach(range(1,88) as $ind)
+			'{{$ind}}' : {						
 				number : true
 			},
 			@endforeach
-
+		},
+		messages: {
+			provincia : {
+				required : 'La provincia es requerida'
+			},
+			indicador : {
+				required : 'Debe seleccionar un ODP'
+			},
+			@foreach(range(1,88) as $ind)
+			'{{$ind}}' : {						
+				number : 'Sólo puede ingresar numeros'
+			},
+			@endforeach				
 		},
 		submitHandler : function(form){
 			$.ajax({
