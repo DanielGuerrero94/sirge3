@@ -329,16 +329,21 @@ class PrestacionesController extends AbstractPadronesController
 	 */
 	public function procesarArchivo($id){
 		
-		if (!isset($_SESSION['posttimer'])){
-			$_SESSION['posttimer'] = 0;
+		session_start();
+		if ($_SESSION['recent_post']){
+			if(time() - $_SESSION['recent_post_time'] <= 5){
+				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
+			}
+			else{
+				$_SESSION['recent_post'] = false;
+				$_SESSION['recent_post_time'] = time();
+			}			
 		}
-    	
-    	if ( (time() - $_SESSION['posttimer']) <= 2)
-        {
-            return '';
-        }
-        else
-        {	            
+    	else{
+    		$_SESSION['recent_post'] = true;
+    		$_SESSION['recent_post_time'] = time();
+    	}
+    	            
 				$fh = $this->abrirArchivo($id);
 
 				if (is_array($fh)){					
@@ -367,8 +372,12 @@ class PrestacionesController extends AbstractPadronesController
 							$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
 							$v = Validator::make($prestacion_raw , $this->_rules);
 							if ($v->fails()) {
-								$this->_resumen['rechazados'] ++;								
-								$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => $v->errors());		
+								$this->_resumen['rechazados'] ++;
+								$this->_error['lote'] = $lote;
+								$this->_error['registro'] = json_encode($prestacion_raw);
+								$this->_error['motivos'] = json_encode($v->errors());
+								$this->_error['created_at'] = date("Y-m-d H:i:s");
+								Rechazo::insert($this->_error);
 							} else {
 								$operacion = array_shift($prestacion_raw);
 								switch ($operacion) {
@@ -377,15 +386,20 @@ class PrestacionesController extends AbstractPadronesController
 											Prestacion::insert($prestacion_raw);
 											$this->_resumen['insertados'] ++;
 										} catch (QueryException $e) {
-											$this->_resumen['rechazados'] ++;											
-											$prestacion_raw['operacion'] = 'A';											
+											$this->_resumen['rechazados'] ++;
+											$this->_error['lote'] = $lote;											
+											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											$prestacion_raw['operacion'] = 'A';
+											$this->_error['registro'] = json_encode($prestacion_raw);
 											if ($e->getCode() == 23505){												
-												$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"pkey" : "Registro ya informado"}');
+												$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 											} else if ($e->getCode() == 22021){
-												$this->_error['resultado'][] = array("registro" => parent::vaciarArray($prestacion_raw), "motivos" => 'linea->'.$nro_linea . 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.');		
+												$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
+												$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 											}else {
-												$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => $e);
-											}											
+												$this->_error['motivos'] = json_encode($e);
+											}
+											Rechazo::insert($this->_error);
 										}
 										break;
 									case 'M':
@@ -404,41 +418,47 @@ class PrestacionesController extends AbstractPadronesController
 												$prestacion->save();
 												$this->_resumen['modificados'] ++;											
 											} catch (QueryException $e) {
-												$this->_resumen['rechazados'] ++;	
-												$prestacion_raw['operacion'] = 'M';												
+												$this->_resumen['rechazados'] ++;
+												$this->_error['lote'] = $lote;											
+												$this->_error['created_at'] = date("Y-m-d H:i:s");
+												$prestacion_raw['operacion'] = 'M';
+												$this->_error['registro'] = json_encode($prestacion_raw);
 												if ($e->getCode() == 23505){												
-													$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"pkey" : "Registro a modificar ya informado"}');
+													$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
 												} else if ($e->getCode() == 22021){
-													$this->_error['resultado'][] = array("registro" => parent::vaciarArray($prestacion_raw), "motivos" => 'linea->'.$nro_linea . 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.');	
+													$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
+													$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 												}else {
-													$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"modificacion" : "Registro no pudo actualizarse"}');							
-												}												
+													$this->_error['motivos'] = '{"modificacion" : ["Registro no pudo actualizarse"]}';
+												}
+												Rechazo::insert($this->_error);
 											}											
 										} else {
-											$this->_resumen['rechazados'] ++;											
+											$this->_resumen['rechazados'] ++;
+											$this->_error['lote'] = $lote;
 											$prestacion_raw['operacion'] = 'M';
-											$this->_error['resultado'][] = array("registro" => $prestacion_raw, "motivos" => '{"modificacion" : "Registro a modificar no encontrado"}');						
+											$this->_error['registro'] = json_encode($prestacion_raw);
+											$this->_error['motivos'] = '{"modificacion" : ["Registro a modificar no encontrado"]}';
+											$this->_error['created_at'] = date("Y-m-d H:i:s");
+											Rechazo::insert($this->_error);
 										}
 										break;
 								}
 							}
 						} else{
-							$this->_resumen['rechazados'] ++;							
-							$this->_error['resultado'][] = array("registro" => $linea, "motivos" => 'La cantidad de columnas ingresadas en la fila no es correcta');							
-						}
-						if(sizeof($this->_error)){
+							$this->_resumen['rechazados'] ++;
 							$this->_error['lote'] = $lote;
-							$this->_error['resultado'] = json_encode($this->_error['resultado']);							
+							$this->_error['registro'] = json_encode($linea);
+							$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
-							Rechazo::insert($this->_error);		
-						}
-						
+							Rechazo::insert($this->_error);
+						}	
 					}
 				}
 				$this->actualizaLote($lote , $this->_resumen);
 				$this->actualizaSubida($id);
-        }
-    	$_SESSION['posttimer'] = time();
+        
+    	
     	unset($fh);
     	unset($lote);
     	unset($nro_linea);

@@ -226,7 +226,23 @@ class OspController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		$bulk = [];
+
+		session_start();
+		if ($_SESSION['recent_post']){
+			if(time() - $_SESSION['recent_post_time'] <= 5){
+				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
+			}
+			else{
+				$_SESSION['recent_post'] = false;
+				$_SESSION['recent_post_time'] = time();
+			}			
+		}
+    	else{
+    		$_SESSION['recent_post'] = true;
+    		$_SESSION['recent_post_time'] = time();
+    	}
+
+		$bulk = [];		
 		$lote = $this->nuevoLote($id);
 		$registros = $this->abrirArchivo($id);
 
@@ -251,7 +267,7 @@ class OspController extends Controller
 				} else {
 					$this->_resumen['insertados'] ++;
 					$bulk[] = $osp_raw;
-					if (sizeof($bulk) % 4000 == 0){
+					if (sizeof($bulk) % 6000 == 0){
 						Osp::insert($bulk);
 						unset($bulk);
 						$bulk = [];
