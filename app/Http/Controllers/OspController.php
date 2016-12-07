@@ -6,6 +6,7 @@ use ErrorException;
 use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
+use Session;
 
 use Illuminate\Http\Request;
 
