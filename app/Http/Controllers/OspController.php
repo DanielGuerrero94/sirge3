@@ -227,19 +227,18 @@ class OspController extends Controller
 	 */
 	public function procesarArchivo($id){
 
-		session_start();
-		if ($_SESSION['recent_post']){
-			if(time() - $_SESSION['recent_post_time'] <= 5){
+		if (Session::get('recent_post')){
+			if(time() - Session::get('recent_post_time') <= 5){
 				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
 			}
 			else{
-				$_SESSION['recent_post'] = false;
-				$_SESSION['recent_post_time'] = time();
+				Session::set('recent_post', false);
+				Session::set('recent_post_time', time());				
 			}			
 		}
     	else{
-    		$_SESSION['recent_post'] = true;
-    		$_SESSION['recent_post_time'] = time();
+    		Session::set('recent_post', true);
+    		Session::set('recent_post_time', time());	
     	}
 
 		$bulk = [];		
