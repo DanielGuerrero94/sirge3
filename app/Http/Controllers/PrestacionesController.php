@@ -247,7 +247,7 @@ class PrestacionesController extends AbstractPadronesController
 	 * @return bool
 	 */
 	protected function actualizaSubida($subida) {
-		$s = Sub3/ida::findOrFail($subida);
+		$s = Subida::findOrFail($subida);
 		$s->id_estado = 2;
 		return $s->save();
 	}
