@@ -329,16 +329,21 @@ class PrestacionesController extends AbstractPadronesController
 	 */
 	public function procesarArchivo($id){
 		
-		if (!isset($_SESSION['posttimer'])){
-			$_SESSION['posttimer'] = 0;
+		session_start();
+		if ($_SESSION['recent_post']){
+			if(time() - $_SESSION['recent_post_time'] <= 5){
+				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
+			}
+			else{
+				$_SESSION['recent_post'] = false;
+				$_SESSION['recent_post_time'] = time();
+			}			
 		}
-    	
-    	if ( (time() - $_SESSION['posttimer']) <= 2)
-        {
-            return '';
-        }
-        else
-        {	            
+    	else{
+    		$_SESSION['recent_post'] = true;
+    		$_SESSION['recent_post_time'] = time();
+    	}
+    	            
 				$fh = $this->abrirArchivo($id);
 
 				if (is_array($fh)){					
@@ -452,8 +457,8 @@ class PrestacionesController extends AbstractPadronesController
 				}
 				$this->actualizaLote($lote , $this->_resumen);
 				$this->actualizaSubida($id);
-        }
-    	$_SESSION['posttimer'] = time();
+        
+    	
     	unset($fh);
     	unset($lote);
     	unset($nro_linea);

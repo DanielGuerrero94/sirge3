@@ -28,7 +28,9 @@ class AuthController extends Controller
 
 				$user = Usuario::find(Auth::user()->id_usuario);
 				$user->last_login = date("Y-m-d H:i:s");
-				$user->save();
+				$user->save();                
+                $_SESSION['recent_post'] = false;
+                $_SESSION['recent_post_time'] = time();                
 			}
 			return redirect()->intended('inicio');
 		}
