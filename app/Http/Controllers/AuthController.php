@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\Login;
 use App\Models\Usuario;
+use Session;
 
 class AuthController extends Controller
 {
@@ -28,9 +29,9 @@ class AuthController extends Controller
 
 				$user = Usuario::find(Auth::user()->id_usuario);
 				$user->last_login = date("Y-m-d H:i:s");
-				$user->save();                
-                $_SESSION['recent_post'] = false;
-                $_SESSION['recent_post_time'] = time();                
+				$user->save();
+                Session::set('recent_post', false);                                
+                Session::set('recent_post_time', time());
 			}
 			return redirect()->intended('inicio');
 		}

@@ -8,6 +8,7 @@ use Validator;
 use Auth;
 use DB;
 use Datatables;
+use Session;
 
 use Illuminate\Http\Request;
 
@@ -246,7 +247,7 @@ class PrestacionesController extends AbstractPadronesController
 	 * @return bool
 	 */
 	protected function actualizaSubida($subida) {
-		$s = Subida::findOrFail($subida);
+		$s = Sub3/ida::findOrFail($subida);
 		$s->id_estado = 2;
 		return $s->save();
 	}
@@ -328,20 +329,19 @@ class PrestacionesController extends AbstractPadronesController
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		
-		session_start();
-		if ($_SESSION['recent_post']){
-			if(time() - $_SESSION['recent_post_time'] <= 5){
+
+		if (Session::get('recent_post')){
+			if(time() - Session::get('recent_post_time') <= 5){
 				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
 			}
 			else{
-				$_SESSION['recent_post'] = false;
-				$_SESSION['recent_post_time'] = time();
+				Session::set('recent_post', false);
+				Session::set('recent_post_time', time());				
 			}			
 		}
     	else{
-    		$_SESSION['recent_post'] = true;
-    		$_SESSION['recent_post_time'] = time();
+    		Session::set('recent_post', true);
+    		Session::set('recent_post_time', time());	
     	}
     	            
 				$fh = $this->abrirArchivo($id);
@@ -349,15 +349,15 @@ class PrestacionesController extends AbstractPadronesController
 				if (is_array($fh)){					
 					$er = new ErrorSubida();
 					$er->id_subida = $id;
-					$er->error = $fh['mensaje'];
+					$er->mensaje = $fh['mensaje'];
 					
 					try {
 						$er->save();	
 					} catch (Exception $e) {
 						return response('Error: ' . $e->getMessage(), 422);
 					}
-
 					return response('Error', 422);
+					//return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse" , 422]);
 				}
 
 				$lote = $this->nuevoLote($id);				
