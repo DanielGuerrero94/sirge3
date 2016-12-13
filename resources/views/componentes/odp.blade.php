@@ -15,7 +15,7 @@
 	<div class="col-md-5">
 		<div class="box box-danger">
 			<div class="box-header">
-				<h2 class="box-title">Resultados {{ ucfirst(strtolower($provincia_descripcion)) }}</h2>
+				<h2 class="box-title">Resultados</h2>
 			</div>
 			<div class="box-body">				
 				<div id="detalle-ca"></div>
@@ -126,7 +126,7 @@
 					events: {
 						click : function(e){							
 							var provincia = e.point.provincia;				    	
-					    	$.get('componentes/{{ $odp }}/' + {{ $periodo_calculado }} + '/' + provincia, function(data){
+					    	$.get('componentes/{{ $odp }}/' + provincia, function(data){
 								$('.content-wrapper').html(data);
 							});
 						}

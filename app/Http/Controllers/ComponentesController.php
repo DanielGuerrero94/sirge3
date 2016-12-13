@@ -143,9 +143,14 @@ class ComponentesController extends Controller
             if($desc->mes){
                 switch ($desc->meta_tipo) {
                     case 1:
-                        if($desc->mes == $cuatri_o_mes){ 
-                            $data['cantidad_para_cumplir'] = (int) $value;
+                       if($cuatri_o_mes >= 100){                            
+                            if($desc->mes == $cuatri_o_mes - 100){                                
+                                $data['cantidad_para_cumplir'] = (int) $value;
+                            }    
                         }
+                        elseif($desc->mes == $cuatri_o_mes - 2){
+                            $data['cantidad_para_cumplir'] = (int) $value;
+                        }                             
                       break;
                     case 2:
                         if($cuatri_o_mes >= 100){                            
@@ -153,7 +158,7 @@ class ComponentesController extends Controller
                                 $data['cantidad_cumplida'] = (int) $value;
                             }    
                         }
-                        elseif($desc->mes == $cuatri_o_mes - 1){
+                        elseif($desc->mes == $cuatri_o_mes - 2){
                             $data['cantidad_cumplida'] = (int) $value;
                         }
                       break;                                            
@@ -352,7 +357,12 @@ class ComponentesController extends Controller
                     if($desc->mes){
                         switch ($desc->meta_tipo) {
                             case 1:
-                                if($desc->mes == $cuatri_o_mes){ 
+                                if($cuatri_o_mes >= 100){                            
+                                    if($desc->mes == $cuatri_o_mes - 100){                                
+                                        $cantidad_para_cumplir = (int) $value;
+                                    }    
+                                }
+                                elseif($desc->mes == $cuatri_o_mes - 2){
                                     $cantidad_para_cumplir = (int) $value;
                                 }
                               break;
@@ -362,7 +372,7 @@ class ComponentesController extends Controller
                                         $cantidad_cumplida = (int) $value;
                                     }    
                                 }
-                                elseif($desc->mes == $cuatri_o_mes - 1){
+                                elseif($desc->mes == $cuatri_o_mes - 2){
                                     $cantidad_cumplida = (int) $value;
                                 }
                               break;                                             
