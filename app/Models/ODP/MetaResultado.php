@@ -38,7 +38,7 @@ class MetaResultado extends Model
      *
      * @var array
      */
-    protected $casts = [
-        'detalle' => 'array'
-    ];
+    /*protected $casts = [
+        'detalle' => 'object'
+    ];*/
 }
