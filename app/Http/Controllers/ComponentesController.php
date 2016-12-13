@@ -35,7 +35,7 @@ class ComponentesController extends Controller
      * @return null
      */
     public function getResumenODP($odp, $provincia = null, $year = null){        
-        $provincia = '03';
+        //$provincia = '03';
         
         if(isset($periodo)){
             $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
@@ -48,9 +48,8 @@ class ComponentesController extends Controller
             $periodo = $dt->format('Ym');             
         }
 
-        if(! isset($provincia)){
-            $provincia = null;
-            $provincia_descripcion = 'Nivel Pais';
+        if($provincia == null){            
+            $provincia_descripcion = 'Nivel Pais';            
         }
         else{
             $datos_provincia = Provincia::find($provincia);            
@@ -79,49 +78,23 @@ class ComponentesController extends Controller
      */
     protected function getDistribucionCp($id_odp, $provincia = null){        
 
-        $odp = OdpTipo::find($id_odp);
-
-        $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);       
-        
         if($provincia){
-            $resultados_detalle = MetaResultado::where('provincia',$provincia)
-                                        ->where('year',date('Y'))
-                                        ->where('id_tipo_meta',$id_odp)
-                                        ->first()                                        
-                                        ->detalle;
+            $resultados = $this->getResultados($id_odp, $provincia);
+            $cantidad_para_cumplir = $resultados['cantidad_para_cumplir'];
+            $cantidad_cumplida = $resultados['cantidad_cumplida'];
+            $meta = $resultados['meta'];    
         }
-
-        foreach ($resultados_detalle as $key => $value) {
-
-            $desc = MetaDescripcion::where('meta_desc_id',$key)
-                                    ->where('odp',$odp->odp)           
-                                    ->first();            
-
-            if($desc->mes){
-                switch ($desc->meta_tipo) {
-                    case 1:
-                        if($desc->mes == $cuatri_o_mes){ 
-                            $cantidad_para_cumplir = (int) $value;
-                        }
-                      break;
-                    case 2:
-                        if($desc->mes == $cuatri_o_mes - 1){
-                            $cantidad_cumplida = (int) $value;
-                        }
-                      break;                                            
-                }      
+        else{
+            $provincias = Provincia::all();
+            foreach ($provincias as $unaProvincia) {
+                $resultados = $this->getResultados($id_odp, $unaProvincia->id_provincia);
+                $cantidad_para_cumplir = $resultados['meta'];
+                $meta = $resultados['meta'];
+                $cantidades_a_promediar['cantidad_cumplida'][] = $resultados['cantidad_cumplida'];                
             }
-            else{
-                switch ($desc->meta_tipo) {                    
-                    case 3:
-                        $meta = $value;
-                      break;
-                    case 4:
-                        $linea_base = $value;
-                      break;                        
-                }
-            }
+            $cantidad_cumplida =  intval(array_sum($cantidades_a_promediar['cantidad_cumplida']) / 24);
         }
+        
 
         //var_dump(array('cantidad_cumplida' => $cantidad_cumplida, 'cantidad_para_cumplir' => $cantidad_para_cumplir, 'meta' => $meta, 'linea_base' => $linea_base));             
 
@@ -137,11 +110,77 @@ class ComponentesController extends Controller
         }                
 
         $superObjeto = [
-                        'titulo' => 'Meta: '. $cantidad_para_cumplir . '%',
+                        'titulo' => 'Meta: '. $meta . '%',
                         'data' => json_encode($data) 
                         ];
      
         return $superObjeto;
+    }
+
+    /**
+     * 
+     */
+    protected function getResultados($id_odp, $provincia){
+        
+        $odp = OdpTipo::find($id_odp);
+
+        $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);  
+        
+        if($provincia){
+            $resultados_detalle = MetaResultado::where('provincia',$provincia)
+                                        ->where('year',date('Y'))
+                                        ->where('id_tipo_meta',$id_odp)
+                                        ->first()          
+                                        ->detalle;
+        }
+
+        foreach (json_decode($resultados_detalle, true) as $key => $value) {
+
+            $desc = MetaDescripcion::where('meta_desc_id',$key)
+                                    ->where('odp',$odp->odp)           
+                                    ->first();                         
+
+            if($desc->mes){
+                switch ($desc->meta_tipo) {
+                    case 1:
+                        if($desc->mes == $cuatri_o_mes){ 
+                            $data['cantidad_para_cumplir'] = (int) $value;
+                        }
+                      break;
+                    case 2:
+                        if($cuatri_o_mes >= 100){                            
+                            if($desc->mes == $cuatri_o_mes - 100){                                
+                                $data['cantidad_cumplida'] = (int) $value;
+                            }    
+                        }
+                        elseif($desc->mes == $cuatri_o_mes - 1){
+                            $data['cantidad_cumplida'] = (int) $value;
+                        }
+                      break;                                            
+                }      
+            }
+            else{
+                switch ($desc->meta_tipo) {                    
+                    case 3:
+                        $data['meta'] = $value;
+                      break;
+                    case 4:
+                        $data['linea_base'] = $value;
+                      break;                        
+                }
+            }
+        }
+
+        $data['titulo'] = $odp->descripcion;
+        $data['entidad'] = Provincia::find($provincia)->descripcion;
+        $data['periodo'] = $this->devolverFormatoDeMes($cuatri_o_mes);
+        $data['observado'] = number_format($data['cantidad_cumplida']);
+        $data['planificado'] = number_format($data['cantidad_para_cumplir']);
+        $data['meta'] = number_format($data['meta']);
+        $data['linea_base'] = number_format($data['linea_base']);
+        $data['odp'] = $odp->odp;
+
+        return $data;        
     }
 
     /**
@@ -152,12 +191,13 @@ class ComponentesController extends Controller
 
         $dt = new \DateTime();        
         $dt->modify('-1 month');
-        $mes_a_graficar = $dt->format('m');  
+        $mes_a_graficar = $dt->format('m'); 
 
-        if( MetaDescripcion::where('meta_tipo',1)
+        if( ! empty(MetaDescripcion::where('meta_tipo',1)
                             ->where('odp',$odp_id)
                             ->where('mes',$mes_a_graficar)
-                            ->get() )
+                            ->get()
+                            ->toArray()) )
         {
             return $mes_a_graficar;
         }
@@ -286,14 +326,16 @@ class ComponentesController extends Controller
      */
     protected function getMapSeries($id_odp){        
 
-        $resultados = MetaResultado::select('id_tipo_meta','detalle','provincia','geojson_provincia')
+        $resultados = MetaResultado::select('id_tipo_meta',DB::raw('detalle::jsonb'),'provincia','geojson_provincia')
                                     ->join('geo.geojson as g' , 'odp.meta_resultado.provincia' , '=' , 'g.id_provincia')
                                     ->where('year' , date('Y'))
-                                    ->where('id_tipo_meta',$id_odp)                                                                    
+                                    ->where('id_tipo_meta',$id_odp)                                                                  
                                     ->orderBy('provincia' , 'desc')
-                                    ->get();                                                
+                                    ->get()
+                                    ->toArray();                                                
 
-        foreach ($resultados as $fila){            
+        foreach ($resultados as $fila){                    
+            $detalle = json_decode($fila['detalle'], true);              
 
             $odp = OdpTipo::find($id_odp);
 
@@ -301,7 +343,7 @@ class ComponentesController extends Controller
             
             if($fila['provincia']){
                
-                foreach ($fila['detalle'] as $key => $value) {
+                foreach ($detalle as $key => $value) {
 
                     $desc = MetaDescripcion::where('meta_desc_id',$key)
                                             ->where('odp',$odp->odp)
@@ -315,10 +357,15 @@ class ComponentesController extends Controller
                                 }
                               break;
                             case 2:
-                                if($desc->mes == $cuatri_o_mes - 1){
+                                if($cuatri_o_mes >= 100){                            
+                                    if($desc->mes == $cuatri_o_mes - 100){                                
+                                        $cantidad_cumplida = (int) $value;
+                                    }    
+                                }
+                                elseif($desc->mes == $cuatri_o_mes - 1){
                                     $cantidad_cumplida = (int) $value;
                                 }
-                              break;                                            
+                              break;                                             
                         }      
                     }
                     else{
@@ -333,12 +380,18 @@ class ComponentesController extends Controller
                     }
                 }
             }            
-            
+
             $map['map-data'][] = array("value" => $cantidad_cumplida, "hc-key" => $fila['geojson_provincia'], "periodo" => date('Y').$cuatri_o_mes, "provincia" => $fila['provincia']);            
         }
 
         $map['map-data'] = json_encode($map['map-data']);
         $map['clase'] = $fila['provincia'];        
+
+        /**
+         * TEMPORAL
+         */
+        /*$map['mes'] = $cuatri_o_mes;
+        return var_dump($map);*/
 
         return $map;
     }
@@ -417,61 +470,22 @@ class ComponentesController extends Controller
      *
      * @return null
      */
-    public function getDetalleProvinciaODP($id_odp, $periodo, $provincia){                
+    public function getDetalleProvinciaODP($id_odp, $periodo, $provincia){
 
-        $odp = OdpTipo::find($id_odp);
-
-        $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);       
-        
-        if($provincia){
-            $resultados_detalle = MetaResultado::where('provincia',$provincia)
-                                        ->where('year',date('Y'))
-                                        ->where('id_tipo_meta',$id_odp)
-                                        ->first()                                        
-                                        ->detalle;
+        if($provincia != 'pais'){
+            $data = $this->getResultados($id_odp, $provincia);    
         }
-
-        foreach ($resultados_detalle as $key => $value) {
-
-            $desc = MetaDescripcion::where('meta_desc_id',$key)
-                                    ->where('odp',$odp->odp)           
-                                    ->first();            
-
-            if($desc->mes){
-                switch ($desc->meta_tipo) {
-                    case 1:
-                        if($desc->mes == $cuatri_o_mes){ 
-                            $cantidad_para_cumplir = (int) $value;
-                        }
-                      break;
-                    case 2:
-                        if($desc->mes == $cuatri_o_mes - 1){
-                            $cantidad_cumplida = (int) $value;
-                        }
-                      break;                                            
-                }      
+        else{
+            $provincias = Provincia::all();
+            foreach ($provincias as $unaProvincia) {
+                $data = $this->getResultados($id_odp, $unaProvincia->id_provincia);
+                $data['cantidad_para_cumplir'] = $data['meta'];
+                $data['planificado'] = $data['meta'];                
+                $cantidades_a_promediar['cantidad_cumplida'][] = $data['cantidad_cumplida'];
             }
-            else{
-                switch ($desc->meta_tipo) {                    
-                    case 3:
-                        $meta = $value;
-                      break;
-                    case 4:
-                        $linea_base = $value;
-                      break;                        
-                }
-            }
-        }        
-
-        $data['titulo'] = $odp->descripcion;
-        $data['entidad'] = Provincia::find($provincia)->descripcion;
-        $data['periodo'] = $this->devolverFormatoDeMes($cuatri_o_mes);
-        $data['observado'] = number_format($cantidad_cumplida);
-        $data['planificado'] = number_format($cantidad_para_cumplir);
-        $data['meta'] = number_format($meta);
-        $data['linea_base'] = number_format($meta);
-        $data['odp'] = $odp->odp;                        
-
+            $data['cantidad_cumplida'] =  intval(array_sum($cantidades_a_promediar['cantidad_cumplida']) / 24);
+        }                
+        
         return view('componentes.ca-detalle-provincia' , array('data' => $data));
     }
 
@@ -637,13 +651,14 @@ class ComponentesController extends Controller
             elseif($key == 'indicador'){
                 $array_a_insertar['id_tipo_meta'] = $value;   
             }
-            else{
-                $array_a_insertar['detalle'][$key] = $value;    
-            }                        
+            elseif($key != 'id_tipo_meta'){
+                $array_a_insertar['detalle'][$key] = (int) $value;    
+            }            
         }        
 
-        $array_a_insertar['year'] = intval(date('Y'));
-        $array_a_insertar['detalle'] = json_encode($array_a_insertar['detalle']);
+        $array_a_insertar['year'] = intval(date('Y'));        
+
+        $array_a_insertar['detalle'] = json_encode($array_a_insertar['detalle'], JSON_UNESCAPED_SLASHES);        
         
         $resultado = MetaResultado::updateOrCreate(['id_tipo_meta' => $array_a_insertar['id_tipo_meta'], 'provincia' => $array_a_insertar['provincia'], 'year' => $array_a_insertar['year']], ['detalle' => $array_a_insertar['detalle']]);
 
@@ -678,8 +693,8 @@ class ComponentesController extends Controller
             $detalle_resultados =  json_decode(MetaResultado::where('id_tipo_meta',$id_meta)
                     ->where('year',intval(date('Y')))
                     ->where('provincia',$provincia)                    
-                    ->first()->detalle);        
-        }    
+                    ->first()->detalle, true);        
+        }
 
         $columnas = 0;
 

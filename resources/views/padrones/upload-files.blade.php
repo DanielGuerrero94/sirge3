@@ -165,6 +165,7 @@
         done: function (e, data) {
         	if(data.result.success == 'true'){
         		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
+        		$('<p/>').text('Comienza el procesamiento. Puede demorar varios minutos.').appendTo('#files');
         	}
         	else if(data.result.success == 'false'){
         		$('#errores-form').html(data.result.errors);
