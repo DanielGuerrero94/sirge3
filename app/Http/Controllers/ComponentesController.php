@@ -80,15 +80,15 @@ class ComponentesController extends Controller
 
         if($provincia){
             $resultados = $this->getResultados($id_odp, $provincia);
-            $cantidad_para_cumplir = $resultados['cantidad_para_cumplir'];
-            $cantidad_cumplida = $resultados['cantidad_cumplida'];
+            $cantidad_para_cumplir = intval($resultados['cantidad_para_cumplir']);
+            $cantidad_cumplida = intval($resultados['cantidad_cumplida']);
             $meta = $resultados['meta'];    
         }
         else{
             $provincias = Provincia::all();
             foreach ($provincias as $unaProvincia) {
                 $resultados = $this->getResultados($id_odp, $unaProvincia->id_provincia);
-                $cantidad_para_cumplir = $resultados['meta'];
+                $cantidad_para_cumplir = intval($resultados['meta']);
                 $meta = $resultados['meta'];
                 $cantidades_a_promediar['cantidad_cumplida'][] = $resultados['cantidad_cumplida'];                
             }
@@ -484,6 +484,7 @@ class ComponentesController extends Controller
                 $cantidades_a_promediar['cantidad_cumplida'][] = $data['cantidad_cumplida'];
             }
             $data['cantidad_cumplida'] =  intval(array_sum($cantidades_a_promediar['cantidad_cumplida']) / 24);
+            $data['entidad'] = 'Nivel Pais';
         }                
         
         return view('componentes.ca-detalle-provincia' , array('data' => $data));
