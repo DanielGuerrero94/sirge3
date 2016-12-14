@@ -106,7 +106,7 @@ class ComponentesController extends Controller
         else{
             $data[] = array_merge(array('y' => 100 - $cantidad_cumplida), array('name' => 'resto', 'color' => '#EDEDED'));
             $data[] = array_merge(array('y' => $cantidad_cumplida - $cantidad_para_cumplir),array('name' => 'superado', 'color' => '#00CC00', 'sliced' => true, 'selected' => true));
-            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'observado', 'color' => '#00FFFF'));             
+            $data[] = array_merge(array('y' => $cantidad_para_cumplir),array('name' => 'planificado', 'color' => '#00FFFF'));             
         }                
 
         $superObjeto = [
