@@ -134,6 +134,35 @@
 		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }} , id_sss : $('#id_sss').val() }		
 	});
 
+	$('#fileupload').bind('fileuploaddone', function (e, data) {					
+		$.ajax({
+				url : data.result.ruta_procesar + '/' + data.result.id_subida,
+				dataType: 'json',
+				success : function(data){
+					if(data.result.success == 'true'){
+						var info = '';
+						$.each(data , function (index , value){
+							info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';
+						});
+						$('body').removeClass("loading");
+						$('#modal-text').html(info);
+				        $('.modal').modal();
+				        $('.modal').on('hidden.bs.modal', function (e) {
+				            dt.ajax.reload( null, false );
+				        });				        
+				    }
+				    else{
+				    	$('#errores-form').html(data.result.errors);
+						$('#errores-div').show();
+				    }
+				},
+				error : function(data){
+					$('#errores-form').html('<li>No se pudo abrir el archivo</li>');
+					$('#errores-div').show();
+				}
+		});        						
+	});
+
     $('#fileupload').fileupload({
         url: 'subir-padron',
         dataType: 'json',
@@ -165,7 +194,7 @@
         done: function (e, data) {
         	if(data.result.success == 'true'){
         		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
-        		$('<p/>').text('Comienza el procesamiento. Puede demorar varios minutos.').appendTo('#files');
+        		$('<p/>').html('Comienza el procesamiento en instantes. Puede demorar varios minutos.').appendTo('#files');	
         	}
         	else if(data.result.success == 'false'){
         		$('#errores-form').html(data.result.errors);
