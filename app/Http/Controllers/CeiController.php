@@ -415,7 +415,7 @@ class CeiController extends Controller
     		ob_start();
 			
 			foreach ($calculo->numerador->prestaciones as $prestacion){
-				$codigos = implode ('_' , $prestacion->codigos);
+				$codigos = is_array($prestacion->codigos) ? implode ('_' , $prestacion->codigos) : $prestacion->codigos;
 				$super_objeto['prestaciones']['codigos'][$codigos] = 0;
 			}
 
@@ -486,7 +486,7 @@ class CeiController extends Controller
 										->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
 										->count();
 					
-					$codigos = implode ('_' , $prestacion->codigos);
+					$codigos = is_array($prestacion->codigos) ? implode ('_' , $prestacion->codigos) : $prestacion->codigos;
 					
 					if ($existe)
 						$super_objeto['prestaciones']['codigos'][$codigos] ++;
@@ -537,12 +537,13 @@ class CeiController extends Controller
 
     	$periodo_del = str_replace('-', '', $periodo);
 
-    	Oportuno::where('linea_cuidado' , $linea_cuidado)->where('periodo' , $periodo_del)->delete();
+    	//Oportuno::where('linea_cuidado' , $linea_cuidado)->where('periodo' , $periodo_del)->delete();
 
     	$detalle = Detalle::findOrFail($linea_cuidado);
     	$indicador = Indicador::where('indicador' , $linea_cuidado)->where('tipo' , 1)->orderBy('tipo' , 'asc')->firstOrFail();
     	$provincias = Provincia::orderBy('id_provincia' , 'asc')->get();
     	$calculo = Calculo::findOrFail($indicador->id);
+    	$calculo_inicial = Calculo::findOrFail($indicador->id + 1);
 
     	$dt = \DateTime::createFromFormat('Y-m' , $periodo);
     	$dt->modify('first day of this month');
@@ -570,7 +571,7 @@ class CeiController extends Controller
 			$beneficiarios_oportunos = count($beneficiarios);
 
 			foreach ($beneficiarios as $key => $beneficiario) {
-
+				
 				$coincidence = FALSE;
 				foreach ($calculo->numerador->prestaciones as $prestacion){
 
@@ -578,24 +579,79 @@ class CeiController extends Controller
 					$dt->modify('first day of this month');
 					$fechas['min_prestacion'] = $dt->format('Y-m-d');
 					$dt->modify("+ $prestacion->lapso");
+					$fechas['max_prestacion'] = $dt->format('Y-m-d');								
+					
+					if(is_array($prestacion->codigos)){
+						$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+								  ->whereIn('codigo_prestacion' , $prestacion->codigos)
+								  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+								  ->first();
+					}
+					else{
+						$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+								  ->where('codigo_prestacion' , $prestacion->codigos)
+								  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+								  ->first();						
+					}					
+
+					if($existe){
+				    	$coincidence = TRUE;				    	
+	    			}										
+				}
+				if ($coincidence) {
+						$obj[] = $beneficiario;
+				}				
+			}
+
+			if (! isset ($obj)){
+				$obj[] = NULL;				
+			}
+
+			unset($existe);
+			unset($beneficiario);
+			unset($coincidence);
+			unset($dt);
+
+			foreach ($beneficiarios as $key => $beneficiario) {
+
+				$coincidence = FALSE;
+				foreach ($calculo_inicial->denominador->prestaciones as $prestacion){
+
+					$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+					$dt->modify('first day of this month');
+					$fechas['min_prestacion'] = $dt->format('Y-m-d');
+					$dt->modify("+ $prestacion->lapso");
 					$fechas['max_prestacion'] = $dt->format('Y-m-d');
-				
-					$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-										->whereIn('codigo_prestacion' , $prestacion->codigos)
-										->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-										->get();
+
+					if(is_array($prestacion->codigos)){
+						$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+								  ->whereIn('codigo_prestacion' , $prestacion->codigos)
+								  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+								  ->first();
+					}
+					else{
+						$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+								  ->where('codigo_prestacion' , $prestacion->codigos)
+								  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+								  ->first();						
+					}					
+
 
 					if($existe){
 				    	$coincidence = TRUE;	
 	    			}										
 				}
 				if ($coincidence) {
-						$obj[] = $beneficiario;
+						$obj_inicial[] = $beneficiario;
 				}
 			}
 
-			if (! isset ($obj)){
-				$obj[] = NULL;
+			if (! isset ($obj_inicial)){
+				$obj_inicial[] = NULL;
+				$cantidad_inicial = 0;
+			}
+			else{
+				$cantidad_inicial = count($obj_inicial);
 			}
 
 			// return json_encode($obj);
@@ -606,10 +662,17 @@ class CeiController extends Controller
 			$op->periodo = $periodo_del;
 			$op->beneficiarios_oportunos = $beneficiarios_oportunos;
 			$op->beneficiarios = json_encode($obj);
+			$op->beneficiarios_inicial = json_encode($obj_inicial);
+			$op->beneficiarios_cantidad_inicial = $cantidad_inicial;			
 			$op->save();
 
 			unset($obj);
+			unset($obj_inicial);
+			unset($coincidence);
+			unset($beneficiario);
     	}
+    	unset($provincias);
+    	unset($provincia);
 		
     } 
 
@@ -648,7 +711,7 @@ class CeiController extends Controller
     	foreach ($provincias as $provincia) {
 			
 			foreach ($calculo->numerador->prestaciones as $prestacion){
-				$codigos = implode ('_' , $prestacion->codigos);
+				$codigos = is_array($prestacion->codigos) ? implode ('_' , $prestacion->codigos) : $prestacion->codigos;
 				$super_objeto['prestaciones']['codigos'][$codigos] = 0;
 			}
 
@@ -667,10 +730,34 @@ class CeiController extends Controller
 
 	    	foreach ($oportunos as $oportuno){
 
-	    		// return json_encode($oportuno);
-	    		$super_objeto['beneficiarios_oportunos'] = $oportuno->beneficiarios_oportunos;
+	    		/****
+		    	DENOMINADOR DE LOS INDICADORES
+		    	****/
 
-	    		$oportuno = $oportuno->beneficiarios;
+	    		// return json_encode($oportuno);	    		
+	    		$tipo = Indicador::find($id_indicador)->tipo;
+
+	    		if($tipo == 3 || $tipo == 2){
+	    			$super_objeto['beneficiarios_oportunos'] = Resultado::where('indicador' , $id_indicador-1)->where('periodo' , $periodo_del)->where('provincia' , $provincia->id_provincia)->first()->resultados->beneficiarios_puntuales;
+	    		}
+	    		else{
+	    			$super_objeto['beneficiarios_oportunos'] = $oportuno->beneficiarios_oportunos;
+	    		}
+	    	
+	    		if ($tipo == 3) {
+
+	    			$beneficiarios_madre = Resultado::where('indicador' , $id_indicador-1)->where('periodo' , $periodo_del)->where('provincia' , $provincia->id_provincia)->first()->beneficiarios_puntuales;
+
+	    			if($beneficiarios_madre){
+	    				$beneficiarios = json_decode(json_decode($beneficiarios_madre));		    
+	    			}					
+				}
+				elseif ($tipo == 2) {
+					$beneficiarios = json_decode($oportuno->beneficiarios_inicial);					
+				}
+	    		else{
+	    			$beneficiarios = $oportuno->beneficiarios;	
+	    		}
 
 	    		if (isset ($calculo->denominador->id)){
 	    			$denominador = Denominador::where('indicador' , $id_indicador)
@@ -678,57 +765,17 @@ class CeiController extends Controller
 	    									->firstOrFail();
 	    			$super_objeto['denominador'] = $denominador->denominador;
 	    		}
-	    		elseif(Indicador::find($id_indicador)->tipo == 3 && Resultado::where('indicador',$id_indicador-1)
-																	->where('provincia',$provincia->id_provincia)
-																	->where('periodo',str_replace('-', '', $periodo))
-																	->first() )
-	    		{
-	    			$super_objeto['denominador'] = Resultado::where('indicador',$id_indicador-1)
-															->where('provincia',$provincia->id_provincia)
-															->where('periodo',str_replace('-', '', $periodo))
-															->first()
-															->resultados
-															->denominador;
+	    		elseif(in_array(Indicador::find($id_indicador)->tipo,array(2,3)) )
+	    		{	    			
+	    			$super_objeto['denominador'] = $oportuno->beneficiarios_cantidad_inicial;
 	    		}
-	    		else{
 	    		
-		    		foreach ($oportuno as $key => $beneficiario) {
-			    		
-			    		if (isset ($calculo->denominador->prestaciones)) {
-			    			$coincidence = FALSE;
-			    			foreach ($calculo->denominador->prestaciones as $prestacion){
 
-			    				$dt = \DateTime::createFromFormat('Y-m' , $periodo);
-				    			$dt->modify('first day of this month');
-				    			$fechas['min_prestacion'] = $dt->format('Y-m-d');
-				    			$dt->modify("+ $prestacion->lapso");
-				    			$fechas['max_prestacion'] = $dt->format('Y-m-d');
+		    	/****
+		    	NUMERADOR DE LOS INDICADORES
+		    	****/
 
-				    			$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-				    								->whereIn('codigo_prestacion' , $prestacion->codigos)
-				    								->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-				    								->count();
-				    			if($existe){
-				    				$coincidence = TRUE;	
-				    			}			    			
-			    			}
-
-			    			if (! $coincidence) {
-				    				unset($oportuno[$key]);
-			    			}
-
-			    			$super_objeto['denominador'] = count($oportuno);
-			    		} 
-		    		}
-		    	}
-
-    		}
-
-			foreach ($oportunos as $oportuno) {
-
-				$oportuno = $oportuno->beneficiarios;
-
-				foreach ($oportuno as $key => $beneficiario) {
+		    	foreach ($beneficiarios as $key => $beneficiario) {
 
 					$cantidad_prestaciones = 0;
 					$coincidence = FALSE;
@@ -740,48 +787,82 @@ class CeiController extends Controller
 						$dt->modify('first day of this month');
 						$fechas['min_prestacion'] = $dt->format('Y-m-d');
 						$dt->modify("+ $prestacion->lapso");
-						$fechas['max_prestacion'] = $dt->format('Y-m-d');
+						$fechas['max_prestacion'] = $dt->format('Y-m-d');						
 
-					
-						$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
-											->whereIn('codigo_prestacion' , $prestacion->codigos)
-											->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-											->count();
+						if(is_array($prestacion->codigos)){
+							$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+									  ->whereIn('codigo_prestacion' , $prestacion->codigos)
+									  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+									  ->first();
+						}
+						else{
+							$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+									  ->where('codigo_prestacion' , $prestacion->codigos)
+									  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+									  ->first();						
+						}					
+										
 						
-						$codigos = implode ('_' , $prestacion->codigos);
+						$codigos = is_array($prestacion->codigos) ? implode ('_' , $prestacion->codigos) : $prestacion->codigos;
 												
 						if($existe){
 			    				$super_objeto['prestaciones']['codigos'][$codigos] ++;
+			    				$super_objeto['beneficiarios'][$beneficiario][] = $codigos;
 			    				$coincidence = TRUE;	
-			    		}
-
-						$cantidad_prestaciones += $existe;						
+			    				$cantidad_prestaciones += 1;
+			    		}												
 					}
 
 					if (isset ($calculo->numerador->cantidad) && $coincidence){
-						if ($cantidad_prestaciones < $calculo->numerador->cantidad) {
-								unset($oportuno[$key]);
+						if ($cantidad_prestaciones >= $calculo->numerador->cantidad) {
+								$obj[] = $beneficiario;
 						}
 					}
-					elseif (!$coincidence) {
-						unset($oportuno[$key]);	
+					elseif((!isset($calculo->numerador->cantidad)) && $coincidence) {
+						$obj[] = $beneficiario;
 					}
+					unset($existe);
 				}
 
+				if (! isset ($obj)){
+					$obj[] = NULL;
+					$super_objeto['beneficiarios_puntuales'] = 0;
+				}
+				else{
+					$super_objeto['beneficiarios_puntuales'] = count($obj);	
+				}								   				
+   				$json_beneficiarios_puntuales = json_encode($obj);
 
-   				$super_objeto['beneficiarios_puntuales'] = count($oportuno);
+   				unset($obj);   				
+    		}
 
-			}
-
+			
     		$r = new Resultado;
     		$r->indicador = $id_indicador;
     		$r->provincia = $provincia->id_provincia;
     		$r->periodo = str_replace('-', '', $periodo);
     		$r->resultados = json_encode($super_objeto);
-    		$r->save();
-
-    		echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
-    	}
+    		$r->beneficiarios_puntuales = json_encode($json_beneficiarios_puntuales);
+    		if($r->save()){
+    			unset($super_objeto['beneficiarios']);
+    			echo '<pre>' , json_encode($super_objeto , JSON_PRETTY_PRINT) , '<pre>';
+    		}
+    	
+			unset($super_objeto);
+			unset($json_beneficiarios_puntuales);
+			unset($codigos);
+			unset($existe);
+			unset($coincidence);			
+			unset($provincia);
+    	}    	
+    	unset($res);
+    	unset($id_indicador);
+		unset($periodo);  
+		unset($dt);
+		unset($provincias);
+		unset($calculo);
+		unset($indicador);	
+		unset($periodo_del);		  							
     }
 
    /**
@@ -792,7 +873,7 @@ class CeiController extends Controller
    */
   public function nuevoCalculoCompleto($periodo){
     
-  	for ($i= 1; $i < 26; $i++) {
+  	for ($i = 1; $i < 26; $i++) {
   		$this->nuevoCalculo($i,$periodo);
   	}        
 
@@ -807,11 +888,428 @@ class CeiController extends Controller
    */
   public function indicadoresCompleto($periodo){
     
-  	for ($i= 3; $i < 73; $i++) {
-  		$this->getIndicadorCeiNew($periodo,$i);
+  	for ($i= 1; $i < 73; $i++) {
+  		$this->getIndicadorCeiNew($periodo,$i);  		
   	}        
 
     return response()->json("Los indicadores fueron del CEI para el periodo $periodo fueron procesados correctamente.");   
+  }
+
+  /**
+   * Genera el excel correspondiente a la linea.
+   * @param character(7) $periodo
+   * @param integer $linea
+   * @return view
+   */
+  public function calcularTipo($periodo, $linea, $tipo){
+
+  		$periodo = str_replace('-', '', $periodo);  
+
+	    if($linea > 25 || $linea < 1){
+	    	return response()->json("La linea de cuidado ingresada no es correcta");   
+	    }
+
+	    $indicadores = Indicador::where('indicador',$linea)->lists('id');
+
+  		switch ($tipo) {
+  		   	case 'INICIAL':
+  		   		$id_tipo = 1;
+  		   		break;
+  		   	
+  		   	case 'MINIMA':
+  		   		$id_tipo = 2;
+  		   		break;
+
+  		   	case 'ADECUADA':
+  		   		$id_tipo = 3;
+  		   		break;  		   	
+	    } 
+
+		$resultado = Resultado::select('provincia','resultados')
+							->join('cei.indicadores as detalle','detalle.id','=','cei.resultados.indicador')
+							->whereIn('cei.resultados.indicador' , $indicadores)
+							->where('detalle.tipo',$id_tipo)
+							->where('periodo' , $periodo)
+							->orderBy('provincia')
+							->get()
+							->toArray();
+
+		if(!$resultado){
+			return FALSE;
+		}		
+
+		$arrayCompleto = array();
+
+		unset($resultado['beneficiarios']);
+            
+		foreach ($resultado[0] as $clave => $val){
+				if($clave == "resultados"){
+					$arrayParaExcel[] = 'Denominador';
+			 		$arrayParaExcel[] = 'Beneficiarios Oportunos';
+			 		$arrayParaExcel[] = 'Beneficiarios Puntuales';  
+				foreach ($val->prestaciones->codigos as $key => $value) {
+			 				$arrayParaExcel[] = $key;
+		 			}
+			}
+			else{
+				$arrayParaExcel[] = ucfirst($clave);
+			}			
+		}
+		array_push($arrayCompleto, $arrayParaExcel);
+		unset($arrayParaExcel);		
+
+		foreach ($resultado as $registro) {      	 
+			 foreach ($registro as $campo => $valor) {
+			 	      	 	      	 		
+		 		if($campo == 'resultados'){
+		 			$arrayParaExcel[] = $valor->denominador;
+			 		$arrayParaExcel[] = $valor->beneficiarios_oportunos;
+			 		$arrayParaExcel[] = $valor->beneficiarios_puntuales;
+		 			foreach ($valor->prestaciones->codigos as $key => $value) {
+		 				$arrayParaExcel[] = intval($value);
+		 			}
+		 		}      	 		
+		 		else{
+		 			if($campo == 'provincia'){
+		 				$nombre_provincia = Provincia::find($valor)->descripcion;
+		 				$arrayParaExcel[] = $nombre_provincia == "CIUDAD AUTONOMA DE BUENOS AIRES" ? 'CABA' : $nombre_provincia;  	 				
+		 			}
+		 			else{
+		 				$arrayParaExcel[] = $valor;	
+		 			}  	 			
+		 		}      	 		
+			 	
+			 }
+			 $cantidad_elementos = count($arrayParaExcel);			 
+			 array_push($arrayCompleto, $arrayParaExcel);
+			 unset($arrayParaExcel);
+			 unset($indicadores);			 			 
+		}		
+		return array($arrayCompleto, $cantidad_elementos);
+	}  
+
+  /**
+   * Genera el excel correspondiente a la linea.
+   * @param character(7) $periodo
+   * @param integer $linea
+   * @return view
+   */
+  public function generarExcelLinea($periodo, $linea){   
+
+                                    
+	  $arrayCompletoInicial = $this->calcularTipo($periodo, $linea, 'INICIAL');	  
+	  $arrayCompletoMinima = $this->calcularTipo($periodo, $linea, 'MINIMA');
+	  $arrayCompletoAdecuada = $this->calcularTipo($periodo, $linea, 'ADECUADA');
+
+      Excel::create('Linea de cuidado N°'.$linea. ' ' . $periodo , function ($e) use ($arrayCompletoInicial, $arrayCompletoMinima, $arrayCompletoAdecuada){
+        $e->sheet('INICIAL' , function ($s) use ($arrayCompletoInicial){
+        	$s->setHeight(1, 20);
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoInicial[1]).'1', function($cells) {
+        		$cells->setBackground('#00004d');
+        		$cells->setFontColor('#ffffff');
+        		$cells->setFont(array(				    
+				    'size'       => '12',
+				    'bold'       =>  true
+				));
+        	});
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoInicial[1]).'25', function($cells2) {
+        		$cells2->setAlignment('center');
+        		$cells2->setValignment('center');
+        		$cells2->setFontFamily('Arial');
+    	    });
+    	    $s->setColumnFormat(array(
+			    'E2:'.$this->letraEnExcel($arrayCompletoInicial[1]).'25' => '0'
+			));
+    	    $s->setAutoSize(true);      
+        	$s->fromArray($arrayCompletoInicial[0], null, 'A1', false, false);
+        });
+        $e->sheet('MINIMA' , function ($s) use ($arrayCompletoMinima){
+        	$s->setHeight(1, 20);
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoMinima[1]).'1', function($cells) {
+        		$cells->setBackground('#00004d');
+        		$cells->setFontColor('#ffffff');
+        		$cells->setFont(array(				    
+				    'size'       => '12',
+				    'bold'       =>  true
+				));
+        	});
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoMinima[1]).'25', function($cells2) {
+        		$cells2->setAlignment('center');
+        		$cells2->setValignment('center');
+        		$cells2->setFontFamily('Arial');
+    	    });
+    	    $s->setColumnFormat(array(
+			    'E2:'.$this->letraEnExcel($arrayCompletoMinima[1]).'25' => '0'
+			));
+    	    $s->setAutoSize(true);      
+        	$s->fromArray($arrayCompletoMinima[0], null, 'A1', false, false);
+        });
+        if($arrayCompletoAdecuada){
+	        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){
+	        	$s->setHeight(1, 20);
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'1', function($cells) {
+	        		$cells->setBackground('#00004d');
+	        		$cells->setFontColor('#ffffff');
+	        		$cells->setFont(array(				    
+					    'size'       => '12',
+					    'bold'       =>  true
+					));
+	        	});
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'25', function($cells2) {
+	        		$cells2->setAlignment('center');
+	        		$cells2->setValignment('center');
+	        		$cells2->setFontFamily('Arial');
+	    	    });
+	    	    $s->setColumnFormat(array(
+				    'E2:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'25' => '0'
+				));
+	    	    $s->setAutoSize(true);      
+	        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
+	        });
+	    }        
+      })               
+      ->store('xlsx');
+
+      echo "El xlsx de la linea de cuidado fue guardado correctamente";      
+
+      unset($arrayCompletoInicial);
+      unset($arrayCompletoMinima);
+      unset($arrayCompletoAdecuada);       
+  }
+
+  /**
+   * Genera el excel correspondiente a la linea.
+   * @param character(7) $periodo
+   * @param integer $linea
+   * @return view
+   */
+  public function generarExcelLineaBeneficiario($periodo, $linea){   
+
+                                    
+	  $arrayCompletoInicial = $this->calcularTipoBeneficiario($periodo, $linea, 'INICIAL');	  	  
+	  $arrayCompletoMinima = $this->calcularTipoBeneficiario($periodo, $linea, 'MINIMA');
+	  $arrayCompletoAdecuada = $this->calcularTipoBeneficiario($periodo, $linea, 'ADECUADA');
+
+      Excel::create('Linea de cuidado Desplegada N°'.$linea. ' ' . $periodo , function ($e) use ($arrayCompletoInicial, $arrayCompletoMinima, $arrayCompletoAdecuada){      	
+        $e->sheet('INICIAL' , function ($s) use ($arrayCompletoInicial){
+        	$s->setHeight(1, 20);
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoInicial[1]).'1', function($cells) {
+        		$cells->setBackground('#00004d');
+        		$cells->setFontColor('#ffffff');
+        		$cells->setFont(array(				    
+				    'size'       => '12',
+				    'bold'       =>  true
+				));
+        	});
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoInicial[1]).$arrayCompletoInicial[2], function($cells2) {
+        		$cells2->setAlignment('center');
+        		$cells2->setValignment('center');
+        		$cells2->setFontFamily('Arial');
+    	    });
+    	    $s->setColumnFormat(array(
+			    'B2:B'.$arrayCompletoInicial[2] => '0'
+			));
+    	    $s->setAutoSize(true);      
+        	$s->fromArray($arrayCompletoInicial[0], null, 'A1', false, false);
+        });
+        $e->sheet('MINIMA' , function ($s) use ($arrayCompletoMinima){
+        	$s->setHeight(1, 20);
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoMinima[1]).'1', function($cells) {
+        		$cells->setBackground('#00004d');
+        		$cells->setFontColor('#ffffff');
+        		$cells->setFont(array(				    
+				    'size'       => '12',
+				    'bold'       =>  true
+				));
+        	});
+        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoMinima[1]).$arrayCompletoMinima[2], function($cells2) {
+        		$cells2->setAlignment('center');
+        		$cells2->setValignment('center');
+        		$cells2->setFontFamily('Arial');
+    	    });
+    	    $s->setColumnFormat(array(
+			    'B2:B'.$arrayCompletoMinima[2] => '0'
+			));
+    	    $s->setAutoSize(true);      
+        	$s->fromArray($arrayCompletoMinima[0], null, 'A1', false, false);
+        });
+        if($arrayCompletoAdecuada){
+	        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){
+	        	$s->setHeight(1, 20);
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).'1', function($cells) {
+	        		$cells->setBackground('#00004d');
+	        		$cells->setFontColor('#ffffff');
+	        		$cells->setFont(array(				    
+					    'size'       => '12',
+					    'bold'       =>  true
+					));
+	        	});
+	        	$s->cells('A1:'.$this->letraEnExcel($arrayCompletoAdecuada[1]).$arrayCompletoAdecuada[2], function($cells2) {
+	        		$cells2->setAlignment('center');
+	        		$cells2->setValignment('center');
+	        		$cells2->setFontFamily('Arial');
+	    	    });
+	    	    $s->setColumnFormat(array(
+				    'B2:B'.$arrayCompletoAdecuada[2] => '0'
+				));
+	    	    $s->setAutoSize(true);      
+	        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
+	        });
+        }        
+      })               
+      ->store('xlsx');      
+	  
+      /*Excel::create('Linea de cuidado Desplegada N°'.$linea. ' ' . $periodo . ' INICIAL' , function ($e) use ($arrayCompletoInicial){     	
+        $e->sheet('INICIAL' , function ($s) use ($arrayCompletoInicial){        	
+        	$s->fromArray($arrayCompletoInicial[0], null, 'A1', false, false);
+        });
+      })               
+      ->store('csv');
+
+      Excel::create('Linea de cuidado Desplegada N°'.$linea. ' ' . $periodo . ' MINIMA' , function ($e) use ($arrayCompletoMinima){     	        
+        $e->sheet('MINIMA' , function ($s) use ($arrayCompletoMinima){        	
+        	$s->fromArray($arrayCompletoMinima[0], null, 'A1', false, false);
+        });
+      })               
+      ->store('csv');
+
+      Excel::create('Linea de cuidado Desplegada N°'.$linea. ' ' . $periodo . ' ADECUADA' , function ($e) use ($arrayCompletoAdecuada){     	        
+        $e->sheet('ADECUADA' , function ($s) use ($arrayCompletoAdecuada){        	
+        	$s->fromArray($arrayCompletoAdecuada[0], null, 'A1', false, false);
+        });        
+      })               
+      ->store('csv');*/
+
+      echo "El xlsx de la linea de cuidado desplegada fue guardado correctamente";      
+
+      unset($arrayCompletoInicial);
+      unset($arrayCompletoMinima);
+      unset($arrayCompletoAdecuada);       
+  }
+
+  /**
+   * Genera el excel correspondiente a la linea.
+   * @param character(7) $periodo
+   * @param integer $linea
+   * @return view
+   */
+  public function calcularTipoBeneficiario($periodo, $linea, $tipo){
+
+  		$periodo = str_replace('-', '', $periodo);  
+
+	    if($linea > 25 || $linea < 1){
+	    	return response()->json("La linea de cuidado ingresada no es correcta");   
+	    }
+
+	    $indicadores = Indicador::where('indicador',$linea)->lists('id');
+
+  		switch ($tipo) {
+  		   	case 'INICIAL':
+  		   		$id_tipo = 1;
+  		   		break;
+  		   	
+  		   	case 'MINIMA':
+  		   		$id_tipo = 2;
+  		   		break;
+
+  		   	case 'ADECUADA':
+  		   		$id_tipo = 3;
+  		   		break;  		   	
+	    } 
+
+		$resultado = Resultado::select(DB::raw('provincia, resultados->\'prestaciones\' as prestaciones'))
+							->join('cei.indicadores as detalle','detalle.id','=','cei.resultados.indicador')
+							->whereIn('cei.resultados.indicador' , $indicadores)
+							->where('detalle.tipo',$id_tipo)
+							->where('periodo' , $periodo)
+							->orderBy('provincia')
+							->get()
+							->toArray();
+
+		if(!$resultado){
+			return FALSE;
+		}	
+
+		$arrayCompleto = array();
+
+		foreach ($resultado[0] as $clave => $val){			    
+				if($clave == "provincia"){
+					$arrayParaExcel[] = 'Provincia';
+					$arrayParaExcel[] = 'Clave Beneficiario';
+				}				
+				elseif($clave == "prestaciones"){										
+					foreach (json_decode($val)->codigos as $key => $value) {
+			 				$arrayParaExcel[] = $key;
+			 				$array_columna_prestacion[array_search($key, $arrayParaExcel)] = $key;
+		 			}				
+				}				
+				else{
+					$arrayParaExcel[] = ucfirst($clave);
+				}				
+		}
+		$cantidad_elementos = count($arrayParaExcel);		
+		array_push($arrayCompleto, $arrayParaExcel);
+		unset($arrayParaExcel);
+		unset($resultado);		
+
+		$resultado = Resultado::select(DB::raw('provincia, jsonb_each_text(resultados->\'beneficiarios\') as beneficiarios_prestaciones'))
+							->join('cei.indicadores as detalle','detalle.id','=','cei.resultados.indicador')
+							->whereIn('cei.resultados.indicador' , $indicadores)
+							->where('detalle.tipo',$id_tipo)
+							->where('periodo' , $periodo)
+							->orderBy('provincia')
+							->get()
+							->toArray();											
+
+		foreach ($resultado as $registro) {
+			 $arrayParaExcel = array();			 				
+			 foreach ($registro as $campo => $valor) {
+		 		if($campo == 'provincia'){
+		 				$nombre_provincia = Provincia::find($valor)->descripcion;
+		 				$arrayParaExcel[0] = $nombre_provincia == "CIUDAD AUTONOMA DE BUENOS AIRES" ? 'CABA' : $nombre_provincia;  	 				
+		 		}		 			
+		 		elseif($campo == 'beneficiarios_prestaciones'){		 				 					 			
+		 			preg_match('/\((.*),(\"\[.*\]\")\)/', $valor, $benef_con_prestaciones);
+		 			$benef_con_prestaciones; 		 			
+		 			$arrayParaExcel[1] = $benef_con_prestaciones[1];
+		 			$arrayParaExcel = $this->completeIndexes($arrayParaExcel,$cantidad_elementos);
+					$array_codigos_benef = json_decode(str_replace(']"',']', str_replace('"[','[', str_replace('""', '"', $benef_con_prestaciones[2]))));		 			
+		 			foreach ($array_codigos_benef as $key) {		 				
+		 				if(array_search($key,$array_columna_prestacion)){
+		 					$arrayParaExcel[array_search($key, $array_columna_prestacion)] = 'X';	
+		 				}		 						 				
+		 			}		 			
+		 		}      	 				 		
+	 			else{
+	 				$arrayParaExcel[] = $valor;	
+	 			}  	 					 		      	 				 	
+			 }			 			 
+			 array_push($arrayCompleto, $arrayParaExcel);
+			 unset($arrayParaExcel);
+			 unset($indicadores);			 			 
+		}
+		$cantidad_filas = count($arrayCompleto);
+		unset($resultado);
+		unset($arrayParaExcel);
+		return array($arrayCompleto, $cantidad_elementos, $cantidad_filas);
+	}
+
+
+  public function letraEnExcel($numero){  	
+  	return chr(ord('A') + $numero - 1);  			  
+  }
+
+  public function completeIndexes($array, $total_elements){    
+		for($i = 0 ;$i < $total_elements ; $i++) 
+		{
+		//if it's not set
+			if(!isset($array[$i]))
+			{
+				//set to empty
+				$array[$i] = "";
+			}
+		}
+    	return $array; 
   }
 
 }
