@@ -6,6 +6,7 @@ use ErrorException;
 use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
+use Session;
 
 use Illuminate\Http\Request;
 
@@ -159,11 +160,25 @@ class FondosController extends AbstractPadronesController
 	 * @return json
 	 */
 	public function procesarArchivo($id){
+		if (Session::get('recent_post')){
+			if(time() - Session::get('recent_post_time') <= 5){
+				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
+			}
+			else{
+				Session::set('recent_post', false);
+				Session::set('recent_post_time', time());				
+			}			
+		}
+    	else{
+    		Session::set('recent_post', true);
+    		Session::set('recent_post_time', time());	
+    	}
+
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
 		
 		if (!$fh){
-			return response('Error' , 422);
+			return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
 		}
 		$nro_linea = 1;
 
@@ -171,7 +186,7 @@ class FondosController extends AbstractPadronesController
 		while (!feof($fh)){
 			$nro_linea++;
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-			if (count($linea) != 1){
+			if (count($linea) > 1){
 				if(strpos($linea[4],'.')){
 					$fondo_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
 					$v = Validator::make($fondo_raw , $this->_rules);
@@ -204,7 +219,8 @@ class FondosController extends AbstractPadronesController
 						}
 					}	
 				}								
-			}else{
+			}
+			else{
 					$this->_resumen['rechazados'] ++;
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($linea);
@@ -215,6 +231,6 @@ class FondosController extends AbstractPadronesController
 		}
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
-		return response()->json($this->_resumen);	
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
 	}
 }

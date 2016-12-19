@@ -4,7 +4,7 @@
 	<div class="col-md-4">
 		<div class="box box-primary">
 			<div class="box-header">
-				<h2 class="box-title">Cargar archivos</h2>
+				<h2 class="box-title">Cargar y procesar archivos</h2>
 			</div>
 			<div class="box-body">
 				<p>Desde esta opción usted podrá subir los archivos para la carga de prestaciones. Recuerde respetar la estructura de datos. Si tiene dudas consulte la opción "Diccionario de Datos"</p>
@@ -33,7 +33,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button href="listar-archivos/{{ $id_padron }}" class="action btn btn-primary">Ver archivos</button>
+					<button href="listar-archivos/{{ $id_padron }}" class="action btn btn-primary" disabled>Ver archivos (removido)</button>
 				</div>
 			</div>
 		</div>

@@ -230,7 +230,7 @@ class OspController extends Controller
 
 		if (Session::get('recent_post')){
 			if(time() - Session::get('recent_post_time') <= 5){
-				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
+				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
 			}
 			else{
 				Session::set('recent_post', false);
@@ -298,8 +298,8 @@ class OspController extends Controller
 
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
-		$this->actualizarProceso($lote , $this->getCodigoOsp($id));
-		return response()->json($this->_resumen);
+		$this->actualizarProceso($lote , $this->getCodigoOsp($id));		
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
 	}
 
 	/**

@@ -7,6 +7,7 @@ use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
 use DB;
+use Session;
 
 use Illuminate\Http\Request;
 
@@ -194,7 +195,23 @@ class ProfeController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		DB::statement('truncate table puco.beneficiarios_profe');
+		
+		if (Session::get('recent_post')){
+			if(time() - Session::get('recent_post_time') <= 5){
+				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
+			}
+			else{
+				Session::set('recent_post', false);
+				Session::set('recent_post_time', time());				
+			}			
+		}
+    	else{
+    		Session::set('recent_post', true);
+    		Session::set('recent_post_time', time());	
+    	}
+
+		DB::statement('truncate table puco.beneficiarios_profe');		
+
 		$bulk = [];
 		$lote = $this->nuevoLote($id);
 		$registros = $this->abrirArchivo($id);
@@ -241,6 +258,6 @@ class ProfeController extends Controller
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
 		$this->actualizarProceso($lote , $this->getCodigoOsp($id));
-		return response()->json($this->_resumen);
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
 	}
 }
