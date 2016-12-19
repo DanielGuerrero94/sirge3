@@ -160,6 +160,9 @@ class PadronesController extends Controller
 	 */
 	public function postUpload(Request $r){
 
+		return response()->json(['success' => 'false',
+        							 'errors'  => json_encode($r->all())]);
+
 		$status = $this->checkNoPending($r->id_padron);
 
 		if($status['status'] == 'error'){
