@@ -4,7 +4,7 @@
 	<div class="col-md-4">
 		<div class="box box-primary">
 			<div class="box-header">
-				<h2 class="box-title">Cargar archivos</h2>
+				<h2 class="box-title">Cargar y procesar archivos</h2>
 			</div>
 			<div class="box-body">
 				<p>Desde esta opción usted podrá subir los archivos para la carga de prestaciones. Recuerde respetar la estructura de datos. Si tiene dudas consulte la opción "Diccionario de Datos"</p>
@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="box-body">
-				<p>--Los archivos se cargan y procesan al mismo tiempo, este modulo sera eliminado en breve-- Desde esta opción usted podrá procesar aquellos archivos que ha subido y aceptarlos o no en caso que ud. lo desee. Recuerde revisar los errores informados una vez finalizado el proceso.</p>
+				<p>Desde esta opción usted podrá procesar aquellos archivos que ha subido y aceptarlos o no en caso que ud. lo desee. Recuerde revisar los errores informados una vez finalizado el proceso.</p>
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
