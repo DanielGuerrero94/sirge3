@@ -50,6 +50,7 @@
 	$(document).ready(function(){
 
 		$('#errores-div').hide();
+		$('.procesar').prop('disabled', true);
 
 		$('.back').click(function(){
 			$.get('padron/{{ $id_padron }}' , function(data){
@@ -92,7 +93,7 @@
 				url : '{{ $ruta_procesar }}/' + id,
 				success : function(data){
 					var info = '';
-					$.each(data , function (index , value){
+					$.each(data.data , function (index , value){
 						info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';
 					});
 					$('#modal-text').html(info);

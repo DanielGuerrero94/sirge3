@@ -7,6 +7,7 @@ use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
 use DB;
+use Session;
 
 use Illuminate\Http\Request;
 
@@ -210,13 +211,28 @@ class SuperController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
+		
+		if (Session::get('recent_post')){
+			if(time() - Session::get('recent_post_time') <= 5){
+				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
+			}
+			else{
+				Session::set('recent_post', false);
+				Session::set('recent_post_time', time());				
+			}			
+		}
+    	else{
+    		Session::set('recent_post', true);
+    		Session::set('recent_post_time', time());	
+    	}
+
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
 		$bulk = [];
 		$nro_linea;
 		
 		if (!$fh){
-			return response('Error' , 422);
+			return response()->json(['success' => 'false','errors'  => 'Error al abrir el archivo']);
 		}
 
 		while (!feof($fh)){
@@ -279,7 +295,7 @@ class SuperController extends Controller
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
 		$this->actualizarProceso($lote , $this->getCodigoOsp($id) , $this->getIdArchivo($id));
-		return response()->json($this->_resumen);
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
 	}
 
 	/**

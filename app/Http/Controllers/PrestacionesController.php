@@ -332,7 +332,7 @@ class PrestacionesController extends AbstractPadronesController
 
 		if (Session::get('recent_post')){
 			if(time() - Session::get('recent_post_time') <= 5){
-				return response('Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior',422);	
+				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
 			}
 			else{
 				Session::set('recent_post', false);
@@ -349,15 +349,13 @@ class PrestacionesController extends AbstractPadronesController
 				if (is_array($fh)){					
 					$er = new ErrorSubida();
 					$er->id_subida = $id;
-					$er->mensaje = $fh['mensaje'];
-					
+					$er->mensaje = $fh['mensaje'];					
 					try {
 						$er->save();	
 					} catch (Exception $e) {
 						return response('Error: ' . $e->getMessage(), 422);
-					}
-					return response('Error', 422);
-					//return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse" , 422]);
+					}					
+					return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
 				}
 
 				$lote = $this->nuevoLote($id);				
@@ -366,8 +364,7 @@ class PrestacionesController extends AbstractPadronesController
 				fgets($fh);
 				while (!feof($fh)){
 					$nro_linea++;
-					$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-					if (count($linea) != 1) {
+					$linea = explode (';' , trim(fgets($fh) , "\r\n"));													
 						if(count($this->_deben_ingresar) == count($linea)){
 							$prestacion_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
 							$v = Validator::make($prestacion_raw , $this->_rules);
@@ -452,8 +449,7 @@ class PrestacionesController extends AbstractPadronesController
 							$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
 							Rechazo::insert($this->_error);
-						}	
-					}
+						}						
 				}
 				$this->actualizaLote($lote , $this->_resumen);
 				$this->actualizaSubida($id);
@@ -464,7 +460,7 @@ class PrestacionesController extends AbstractPadronesController
     	unset($nro_linea);
     	unset($id);
 		
-		return response()->json($this->_resumen);
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
 	}
 
 	/**

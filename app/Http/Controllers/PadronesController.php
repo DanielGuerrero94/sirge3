@@ -164,7 +164,7 @@ class PadronesController extends Controller
 
 		if($status['status'] == 'error'){
 			return response()->json(['success' => 'false',
-        							 'errors'  => "No puede cargar nuevos archivos habiendo lotes pendientes en el mismo padrón. Dichos lotes son ". $status['detalle'] , 422]);
+        							 'errors'  => "No puede cargar nuevos archivos habiendo lotes pendientes en el mismo padrón. Dichos lotes son ". $status['detalle']]);
 		}		
 
 		$nombre_archivo = uniqid() . '.txt';
@@ -184,7 +184,7 @@ class PadronesController extends Controller
 		} catch (FileException $e){
 			$s->delete();
 			return response()->json(['success' => 'false',
-                							'errors'  => "Ha ocurrido un error: ". $e->getMessage() , 422]);
+                							'errors'  => "Ha ocurrido un error: ". $e->getMessage()]);
 		}
 		if ($s->save()){
 			switch ($r->id_padron) {
@@ -193,7 +193,7 @@ class PadronesController extends Controller
 						$s->delete();
 						unlink($destino . '/' . $nombre_archivo);
 						return response()->json(['success' => 'false',
-                							'errors'  => "Debe elegir la Obra Social a reportar" , 422]);
+                							'errors'  => "Debe elegir la Obra Social a reportar"]);
 					} else {
 						$codigo_final = $r->codigo_osp;
 						$id_archivo = 1;
@@ -223,7 +223,7 @@ class PadronesController extends Controller
 						$s->delete();
 						unlink($destino . '/' . $nombre_archivo);
 						return response()->json(['success' => 'false',
-                							'errors'  => 'Debe elegir el ID del archivo de la SSS' , 422]);
+                							'errors'  => 'Debe elegir el ID del archivo de la SSS']);
 					} else {
 						$id_archivo = $r->id_sss;
 						$codigo_final = 998001;
@@ -232,6 +232,8 @@ class PadronesController extends Controller
 					break;
 			}
 
+			$id_subida = $s->id_subida;
+
 			if (isset($codigo_final)){
 				$so = new SubidaOsp;
 				$so->id_subida = $s->id_subida;
@@ -239,9 +241,9 @@ class PadronesController extends Controller
 				$so->id_archivo = $id_archivo;
 				$so->save();
 			}
-
-			unset($s);
-			return response()->json(['success' => 'true', 'file' => $r->file->getClientOriginalName()]); 
+			
+			return response()->json(['success' => 'true', 'file' => $r->file->getClientOriginalName(), 'id_subida' => $s->id_subida,  'ruta_procesar' => 'procesar-' . strtolower($this->getName($r->id_padron)) ]);
+			unset($s); 
 		}
 	}
 

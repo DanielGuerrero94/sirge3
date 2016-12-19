@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="box-body">
-				<p>Desde esta opción usted podrá procesar aquellos archivos que ha subido y aceptarlos o no en caso que ud. lo desee. Recuerde revisar los errores informados una vez finalizado el proceso.</p>
+				<p>--Los archivos se cargan y procesan al mismo tiempo, este modulo sera eliminado en breve-- Desde esta opción usted podrá procesar aquellos archivos que ha subido y aceptarlos o no en caso que ud. lo desee. Recuerde revisar los errores informados una vez finalizado el proceso.</p>
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">

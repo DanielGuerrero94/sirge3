@@ -134,25 +134,29 @@
 		data.formData = {codigo_osp : $('#codigo_osp').val() , id_padron : {{ $id_padron }} , id_sss : $('#id_sss').val() }		
 	});
 
-	$('#fileupload').bind('fileuploaddone', function (e, data) {					
+	/*$('#fileupload').bind('fileuploaddone', function (e, data) {					
 		$.ajax({
 				url : data.result.ruta_procesar + '/' + data.result.id_subida,
 				dataType: 'json',
-				success : function(data){
-					if(data.result.success == 'true'){
+				success : function(data){					
+					if(data.success == 'true'){
 						var info = '';
-						$.each(data , function (index , value){
-							info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';
+						$.each(data.data , function (index , value){
+							if(index != 'success'){
+								info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';	
+							}							
 						});
 						$('body').removeClass("loading");
 						$('#modal-text').html(info);
 				        $('.modal').modal();
-				        $('.modal').on('hidden.bs.modal', function (e) {
-				            dt.ajax.reload( null, false );
+				        $('.modal').on('hidden.bs.modal', function (e) {				            
+							$.get('listar-lotes/{{ $id_padron }}' , function(data){
+								$('.content-wrapper').html(data);
+							})							
 				        });				        
 				    }
 				    else{
-				    	$('#errores-form').html(data.result.errors);
+				    	$('#errores-form').html(data.errors);
 						$('#errores-div').show();
 				    }
 				},
@@ -161,7 +165,7 @@
 					$('#errores-div').show();
 				}
 		});        						
-	});
+	});*/
 
     $('#fileupload').fileupload({
         url: 'subir-padron',
@@ -191,10 +195,41 @@
                 data.submit();
             }
         },
-        done: function (e, data) {
+        done: function (e, data) {        	
         	if(data.result.success == 'true'){
         		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
         		$('<p/>').html('Comienza el procesamiento en instantes. Puede demorar varios minutos.').appendTo('#files');	
+
+        		$.ajax({
+					url : data.result.ruta_procesar + '/' + data.result.id_subida,
+					dataType: 'json',
+					success : function(data){					
+						if(data.success == 'true'){
+							var info = '';
+							$.each(data.data , function (index , value){
+								if(index != 'success'){
+									info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';	
+								}							
+							});
+							$('body').removeClass("loading");
+							$('#modal-text').html(info);
+					        $('.modal').modal();
+					        $('.modal').on('hidden.bs.modal', function (e) {				            
+								$.get('listar-lotes/{{ $id_padron }}' , function(data){
+									$('.content-wrapper').html(data);
+								})							
+					        });				        
+					    }
+					    else{
+					    	$('#errores-form').html(data.errors);
+							$('#errores-div').show();
+					    }
+					},
+					error : function(data){
+						$('#errores-form').html('<li>No se pudo abrir el archivo</li>');
+						$('#errores-div').show();
+					}
+				});       
         	}
         	else if(data.result.success == 'false'){
         		$('#errores-form').html(data.result.errors);

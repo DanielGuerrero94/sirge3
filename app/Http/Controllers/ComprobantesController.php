@@ -6,6 +6,7 @@ use ErrorException;
 use Illuminate\Database\QueryException;
 use Validator;
 use Auth;
+use Session;
 
 use Illuminate\Http\Request;
 
@@ -139,23 +140,37 @@ class ComprobantesController extends AbstractPadronesController
 	 * @return json
 	 */
 	public function procesarArchivo($id){
+		
+		if (Session::get('recent_post')){
+			if(time() - Session::get('recent_post_time') <= 5){
+				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
+			}
+			else{
+				Session::set('recent_post', false);
+				Session::set('recent_post_time', time());				
+			}			
+		}
+    	else{
+    		Session::set('recent_post', true);
+    		Session::set('recent_post_time', time());	
+    	}
+
 		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);
 		
 		if (!$fh){
-			return response('Error' , 422);
+			return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
 		}
 		$nro_linea = 1;
 
 		fgets($fh);
 		while (!feof($fh)){
 			$nro_linea++;
-			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-			if (count($linea) != 1){
+			$linea = explode (';' , trim(fgets($fh) , "\r\n"));			
 				array_push($linea, $lote);
 				if(count($this->_data) == count($linea)){
 					$comprobante_raw = array_combine($this->_data, $linea);
-
+					
 					if (strlen($comprobante_raw['fecha_debito_bancario']) < 10){
 						$comprobante_raw['fecha_debito_bancario'] = '1900-01-01';
 					}
@@ -197,11 +212,10 @@ class ComprobantesController extends AbstractPadronesController
 					$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la linea no es la correcta');
 					$this->_error['created_at'] = date("Y-m-d H:i:s");
 					Rechazo::insert($this->_error);
-				}				
-			}
+				}							
 		}
 		$this->actualizaLote($lote , $this->_resumen);
 		$this->actualizaSubida($id);
-		return response()->json($this->_resumen);	
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));	
 	}
 }
