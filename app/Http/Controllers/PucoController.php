@@ -180,23 +180,15 @@ class PucoController extends Controller
 
 		DB::table('puco.cantidades_mensuales')->where('periodo','=',date('Ym'))->delete();
 		DB::table('puco.cantidades_mensuales')->insert($objeto_a_insertar);
-
+		
 		Osp::where('numero_documento','46074543')->update(['nombre_apellido' => 'GONZALEZ D AMICO MARIA CLARA']);
+		Osp::where('numero_documento','4313713')->where('tipo_documento','DNI')->update(['nombre_apellido' => 'ACUÑA PEDRO ISIDORO']);
+		Osp::where('numero_documento','11231247')->where('tipo_documento','DNI')->update(['nombre_apellido' => 'NUÑEZ SILVIA LILIANA']);
 		
 		$password = $this->password();
 
 		DB::statement("	SELECT public.copiar_puco_en_servidor(); ");
-		/**
-		*
-		DB::statement("
-			copy (
-				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || case when tipo_afiliado = 'T' then 'S' else 'N' end || rpad (nombre_apellido , 30 , ' ')  from puco.beneficiarios_osp union all
-				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || lpad (codigo_os :: text , 6 , '0') || case when codigo_parentesco :: int = 0 then 'S' else 'N' end || rpad (regexp_replace(nombre_apellido , '[^a-zA-Z] ' , '' , 'g') , 30 , ' ')  from puco.beneficiarios_sss union all
-				select rpad (tipo_documento , 3 , ' ')	|| rpad (numero_documento :: text , 12 , ' ') || codigo_os || 'N' || rpad (nombre_apellido  , 30 , ' ') from puco.beneficiarios_profe
-			) to '/var/www/html/sirge3/storage/swap/puco.txt' 
-			");
-		*/
-
+		
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
 		
@@ -205,33 +197,14 @@ class PucoController extends Controller
 		unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
 		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip PUCO_" . date('Y-m') . ".txt";
-		exec($sys);
-
-		// $zh = fopen("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
-		// file_put_contents("/var/www/html/sirge3/storage/swap/PUCO_" . date("Y-m") . '.zip', $zh);	
+		exec($sys);		
 		
 		$this->actualizarPuco($password , $this->getBeneficiarios(date('Ym')));
 		$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
 		
 		unlink('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt');
 
-		$this->generarZipACE();
-
-		/*
-		$puco = Storage::get('sirg3/puco/puco.txt');
-		Storage::delete('sirg3/puco/puco.txt');
-		
-		$puco = str_replace("\n", "\r\n", $puco);
-		file_put_contents('../storage/swap/puco.txt', $puco);
-		
-		$sys = "cd ../storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip *";
-		exec($sys);
-
-		$zh = fopen("../storage/swap/PUCO_" . date("Y-m") . '.zip' , 'r');
-		Storage::put("sirg3/puco/PUCO_" . date("Y-m") . ".zip" , $zh);
-		$this->actualizarPuco($password , $this->getBeneficiarios(date('Ym')));
-		$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
-		*/
+		$this->generarZipACE();		
 	}
 
 	/**
