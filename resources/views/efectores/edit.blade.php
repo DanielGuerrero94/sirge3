@@ -726,7 +726,7 @@ $(document).ready(function() {
 
 	function checkCompromiso(integrante , compromiso){
 		if (integrante == 'N' || compromiso == 'N'){
-			$('#compromiso').val('N').attr('readonly' , 'readonly');
+			$('#compromiso').val('N').attr('disabled' , 'disabled');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
 		}
@@ -744,11 +744,11 @@ $(document).ready(function() {
 	$('#integrante').change(function(){
 		var estado = $(this).val();
 		if (estado == 'N'){
-			$('#compromiso').val('N').attr('readonly' , 'readonly');
+			$('#compromiso').val('N').attr('disabled' , 'disabled');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
 		} else {
-			$('#compromiso').val('').removeAttr('readonly');
+			$('#compromiso').val('').removeAttr('disabled');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').removeAttr('disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').removeAttr('disabled');
 		}
@@ -882,6 +882,7 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler : function(form){
+			$('#compromiso').removeAttr('disabled');
 			$.ajax({
 				method : 'post',
 				url : 'efectores-modificacion',
