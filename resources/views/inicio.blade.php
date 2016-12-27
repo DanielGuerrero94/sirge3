@@ -243,7 +243,7 @@ $(document).ready(function(){
     }
 
     function newMessages(){
-        setInterval(function(){ getMessages(); getNotifications(); } , 10000);
+        setInterval(function(){ getMessages(); getNotifications(); } , 50000);
     }
 
     getMessages();
