@@ -11,7 +11,10 @@ use SimpleXMLElement;
 use App\Models\Beneficiario;
 use App\Models\InscriptosPadronSisa;
 use App\Models\ErrorPadronSisa;
-
+use Exception;
+use DB;
+use Schema;
+use App\Models\Excepciones;
 
 class WebServicesController extends Controller
 {
@@ -139,29 +142,18 @@ class WebServicesController extends Controller
     {
         
         if(!InscriptosPadronSisa::find($nrdoc)){
-            
-            //$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc=$nrodoc&usuario=fnunez&clave=fernandonunez';
 
             $url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';                    
-
+                        
             try {
+                //throw new Exception("Error Processing Request", 1);                
                 $response = $client->get($url);                
             } catch (Exception $e) {
-                if($e->getCode() == 500){
-                    return var_dump($nrodoc);
-                }
-                else{
-                    return $e->getMessage();   
-                }
-                
-            }        
-            /*echo $response->getStatusCode();
+                return json_encode(array('error' => 'SI', 'mensaje' => 'Error Code '. $e->getCode() .': ' . $e->getMessage()));                                   
+            }    
 
-            echo '</br></br>';*/
-
-            $datos = get_object_vars(new SimpleXMLElement($response->getBody()));
-
-            return json_encode($datos);        
+                $datos = get_object_vars(new SimpleXMLElement($response->getBody()));                
+            return json_encode($datos);             
         }
         else{
             return null;
@@ -206,51 +198,132 @@ class WebServicesController extends Controller
     public function cruzarBeneficiariosConSiisa(){
 
         $ch = curl_init();      
-
         set_time_limit(0);
         curl_setopt($ch, CURLOPT_TIMEOUT,30000);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-
         curl_close($ch);
+
+        $start = microtime(true);
 
         $client = $this->create();
 
-        $documentos = Beneficiario::leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
-                                  ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')          
+        $cantidad = 1500;
+        $periodo = intval(date('Ym')) - 2;
+
+        DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");
+
+        $documentos = Beneficiario::join('beneficiarios.geografico as g' , 'beneficiarios.beneficiarios.clave_beneficiario' , '=' , 'g.clave_beneficiario')
+                                  ->join('beneficiarios.periodos as p', function($join) use ($periodo)
+                                  {
+                                       $join->on('beneficiarios.beneficiarios.clave_beneficiario', '=',  'p.clave_beneficiario');
+                                       $join->where('p.periodo','=', $periodo);
+                                  })                        
+                                  ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
+                                  ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
+                                  ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')       
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
-                                  //->where('numero_documento','22584419')
+                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
-                                  ->where(function($query) {                                        
-                                        return $query->whereNull('e.numero_documento')
-                                            ->orWhere('error', '!=', 'REGISTRO_NO_ENCONTRADO');
-                                    })                                  
-                                  ->take(30000)
-                                  ->lists('beneficiarios.beneficiarios.numero_documento');                 
+                                  ->whereNull('t.numero_documento')                                  
+                                  ->whereNull('e.numero_documento')                                                     
+                                  ->take($cantidad)                                  
+                                  ->select('beneficiarios.beneficiarios.numero_documento')                                  
+                                  ->get()
+                                  ->toArray();                                    
+        
+        try {
+            DB::table("siisa.temporal_migracion_siisa")->insert($documentos);
+        } catch (Exception $e) {
+            $excepcion = new Excepciones();
+            $excepcion->clase = (string) get_class();
+            $excepcion->metodo = (string) __FUNCTION__;
+            $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+            $excepcion->save();
+            unset($excepcion);
+        }                                        
 
-        foreach ($documentos as $key => $documento){
-            $datos_benef = $this->cruceSiisaXMLRequest($documento, $client);
-            if($datos_benef){
-                $data = json_decode($datos_benef);
-                if ($data->resultado == 'OK') {
-                    $resultado = $this->guardarDatos($data);
-                    if($resultado != TRUE){
-                        echo $resultado;
-                    }                        
+        foreach ($documentos as $documento){                    
+            $datos_benef = $this->cruceSiisaXMLRequest($documento['numero_documento'], $client);                        
+            if($datos_benef && $datos_benef <> '{}'){                                                             
+                $data = (array) json_decode($datos_benef);                            
+                $data = (object) $data;                                                            
+                if(isset($data->resultado)){                    
+                    if ($data->resultado == 'OK') {              
+                        $resultado[] = $this->guardarDatos($data);                       
+                        if (sizeof($resultado) % 2000 == 0){
+                            try {
+                                InscriptosPadronSisa::insert($resultado);    
+                            } catch (Exception $e) {
+                                $excepcion = new Excepciones();
+                                $excepcion->clase = (string) get_class();
+                                $excepcion->metodo = (string) __FUNCTION__;
+                                $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+                                $excepcion->save();
+                                unset($excepcion);
+                            }            
+                            unset($resultado);
+                            $resultado = [];
+                        } 
+                    }
+                    else{                        
+                        $devolucion = $this->guardarError($data, $documento['numero_documento']);
+                        if($devolucion){
+                            $error[] = $devolucion;    
+                        }
+                        unset($devolucion);                        
+                    }    
                 }
                 else{
-                    try {                        
-                        $this->guardarError($data, $documento);
-                    } catch (Exception $e) {
-                        echo $e->getCode(); 
+                    $devolucion = $this->guardarError($data, $documento['numero_documento']);
+                    if($devolucion){
+                        $error[] = $devolucion;    
                     }
-                }    
-            }  
+                    unset($devolucion);
+                }  
+            }
             unset($datos_benef);
             unset($data);                      
-        }
+        }        
+        if (isset($resultado) ? sizeof($resultado) : FALSE){
+            try {                
+                InscriptosPadronSisa::insert($resultado);
+            } catch (Exception $e) {                
+                $excepcion = new Excepciones();
+                $excepcion->clase = (string) get_class();
+                $excepcion->metodo = (string) __FUNCTION__;
+                $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+                $excepcion->save();
+                unset($excepcion);
+            }            
+            unset($resultado);
+        }        
+        
+        if (isset($error) ? sizeof($error) : FALSE){
+            try {
+                ErrorPadronSisa::insert($error);
+            } catch (Exception $e) {
+                $excepcion = new Excepciones();
+                $excepcion->clase = (string) get_class();
+                $excepcion->metodo = (string) __FUNCTION__;
+                $excepcion->error = json_encode(array("codigo" => $e->getCode(),"mensaje" => $e->getMessage()));
+                $excepcion->save();
+                unset($excepcion);
+            }            
+            unset($error);
+        }                        
         unset($documento);
-        echo "Los beneficiarios se han insertado correctamente";
+        unset($documentos);
+
+        $end = microtime(true) - $start;
+
+        if(DB::table('siisa.temporal_migracion_siisa')->count() <= $cantidad){
+            Schema::dropIfExists('siisa.temporal_migracion_siisa');
+        }
+
+        DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo, cantidad) VALUES (now(), ?, ?)", [$end, $cantidad]);
+
+        echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end;
     }
 
      /**
@@ -260,39 +333,37 @@ class WebServicesController extends Controller
      * @return json_encode($datos)
      */
     public function guardarDatos($datos){
+
+        //die(var_dump($datos));
                 
-        $inscripto = new InscriptosPadronSisa();
-        $inscripto->id = $this->convertirEnTexto($datos->id);                
-        $inscripto->codigosisa = $this->convertirEnTexto($datos->codigoSISA);
-        $inscripto->identificadorenaper = $this->convertirEnTexto($datos->identificadoRenaper);
-        $inscripto->padronsisa = $this->convertirEnTexto($datos->PadronSISA);
-        $inscripto->tipodocumento = $this->convertirEnTexto($datos->tipoDocumento);
-        $inscripto->nrodocumento = $this->convertirEnTexto($datos->nroDocumento);
-        $inscripto->apellido = $this->convertirEnTexto($datos->apellido);
-        $inscripto->nombre = $this->convertirEnTexto($datos->nombre);
-        $inscripto->sexo = $this->convertirEnTexto($datos->sexo);
-        $inscripto->fechanacimiento = $this->convertirEnTexto($datos->fechaNacimiento);
-        $inscripto->estadocivil = $this->convertirEnTexto($datos->estadoCivil);
-        $inscripto->provincia = $this->convertirEnTexto($datos->provincia);
-        $inscripto->departamento = $this->convertirEnTexto($datos->departamento);
-        $inscripto->localidad = $this->convertirEnTexto($datos->localidad);
-        $inscripto->domicilio = $this->convertirEnTexto($datos->domicilio);
-        $inscripto->pisodpto = $this->convertirEnTexto($datos->pisoDpto);
-        $inscripto->codigopostal = $this->convertirEnTexto($datos->codigoPostal);
-        $inscripto->paisnacimiento = $this->convertirEnTexto($datos->paisNacimiento);
-        $inscripto->provincianacimiento = $this->convertirEnTexto($datos->provinciaNacimiento);
-        $inscripto->localidadnacimiento = $this->convertirEnTexto($datos->localidadNacimiento);
-        $inscripto->nacionalidad = $this->convertirEnTexto($datos->nacionalidad);
-        $inscripto->fallecido = $this->convertirEnTexto($datos->fallecido);
-        $inscripto->fechafallecido = $this->convertirEnTexto($datos->fechaFallecido);
-        $inscripto->donante = $this->convertirEnTexto($datos->donante);
-        try {
-            $inscripto->save();
-            unset($inscripto);
-            return TRUE;
-        } catch (QueryException $e) {
-            return json_encode($e);
-        }                        
+        //$inscripto = new InscriptosPadronSisa();
+        $inscripto['id'] = $this->convertirEnTexto($datos->id);  
+        $inscripto['codigosisa'] = $this->convertirEnTexto($datos->codigoSISA);
+        $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadoRenaper);
+        $inscripto['padronsisa'] = $this->convertirEnTexto($datos->PadronSISA);
+        $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipoDocumento);
+        $inscripto['nrodocumento'] = $this->convertirEnTexto($datos->nroDocumento);
+        $inscripto['apellido'] = $this->convertirEnTexto($datos->apellido);
+        $inscripto['nombre'] = $this->convertirEnTexto($datos->nombre);
+        $inscripto['sexo'] = $this->convertirEnTexto($datos->sexo);
+        $inscripto['fechanacimiento'] = $this->convertirEnTexto($datos->fechaNacimiento);
+        $inscripto['estadocivil'] = $this->convertirEnTexto($datos->estadoCivil);
+        $inscripto['provincia'] = $this->convertirEnTexto($datos->provincia);
+        $inscripto['departamento'] = $this->convertirEnTexto($datos->departamento);
+        $inscripto['localidad'] = $this->convertirEnTexto($datos->localidad);
+        $inscripto['domicilio'] = $this->convertirEnTexto($datos->domicilio);
+        $inscripto['pisodpto'] = $this->convertirEnTexto($datos->pisoDpto);
+        $inscripto['codigopostal'] = $this->convertirEnTexto($datos->codigoPostal);
+        $inscripto['paisnacimiento'] = $this->convertirEnTexto($datos->paisNacimiento);
+        $inscripto['provincianacimiento'] = $this->convertirEnTexto($datos->provinciaNacimiento);
+        $inscripto['localidadnacimiento'] = $this->convertirEnTexto($datos->localidadNacimiento);
+        $inscripto['nacionalidad'] = $this->convertirEnTexto($datos->nacionalidad);
+        $inscripto['fallecido'] = $this->convertirEnTexto($datos->fallecido);
+        $inscripto['fechafallecido'] = $this->convertirEnTexto($datos->fechaFallecido);
+        $inscripto['donante'] = $this->convertirEnTexto($datos->donante);
+        $inscripto['created_at'] = date('Y-m-d H:i:s');
+        $inscripto['updated_at'] = date('Y-m-d H:i:s');
+        return $inscripto;
     }
 
      /**
@@ -301,22 +372,38 @@ class WebServicesController extends Controller
      * @param  object $datos
      * @return bool
      */
-    public function guardarError($datos, $documento){
-            
-        if($noEncontrado = ErrorPadronSisa::find($documento)){
-            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);    
+    public function guardarError($datos, $documento){             
+        
+        $devolver = array();
+        $noEncontrado = ErrorPadronSisa::find($documento);
+        
+        if($noEncontrado){                
+            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);                   
+            try {
+                $noEncontrado->save();
+                unset($noEncontrado);
+                return FALSE;
+            } catch (QueryException $e) {
+                echo json_encode($e);
+            }                        
         }
-        else{
-            $noEncontrado = new ErrorPadronSisa();
-            $noEncontrado->numero_documento = $documento;                
-            $noEncontrado->error = $this->convertirEnTexto($datos->resultado);            
-        }            
-        try {
-            $noEncontrado->save();
-            unset($noEncontrado);
-            return TRUE;
-        } catch (QueryException $e) {
-            return json_encode($e);
-        }                        
+        else{            
+            //$noEncontrado = new ErrorPadronSisa();
+            $devolver['numero_documento'] = $documento;                
+            $devolver['error'] = isset($datos->error) ? $datos->mensaje : $this->convertirEnTexto($datos->resultado);
+            $devolver['created_at'] = date('Y-m-d H:i:s');
+            $devolver['updated_at'] = date('Y-m-d H:i:s');
+            return $devolver;            
+        }                    
+    }
+
+    /**
+     * Borra la tabla temporal
+     *
+     * 
+     * 
+     */
+    public function borrarTablaTemporal(){             
+        Schema::dropIfExists('siisa.temporal_migracion_siisa');        
     }
 }
