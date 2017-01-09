@@ -725,11 +725,18 @@ $(document).ready(function() {
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
 
 	function checkCompromiso(integrante , compromiso){
-		if (integrante == 'N' || compromiso == 'N'){
+		if(integrante == 'S'){
+			if(compromiso == 'N'){
+				$('#compromiso').removeAttr('disabled');
+				$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
+				$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' ,'disabled');
+			}
+		}
+		else if(integrante == 'N' || compromiso == 'N'){
 			$('#compromiso').val('N').attr('disabled' , 'disabled');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
-		}
+		}		
 	}
 
 	function checkConvenio(integrante , compromiso , convenio){
