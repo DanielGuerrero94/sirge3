@@ -779,6 +779,7 @@ class CeiController extends Controller
 
 					$cantidad_prestaciones = 0;
 					$coincidence = FALSE;
+					$existe = FALSE;
 					foreach ($calculo->numerador->prestaciones as $prestacion){
 
 						// return json_encode($calculo);
@@ -790,21 +791,43 @@ class CeiController extends Controller
 						$fechas['max_prestacion'] = $dt->format('Y-m-d');						
 
 						if(is_array($prestacion->codigos)){
-							$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+							if(isset($prestacion->cantidad)){
+								$cantidad = Prestacion::where('clave_beneficiario' , $beneficiario)
 									  ->whereIn('codigo_prestacion' , $prestacion->codigos)
 									  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
-									  ->first();
+									  ->count();
+								if($cantidad >= $prestacion->cantidad){
+									$existe = TRUE;
+								}
+							}
+							else{
+								$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+									  ->whereIn('codigo_prestacion' , $prestacion->codigos)
+									  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+									  ->first();							
+							}							
 						}
 						else{
-							$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
+							if(isset($prestacion->cantidad)){
+								$cantidad = Prestacion::where('clave_beneficiario' , $beneficiario)
+									  ->where('codigo_prestacion' , $prestacion->codigos)
+									  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
+									  ->count();
+								if($cantidad >= $prestacion->cantidad){
+									$existe = TRUE;
+								}
+							}
+							else{
+								$existe = Prestacion::where('clave_beneficiario' , $beneficiario)
 									  ->where('codigo_prestacion' , $prestacion->codigos)
 									  ->whereBetween('fecha_prestacion' , [$fechas['min_prestacion'] , $fechas['max_prestacion']])
 									  ->first();						
+							}							
 						}					
 										
 						
 						$codigos = is_array($prestacion->codigos) ? implode ('_' , $prestacion->codigos) : $prestacion->codigos;
-												
+																								
 						if($existe){
 			    				$super_objeto['prestaciones']['codigos'][$codigos] ++;
 			    				$super_objeto['beneficiarios'][$beneficiario][] = $codigos;
