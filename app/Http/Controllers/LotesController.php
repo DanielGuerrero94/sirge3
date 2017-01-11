@@ -74,8 +74,11 @@ class LotesController extends Controller
 
 		return Datatables::of($lotes)
 			->addColumn('estado_css' , function($lote){
-				return '<span class="label label-' . $lote->estado->css . '">' . $lote->estado->descripcion . '</span>';
+				return '<span class="label label-' . (($lote->id_estado == 1 && $lote->registros_in == 0 && $lote->registros_out == 0 && $lote->fin == '31/12/1969') ? 'primary' . '">' . 'PROCESANDO' : $lote->estado->css . '">' . $lote->estado->descripcion) . '</span>';
 			})
+			->setRowClass(function($lote){
+                return ($lote->id_estado == 1 && $lote->registros_in == 0 && $lote->registros_out == 0 && $lote->fin == '31/12/1969') ? 'info' : '';
+            })
 			->addColumn('action' , function($lote){
 				return '<button lote="'. $lote->lote .'" class="view-lote btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver lote</button>';
 			})
@@ -108,7 +111,7 @@ class LotesController extends Controller
 			$minutos_de_procesamiento = round((float) ($lote->registros_out / $coef_rendimiento) / 60);
 			$minutos_faltantes = 60 - date("i") + ( $minutos_de_procesamiento == 0 ? 1 : $minutos_de_procesamiento );			
 		}				
-		
+
 		$data = [
 			'page_title' => 'Detalle lote ' . $lote->lote,
 			'descarga_disponible' => $descarga_disponible,
