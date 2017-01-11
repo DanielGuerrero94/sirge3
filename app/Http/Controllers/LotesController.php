@@ -80,7 +80,7 @@ class LotesController extends Controller
                 return ($lote->id_estado == 1 && $lote->registros_in == 0 && $lote->registros_out == 0 && $lote->fin == '31/12/1969') ? 'info' : '';
             })
 			->addColumn('action' , function($lote){
-				return '<button lote="'. $lote->lote .'" class="view-lote btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver lote</button>';
+				return '<button lote="'. $lote->lote .'" class="view-lote btn btn-info btn-xs"'. (($lote->id_estado == 1 && $lote->registros_in == 0 && $lote->registros_out == 0 && $lote->fin == '31/12/1969') ? 'disabled' : '') . '><i class="fa fa-pencil-square-o"></i> Ver lote</button>';
 			})
 			->make(true);
 	}
