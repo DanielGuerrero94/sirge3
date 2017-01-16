@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Lote;
 use App\Models\Rechazo;
+use App\Models\RechazoAlternativo;
 use App\Models\Usuario;
 use App\Models\AccesoWS;
 use App\Models\GenerarRechazoLote;
@@ -117,7 +118,8 @@ class RechazosController extends Controller
 
     $this->cargarComienzoExcelRechazo($lote, $padron->registros_out);
 
-      $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)->get();
+      $rechazos = Rechazo::select('registro','motivos')->where('lote',$lote)
+      ->take(15)->get();
 
       $id_padron = $padron->id_padron;
 
@@ -125,11 +127,11 @@ class RechazosController extends Controller
 
       Excel::create($lote , function ($e) use ($data, $padron){
         $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
+          $s->setHeight(1, 20);
           $s->setColumnFormat([
               'B' => '0',
-              'H' => '@'
-            ]); 
-          $s->setHeight(1, 20);          
+              'H' => '\PHPExcel_Style_NumberFormat::FORMAT_TEXT'
+            ]);          
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
@@ -174,11 +176,11 @@ class RechazosController extends Controller
 
       Excel::create($lote , function ($e) use ($data, $padron){
         $e->sheet('Rechazos_SUMAR' , function ($s) use ($data, $padron){
+          $s->setHeight(1, 20);
           $s->setColumnFormat([
               'B' => '0',
               'H' => '@'
             ]);
-          $s->setHeight(1, 20);          
           $s->loadView('padrones.excel-tabla.'.$padron->id_padron , $data);
         });
       })      
@@ -278,20 +280,30 @@ class RechazosController extends Controller
     }            
 
     /**
-     * Elimina todos los txt de lotes rechazados mayores a 1 mes de antiguedad.
+     * Convierte los rechazos de los lotes en un único registro json.
      * 
      * @return null
      */
-    protected function eliminarArchivosRechazadosAntiguos(){
+    protected function convertirEnJsonDeJsons(){
          
-        $lotes_a_eliminar = Lote::where(DB::raw(' fin + interval \'30 days\' '),'<',date('Y-m-d'))
-          ->where('estado',4)
-          ->lists('lote');
+        
+        $lotes = Rechazo::whereBetween('lote',[6400,6500])
+                        ->groupBy('lote')->get(); 
 
-        foreach ($lotes_a_eliminar as $key => $lote) {
-          /**/
+
+        $lotes_a_convertir = Rechazo::where('lote',6962)->take(15)->get(); 
+        
+        $json_de_jsons = array();
+
+        foreach ($lotes_a_convertir as $rechazo) { 
+                $json_de_jsons[] = array('registro' => (array) json_decode($rechazo->registro), 'motivos' => (array) json_decode($rechazo->motivos));
         }
 
-        
+        $insert_rechazo = new RechazoAlternativo();
+        $insert_rechazo->lote = 6962;
+        $insert_rechazo->registro = json_encode($json_de_jsons);        
+        $insert_rechazo->save();
+
+        echo '<pre>' . json_encode($json_de_jsons, JSON_PRETTY_PRINT) . '</pre>';            
     }
 }
