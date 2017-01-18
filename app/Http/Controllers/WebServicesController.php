@@ -207,7 +207,7 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 1500;
+        $cantidad = 100;
         $periodo = intval(date('Ym')) - 2;
 
         DB::statement("CREATE TABLE IF NOT EXISTS siisa.temporal_migracion_siisa(numero_documento character varying(14) PRIMARY KEY);");

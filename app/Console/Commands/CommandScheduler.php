@@ -51,6 +51,7 @@ class CommandScheduler extends Command
         $schedule->save();*/
         //RechazosController::generarRechazosLote();
         app('App\Http\Controllers\RechazosController')->generarRechazosLotesNuevos();
+        app('App\Http\Controllers\WebServicesController')->cruzarBeneficiariosConSiisa();
         //app('App\Http\Controllers\PrestacionesController')->corregirDatosReportables();
     }
 }
