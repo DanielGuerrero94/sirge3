@@ -541,7 +541,7 @@ class CeiController extends Controller
 
     	$detalle = Detalle::findOrFail($linea_cuidado);
     	$indicador = Indicador::where('indicador' , $linea_cuidado)->where('tipo' , 1)->orderBy('tipo' , 'asc')->firstOrFail();
-    	$provincias = Provincia::where('id_provincia','=','09')->orderBy('id_provincia' , 'asc')->get();
+    	$provincias = Provincia::where('id_provincia','!=','01')->orderBy('id_provincia' , 'asc')->get();
     	$calculo = Calculo::findOrFail($indicador->id);
     	$calculo_inicial = Calculo::findOrFail($indicador->id + 1);
 
@@ -670,6 +670,7 @@ class CeiController extends Controller
 			unset($obj_inicial);
 			unset($coincidence);
 			unset($beneficiario);
+			unset($provincia);
     	}
     	unset($provincias);
     	unset($provincia);
