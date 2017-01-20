@@ -192,7 +192,7 @@ class PucoController extends Controller
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
 		
-		return var_dump(file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt', $puco));
+		file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt', $puco);
 		unset($puco);
 		//unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
