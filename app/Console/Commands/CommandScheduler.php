@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use DB;
+use Auth;
 use App\Models\Scheduler;
+use App\Models\Subida;
 use Illuminate\Console\Command;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +20,7 @@ class CommandScheduler extends Command
     //protected $signature = 'scheduler:execute {periodo}';
     protected $signature = 'scheduler:execute';
 
-    /**
+    /**2
      * The console command description.
      *
      * @var string
@@ -41,17 +43,41 @@ class CommandScheduler extends Command
      * @return mixed
      */
     public function handle()
-    {
-        /*$schedule = new Scheduler;
-        
-        $schedule->contexto = 'Probando el Scheduler';
-        $schedule->estado = 0;
-        $schedule->periodo = $this->argument('periodo');        
-
-        $schedule->save();*/
+    {        
         //RechazosController::generarRechazosLote();
-        app('App\Http\Controllers\RechazosController')->generarRechazosLotesNuevos();
-        app('App\Http\Controllers\WebServicesController')->cruzarBeneficiariosConSiisa();
-        //app('App\Http\Controllers\PrestacionesController')->corregirDatosReportables();
+        $subida = Subida::where('id_estado',1)->orderBy('fecha_subida')->first();
+        $subida->id_estado = 5;
+        $subida->save();
+        if(!Auth::check()){
+            Auth::loginUsingId($subida->id_usuario, true);
+        }
+        try {
+            switch ($subida->id_padron) {
+                case 1:
+                    app('App\Http\Controllers\PrestacionesController')->procesarArchivo($subida->id_subida);
+                    break;
+                case 2:
+                    app('App\Http\Controllers\FondosController')->procesarArchivo($subida->id_subida);
+                    break;
+                case 3:
+                    app('App\Http\Controllers\ComprobantesController')->procesarArchivo($subida->id_subida);
+                    break;
+                case 4:
+                    app('App\Http\Controllers\OspController')->procesarArchivo($subida->id_subida);
+                    break;
+                case 5:
+                    app('App\Http\Controllers\ProfeController')->procesarArchivo($subida->id_subida);
+                    break;
+                case 6:
+                    app('App\Http\Controllers\SuperController')->procesarArchivo($subida->id_subida);
+                    break;
+            }            
+            Auth::logout();
+            Subida::where('id_subida',$subida->id_subida)->update(['id_estado' => 3]);                    
+        } catch (Exception $e) {
+            return json_encode($e->getMessage());
+                        
+        }        
+        
     }
 }

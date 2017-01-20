@@ -110,7 +110,7 @@ class ProfeController extends Controller
 	 */
 	protected function actualizaSubida($subida) {
 		$s = Subida::findOrFail($subida);
-		$s->id_estado = 2;
+		$s->id_estado = 3;
 		return $s->save();
 	}
 
@@ -122,7 +122,7 @@ class ProfeController extends Controller
 	 */
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
-		return file('../storage/uploads/profe/' . $info->nombre_actual);
+		return file('/var/www/html/sirge3/storage/uploads/profe/' . $info->nombre_actual);
 	}
 
 	/**
