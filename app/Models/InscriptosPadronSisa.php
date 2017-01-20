@@ -12,7 +12,7 @@ class InscriptosPadronSisa extends Model
 	 * @var string
 	 */
 	protected $table = 'siisa.inscriptos_padron';
-	
+
 	/**
 	 * Primary key asociated with the table.
 	 *

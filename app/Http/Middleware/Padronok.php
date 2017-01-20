@@ -38,6 +38,7 @@ class Padronok
     public function handle($request, Closure $next)
     {        
         
+
         if(intval(date('d')) <= ExcepcionDDJJ::first()->dia){
             $dt = new \DateTime();
             $dt->modify('-1 month');

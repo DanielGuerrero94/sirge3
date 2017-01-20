@@ -62,7 +62,7 @@
 	</tr>
 	@foreach($rechazos as $rechazo)
 	<tr>		
-		<?php $registros = json_decode($rechazo->registro); ?>
+		<?php $registros = json_decode($rechazo->registro); if(isset($registros->clave_beneficiario)){ $registros->clave_beneficiario = '"' . $registros->clave_beneficiario . '"';}?>
 		<td>{{ $registros->operacion  or '' }}</td>
 		<td>{{ $registros->estado  or '' }}</td>
 		<td>{{ $registros->numero_comprobante  or '' }}</td>
