@@ -73,7 +73,7 @@ class CommandScheduler extends Command
                     break;
             }            
             Auth::logout();
-            Subida::where('id_subida',$subida->id_subida)->update(['id_estado' => 1]);                    
+            Subida::where('id_subida',$subida->id_subida)->update(['id_estado' => 3]);                    
         } catch (Exception $e) {
             return json_encode($e->getMessage());
                         
