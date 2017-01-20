@@ -187,20 +187,20 @@ class PucoController extends Controller
 		
 		$password = $this->password();
 
-		DB::statement("	SELECT public.copiar_puco_en_servidor(); ");
+		//DB::statement("	SELECT public.copiar_puco_en_servidor(); ");
 		
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
 		
-		file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt', $puco);
+		return var_dump(file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt', $puco));
 		unset($puco);
-		unlink('/var/www/html/sirge3/storage/swap/puco.txt');
+		//unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
 		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" . date("Y-m") . ".zip PUCO_" . date('Y-m') . ".txt";
 		exec($sys);		
 		
 		$this->actualizarPuco($password , $this->getBeneficiarios(date('Ym')));
-		$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
+		//$this->notificar($this->getBeneficiarios(date('Ym')) , $password);
 		
 		unlink('/var/www/html/sirge3/storage/swap/PUCO_' . date("Y-m") . '.txt');
 
