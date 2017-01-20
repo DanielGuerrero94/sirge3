@@ -203,9 +203,10 @@
         			method : 'post',
 					url : 'nuevo-lote-' + data.result.nombre_padron + '/' + data.result.id_subida,					
 					success : function(data){					
-						if(data){							
-							$('#modal-text').html(data.lote);
-					        $('#modal-text').html("El número de lote asignado es " + data.lote + ". Presione CERRAR para ser redirigido a la sección Administracion De Lotes.");
+						if(data){
+							console.log(data);							
+							$('#modal-text').html(data);
+					        $('#modal-text').html("Procesando el lote <b>" + data + "</b>. Presione CERRAR para ser redirigido a la sección Administracion De Lotes. El procesamiento finalizará cuando el estado sea PENDIENTE. Puede continuar utilizando el Sirge.");
 					        $('.modal').modal();
 					        $('.modal').on('hidden.bs.modal', function (e) {				            
 								$.get('listar-lotes/{{ $id_padron }}' , function(data){
