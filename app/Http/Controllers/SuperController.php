@@ -210,9 +210,9 @@ class SuperController extends Controller
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-
-		$lote = $this->nuevoLote($id);
+		
 		$fh = $this->abrirArchivo($id);
+		$lote = Lote::where('id_subida',$id)->first();	
 		$bulk = [];
 		$nro_linea;
 		

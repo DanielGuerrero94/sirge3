@@ -141,7 +141,7 @@ class ComprobantesController extends AbstractPadronesController
 	 */
 	public function procesarArchivo($id){
 
-		$lote = $this->nuevoLote($id);
+		$lote = Lote::where('id_subida',$id)->first();	
 		$fh = $this->abrirArchivo($id);
 		
 		if (!$fh){

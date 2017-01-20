@@ -197,15 +197,32 @@
         },
         done: function (e, data) {        	
         	if(data.result.success == 'true'){
-        		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');        		
+        		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
 
-        		$('#modal-text').html("En instantes comenzará el procesamiento. Podrá verificar su estado en la sección Administracion De Lotes.");
-		        $('.modal').modal();
-		        $('.modal').on('hidden.bs.modal', function (e) {				            
-					$.get('listar-lotes/{{ $id_padron }}' , function(data){
-						$('.content-wrapper').html(data);
-					})												
-		        });				             
+        		$.ajax({
+        			method : 'post',
+					url : 'nuevo-lote-' + data.result.nombre_padron + '/' + data.result.id_subida,					
+					success : function(data){					
+						if(data){							
+							$('#modal-text').html(data.lote);
+					        $('#modal-text').html("El número de lote asignado es " + data.lote + ". Presione CERRAR para ser redirigido a la sección Administracion De Lotes.");
+					        $('.modal').modal();
+					        $('.modal').on('hidden.bs.modal', function (e) {				            
+								$.get('listar-lotes/{{ $id_padron }}' , function(data){
+									$('.content-wrapper').html(data);
+								})												
+					        });					        
+					    }
+					    else{
+					    	$('#errores-form').html(data.errors);
+							$('#errores-div').show();
+					    }
+					},
+					error : function(data){
+						$('#errores-form').html('<li>No se pudo abrir el archivo</li>');
+						$('#errores-div').show();
+					}
+				});      		        				            
         	}
         	else if(data.result.success == 'false'){
         		$('#errores-form').html(data.result.errors);

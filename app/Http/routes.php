@@ -114,33 +114,39 @@ Route::get('diccionario-table/{id}' , 'DiccionariosController@getDatadicTabla');
  * PRESTACIONES 
  */
 Route::get('procesar-prestaciones/{archivo}' , 'PrestacionesController@procesarArchivo');
+Route::post('nuevo-lote-prestaciones/{id_subida}' , 'PrestacionesController@nuevoLote');
 
 /**
  * COMPROBANTES
  */
 Route::get('procesar-comprobantes/{archivo}' , 'ComprobantesController@procesarArchivo');
+Route::post('nuevo-lote-comprobantes/{id_subida}' , 'ComprobantesController@nuevoLote');
 
 /**
  * FONDOS
  */
 Route::get('procesar-fondos/{archivo}' , 'FondosController@procesarArchivo');
+Route::post('nuevo-lote-fondos/{id_subida}' , 'FondosController@nuevoLote');
 
 /**
  * OBRA SOCIAL PROVINCIAL
  */
 Route::get('procesar-osp/{archivo}' , 'OspController@procesarArchivo');
 Route::get('check-periodo/{codigo}' , 'OspController@checkPeriodo');
+Route::post('nuevo-lote-osp/{id_subida}' , 'OspController@nuevoLote');
 
 /**
  * PROGRAMA FEDERAL DE SALUD
  */
 Route::get('procesar-profe/{archivo}' , 'ProfeController@procesarArchivo');
+Route::post('nuevo-lote-profe/{id_subida}' , 'ProfeController@nuevoLote');
 
 /**
  * SUPERINTENDENCIA DE SERVICIOS DE SALUD
  */
 Route::get('procesar-sss/{archivo}' , 'SuperController@procesarArchivo');
 Route::get('check-sss/{archivo}' , 'SuperController@checkId');
+Route::post('nuevo-lote-super/{id_subida}' , 'SuperController@nuevoLote');
 
 /**
  * PUCO

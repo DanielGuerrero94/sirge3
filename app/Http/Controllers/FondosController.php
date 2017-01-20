@@ -162,8 +162,8 @@ class FondosController extends AbstractPadronesController
 	 */
 	public function procesarArchivo($id){
 
-		$lote = $this->nuevoLote($id);
 		$fh = $this->abrirArchivo($id);		
+		$lote = Lote::where('id_subida',$id)->first();	
 		
 		if (!$fh){			
 			return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);

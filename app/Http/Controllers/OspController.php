@@ -228,9 +228,9 @@ class OspController extends Controller
 	 */
 	public function procesarArchivo($id){
 
-		$bulk = [];		
-		$lote = $this->nuevoLote($id);
+		$bulk = [];				
 		$registros = $this->abrirArchivo($id);
+		$lote = Lote::where('id_subida',$id)->first();
 
 		foreach ($registros as $key => $registro) {
 			$linea = explode('||' , trim($registro , "\r\n"));
