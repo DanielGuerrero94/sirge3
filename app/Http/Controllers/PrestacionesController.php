@@ -344,7 +344,7 @@ class PrestacionesController extends AbstractPadronesController
 				return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
 			}
 
-			$lote = Lote::where('id_subida',$id)->first();						
+			$lote = Lote::where('id_subida',$id)->first()->lote;						
 			$nro_linea = 1;
 
 			fgets($fh);

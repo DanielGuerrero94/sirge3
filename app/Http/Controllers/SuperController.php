@@ -212,7 +212,7 @@ class SuperController extends Controller
 	public function procesarArchivo($id){
 		
 		$fh = $this->abrirArchivo($id);
-		$lote = Lote::where('id_subida',$id)->first();	
+		$lote = Lote::where('id_subida',$id)->first()->lote;	
 		$bulk = [];
 		$nro_linea;
 		

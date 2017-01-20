@@ -230,7 +230,7 @@ class OspController extends Controller
 
 		$bulk = [];				
 		$registros = $this->abrirArchivo($id);
-		$lote = Lote::where('id_subida',$id)->first();
+		$lote = Lote::where('id_subida',$id)->first()->lote;
 
 		foreach ($registros as $key => $registro) {
 			$linea = explode('||' , trim($registro , "\r\n"));
