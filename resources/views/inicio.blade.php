@@ -218,7 +218,7 @@ $(document).ready(function(){
                     m = m + subidas.length;                                        
                     var estado = 'FINALIZO SU PROCESAMIENTO SATISFACTORIAMENTE. Diríjase a adm. lotes para más detalles.';
                     for (i = 0; i < subidas.length; ++i) {
-                        if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2)){
+                        if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && in_array(subidas[i]['avisado'], [1,2])) ){
                             if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
                                 estado = 'COMENZO SU PROCESAMIENTO';
                             }
