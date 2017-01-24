@@ -71,8 +71,14 @@ class InboxController extends Controller{
 
         $subidas = Subida::join('sistema.lotes','sistema.subidas.id_subida','=','sistema.lotes.id_subida')
                         ->where('sistema.subidas.id_usuario',Auth::user()->id_usuario)
-                        ->whereIn('sistema.subidas.id_estado',[3,5])
-                        ->whereIn('avisado',[1,2])                        
+                        ->where(function($query) {                            
+                            return $query->where('sistema.subidas.id_estado', 3)
+                                ->whereIn('avisado', [1,2]);
+                        })
+                        ->orWhere(function($query) {                            
+                            return $query->where('sistema.subidas.id_estado', 5)
+                                ->where('avisado', 1);
+                        })                        
                         ->lists('sistema.subidas.id_subida');        
 
         if($subidas->count()){                    
