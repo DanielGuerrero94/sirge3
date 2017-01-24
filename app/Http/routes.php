@@ -46,6 +46,8 @@ Route::group(array('before' => 'auth'), function()
    Route::get('nuevos-mensajes' , 'InboxController@mensajesNoLeidos');
 });
 
+Route::post('avisos-leidos' , 'InboxController@avisosLeidos');
+
 
 /**
  * SOLICITUDES

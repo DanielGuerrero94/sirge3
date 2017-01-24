@@ -206,11 +206,36 @@ $(document).ready(function(){
             global : false,
             url : 'nuevos-mensajes',
             method : 'get',
+            dataType: 'json',
             success : function(data){
-                var m = data;
+
+                var m = data['mensajes'];
+                var m_no_leido = m;
+                var texto = '<ul>';
+
+                if(typeof data['subidas'] !== "undefined"){
+                    var subidas = data['subidas'];                    
+                    m = m + subidas.length;                                        
+                    var estado = 'ACEPTADO';
+                    for (i = 0; i < subidas.length; ++i) {
+                        if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2)){
+                            if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
+                                estado = 'EN PROCESAMIENTO';
+                            }
+                            texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> paso a estado ' + estado + '</li>';    
+                        }
+                        else{
+                            m = m - 1;
+                        }                        
+                    }                    
+                }
+                
                 if (m > 0) {
                     $('.new-messages').html(m);
-                    $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
+                    texto += '<li> Usted tiene ' + m_no_leido + ' conversaciones no leídas </li>';
+                    texto += '</ul>';
+                    $('.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu').css('width','380px');
+                    $('.new-messages-text').html(texto);
                     /*$.ajax({
                         method : 'get',
                         url : 'sonido-notificacion',                        
@@ -249,6 +274,24 @@ $(document).ready(function(){
     getMessages();
     getNotifications();
     newMessages();
+
+    $('.dropdown-toggle').on('click', function(){
+        var variables = '';
+        $('.new-messages-text .subidas').each(function(i){
+            variables += $(this).attr('subida') + ',';
+        });        
+
+        $.ajax({
+            method: 'post',            
+            url: 'avisos-leidos',
+            data: {subidas: variables},
+            success: function(data){
+                console.log(data); 
+            }, 
+            global: false,     // this makes sure ajaxStart is not triggered
+            dataType: 'json'            
+        });        
+    });
 
     $.extend( true, $.fn.dataTable.defaults, {
         "language": {
