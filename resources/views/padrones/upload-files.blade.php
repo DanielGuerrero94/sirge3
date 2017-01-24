@@ -206,7 +206,7 @@
 						if(data){
 							console.log(data);							
 							$('#modal-text').html(data);
-					        $('#modal-text').html("Procesando el lote <b>" + data + "</b>. Presione CERRAR para ser redirigido a la sección Administracion de Lotes. El procesamiento finalizará cuando pase del estado PROCESANDO a PENDIENTE. <br /><br />Puede continuar utilizando el SirgeWeb.");
+					        $('#modal-text').html("Procesando el lote <b>" + data + "</b>. Presione CERRAR para ser redirigido a la sección Administracion de Lotes. El procesamiento finalizará cuando pase del estado PROCESANDO a PENDIENTE. <br /><br />Puede continuar utilizando SIRGe Web.");
 					        $('.modal').modal();
 					        $('.modal').on('hidden.bs.modal', function (e) {				            
 								$.get('listar-lotes/{{ $id_padron }}' , function(data){
