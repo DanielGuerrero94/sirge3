@@ -216,13 +216,13 @@ $(document).ready(function(){
                 if(typeof data['subidas'] !== "undefined"){
                     var subidas = data['subidas'];                    
                     m = m + subidas.length;                                        
-                    var estado = 'ACEPTADO';
+                    var estado = 'FINALIZO SU PROCESAMIENTO SATISFACTORIAMENTE. Diríjase a adm. lotes para más detalles.';
                     for (i = 0; i < subidas.length; ++i) {
                         if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2)){
                             if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
-                                estado = 'EN PROCESAMIENTO';
+                                estado = 'COMENZO SU PROCESAMIENTO';
                             }
-                            texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> paso a estado ' + estado + '</li>';    
+                            texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> ' + estado + '</li>';    
                         }
                         else{
                             m = m - 1;
