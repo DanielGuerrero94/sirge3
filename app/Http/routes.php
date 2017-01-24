@@ -146,7 +146,7 @@ Route::post('nuevo-lote-profe/{id_subida}' , 'ProfeController@nuevoLote');
  */
 Route::get('procesar-sss/{archivo}' , 'SuperController@procesarArchivo');
 Route::get('check-sss/{archivo}' , 'SuperController@checkId');
-Route::post('nuevo-lote-super/{id_subida}' , 'SuperController@nuevoLote');
+Route::post('nuevo-lote-sss/{id_subida}' , 'SuperController@nuevoLote');
 
 /**
  * PUCO
