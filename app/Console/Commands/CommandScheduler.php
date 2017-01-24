@@ -43,8 +43,8 @@ class CommandScheduler extends Command
      * @return mixed
      */
     public function handle()
-    {        
-        //RechazosController::generarRechazosLote();
+    {                
+
         $subida = Subida::where('id_estado',1)->orderBy('fecha_subida')->first();
         $subida->id_estado = 5;
         $subida->save();
@@ -77,7 +77,7 @@ class CommandScheduler extends Command
         } catch (Exception $e) {
             return json_encode($e->getMessage());
                         
-        }        
+        }
         
     }
 }

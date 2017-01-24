@@ -366,4 +366,27 @@ class LotesController extends Controller
 
 		return 'Se ha enviado la DDJJ a su casilla de correo electónico. (' . Auth::user()->email . ')';
 	}
+
+	/**
+	 * Alerta al administrador las subidas que llevan más de 12 horas procesándose referenciadas por el lote.	 
+	 *
+	 * @return null
+	 */
+	public function alertSubidasMalProcesadas(){
+		$lotes = Subida::join('sistema.lotes','sistema.lotes.id_subida','=','sistema.subidas.id_subida')			    
+				->select('lote')
+				->where('sistema.subidas.id_estado',5)
+				->whereRaw("fecha_subida + interval '12 hours' > now()")				
+				->lists('lote');		
+
+		Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {
+	            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+	            $m->to('sirgeweb@gmail.com');
+              	$m->to('javier.minsky@gmail.com');
+              	$m->to('rodrigo.cadaval.sumar@gmail.com');
+	            $m->subject('ALERTA LOTES DEMORADOS');	            
+        });
+
+		return null;
+	}
 }
