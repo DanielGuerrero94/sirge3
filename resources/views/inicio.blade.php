@@ -202,70 +202,72 @@ $(document).ready(function(){
     });
 
     function getMessages(){
-        $.ajax({
-            global : false,
-            url : 'nuevos-mensajes',
-            method : 'get',
-            dataType: 'json',
-            success : function(data){
 
-                var m = data['mensajes'];
-                var m_no_leido = m;
-                var texto = '<ul>';
+        if(! $('.navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu').hasClass('open')){
 
-                if(typeof data['subidas'] !== "undefined"){
-                    var subidas = data['subidas'];                    
-                    m = m + subidas.length;                                        
-                    var estado = 'FINALIZO su procesamiento satisfactoriamente';
-                    for (i = 0; i < subidas.length; ++i) {
-                        if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2) ){
-                            if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
-                                estado = 'COMENZO su procesamiento';
+            console.log('Entro porque no está la clase open');
+
+            $.ajax({
+                global : false,
+                url : 'nuevos-mensajes',
+                method : 'get',
+                dataType: 'json',
+                success : function(data){
+
+                    var m = data['mensajes'];
+                    var m_no_leido = m;
+                    var texto = '<ul>';
+
+                    if(typeof data['subidas'] !== "undefined"){
+                        
+                        ion.sound.play("branch_break");
+                        
+                        var subidas = data['subidas'];                    
+                        m = m + subidas.length;                                        
+                        var estado = 'FINALIZO su procesamiento.';
+                        for (i = 0; i < subidas.length; ++i) {
+                            if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2) ){
+                                if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
+                                    estado = 'HA COMENZADO a procesarse.';
+                                }
+                                texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> ' + estado + '</li>';    
                             }
-                            texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> ' + estado + '</li>';    
+                            else{
+                                m = m - 1;
+                            }                        
                         }
-                        else{
-                            m = m - 1;
-                        }                        
+                        texto += '<li>Diríjase a adm. lotes para más detalles.</li><br />';                    
                     }
-                    texto += '<li>Diríjase a adm. lotes para más detalles.</li><br />';                    
+                    
+                    if (m > 0) {
+                        $('.new-messages').html(m);
+                        texto += '<li> Usted tiene ' + m_no_leido + ' conversaciones no leídas </li>';
+                        texto += '</ul>';
+                        $('.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu').css('width','380px');
+                        $('.new-messages-text').html(texto);                        
+                    } else {
+                        $('.new-messages').html('');
+                        $('.new-messages-text').html('Usted no tiene mensajes nuevos');
+                    }        
                 }
-                
-                if (m > 0) {
-                    $('.new-messages').html(m);
-                    texto += '<li> Usted tiene ' + m_no_leido + ' conversaciones no leídas </li>';
-                    texto += '</ul>';
-                    $('.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu').css('width','380px');
-                    $('.new-messages-text').html(texto);
-                    /*$.ajax({
-                        method : 'get',
-                        url : 'sonido-notificacion',                        
-                        success : function(data){
-                            if(data == 1){
-                                ion.sound.play("branch_break");
-                            }
-                        }                        
-                    });             */
-                } else {
-                    $('.new-messages').html('');
-                    $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-                }        
-            }
-        })
+            })
+        }
     }
 
     function getNotifications(){
 
-        $.ajax({
-                global : false,
-                method : 'get',
-                url : 'sonido-notificacion',                        
-                success : function(data){
-                    if(data == 1){
-                        ion.sound.play("water_droplet_3");
-                    }
-                }                        
-        });             
+        if(! $('.navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu').hasClass('open')){
+            $.ajax({
+                    global : false,
+                    method : 'get',
+                    url : 'sonido-notificacion',                        
+                    success : function(data){
+                        if(data == 1){
+                            ion.sound.play("water_droplet_3");
+                        }
+                    }                        
+            });     
+        }        
     }
 
     function newMessages(){
