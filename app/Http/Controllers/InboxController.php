@@ -191,7 +191,15 @@ class InboxController extends Controller{
 
         foreach ($subidas as $subida) {
             if($subida){
-                Subida::find($subida)->increment('avisado');    
+                $unaSubida = Subida::find($subida);
+                if($unaSubida->id_estado == 3 && $unaSubida->avisado == 1){
+                    $unaSubida->avisado = 3;
+                    $unaSubida->save();
+                }
+                else{
+                    $unaSubida->increment('avisado');        
+                }
+                
             }            
         }
         return null;        

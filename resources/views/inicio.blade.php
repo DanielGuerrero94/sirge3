@@ -216,7 +216,7 @@ $(document).ready(function(){
                 if(typeof data['subidas'] !== "undefined"){
                     var subidas = data['subidas'];                    
                     m = m + subidas.length;                                        
-                    var estado = 'FINALIZO SU PROCESAMIENTO SATISFACTORIAMENTE. Diríjase a adm. lotes para más detalles.';
+                    var estado = 'FINALIZO SU PROCESAMIENTO SATISFACTORIAMENTE';
                     for (i = 0; i < subidas.length; ++i) {
                         if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2) ){
                             if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
@@ -227,7 +227,8 @@ $(document).ready(function(){
                         else{
                             m = m - 1;
                         }                        
-                    }                    
+                    }
+                    texto += '<li>Diríjase a adm. lotes para más detalles.</li>';                    
                 }
                 
                 if (m > 0) {
