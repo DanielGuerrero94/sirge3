@@ -228,7 +228,7 @@ $(document).ready(function(){
                             m = m - 1;
                         }                        
                     }
-                    texto += '<li>Diríjase a adm. lotes para más detalles.</li>';                    
+                    texto += '<li>Diríjase a adm. lotes para más detalles.</li><br />';                    
                 }
                 
                 if (m > 0) {
