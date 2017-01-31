@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Bootstrap 3.3.2 -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}"  />
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"  />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"  />    
     <!-- Ionicons -->
     <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css"  />
     <!-- Fullcalendar -->
@@ -124,6 +124,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- AdminLTE App -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
+<!-- Moment JS -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
@@ -204,9 +206,7 @@ $(document).ready(function(){
     function getMessages(){
 
         if(! $('.navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu').hasClass('open')){
-
-            console.log('Entro porque no está la clase open');
-
+            
             $.ajax({
                 global : false,
                 url : 'nuevos-mensajes',
