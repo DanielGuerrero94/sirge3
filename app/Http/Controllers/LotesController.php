@@ -377,16 +377,18 @@ class LotesController extends Controller
 				->select('lote')
 				->where('sistema.subidas.id_estado',5)
 				->whereRaw("fecha_subida + interval '12 hours' > now()")				
-				->lists('lote');		
+				->lists('lote');
 
-		Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {
+		if(isset($lotes[0])){ 			
+			Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {
 	            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
 	            $m->to('sirgeweb@gmail.com');
               	$m->to('javier.minsky@gmail.com');
               	$m->to('rodrigo.cadaval.sumar@gmail.com');
 	            $m->subject('ALERTA LOTES DEMORADOS');	            
-        });
-
+        	});	
+		}			
+			
 		return null;
 	}
 }
