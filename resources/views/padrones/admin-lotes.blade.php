@@ -39,6 +39,7 @@
 			<div class="box-footer">
 				<div class="btn-group" role="group">
 					<button class="back btn btn-info">Atrás</button>
+					<button class="refresh btn btn-success">Refrescar</button>
 				</div>			
 			</div>
 		</div>
@@ -102,6 +103,11 @@
 				$('.content-wrapper').html(data);
 			});
 		});
+
+		$('.refresh').click(function(){
+			$('#lotes-table').DataTable().ajax.reload();
+		});
+
 
 
 	});
