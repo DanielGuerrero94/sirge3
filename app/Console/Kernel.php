@@ -36,8 +36,7 @@ class Kernel extends ConsoleKernel
         $schedule->call('App\Http\Controllers\PssController@generarTabla')->dailyAt('22:00');
         $schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->hourly();
         $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('49 19 31 * * *');
-
-        //LO QUE SE ESTA EJECUTANDO DESDE EL 48
+                
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:02');        
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:05');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:08');
@@ -48,8 +47,7 @@ class Kernel extends ConsoleKernel
         //BORRO LA TABLA DE TEMPORALES
         $schedule->call('App\Http\Controllers\WebServicesController@borrarTablaTemporal')->dailyAt('23:55');
         $schedule->call('App\Http\Controllers\WebServicesController@borrarTablaTemporal')->dailyAt('05:55');
-
-        //LO QUE SE EJECUTA EN MI LOCALHOST
+        
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('00:00');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('00:04');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('00:08');
@@ -62,9 +60,10 @@ class Kernel extends ConsoleKernel
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('00:40');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('00:51');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('00:59');
-        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:07');        
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:07');
 
-        //$schedule->command('scheduler:execute',[$periodo_a_automatizar])->everyMinute();
+        $schedule->command('scheduler:execute')->cron('* * * * * *');
+        $schedule->call('App\Http\Controllers\LotesController@alertSubidasdMalProcesadas')->dailyAt('21:00');
         
        /* ->when(function ($periodo_a_automatizar) {                                                
 

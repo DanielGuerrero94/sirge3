@@ -198,27 +198,21 @@
         done: function (e, data) {        	
         	if(data.result.success == 'true'){
         		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
-        		$('<p/>').html('Comienza el procesamiento en instantes. Puede demorar varios minutos.').appendTo('#files');	
 
         		$.ajax({
-					url : data.result.ruta_procesar + '/' + data.result.id_subida,
-					dataType: 'json',
+        			method : 'post',
+					url : 'nuevo-lote-' + data.result.nombre_padron + '/' + data.result.id_subida,					
 					success : function(data){					
-						if(data.success == 'true'){
-							var info = '';
-							$.each(data.data , function (index , value){
-								if(index != 'success'){
-									info += 'REGISTROS ' + index.toUpperCase() + ' : ' + value + '<br />';	
-								}							
-							});
-							$('body').removeClass("loading");
-							$('#modal-text').html(info);
+						if(data){
+							console.log(data);							
+							$('#modal-text').html(data);
+					        $('#modal-text').html("Procesando el lote <b>" + data + "</b>. Presione CERRAR para ser redirigido a la sección Administracion de Lotes. El procesamiento finalizará cuando pase del estado PROCESANDO a PENDIENTE. <br /><br />Puede continuar utilizando SIRGe Web.");
 					        $('.modal').modal();
 					        $('.modal').on('hidden.bs.modal', function (e) {				            
 								$.get('listar-lotes/{{ $id_padron }}' , function(data){
 									$('.content-wrapper').html(data);
-								})							
-					        });				        
+								})												
+					        });					        
 					    }
 					    else{
 					    	$('#errores-form').html(data.errors);
@@ -229,7 +223,7 @@
 						$('#errores-form').html('<li>No se pudo abrir el archivo</li>');
 						$('#errores-div').show();
 					}
-				});       
+				});      		        				            
         	}
         	else if(data.result.success == 'false'){
         		$('#errores-form').html(data.result.errors);

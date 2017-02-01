@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Conversacion;
 use App\Models\Mensaje;
+use App\Models\Subida;
 
 class InboxController extends Controller{
     
@@ -66,6 +67,24 @@ class InboxController extends Controller{
      * @return int
      */
     public function mensajesNoLeidos (){
+        $array_estado_lotes = [];            
+
+        $subidas = Subida::join('sistema.lotes','sistema.subidas.id_subida','=','sistema.lotes.id_subida')
+                        ->where('sistema.subidas.id_usuario',Auth::user()->id_usuario)
+                        ->where(function($query) {                            
+                            return $query->where('sistema.subidas.id_estado', 3)
+                                ->whereIn('avisado', [1,2]);
+                        })
+                        ->orWhere(function($query) {                            
+                            return $query->where('sistema.subidas.id_estado', 5)
+                                ->where('avisado', 1);
+                        })                        
+                        ->lists('sistema.subidas.id_subida');        
+
+        if($subidas->count()){                    
+            $array_estado_lotes['subidas'] = Subida::join('sistema.lotes','sistema.subidas.id_subida','=','sistema.lotes.id_subida')->whereIn('sistema.subidas.id_subida',$subidas)->select('sistema.subidas.id_estado','avisado','sistema.subidas.id_subida','lote')->get();                                    
+        }
+
     	$user = Auth::user()->id_usuario;
     	$mensajes = DB::select("
     		select count (*) as nuevos_mensajes
@@ -80,7 +99,10 @@ class InboxController extends Controller{
                     and m.id_usuario <> $user
                     and leido = 'N'
                 group by c.id ) a");
-    	return $mensajes[0]->nuevos_mensajes;
+
+        $array_estado_lotes['mensajes'] = $mensajes[0]->nuevos_mensajes;
+
+    	return  json_encode($array_estado_lotes);
     }
 
     /**
@@ -157,6 +179,30 @@ class InboxController extends Controller{
     public function updateMensajes($id){
         $user = Auth::user()->id_usuario;
         $mensajes = Mensaje::where('id_conversacion' , '=' , $id)->where('id_usuario' , '<>' , $user)->update(['leido' => 'S']);
+    }
+
+    /**
+     * Marco como leidos los avisos al hacer click
+     *
+     * @return null
+     */
+    public function avisosLeidos(Request $r){
+        $subidas = explode(',', $r->subidas);
+
+        foreach ($subidas as $subida) {
+            if($subida){
+                $unaSubida = Subida::find($subida);
+                if($unaSubida->id_estado == 3 && $unaSubida->avisado == 1){
+                    $unaSubida->avisado = 3;
+                    $unaSubida->save();
+                }
+                else{
+                    $unaSubida->increment('avisado');        
+                }
+                
+            }            
+        }
+        return null;        
     }
 
     /**

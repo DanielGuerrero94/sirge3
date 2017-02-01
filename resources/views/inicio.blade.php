@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Bootstrap 3.3.2 -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}"  />
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"  />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"  />    
     <!-- Ionicons -->
     <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css"  />
     <!-- Fullcalendar -->
@@ -124,6 +124,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- AdminLTE App -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
+<!-- Moment JS -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
@@ -202,53 +204,97 @@ $(document).ready(function(){
     });
 
     function getMessages(){
-        $.ajax({
-            global : false,
-            url : 'nuevos-mensajes',
-            method : 'get',
-            success : function(data){
-                var m = data;
-                if (m > 0) {
-                    $('.new-messages').html(m);
-                    $('.new-messages-text').html('Usted tiene ' + m + ' conversaciones no leídas');
-                    /*$.ajax({
-                        method : 'get',
-                        url : 'sonido-notificacion',                        
-                        success : function(data){
-                            if(data == 1){
-                                ion.sound.play("branch_break");
+
+        if(! $('.navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu').hasClass('open')){
+            
+            $.ajax({
+                global : false,
+                url : 'nuevos-mensajes',
+                method : 'get',
+                dataType: 'json',
+                success : function(data){
+
+                    var m = data['mensajes'];
+                    var m_no_leido = m;
+                    var texto = '<ul>';
+
+                    if(typeof data['subidas'] !== "undefined"){
+                        
+                        ion.sound.play("branch_break");
+                        
+                        var subidas = data['subidas'];                    
+                        m = m + subidas.length;                                        
+                        var estado = 'FINALIZO su procesamiento.';
+                        for (i = 0; i < subidas.length; ++i) {
+                            if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2) ){
+                                if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
+                                    estado = 'HA COMENZADO a procesarse.';
+                                }
+                                texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> ' + estado + '</li>';    
                             }
-                        }                        
-                    });             */
-                } else {
-                    $('.new-messages').html('');
-                    $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-                }        
-            }
-        })
+                            else{
+                                m = m - 1;
+                            }                        
+                        }
+                        texto += '<li>Diríjase a adm. lotes para más detalles.</li><br />';                    
+                    }
+                    
+                    if (m > 0) {
+                        $('.new-messages').html(m);
+                        texto += '<li> Usted tiene ' + m_no_leido + ' conversaciones no leídas </li>';
+                        texto += '</ul>';
+                        $('.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu').css('width','380px');
+                        $('.new-messages-text').html(texto);                        
+                    } else {
+                        $('.new-messages').html('');
+                        $('.new-messages-text').html('Usted no tiene mensajes nuevos');
+                    }        
+                }
+            })
+        }
     }
 
     function getNotifications(){
 
-        $.ajax({
-                global : false,
-                method : 'get',
-                url : 'sonido-notificacion',                        
-                success : function(data){
-                    if(data == 1){
-                        ion.sound.play("water_droplet_3");
-                    }
-                }                        
-        });             
+        if(! $('.navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu').hasClass('open')){
+            $.ajax({
+                    global : false,
+                    method : 'get',
+                    url : 'sonido-notificacion',                        
+                    success : function(data){
+                        if(data == 1){
+                            ion.sound.play("water_droplet_3");
+                        }
+                    }                        
+            });     
+        }        
     }
 
     function newMessages(){
-        setInterval(function(){ getMessages(); getNotifications(); } , 50000);
+        setInterval(function(){ getMessages(); getNotifications(); } , 10000);
     }
 
     getMessages();
     getNotifications();
     newMessages();
+
+    $('.dropdown-toggle').on('click', function(){
+        var variables = '';
+        $('.new-messages-text .subidas').each(function(i){
+            variables += $(this).attr('subida') + ',';
+        });        
+
+        $.ajax({
+            method: 'post',            
+            url: 'avisos-leidos',
+            data: {subidas: variables},
+            success: function(data){
+                console.log(data); 
+            }, 
+            global: false,     // this makes sure ajaxStart is not triggered
+            dataType: 'json'            
+        });        
+    });
 
     $.extend( true, $.fn.dataTable.defaults, {
         "language": {

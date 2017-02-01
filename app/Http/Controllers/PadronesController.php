@@ -242,7 +242,7 @@ class PadronesController extends Controller
 				$so->save();
 			}
 			
-			return response()->json(['success' => 'true', 'file' => $r->file->getClientOriginalName(), 'id_subida' => $s->id_subida,  'ruta_procesar' => 'procesar-' . strtolower($this->getName($r->id_padron)) ]);
+			return response()->json(['success' => 'true', 'file' => $r->file->getClientOriginalName(), 'nombre_padron' => strtolower($this->getName($r->id_padron)) , 'id_subida' => $s->id_subida,  'ruta_procesar' => 'procesar-' . strtolower($this->getName($r->id_padron)) ]);
 			unset($s); 
 		}
 	}

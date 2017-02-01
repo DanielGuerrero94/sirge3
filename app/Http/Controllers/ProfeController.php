@@ -110,7 +110,7 @@ class ProfeController extends Controller
 	 */
 	protected function actualizaSubida($subida) {
 		$s = Subida::findOrFail($subida);
-		$s->id_estado = 2;
+		$s->id_estado = 3;
 		return $s->save();
 	}
 
@@ -122,7 +122,7 @@ class ProfeController extends Controller
 	 */
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
-		return file('../storage/uploads/profe/' . $info->nombre_actual);
+		return file('/var/www/html/sirge3/storage/uploads/profe/' . $info->nombre_actual);
 	}
 
 	/**
@@ -196,25 +196,11 @@ class ProfeController extends Controller
 	 */
 	public function procesarArchivo($id){
 		
-		if (Session::get('recent_post')){
-			if(time() - Session::get('recent_post_time') <= 5){
-				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
-			}
-			else{
-				Session::set('recent_post', false);
-				Session::set('recent_post_time', time());				
-			}			
-		}
-    	else{
-    		Session::set('recent_post', true);
-    		Session::set('recent_post_time', time());	
-    	}
-
 		DB::statement('truncate table puco.beneficiarios_profe');		
 
-		$bulk = [];
-		$lote = $this->nuevoLote($id);
+		$bulk = [];		
 		$registros = $this->abrirArchivo($id);
+		$lote = Lote::where('id_subida',$id)->first()->lote;	
 
 		foreach ($registros as $key => $registro) {
 			$linea = explode("\t" , trim($registro , "\r\n"));

@@ -107,7 +107,7 @@ class FondosController extends AbstractPadronesController
 	 */
 	protected function actualizaSubida($subida) {
 		$s = Subida::findOrFail($subida);
-		$s->id_estado = 2;
+		$s->id_estado = 3;
 		return $s->save();
 	}
 
@@ -120,7 +120,8 @@ class FondosController extends AbstractPadronesController
 	protected function abrirArchivo($id){
 		$info = Subida::findOrFail($id);
 		try {
-			$fh = fopen ('../storage/uploads/fondos/' . $info->nombre_actual , 'r');
+			$fh = fopen ('/var/www/html/sirge3/storage/uploads/fondos/' . $info->nombre_actual , 'r');
+			//return fopen ('/var/www/html/sirge3/storage/uploads/fondos/' . $info->nombre_actual , 'r');
 		} catch (ErrorException $e) {
 			return false;
 		}
@@ -160,24 +161,11 @@ class FondosController extends AbstractPadronesController
 	 * @return json
 	 */
 	public function procesarArchivo($id){
-		if (Session::get('recent_post')){
-			if(time() - Session::get('recent_post_time') <= 5){
-				return response()->json(['success' => 'false','errors'  => 'Multiple procesamiento de archivos en el mismo padron. Espere a que termine el anterior']);
-			}
-			else{
-				Session::set('recent_post', false);
-				Session::set('recent_post_time', time());				
-			}			
-		}
-    	else{
-    		Session::set('recent_post', true);
-    		Session::set('recent_post_time', time());	
-    	}
 
-		$lote = $this->nuevoLote($id);
-		$fh = $this->abrirArchivo($id);
+		$fh = $this->abrirArchivo($id);		
+		$lote = Lote::where('id_subida',$id)->first()->lote;	
 		
-		if (!$fh){
+		if (!$fh){			
 			return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
 		}
 		$nro_linea = 1;
