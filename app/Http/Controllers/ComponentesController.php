@@ -126,7 +126,7 @@ class ComponentesController extends Controller
 
         $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);  
         
-        $year = $this->getYearDependingOnQuarter();
+        $year = $this->getYearDependingOnQuarter();        
 
         if($provincia){
             $resultados_detalle = MetaResultado::where('provincia',$provincia)
@@ -134,7 +134,7 @@ class ComponentesController extends Controller
             ->where('id_tipo_meta',$id_odp)
             ->first()          
             ->detalle;
-        }
+        }        
 
         foreach (json_decode($resultados_detalle, true) as $key => $value) {
 
@@ -150,7 +150,7 @@ class ComponentesController extends Controller
                             $data['cantidad_para_cumplir'] = (int) $value;
                         }    
                     }
-                    elseif($desc->mes == $cuatri_o_mes - 1){
+                    elseif($desc->mes == ($cuatri_o_mes - 1 <= 0 ? 13 - $cuatri_o_mes : $cuatri_o_mes - 1)){
                         $data['cantidad_para_cumplir'] = (int) $value;
                     }                             
                     break;
@@ -160,7 +160,7 @@ class ComponentesController extends Controller
                             $data['cantidad_cumplida'] = (int) $value;
                         }    
                     }
-                    elseif($desc->mes == $cuatri_o_mes - 1){
+                    elseif($desc->mes == ($cuatri_o_mes - 1 <= 0 ? 13 - $cuatri_o_mes : $cuatri_o_mes - 1)){
                         $data['cantidad_cumplida'] = (int) $value;
                     }
                     break;                                            
@@ -333,7 +333,7 @@ class ComponentesController extends Controller
      */
     protected function getMapSeries($id_odp){        
 
-        $year = $this->getYearDependingOnQuarter();
+        $year = $this->getYearDependingOnQuarter();        
 
         $resultados = MetaResultado::select('id_tipo_meta',DB::raw('detalle::jsonb'),'provincia','geojson_provincia')
         ->join('geo.geojson as g' , 'odp.meta_resultado.provincia' , '=' , 'g.id_provincia')
@@ -341,14 +341,14 @@ class ComponentesController extends Controller
         ->where('id_tipo_meta',$id_odp)                                                                  
         ->orderBy('provincia' , 'desc')
         ->get()
-        ->toArray();                                                
+        ->toArray();        
 
         foreach ($resultados as $fila){                    
-            $detalle = json_decode($fila['detalle'], true);              
+            $detalle = json_decode($fila['detalle'], true);                          
 
             $odp = OdpTipo::find($id_odp);
 
-            $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);       
+            $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);               
             
             if($fila['provincia']){
 
@@ -366,7 +366,7 @@ class ComponentesController extends Controller
                                     $cantidad_para_cumplir = (int) $value;
                                 }    
                             }
-                            elseif($desc->mes == $cuatri_o_mes - 2){
+                            elseif($desc->mes == ($cuatri_o_mes - 2 <= 0 ? 13 - $cuatri_o_mes : $cuatri_o_mes - 2)){
                                 $cantidad_para_cumplir = (int) $value;
                             }
                             break;
@@ -376,7 +376,7 @@ class ComponentesController extends Controller
                                     $cantidad_cumplida = (int) $value;
                                 }    
                             }
-                            elseif($desc->mes == $cuatri_o_mes - 2){
+                            elseif($desc->mes == ($cuatri_o_mes - 2 <= 0 ? 13 - $cuatri_o_mes : $cuatri_o_mes - 2)){
                                 $cantidad_cumplida = (int) $value;
                             }
                             break;                                             
