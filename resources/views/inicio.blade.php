@@ -29,6 +29,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" type="text/css" href="{{ asset("/plugins/jquery-file-upload/css/jquery.fileupload.css")}}"  />
     <!-- Loading Modal -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/dist/css/loading-modal.css")}}" />
+    <!-- Date Picker -->
+    <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/plugins/datepicker/datepicker3.css") }}"  />
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
@@ -124,6 +126,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- AdminLTE App -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
+<!-- Date Picker -->
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/datepicker/bootstrap-datepicker.js") }}"></script>
 <!-- Moment JS -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
 
