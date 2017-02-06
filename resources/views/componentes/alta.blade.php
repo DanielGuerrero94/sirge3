@@ -68,6 +68,17 @@
 							    			</div>
 						    			</div>
 						    		</div>						    		
+						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-4">
+										<div class="form-group">
+							    			<label for="year" class="col-sm-3 control-label">A&ntilde;o</label>
+							    			<div class="col-sm-9">
+								    			<input type="text" name="year" class="form-control" id="year-datepicker">
+							    			</div>
+						    			</div>
+						    		</div>						    								    	
 						    	</div>						    							    	
 						    </div>
 						    <div class="tab-pane" id="planificacion">
@@ -122,6 +133,10 @@ $(document).ready(function() {
 			indicador : {
 				required : true
 			},
+			year : {				
+				number : true,
+				required : true
+			},
 			linea_base : {				
 				number : true
 			},
@@ -170,17 +185,18 @@ $(document).ready(function() {
 	});
 	
 
-	$('#indicador,#provincia').click(function(){		
+	$('#indicador,#provincia,#year-datepicker').on('change',function(){		
 		var indicador = $('#indicador').val();
 		var provincia = $('#provincia').val();	
-		console.log(indicador + ' - ' + provincia);
+		var year = $('#year-datepicker').val();	
+		console.log(indicador + ' - ' + provincia + ' - ' + year);
 
-		if($('#provincia').val() != '' && $('#indicador').val() != ''){
-			$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/planificado', function(data){			
+		if($('#provincia').val() != '' && $('#indicador').val() != '' && $('#year-datepicker').val() != ''){
+			$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/planificado' + '/' + year, function(data){			
 				console.log(data);
 				$('#planificacion').html(data);
 			});
-			$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/observado', function(data){
+			$.get('metas-odp-indicador/' + indicador + '/' + provincia + '/observado' + '/' + year, function(data){
 				$('#observado').html(data);			
 			});
 		}		
@@ -210,6 +226,14 @@ $(document).ready(function() {
   				return false;
   			}
 		}
+	});
+
+	$("#year-datepicker").datepicker({
+	    format: "yyyy",
+	    viewMode: "years", 
+	    minViewMode: "years"
+	}).on('changeDate', function(e){
+	    $(this).datepicker('hide');
 	});
 });
 </script>

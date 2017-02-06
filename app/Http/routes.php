@@ -478,7 +478,7 @@ Route::post('carga-odp' , 'ComponentesController@postCarga');
 Route::get('odp-resumen/{odp}/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
-Route::get('metas-odp-indicador/{indicador}/{provincia}/{tipo_meta}' , 'ComponentesController@getFormularioMetas');
+Route::get('metas-odp-indicador/{indicador}/{provincia}/{tipo_meta}/{year}' , 'ComponentesController@getFormularioMetas');
 
 
 /**

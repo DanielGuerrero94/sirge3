@@ -36,7 +36,7 @@ class ComponentesController extends Controller
      */
     public function getResumenODP($odp, $provincia = null, $year = null){        
         //$provincia = '03';
-        
+
         if(isset($periodo)){
             $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
             $dt->modify('-2 months');
@@ -57,14 +57,14 @@ class ComponentesController extends Controller
         }        
 
         $data = [
-            'page_title' => 'Resumen mensual O.D.P '. $odp.', '.$provincia_descripcion.', '. $dt->format('Y'),            
-            'map' => $this->getMapSeries($odp),
-            'pie_cp' => $this->getDistribucionCp($odp,$provincia),                        
-            'periodo_calculado' => $periodo,
-            'provincia' => $provincia == null ? 'pais' : $provincia,
-            'provincia_descripcion' => $provincia_descripcion,
-            'odp_descripcion' => $this->getDescripcionOdp($odp),
-            'odp' => $odp
+        'page_title' => 'Resumen mensual O.D.P '. $odp.', '.$provincia_descripcion.', '. $dt->format('Y'),            
+        'map' => $this->getMapSeries($odp),
+        'pie_cp' => $this->getDistribucionCp($odp,$provincia),                        
+        'periodo_calculado' => $periodo,
+        'provincia' => $provincia == null ? 'pais' : $provincia,
+        'provincia_descripcion' => $provincia_descripcion,
+        'odp_descripcion' => $this->getDescripcionOdp($odp),
+        'odp' => $odp
         ];
 
         return view('componentes.odp' , $data);
@@ -110,10 +110,10 @@ class ComponentesController extends Controller
         }                
 
         $superObjeto = [
-                        'titulo' => 'Meta: '. $meta . '%',
-                        'data' => json_encode($data) 
-                        ];
-     
+        'titulo' => 'Meta: '. $meta . '%',
+        'data' => json_encode($data) 
+        ];
+
         return $superObjeto;
     }
 
@@ -121,57 +121,59 @@ class ComponentesController extends Controller
      * 
      */
     protected function getResultados($id_odp, $provincia){
-        
+
         $odp = OdpTipo::find($id_odp);
 
         $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);  
         
+        $year = $this->getYearDependingOnQuarter();
+
         if($provincia){
             $resultados_detalle = MetaResultado::where('provincia',$provincia)
-                                        ->where('year',date('Y'))
-                                        ->where('id_tipo_meta',$id_odp)
-                                        ->first()          
-                                        ->detalle;
+            ->where('year',$year)
+            ->where('id_tipo_meta',$id_odp)
+            ->first()          
+            ->detalle;
         }
 
         foreach (json_decode($resultados_detalle, true) as $key => $value) {
 
             $desc = MetaDescripcion::where('meta_desc_id',$key)
-                                    ->where('odp',$odp->odp)           
-                                    ->first();                         
+            ->where('odp',$odp->odp)           
+            ->first();                         
 
             if($desc->mes){
                 switch ($desc->meta_tipo) {
                     case 1:
-                       if($cuatri_o_mes >= 100){                            
-                            if($desc->mes == $cuatri_o_mes - 100){                                
-                                $data['cantidad_para_cumplir'] = (int) $value;
-                            }    
-                        }
-                        elseif($desc->mes == $cuatri_o_mes - 1){
+                    if($cuatri_o_mes >= 100){                            
+                        if($desc->mes == $cuatri_o_mes - 100){                                
                             $data['cantidad_para_cumplir'] = (int) $value;
-                        }                             
-                      break;
+                        }    
+                    }
+                    elseif($desc->mes == $cuatri_o_mes - 1){
+                        $data['cantidad_para_cumplir'] = (int) $value;
+                    }                             
+                    break;
                     case 2:
-                        if($cuatri_o_mes >= 100){                            
-                            if($desc->mes == $cuatri_o_mes - 100){                                
-                                $data['cantidad_cumplida'] = (int) $value;
-                            }    
-                        }
-                        elseif($desc->mes == $cuatri_o_mes - 1){
+                    if($cuatri_o_mes >= 100){                            
+                        if($desc->mes == $cuatri_o_mes - 100){                                
                             $data['cantidad_cumplida'] = (int) $value;
-                        }
-                      break;                                            
+                        }    
+                    }
+                    elseif($desc->mes == $cuatri_o_mes - 1){
+                        $data['cantidad_cumplida'] = (int) $value;
+                    }
+                    break;                                            
                 }      
             }
             else{
                 switch ($desc->meta_tipo) {                    
                     case 3:
-                        $data['meta'] = $value;
-                      break;
+                    $data['meta'] = $value;
+                    break;
                     case 4:
-                        $data['linea_base'] = $value;
-                      break;                        
+                    $data['linea_base'] = $value;
+                    break;                        
                 }
             }
         }
@@ -199,10 +201,10 @@ class ComponentesController extends Controller
         $mes_a_graficar = $dt->format('m'); 
 
         if( ! empty(MetaDescripcion::where('meta_tipo',1)
-                            ->where('odp',$odp_id)
-                            ->where('mes',$mes_a_graficar)
-                            ->get()
-                            ->toArray()) )
+            ->where('odp',$odp_id)
+            ->where('mes',$mes_a_graficar)
+            ->get()
+            ->toArray()) )
         {
             return $mes_a_graficar;
         }
@@ -212,22 +214,22 @@ class ComponentesController extends Controller
                 case 2:
                 case 3:
                 case 4:
-                    return 300;
-                    break;
+                return 300;
+                break;
                 
                 case 5:
                 case 6:
                 case 7:
                 case 8:
-                    return 100;
-                    break;
+                return 100;
+                break;
 
                 case 9:
                 case 10:
                 case 11:
                 case 12:
-                    return 200;
-                    break;
+                return 200;
+                break;
             }
         }
     }
@@ -239,19 +241,19 @@ class ComponentesController extends Controller
     protected function devolverFormatoDeMes($cuatri_o_mes){        
         switch ($cuatri_o_mes) {
             case 100:                
-                return '1°C';
-                break;
+            return '1°C';
+            break;
             case 200:                
-                return '2°C';
-                break;
+            return '2°C';
+            break;
             case 300:                
-                return '3°C';
-                break;
+            return '3°C';
+            break;
             
             case ($cuatri_o_mes < 13):                            
-                $dt = \DateTime::createFromFormat('Ym' , date('Y') . $cuatri_o_mes);
-                return strftime("%b %Y" , $dt->getTimeStamp());
-                break;            
+            $dt = \DateTime::createFromFormat('Ym' , date('Y') . $cuatri_o_mes);
+            return strftime("%b %Y" , $dt->getTimeStamp());
+            break;            
         }
     }
 
@@ -262,7 +264,7 @@ class ComponentesController extends Controller
      *
      * @return string
      */
-    protected function alter_brightness($colourstr, $steps) {
+     protected function alter_brightness($colourstr, $steps) {
         $colourstr = str_replace('#','',$colourstr);
         $rhex = substr($colourstr,0,2);
         $ghex = substr($colourstr,2,2);
@@ -292,12 +294,12 @@ class ComponentesController extends Controller
         foreach ($grupos as $grupo) {
 
             $sexos = Ceb003::where('periodo' , $periodo)
-                            ->where('grupo_etario' , $grupo)
-                            ->whereIn('sexo',['M','F'])
-                            ->select('sexo' , DB::raw('sum(cantidad) as c'))
-                            ->groupBy('sexo')
-                            ->orderBy('sexo');
-                            
+            ->where('grupo_etario' , $grupo)
+            ->whereIn('sexo',['M','F'])
+            ->select('sexo' , DB::raw('sum(cantidad) as c'))
+            ->groupBy('sexo')
+            ->orderBy('sexo');
+
             if(isset($provincia)){
                 $sexos = $sexos->where('id_provincia', $provincia);
             }            
@@ -331,13 +333,15 @@ class ComponentesController extends Controller
      */
     protected function getMapSeries($id_odp){        
 
+        $year = $this->getYearDependingOnQuarter();
+
         $resultados = MetaResultado::select('id_tipo_meta',DB::raw('detalle::jsonb'),'provincia','geojson_provincia')
-                                    ->join('geo.geojson as g' , 'odp.meta_resultado.provincia' , '=' , 'g.id_provincia')
-                                    ->where('year' , date('Y'))
-                                    ->where('id_tipo_meta',$id_odp)                                                                  
-                                    ->orderBy('provincia' , 'desc')
-                                    ->get()
-                                    ->toArray();                                                
+        ->join('geo.geojson as g' , 'odp.meta_resultado.provincia' , '=' , 'g.id_provincia')
+        ->where('year' , $year)
+        ->where('id_tipo_meta',$id_odp)                                                                  
+        ->orderBy('provincia' , 'desc')
+        ->get()
+        ->toArray();                                                
 
         foreach ($resultados as $fila){                    
             $detalle = json_decode($fila['detalle'], true);              
@@ -347,45 +351,45 @@ class ComponentesController extends Controller
             $cuatri_o_mes = $this->calcularCuatriOMes($odp->odp);       
             
             if($fila['provincia']){
-               
+
                 foreach ($detalle as $key => $value) {
 
                     $desc = MetaDescripcion::where('meta_desc_id',$key)
-                                            ->where('odp',$odp->odp)
-                                            ->first();
+                    ->where('odp',$odp->odp)
+                    ->first();
 
                     if($desc->mes){
                         switch ($desc->meta_tipo) {
                             case 1:
-                                if($cuatri_o_mes >= 100){                            
-                                    if($desc->mes == $cuatri_o_mes - 100){                                
-                                        $cantidad_para_cumplir = (int) $value;
-                                    }    
-                                }
-                                elseif($desc->mes == $cuatri_o_mes - 2){
+                            if($cuatri_o_mes >= 100){                            
+                                if($desc->mes == $cuatri_o_mes - 100){                                
                                     $cantidad_para_cumplir = (int) $value;
-                                }
-                              break;
+                                }    
+                            }
+                            elseif($desc->mes == $cuatri_o_mes - 2){
+                                $cantidad_para_cumplir = (int) $value;
+                            }
+                            break;
                             case 2:
-                                if($cuatri_o_mes >= 100){                            
-                                    if($desc->mes == $cuatri_o_mes - 100){                                
-                                        $cantidad_cumplida = (int) $value;
-                                    }    
-                                }
-                                elseif($desc->mes == $cuatri_o_mes - 2){
+                            if($cuatri_o_mes >= 100){                            
+                                if($desc->mes == $cuatri_o_mes - 100){                                
                                     $cantidad_cumplida = (int) $value;
-                                }
-                              break;                                             
+                                }    
+                            }
+                            elseif($desc->mes == $cuatri_o_mes - 2){
+                                $cantidad_cumplida = (int) $value;
+                            }
+                            break;                                             
                         }      
                     }
                     else{
                         switch ($desc->meta_tipo) {                    
                             case 3:
-                                $meta = $value;
-                              break;
+                            $meta = $value;
+                            break;
                             case 4:
-                                $linea_base = $value;
-                              break;                        
+                            $linea_base = $value;
+                            break;                        
                         }
                     }
                 }
@@ -415,7 +419,7 @@ class ComponentesController extends Controller
      * @return null
      */
     public function getDetalleProvincia($periodo, $provincia){        
-       
+
         $dt = \DateTime::createFromFormat('Y-m' , substr($periodo, 0,4) . '-' . substr($periodo, 4,2));
         $periodo = $dt->format('Ym');               
         $resultado = Ceb005::where('periodo' , $periodo);
@@ -446,7 +450,7 @@ class ComponentesController extends Controller
 
         if($provincia != 'pais'){
             $resultado = $resultado->where('id_provincia' , $provincia);
-                       
+
 
             $datos_provincia = Provincia::find($provincia);
             $data[1]['entidad'] =  $datos_provincia->descripcion;                      
@@ -508,8 +512,8 @@ class ComponentesController extends Controller
         $min = strftime("%b %Y" , $dt->getTimeStamp());
 
         $data = [
-            'page_title' => 'Evolución: Período ' . $min . ' - ' . $max ,
-            'series' => $this->getProgresionCebSeries($tipo)
+        'page_title' => 'Evolución: Período ' . $min . ' - ' . $max ,
+        'series' => $this->getProgresionCebSeries($tipo)
         ];
 
         return view('componentes.evolucion' , $data);
@@ -520,7 +524,7 @@ class ComponentesController extends Controller
      * 
      * @return json
      */
-    protected function getProgresionCebSeries($tipo){
+     protected function getProgresionCebSeries($tipo){
 
         if($tipo == 'A'){
             $meta = 45;
@@ -539,15 +543,15 @@ class ComponentesController extends Controller
         $interval = $this->getDateInterval($dt->format('Y-m'));
 
         for ($i = 1 ; $i <= 5 ; $i ++){
-            
+
             $datos = $clase::select('estadisticas.'.$tabla.'.*' , 'r.*')
-                            ->join('geo.provincias as p' , 'estadisticas.'.$tabla.'.id_provincia' , '=' , 'p.id_provincia')
-                            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
-                            ->whereBetween('periodo' , [$interval['min'] , $interval['max']])
-                            ->where('r.id_region' , $i)
-                            ->orderBy('periodo')
-                            ->orderBy('p.id_provincia')
-                            ->get();
+            ->join('geo.provincias as p' , 'estadisticas.'.$tabla.'.id_provincia' , '=' , 'p.id_provincia')
+            ->join('geo.regiones as r' , 'p.id_region' , '=' , 'r.id_region')
+            ->whereBetween('periodo' , [$interval['min'] , $interval['max']])
+            ->where('r.id_region' , $i)
+            ->orderBy('periodo')
+            ->orderBy('p.id_provincia')
+            ->get();
 
             foreach ($datos as $key => $registro) {
                 $dateTime = \DateTime::createFromFormat('Ym' , $registro->periodo);
@@ -581,10 +585,10 @@ class ComponentesController extends Controller
             for ($j=0; $j < Provincia::where('id_region' , $i)->count() ; $j++) {                 
                 $values[] = $meta;
             }
-           
+
             $final['regiones'][$i]['series'][] = array('name' => 'Meta', 'data' => $values,'type' => 'spline');
             $values = null;
-        
+
         }
 
         
@@ -616,7 +620,7 @@ class ComponentesController extends Controller
      *
      * @return array
      */
-    protected function getDescripcionOdp($odp){        
+     protected function getDescripcionOdp($odp){        
         return view('componentes.descripcion-indicador', array('descripcion' => DescripcionODP::find($odp)));
     }
 
@@ -630,6 +634,20 @@ class ComponentesController extends Controller
     }
 
     /**
+     * Devuelve la view de componentes alta (Chequear si es funcional esta funcion)
+     *
+     * @return array
+     */
+    protected function getYearDependingOnQuarter(){                
+        if(intval(date('m')) <= 4){
+            return intval(date('Y') - 1);
+        }
+        else{
+            return intval(date('Y'));
+        }
+    }
+
+    /**
      * Devuelvo la vista para el alta de un componente de ODP
      *
      * @return null
@@ -638,9 +656,9 @@ class ComponentesController extends Controller
         $provincias = Provincia::all();
         $odp = OdpTipo::all();
         $data = [
-            'page_title' => 'Carga de Datos ODP',                        
-            'odp' => $odp,
-            'provincias' => $provincias
+        'page_title' => 'Carga de Datos ODP',                        
+        'odp' => $odp,
+        'provincias' => $provincias
         ];
 
         return view('componentes.alta' , $data);
@@ -652,9 +670,11 @@ class ComponentesController extends Controller
      * @return null
      */
     public function postCarga(Request $r){ 
-        
+
         $array_a_insertar['detalle'] = array();                
-        
+                    
+        $year = $r->year;        
+            
         foreach ($r->all() as $key => $value) {
             if($key == 'provincia'){
                 $array_a_insertar[$key] = (string) $value;
@@ -667,7 +687,7 @@ class ComponentesController extends Controller
             }            
         }        
 
-        $array_a_insertar['year'] = intval(date('Y'));        
+        $array_a_insertar['year'] = $year;        
 
         $array_a_insertar['detalle'] = json_encode($array_a_insertar['detalle'], JSON_UNESCAPED_SLASHES);        
         
@@ -677,16 +697,16 @@ class ComponentesController extends Controller
             return 'Se han ingresado los datos correctamente';
         } else {
           return 'Ha ocurrido un error';
-        }
-    }
+      }
+  }
 
     /**
      * Devuelvo la vista para el formulario de planificacion y de observado de la provincia
      *
      * @return null
      */
-    public function getFormularioMetas($id_meta, $provincia, $tipo_meta){ 
-        
+    public function getFormularioMetas($id_meta, $provincia, $tipo_meta, $year){ 
+
         $id_odp = OdpTipo::find($id_meta);        
 
         if($tipo_meta == 'planificado'){
@@ -694,76 +714,76 @@ class ComponentesController extends Controller
         }
         elseif($tipo_meta == 'observado'){
             $descripciones = MetaDescripcion::select('meta_desc_id','descripcion','meta_tipo','odp')->where('odp',$id_odp->odp)->where('meta_tipo',1)->groupBy(['meta_desc_id','descripcion','meta_tipo','odp'])->orderBy('meta_desc_id')->get();       
-        }        
+        }                
 
         if(isset(MetaResultado::where('id_tipo_meta',$id_meta)
-                    ->where('year',intval(date('Y')))
-                    ->where('provincia',$provincia)                    
-                    ->first()->detalle)){           
+            ->where('year',$year)
+            ->where('provincia',$provincia)                    
+            ->first()->detalle)){
 
             $detalle_resultados =  json_decode(MetaResultado::where('id_tipo_meta',$id_meta)
-                    ->where('year',intval(date('Y')))
-                    ->where('provincia',$provincia)                    
-                    ->first()->detalle, true);        
-        }
-
-        $columnas = 0;
-
-        $año_anterior = date('Y', strtotime('-1 year'));        
-
-        $html_view = '<div class="row">';
-        
-        foreach ($descripciones as $descripcion) {
-
-            switch ($descripcion->meta_tipo) {
-                    case 4:
-                        $descripcion->descripcion = $descripcion->descripcion . ' ' . $año_anterior;
-                        break;
-
-                    case 3:
-                        $descripcion->descripcion = $descripcion->descripcion . ' ' . date('Y');
-                        break;
-                    
-                    default:
-                        $descripcion->descripcion = $descripcion->descripcion;
-                        break;
-            }                        
-
-            if(isset($detalle_resultados)){
-                foreach ($detalle_resultados as $campo => $resultado) {                  
-                    if($campo == $descripcion->meta_desc_id){                
-                        $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "valor" => $resultado, "descripcion" => $descripcion->descripcion);                        
-                    }                    
-                }
-            }            
-            if(!isset($superObjeto[$descripcion->meta_desc_id])){
-                $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "descripcion" => $descripcion->descripcion);
-            }
-        }        
-        
-        foreach ($superObjeto as $unObjeto) {
-                    
-            if ($columnas == 2) {
-                $html_view .= '</div>';
-                $html_view .= '<br />';                                                                
-                $html_view .= '<div class="row">';
-                $columnas = 0;
-            }
-
-            $id_valor = isset($unObjeto['valor']) ? 'value="'.$unObjeto['valor'] .'"' : '';
-
-            $html_view .= '<div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="'.$unObjeto['id'].'" class="col-sm-4 control-label">'.$unObjeto['descripcion'].'</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="'.$unObjeto['id'].'" name="'.$unObjeto['id'].'" '.$id_valor.' placeholder="Rellene el campo">
-                                    </div>
-                                </div>
-                            </div>';
-            $columnas++;
-        }
-        $html_view .= '</div>';
-
-        return $html_view;
+                ->where('year',$year)
+                ->where('provincia',$provincia)
+                ->first()->detalle, true);
     }
+
+    $columnas = 0;
+
+    $año_anterior = $year - 1;        
+
+    $html_view = '<div class="row">';
+
+    foreach ($descripciones as $descripcion) {
+
+        switch ($descripcion->meta_tipo) {
+            case 4:
+            $descripcion->descripcion = $descripcion->descripcion . ' ' . $año_anterior;
+            break;
+
+            case 3:
+            $descripcion->descripcion = $descripcion->descripcion . ' ' . $year;
+            break;
+
+            default:
+            $descripcion->descripcion = $descripcion->descripcion;
+            break;
+        }                        
+
+        if(isset($detalle_resultados)){
+            foreach ($detalle_resultados as $campo => $resultado) {                  
+                if($campo == $descripcion->meta_desc_id){                
+                    $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "valor" => $resultado, "descripcion" => $descripcion->descripcion);                        
+                }                    
+            }
+        }            
+        if(!isset($superObjeto[$descripcion->meta_desc_id])){
+            $superObjeto[$descripcion->meta_desc_id] = array("id" => $descripcion->meta_desc_id, "descripcion" => $descripcion->descripcion);
+        }
+    }        
+
+    foreach ($superObjeto as $unObjeto) {
+
+        if ($columnas == 2) {
+            $html_view .= '</div>';
+            $html_view .= '<br />';                                                                
+            $html_view .= '<div class="row">';
+            $columnas = 0;
+        }
+
+        $id_valor = isset($unObjeto['valor']) ? 'value="'.$unObjeto['valor'] .'"' : '';
+
+        $html_view .= '<div class="col-md-6">
+        <div class="form-group">
+            <label for="'.$unObjeto['id'].'" class="col-sm-4 control-label">'.$unObjeto['descripcion'].'</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="'.$unObjeto['id'].'" name="'.$unObjeto['id'].'" '.$id_valor.' placeholder="Rellene el campo">
+            </div>
+        </div>
+    </div>';
+    $columnas++;
+}
+$html_view .= '</div>';
+
+return $html_view;
+}
 }
