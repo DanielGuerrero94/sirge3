@@ -232,7 +232,20 @@ class SuperController extends Controller
 					$this->_error['registro'] = json_encode($sss_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
 					$this->_error['created_at'] = date("Y-m-d H:i:s");
-					Rechazo::insert($this->_error);
+					try {
+							Rechazo::insert($this->_error);							
+						} catch (QueryException $e) {																	
+							if ($e->getCode() == 23505){
+								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+							} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
+								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+							}
+							else {
+								$this->_error['motivos'] = json_encode($e->errorInfo);
+							}
+							Rechazo::insert($this->_error);
+						}		
 				} else {
 					$sss_raw['tipo_documento'] = $this->sanitizeTipoDoc($sss_raw['tipo_documento']);
 					$fnac = \DateTime::createFromFormat('dmY' , $sss_raw['fecha_nacimiento']);

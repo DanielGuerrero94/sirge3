@@ -360,7 +360,20 @@ class PrestacionesController extends AbstractPadronesController
 							$this->_error['registro'] = json_encode($prestacion_raw);
 							$this->_error['motivos'] = json_encode($v->errors());
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
-							Rechazo::insert($this->_error);
+							try {
+								Rechazo::insert($this->_error);							
+							} catch (QueryException $e) {																	
+								if ($e->getCode() == 23505){
+									$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+								} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+									$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
+									$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+								}
+								else {
+									$this->_error['motivos'] = json_encode($e->errorInfo);
+								}
+								Rechazo::insert($this->_error);
+							}		
 						} else {
 							$operacion = array_shift($prestacion_raw);
 							switch ($operacion) {
@@ -376,7 +389,7 @@ class PrestacionesController extends AbstractPadronesController
 										$this->_error['registro'] = json_encode($prestacion_raw);
 										if ($e->getCode() == 23505){												
 											$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-										} else if ($e->getCode() == 22021){
+										} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
 											$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
 											$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 										}else {

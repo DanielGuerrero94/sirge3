@@ -240,8 +240,7 @@ class OspController extends Controller
 				$osp_raw['tipo_documento'] = strtoupper($this->sanitizeTipoDoc($osp_raw['tipo_documento']));
 				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido($osp_raw['nombre_apellido']);
 				$osp_raw['tipo_afiliado'] = $this->sanitizeTipoAfiliado($osp_raw['tipo_afiliado']);
-
-
+				
 				$v = Validator::make($osp_raw , $this->_rules);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;
@@ -249,7 +248,20 @@ class OspController extends Controller
 					$this->_error['registro'] = json_encode($osp_raw);
 					$this->_error['motivos'] = json_encode($v->errors());
 					$this->_error['created_at'] = date("Y-m-d H:i:s");
-					Rechazo::insert($this->_error);
+					try {
+							Rechazo::insert($this->_error);							
+						} catch (QueryException $e) {																	
+							if ($e->getCode() == 23505){
+								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+							} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
+								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+							}
+							else {
+								$this->_error['motivos'] = json_encode($e->errorInfo);
+							}
+							Rechazo::insert($this->_error);
+						}		
 				} else {
 					$this->_resumen['insertados'] ++;
 					$bulk[] = $osp_raw;
