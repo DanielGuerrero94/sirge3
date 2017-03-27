@@ -1,9 +1,7 @@
 /vendor
 /node_modules
 .env
-.idea/
-/nbproject
-/storage/pdf
-/storage/uploads
-/storage/swap
-/storage/exports
+composer.json
+composer.lock
+/storage
+
