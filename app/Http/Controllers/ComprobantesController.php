@@ -141,7 +141,7 @@ class ComprobantesController extends AbstractPadronesController
 	 */
 	public function procesarArchivo($id){
 
-		$fh = $this->abrirArchivo($id);
+		$fh = $this->abrirArchivo($id);		
 		$lote = Lote::where('id_subida',$id)->first()->lote;
 		
 		if (!$fh){
@@ -167,20 +167,33 @@ class ComprobantesController extends AbstractPadronesController
 						$this->_error['lote'] = $lote;
 						$this->_error['registro'] = json_encode($comprobante_raw);
 						$this->_error['motivos'] = json_encode($v->errors());
-						$this->_error['created_at'] = date("Y-m-d H:i:s");
-						Rechazo::insert($this->_error);
+						$this->_error['created_at'] = date("Y-m-d H:i:s");						
+						try {
+							Rechazo::insert($this->_error);							
+						} catch (QueryException $e) {																					
+							if ($e->getCode() == 23505){
+								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+							} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
+								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+							}
+							else {
+								$this->_error['motivos'] = json_encode($e->errorInfo);
+							}
+							Rechazo::insert($this->_error);
+						}						
 					} else {
 						try {
 							Comprobante::insert($comprobante_raw);
 							$this->_resumen['insertados'] ++;
-						} catch (QueryException $e) {
+						} catch (QueryException $e) {							
 							$this->_resumen['rechazados'] ++;
 							$this->_error['lote'] = $lote;
 							$this->_error['registro'] = json_encode($comprobante_raw);
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
 							if ($e->getCode() == 23505){
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-							} else if ($e->getCode() == 22021){
+							} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
 								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
 								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 							}
@@ -196,8 +209,7 @@ class ComprobantesController extends AbstractPadronesController
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($linea);
 					$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la linea no es la correcta');
-					$this->_error['created_at'] = date("Y-m-d H:i:s");
-					Rechazo::insert($this->_error);
+					$this->_error['created_at'] = date("Y-m-d H:i:s");					
 				}							
 		}
 		$this->actualizaLote($lote , $this->_resumen);
