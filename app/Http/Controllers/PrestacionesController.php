@@ -365,7 +365,7 @@ class PrestacionesController extends AbstractPadronesController
 							} catch (QueryException $e) {																	
 								if ($e->getCode() == 23505){
 									$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-								} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+								} else if (substr((string) $e->getCode(), 0, 2) == '22') {
 									$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
 									$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 								}
@@ -389,7 +389,7 @@ class PrestacionesController extends AbstractPadronesController
 										$this->_error['registro'] = json_encode($prestacion_raw);
 										if ($e->getCode() == 23505){												
 											$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-										} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+										} else if (substr((string) $e->getCode(), 0, 2) == '22') {
 											$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
 											$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 										}else {
@@ -421,7 +421,7 @@ class PrestacionesController extends AbstractPadronesController
 											$this->_error['registro'] = json_encode($prestacion_raw);
 											if ($e->getCode() == 23505){												
 												$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
-											} else if ($e->getCode() == 22021){
+											} else if (substr((string) $e->getCode(), 0, 2) == '22') {
 												$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
 												$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 											}else {
