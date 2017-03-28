@@ -220,12 +220,13 @@ class ProfeController extends Controller
 						} catch (QueryException $e) {																	
 							if ($e->getCode() == 23505){
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-							} else if (substr((string) $e->getCode(), 0, 2) == '22') {
-								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
-								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
 							}
-							else {
-								$this->_error['motivos'] = json_encode($e->errorInfo);
+							else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+												$this->_error['registro'] = json_encode(parent::vaciarArray($profe_raw));										
+												$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));											
+							}
+							else {											
+								$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'error' => $e->getMessage()));
 							}
 							Rechazo::insert($this->_error);
 					}		
