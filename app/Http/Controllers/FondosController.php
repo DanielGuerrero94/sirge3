@@ -174,7 +174,7 @@ class FondosController extends AbstractPadronesController
 		while (!feof($fh)){
 			$nro_linea++;
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));
-			if (count($linea) > 1){
+			if(count($this->_data) == count($linea) + 2){
 				if(strpos($linea[4],'.')){
 					$fondo_raw = array_combine($this->_data, $this->armarArray($linea , $lote));
 					$v = Validator::make($fondo_raw , $this->_rules);
@@ -189,12 +189,13 @@ class FondosController extends AbstractPadronesController
 						} catch (QueryException $e) {																	
 							if ($e->getCode() == 23505){
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-							} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
-								$this->_error['registro'] = json_encode(parent::vaciarArray($comprobante_raw));
-								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+							} 
+							else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+									$this->_error['registro'] = json_encode(parent::vaciarArray($fondo_raw));										
+									$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));											
 							}
-							else {
-								$this->_error['motivos'] = json_encode($e->errorInfo);
+							else {											
+								$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'error' => $e->getMessage()));
 							}
 							Rechazo::insert($this->_error);
 						}		
@@ -209,23 +210,32 @@ class FondosController extends AbstractPadronesController
 							$this->_error['created_at'] = date("Y-m-d H:i:s");
 							if ($e->getCode() == 23505){								
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
-							} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
-								$this->_error['registro'] = json_encode(parent::vaciarArray($fondo_raw));
-								$this->_error['motivos'] = json_encode(array('linea->'.$nro_linea => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+							} 
+							else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
+									$this->_error['registro'] = json_encode(parent::vaciarArray($fondo_raw));										
+									$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));											
 							}
-							else {								
-								$this->_error['motivos'] = json_encode($e);
-							}							
+							else {											
+								$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'error' => $e->getMessage()));
+							}
 							Rechazo::insert($this->_error);
 						}
 					}	
-				}								
+				}
+				else{
+						$this->_resumen['rechazados'] ++;
+						$this->_error['lote'] = $lote;
+						$this->_error['registro'] = json_encode($linea);
+						$this->_error['motivos'] = json_encode('No ha ingresado un codigo gasto correcto en la linea');					
+						$this->_error['created_at'] = date("Y-m-d H:i:s");					
+						Rechazo::insert($this->_error);
+				}									
 			}
 			else{
 					$this->_resumen['rechazados'] ++;
 					$this->_error['lote'] = $lote;
 					$this->_error['registro'] = json_encode($linea);
-					$this->_error['motivos'] = json_encode('No ha ingresado un codigo gasto correcto en la linea');
+					$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la linea no es la correcta');
 					$this->_error['created_at'] = date("Y-m-d H:i:s");					
 					Rechazo::insert($this->_error);
 			}			
