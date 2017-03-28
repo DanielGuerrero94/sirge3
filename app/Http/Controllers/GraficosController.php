@@ -204,6 +204,42 @@ class GraficosController extends Controller
     }
 
     /**
+     * Devuelve JSON para el grafico de stack
+     *
+     * @return json
+     */
+    public function getGrafico3Dr($periodo)
+    {
+         $periodo = str_replace("-", '', $periodo);
+
+        $data['categorias'] = Provincia::orderBy('id_provincia')->lists('descripcion');
+        
+        foreach ($data['categorias'] as $key => $provincia){
+            $data['categorias'][$key] = ucwords(mb_strtolower($provincia));
+        }
+
+        $prestaciones = Fc009::select(DB::raw('id_provincia,sum(cantidad_total_dr) as a,sum(cantidad_total_dr - cantidad_dr) as b'))
+                            ->where('periodo',$periodo)
+                            ->groupBy('id_provincia')
+                            ->get();                            
+
+        for ($i=0; $i < 24; $i++) { 
+            $data['series'][0]['data'][$i] = 0; 
+            $data['series'][1]['data'][$i] = 0;        
+        }        
+        foreach ($prestaciones as $key => $prestacion) {                        
+            $data['series'][0]['name'] = 'Prestaciones que requieren dr';       
+            $data['series'][0]['color'] = '#069001';
+            $data['series'][0]['data'][((int) $prestacion->id_provincia) - 1] = (int) $prestacion->a;
+            $data['series'][1]['name'] = 'No presentan dr';            
+            $data['series'][1]['color'] = '#ba140b';
+            $data['series'][1]['data'][((int) $prestacion->id_provincia) - 1] = (int) $prestacion->b;
+        }
+
+        return response()->json($data);
+    }
+
+    /**
      * Retorna la información para armar el gráfico complicado
      *
      * @return json
