@@ -30,7 +30,7 @@ class OspController extends Controller
 			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			//'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255',
+			'nombre_apellido' => 'required|max:255|nonumeric',
 			// 'sexo' => 'required|in:F,M',
 			'tipo_afiliado' => 'required|in:T,A',
 			'codigo_os' => 'required|exists:puco.obras_sociales,codigo_osp',
@@ -50,6 +50,9 @@ class OspController extends Controller
 			'insertados' => 0,
 			'rechazados' => 0,
 			'modificados' => 0
+		],
+		$_messages = [
+			'nonumeric' => 'El campo ingresado contiene numeros'			
 		],
 		$_error = [
 			'lote' => '',
@@ -241,7 +244,7 @@ class OspController extends Controller
 				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido($osp_raw['nombre_apellido']);
 				$osp_raw['tipo_afiliado'] = $this->sanitizeTipoAfiliado($osp_raw['tipo_afiliado']);
 				
-				$v = Validator::make($osp_raw , $this->_rules);
+				$v = Validator::make($osp_raw , $this->_rules, $this->_messages);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;
 					$this->_error['lote'] = $lote;
