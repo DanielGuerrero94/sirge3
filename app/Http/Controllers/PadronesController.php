@@ -312,9 +312,9 @@ class PadronesController extends Controller
         $dt = new \DateTime();
         $dt->modify("-$meses months");
         
-        for ($i = 0 ; $i < $meses - 1 ; $i ++){
-       		$dt->modify('+1 month');
+        for ($i = 0 ; $i < $meses ; $i ++){       		
             $array[$i] = ucwords(strftime("%b %y" , $dt->getTimeStamp()));
+            $dt->modify('+1 month');
         }
         return $array;
     }
