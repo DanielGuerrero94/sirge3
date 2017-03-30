@@ -226,7 +226,7 @@ class WebServicesController extends Controller
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')       
                                   ->where('id_provincia_alta' , '05')
                                   ->where('clase_documento' , 'P')
-                                  ->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
+                                  //->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
