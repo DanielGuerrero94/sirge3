@@ -233,10 +233,10 @@ class WebServicesController extends Controller
                                   ->take($cantidad)                                  
                                   ->select('beneficiarios.beneficiarios.numero_documento')                                  
                                   ->get()
-                                  ->toArray();                                    
+                                  ->toArray();                                                                          
         
         try {
-            DB::table("siisa.temporal_migracion_siisa")->insert($documentos);
+            DB::table("siisa.temporal_migracion_siisa")->insert($documentos);            
         } catch (Exception $e) {
             $excepcion = new Excepciones();
             $excepcion->clase = (string) get_class();
