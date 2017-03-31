@@ -484,7 +484,7 @@ class PrestacionesController extends AbstractPadronesController
     protected function getMesesArray($periodo){
 
         $dt = \DateTime::createFromFormat('Y-m' , $periodo);
-        $dt->modify('-13 month');
+        $dt->modify('-12 month');
         for ($i = 0 ; $i < 12 ; $i ++){
         $dt->modify('+1 month');
 
