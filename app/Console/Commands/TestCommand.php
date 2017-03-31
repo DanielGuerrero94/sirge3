@@ -3,8 +3,12 @@
 namespace App\Console\Commands;
 
 use DB;
-
+use Auth;
+use App\Models\Scheduler;
+use App\Models\Subida;
 use Illuminate\Console\Command;
+
+use App\Http\Controllers\Controller;
 
 class TestCommand extends Command
 {
@@ -38,7 +42,8 @@ class TestCommand extends Command
      * @return mixed
      */
     public function handle()
-    {
-        DB::table('test')->insert(['mensaje' => 'Hola cómo te va JAVIER MINSKY?, sos bastante gay!']);
+    {        
+        app('App\Http\Controllers\WebServicesController')->cruzarBeneficiariosConSiisa();
+        //DB::table('test')->insert(['mensaje' => 'Hola cómo te va JAVIER MINSKY?, sos bastante gay!']);
     }
 }
