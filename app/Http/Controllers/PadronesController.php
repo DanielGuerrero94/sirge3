@@ -310,11 +310,11 @@ class PadronesController extends Controller
     protected function getMesesArray($meses){
 
         $dt = new \DateTime();
-        $dt->modify("-$meses months");
+        $dt->modify("-$meses months");        
         
         for ($i = 0 ; $i < $meses ; $i ++){       		
-            $array[$i] = ucwords(strftime("%b %y" , $dt->getTimeStamp()));
-            $dt->modify('+1 month');
+        	$dt->modify('+1 month');
+            $array[$i] = ucwords(strftime("%b %y" , $dt->getTimeStamp()));                        
         }
         return $array;
     }
