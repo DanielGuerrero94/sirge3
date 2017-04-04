@@ -43,10 +43,7 @@ class CommandScheduler extends Command
      * @return mixed
      */
     public function handle()
-    {                
-
-        //app('App\Http\Controllers\LotesController')->alertSubidasMalProcesadas();
-
+    {                                
         $subida = Subida::where('id_estado',1)->orderBy('fecha_subida')->first();
         if($subida){
             $subida->id_estado = 5;
