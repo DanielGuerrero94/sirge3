@@ -35,7 +35,7 @@
 	<p class="lugar-dia-hora"><b>{{ ucwords(strtolower($ddjj->provincia->descripcion)) }} , {{ $fecha_impresion }}</b></p>
 	<p style="font-weight: bold">
 		SEÑOR COORDINADOR NACIONAL<br/>
-		DR. EDUARDO MARTINEZ <br />		 
+		DR. ADOLFO RUBINSTEIN <br />		 
 		COBERTURA UNIVERSAL DE SALUD - SUMAR
 		
 	</p>
