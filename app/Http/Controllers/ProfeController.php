@@ -27,7 +27,7 @@ class ProfeController extends Controller
 		$_rules = [
 			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255|nonumeric',
+			'nombre_apellido' => 'required|max:255',
 			'sexo' => 'required|in:F,M',
 			'id_beneficiario_profe' => 'numeric',
 			'id_parentezco' => 'numeric'

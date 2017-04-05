@@ -30,7 +30,7 @@ class OspController extends Controller
 			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			//'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255|nonumeric',
+			'nombre_apellido' => 'required|max:255',
 			// 'sexo' => 'required|in:F,M',
 			'tipo_afiliado' => 'required|in:T,A',
 			'codigo_os' => 'required|exists:puco.obras_sociales,codigo_osp',
