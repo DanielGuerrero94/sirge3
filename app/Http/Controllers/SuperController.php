@@ -28,7 +28,7 @@ class SuperController extends Controller
 			'cuil_beneficiario' => 'digits:11',
 			'tipo_documento' => 'required|in:DU,LI,LC,LE,PA,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255|nonumeric',
+			'nombre_apellido' => 'required|max:255',
 			'sexo' => 'required|in:F,M',
 			'fecha_nacimiento' => 'date_format:dmY',
 			'codigo_os' => 'required',
@@ -58,7 +58,7 @@ class SuperController extends Controller
 			'modificados' => 0
 		],
 		$_messages = [
-			'nonumeric' => 'El campo ingresado contiene numeros'			
+			'nonumeric' => 'El campo nombre_apellido contiene numeros'			
 		],
 		$_error = [
 			'lote' => '',
