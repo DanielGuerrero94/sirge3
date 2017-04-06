@@ -231,7 +231,8 @@ class WebServicesController extends Controller
                                   ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
-                                  ->select('beneficiarios.beneficiarios.numero_documento')                                  
+                                  ->select('beneficiarios.beneficiarios.numero_documento')    
+                                  ->groupBy('beneficiarios.beneficiarios.numero_documento')                              
                                   ->get()
                                   ->toArray();                                                                          
         
