@@ -207,17 +207,18 @@ class ProfeController extends Controller
 
 		foreach ($registros as $key => $registro) {
 			$linea = explode("\t" , trim($registro , "\r\n"));
+			$this->_error['lote'] = $lote;
+			$this->_error['created_at'] = date("Y-m-d H:i:s");
+
 			if (count($linea) == 12){
 				array_push($linea, $lote);
 				$profe_raw = array_combine($this->_data, $linea);
 				$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc(strtoupper($profe_raw['tipo_documento']));
 				$v = Validator::make($profe_raw , $this->_rules, $this->_messages);
 				if ($v->fails()) {
-					$this->_resumen['rechazados'] ++;
-					$this->_error['lote'] = $lote;
+					$this->_resumen['rechazados'] ++;					
 					$this->_error['registro'] = json_encode($profe_raw);
-					$this->_error['motivos'] = json_encode($v->errors());
-					$this->_error['created_at'] = date("Y-m-d H:i:s");
+					$this->_error['motivos'] = json_encode($v->errors());					
 					try {
 							Rechazo::insert($this->_error);							
 						} catch (QueryException $e) {																	
@@ -225,8 +226,8 @@ class ProfeController extends Controller
 								$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
 							}
 							else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
-												$this->_error['registro'] = json_encode(parent::vaciarArray($profe_raw));										
-												$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));											
+									$this->_error['registro'] = json_encode(parent::vaciarArray($profe_raw));										
+									$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));											
 							}
 							else {											
 								$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'error' => $e->getMessage()));
@@ -245,11 +246,9 @@ class ProfeController extends Controller
 					}
 				}
 			} else {
-				$this->_resumen['rechazados'] ++;
-				$this->_error['lote'] = $lote;
+				$this->_resumen['rechazados'] ++;				
 				$this->_error['registro'] = json_encode($linea);
-				$this->_error['motivos'] = '{"registro invalido" : ["El número de campos es incorrecto"]}';
-				$this->_error['created_at'] = date("Y-m-d H:i:s");
+				$this->_error['motivos'] = '{"registro invalido" : ["El número de campos es incorrecto"]}';			
 				Rechazo::insert($this->_error);
 			}
 		}
