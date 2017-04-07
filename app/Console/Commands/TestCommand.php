@@ -43,7 +43,8 @@ class TestCommand extends Command
      */
     public function handle()
     {        
-        app('App\Http\Controllers\WebServicesController')->cruzarBeneficiariosConSiisa();
+        //app('App\Http\Controllers\DatawarehouseController')->ejecutarTodas();
+        app('App\Http\Controllers\LotesController')->alertSubidasMalProcesadas();
         //DB::table('test')->insert(['mensaje' => 'Hola cómo te va JAVIER MINSKY?, sos bastante gay!']);
     }
 }
