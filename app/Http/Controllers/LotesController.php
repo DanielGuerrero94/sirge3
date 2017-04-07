@@ -391,4 +391,33 @@ class LotesController extends Controller
 			
 		return null;
 	}
+
+	/**
+	 * Alerta al administrador las lotes que pendientes de más de 2 días.	 
+	 *
+	 * @return null
+	 */
+	public function alertLotesPendientes(){
+		$lotes = Subida::join('sistema.lotes','sistema.lotes.id_subida','=','sistema.subidas.id_subida')
+				->join('sistema.usuarios','sistema.lotes.id_usuario','=','sistema.usuarios.id_usuario')		   
+				->select('lote','sistema.usuarios.email','nombre')
+				->where('sistema.subidas.id_estado',3)
+				->where('sistema.lotes.id_estado',1)
+				->whereRaw("fin + interval '2 days' < now()")				
+				->get('lote','email','nombre');
+
+		foreach ($lotes as $lote) {
+			echo "Enviando mail a: " . $lote->email . " por el lote pendiente ".$lote->lote . "\n";
+			Mail::send('emails.alert-lotes-pendientes', ['lote' => $lote], function ($m) use ($lote) {
+	            $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+	            $m->to('sirgeweb@gmail.com');
+              	$m->to('javier.minsky@gmail.com');
+              	$m->to('rodrigo.cadaval.sumar@gmail.com');
+              	$m->to($lote->email);
+	            $m->subject('ALERTA LOTES PENDIENTES');	            
+        	});	
+		}			
+
+		return null;
+	}
 }
