@@ -393,7 +393,7 @@ class LotesController extends Controller
 	}
 
 	/**
-	 * Alerta al administrador las lotes que pendientes de más de 2 días.	 
+	 * Alerta al administrador los lotes pendientes desde hace más de 2 días.	 
 	 *
 	 * @return null
 	 */
