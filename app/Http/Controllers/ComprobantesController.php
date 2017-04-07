@@ -154,20 +154,18 @@ class ComprobantesController extends AbstractPadronesController
 			$nro_linea++;
 			$linea = explode (';' , trim(fgets($fh) , "\r\n"));			
 				array_push($linea, $lote);
+				$this->_error['lote'] = $lote;
+				$this->_error['created_at'] = date("Y-m-d H:i:s");		
 				if(count($this->_data) == count($linea)){
 					$comprobante_raw = array_combine($this->_data, $linea);
-					
 					if (strlen($comprobante_raw['fecha_debito_bancario']) < 10){
 						$comprobante_raw['fecha_debito_bancario'] = '1900-01-01';
 					}
-
 					$v = Validator::make($comprobante_raw , $this->_rules);
 					if ($v->fails()) {
-						$this->_resumen['rechazados'] ++;
-						$this->_error['lote'] = $lote;
+						$this->_resumen['rechazados'] ++;						
 						$this->_error['registro'] = json_encode($comprobante_raw);
-						$this->_error['motivos'] = json_encode($v->errors());
-						$this->_error['created_at'] = date("Y-m-d H:i:s");						
+						$this->_error['motivos'] = json_encode($v->errors());									
 						try {
 							Rechazo::insert($this->_error);							
 						} catch (QueryException $e) {																					
@@ -207,11 +205,9 @@ class ComprobantesController extends AbstractPadronesController
 					}
 				}
 				else{
-					$this->_resumen['rechazados'] ++;
-					$this->_error['lote'] = $lote;
+					$this->_resumen['rechazados'] ++;					
 					$this->_error['registro'] = json_encode($linea);
-					$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la linea no es la correcta');
-					$this->_error['created_at'] = date("Y-m-d H:i:s");					
+					$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la linea no es la correcta');					
 				}							
 		}
 		$this->actualizaLote($lote , $this->_resumen);
