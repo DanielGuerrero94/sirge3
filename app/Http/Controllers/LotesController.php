@@ -373,11 +373,11 @@ class LotesController extends Controller
 	 * @return null
 	 */
 	public function alertSubidasMalProcesadas(){
-		$lotes = Subida::join('sistema.lotes','sistema.lotes.id_subida','=','sistema.subidas.id_subida')			    
+		$lotes = Subida::join('sistema.lotes','sistema.lotes.id_subida','=','sistema.subidas.id_subida')			   
 				->select('lote')
 				->where('sistema.subidas.id_estado',5)
-				->whereRaw("fecha_subida + interval '12 hours' > now()")				
-				->lists('lote');
+				->whereRaw("fecha_subida + interval '12 hours' < now()")				
+				->lists('lote');		
 
 		if(isset($lotes[0])){ 			
 			Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {

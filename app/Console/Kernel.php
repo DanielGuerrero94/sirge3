@@ -60,7 +60,7 @@ class Kernel extends ConsoleKernel
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:04');        
 
         $schedule->command('scheduler:execute')->cron('* * * * * *');
-        $schedule->call('App\Http\Controllers\LotesController@alertSubidasdMalProcesadas')->dailyAt('21:00');
+        $schedule->call('App\Http\Controllers\LotesController@alertSubidasMalProcesadas')->dailyAt('04:00');
         
        /* ->when(function ($periodo_a_automatizar) {                                                
 
