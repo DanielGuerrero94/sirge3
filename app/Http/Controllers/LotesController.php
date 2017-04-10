@@ -403,7 +403,7 @@ class LotesController extends Controller
 				->select('lote','sistema.usuarios.email','nombre')
 				->where('sistema.subidas.id_estado',3)
 				->where('sistema.lotes.id_estado',1)
-				->whereRaw("fin + interval '2 days' < now()")				
+				->whereRaw("fin + interval '35 hours' < now()")				
 				->get('lote','email','nombre');
 
 		foreach ($lotes as $lote) {
