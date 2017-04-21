@@ -20,7 +20,8 @@ use App\Models\ErrorSubida;
 use App\Models\Lote;
 use App\Models\Rechazo;
 use App\Models\Prestacion;
-
+use App\Models\PrestacionModificada;
+use App\Models\PrestacionDRModificado;
 use App\Models\Dw\FC\Fc001;
 use App\Models\Dw\FC\Fc005;
 
@@ -413,13 +414,19 @@ class PrestacionesController extends AbstractPadronesController
 										$prestacion->estado = 'D';
 										try {
 											$prestacion->save();
+											$debitada = new PrestacionModificada();
+											$debitada->id_prestacion = $prestacion->id;
+											$debitada->lote = $lote;
+											$debitada->save();
+											unset($debitada);											
 											$this->_resumen['modificados'] ++;											
 										} catch (QueryException $e) {
 											$this->_resumen['rechazados'] ++;	
 											$prestacion_raw['operacion'] = 'M';
 											$this->_error['registro'] = json_encode($prestacion_raw);			
 											
-											if ($e->getCode() == 23505){											$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
+											if ($e->getCode() == 23505){											
+												$this->_error['motivos'] = '{"pkey" : ["Registro a modificar ya informado "]}';
 											} else if ($e->getCode() == 22021 || $e->getCode() == '22P05'){
 												$this->_error['registro'] = json_encode(parent::vaciarArray($prestacion_raw));
 												$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));		
@@ -446,9 +453,14 @@ class PrestacionesController extends AbstractPadronesController
 									
 									if ($prestacion->count()){											
 										$prestacion = $prestacion->firstOrFail();
+										$drmodificado = new PrestacionDRModificado();
+										$drmodificado->id_prestacion = $prestacion->id;
+										$drmodificado->datos_reportables = $prestacion->datos_reportables;
+										$drmodificado->lote = $lote;
+										$drmodificado->save();	
 										$prestacion->datos_reportables = $prestacion_raw['datos_reportables'];	
 										$prestacion->save();
-										$this->_resumen['modificados'] ++;										
+										$this->_resumen['modificados'] ++;
 									} else {
 										$this->_resumen['rechazados'] ++;										
 										$prestacion_raw['operacion'] = 'C';
