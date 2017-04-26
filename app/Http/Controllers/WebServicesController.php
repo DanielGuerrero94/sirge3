@@ -173,7 +173,7 @@ class WebServicesController extends Controller
                     return null;
                 }
                 else{
-                    return $valor->{'0'};   
+                    return (string) $valor->{'0'};   
                 }
             }
             else{
@@ -185,7 +185,7 @@ class WebServicesController extends Controller
                 return null;
             }
             else{
-                return $valor;
+                return (string) $valor;
             }       
         }
     }
@@ -223,7 +223,7 @@ class WebServicesController extends Controller
                                   })                        
                                   ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
-                                  ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')       
+                                  ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')    
                                   ->where('id_provincia_alta' , '24')
                                   ->where('clase_documento' , 'P')
                                   //->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
@@ -231,10 +231,12 @@ class WebServicesController extends Controller
                                   ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
-                                  ->select('beneficiarios.beneficiarios.numero_documento')    
+                                  ->select(DB::raw('beneficiarios.beneficiarios.numero_documento::text'))    
                                   ->groupBy('beneficiarios.beneficiarios.numero_documento')                              
                                   ->get()
-                                  ->toArray();                                                                          
+                                  ->toArray(); 
+
+        //return var_dump($documentos);                                                                         
         
         try {
             DB::table("siisa.temporal_migracion_siisa")->insert($documentos);            
@@ -248,12 +250,13 @@ class WebServicesController extends Controller
         }                                        
 
         foreach ($documentos as $documento){                    
-            $datos_benef = $this->cruceSiisaXMLRequest($documento['numero_documento'], $client);                        
+            $datos_benef = $this->cruceSiisaXMLRequest((string) $documento['numero_documento'], $client);                            
             if($datos_benef && $datos_benef <> '{}'){                                                             
                 $data = (array) json_decode($datos_benef);                            
                 $data = (object) $data;                                                            
                 if(isset($data->resultado)){                    
-                    if ($data->resultado == 'OK') {              
+                    if ($data->resultado == 'OK') {
+                        $data->nroDocumento = (string) $data->nroDocumento;              
                         $resultado[] = $this->guardarDatos($data);                       
                         if (sizeof($resultado) % 2000 == 0){
                             try {
@@ -346,7 +349,7 @@ class WebServicesController extends Controller
         $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadoRenaper);
         $inscripto['padronsisa'] = $this->convertirEnTexto($datos->PadronSISA);
         $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipoDocumento);
-        $inscripto['nrodocumento'] = $this->convertirEnTexto($datos->nroDocumento);
+        $inscripto['nrodocumento'] = (string) $this->convertirEnTexto($datos->nroDocumento);
         $inscripto['apellido'] = $this->convertirEnTexto($datos->apellido);
         $inscripto['nombre'] = $this->convertirEnTexto($datos->nombre);
         $inscripto['sexo'] = $this->convertirEnTexto($datos->sexo);
