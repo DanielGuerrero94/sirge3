@@ -256,7 +256,7 @@ class WebServicesController extends Controller
                 $data = (object) $data;                                                            
                 if(isset($data->resultado)){                    
                     if ($data->resultado == 'OK') {
-                        $data->nroDocumento = (string) $data->nroDocumento;              
+                        $data->nroDocumento = (string) $documento['numero_documento'];              
                         $resultado[] = $this->guardarDatos($data);                       
                         if (sizeof($resultado) % 2000 == 0){
                             try {
