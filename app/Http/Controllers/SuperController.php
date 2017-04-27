@@ -28,7 +28,7 @@ class SuperController extends Controller
 			'cuil_beneficiario' => 'digits:11',
 			'tipo_documento' => 'required|in:DU,LI,LC,LE,PA,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255',
+			'nombre_apellido' => 'required|min:3|max:255|regex:/^[\pL\s\'\,\.]/',
 			'sexo' => 'required|in:F,M',
 			'fecha_nacimiento' => 'date_format:dmY',
 			'codigo_os' => 'required',
@@ -231,6 +231,7 @@ class SuperController extends Controller
 			if (count($linea) == 15) {
 				array_push($linea, $lote);
 				$sss_raw = array_combine($this->_data, $linea);
+				$sss_raw['nombre_apellido'] = trim($sss_raw['nombre_apellido']);
 				$v = Validator::make($sss_raw , $this->_rules, $this->_messages);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;					

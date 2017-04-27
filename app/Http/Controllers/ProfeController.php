@@ -27,7 +27,7 @@ class ProfeController extends Controller
 		$_rules = [
 			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255',
+			'nombre_apellido' => 'required|max:255|min:3|regex:/^[\pL\s\'\,\.]/',
 			'sexo' => 'required|in:F,M',
 			'id_beneficiario_profe' => 'numeric',
 			'id_parentezco' => 'numeric'
@@ -214,6 +214,7 @@ class ProfeController extends Controller
 				array_push($linea, $lote);
 				$profe_raw = array_combine($this->_data, $linea);
 				$profe_raw['tipo_documento'] = $this->sanitizeTipoDoc(strtoupper($profe_raw['tipo_documento']));
+				$profe_raw['nombre_apellido'] = trim($profe_raw['nombre_apellido']);
 				$v = Validator::make($profe_raw , $this->_rules, $this->_messages);
 				if ($v->fails()) {
 					$this->_resumen['rechazados'] ++;					

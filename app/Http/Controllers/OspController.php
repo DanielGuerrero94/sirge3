@@ -30,7 +30,7 @@ class OspController extends Controller
 			'tipo_documento' => 'required|exists:sistema.tipo_documento,tipo_documento',
 			//'tipo_documento' => 'required|in:DNI,LE,LC,CI,OTR',
 			'numero_documento' => 'required|digits_between:4,8',
-			'nombre_apellido' => 'required|max:255',
+			'nombre_apellido' => 'required|min:3|max:255|regex:/^[\pL\s\'\,\.]/',
 			// 'sexo' => 'required|in:F,M',
 			'tipo_afiliado' => 'required|in:T,A',
 			'codigo_os' => 'required|exists:puco.obras_sociales,codigo_osp',
@@ -244,7 +244,7 @@ class OspController extends Controller
 				array_push($linea, $lote);
 				$osp_raw = array_combine($this->_data, $linea);
 				$osp_raw['tipo_documento'] = strtoupper($this->sanitizeTipoDoc($osp_raw['tipo_documento']));
-				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido($osp_raw['nombre_apellido']);
+				$osp_raw['nombre_apellido'] = $this->sanitizeNombreApellido(trim($osp_raw['nombre_apellido']));
 				$osp_raw['tipo_afiliado'] = $this->sanitizeTipoAfiliado($osp_raw['tipo_afiliado']);
 				
 				$v = Validator::make($osp_raw , $this->_rules, $this->_messages);
