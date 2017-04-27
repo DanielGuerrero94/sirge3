@@ -231,7 +231,7 @@ class WebServicesController extends Controller
                                   ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
-                                  ->select(DB::raw('beneficiarios.beneficiarios.numero_documento::text'))    
+                                  ->select(DB::raw('beneficiarios.beneficiarios.numero_documento::int'))    
                                   ->groupBy('beneficiarios.beneficiarios.numero_documento')                              
                                   ->get()
                                   ->toArray(); 
@@ -255,8 +255,7 @@ class WebServicesController extends Controller
                 $data = (array) json_decode($datos_benef);                            
                 $data = (object) $data;                                                            
                 if(isset($data->resultado)){                    
-                    if ($data->resultado == 'OK') {
-                        $data->nroDocumento = (string) $documento['numero_documento'];              
+                    if ($data->resultado == 'OK') {                                
                         $resultado[] = $this->guardarDatos($data);                       
                         if (sizeof($resultado) % 2000 == 0){
                             try {
@@ -349,7 +348,7 @@ class WebServicesController extends Controller
         $inscripto['identificadorenaper'] = $this->convertirEnTexto($datos->identificadoRenaper);
         $inscripto['padronsisa'] = $this->convertirEnTexto($datos->PadronSISA);
         $inscripto['tipodocumento'] = $this->convertirEnTexto($datos->tipoDocumento);
-        $inscripto['nrodocumento'] = (string) $this->convertirEnTexto($datos->nroDocumento);
+        $inscripto['nrodocumento'] = intval($this->convertirEnTexto($datos->nroDocumento));
         $inscripto['apellido'] = $this->convertirEnTexto($datos->apellido);
         $inscripto['nombre'] = $this->convertirEnTexto($datos->nombre);
         $inscripto['sexo'] = $this->convertirEnTexto($datos->sexo);
@@ -396,7 +395,7 @@ class WebServicesController extends Controller
         }
         else{            
             //$noEncontrado = new ErrorPadronSisa();
-            $devolver['numero_documento'] = $documento;                
+            $devolver['numero_documento'] = intval($documento);                
             $devolver['error'] = isset($datos->error) ? $datos->mensaje : $this->convertirEnTexto($datos->resultado);
             $devolver['created_at'] = date('Y-m-d H:i:s');
             $devolver['updated_at'] = date('Y-m-d H:i:s');
