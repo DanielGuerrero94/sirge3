@@ -274,6 +274,10 @@
 							$('.modal-info').modal();
 							$('#form-new-request').trigger('reset');
 							id_adjunto = null;
+							$.get('nueva-solicitud' , function(data){
+					            $('.content-wrapper').html(data);
+					        });
+							
 						},
 						error : function(data){
 							var html = '';

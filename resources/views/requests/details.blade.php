@@ -13,6 +13,12 @@
 							<p class="form-control-static"><span class="label label-{{$solicitud->estados->css}}">{{ $solicitud->estados->descripcion }}</span></p>
 						</div>
 
+						<!-- USUARIO -->
+						<label class="col-md-5 control-label">Usuario solicitante : </label>
+						<div class="col-md-7">
+							<p class="form-control-static">{{ $solicitud->usuario->nombre }}</span></p>
+						</div>
+
 						<!-- SECTOR -->
 						<label class="col-md-5 control-label">Sector responsable de resolución : </label>
 						<div class="col-md-7">
