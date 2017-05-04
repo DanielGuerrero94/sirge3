@@ -14,7 +14,7 @@ class AddColumnSolicitudes extends Migration
     {
         Schema::table('solicitudes.solicitudes', function($table)
         {
-            $table->bigInteger('id_adjunto');
+            $table->bigInteger('id_adjunto')->nullable();
             $table->foreign('id_adjunto')->references('id_adjunto')->on('solicitudes.adjuntos');
         });
     }
