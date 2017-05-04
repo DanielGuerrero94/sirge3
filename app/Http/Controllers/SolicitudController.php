@@ -418,7 +418,7 @@ class SolicitudController extends Controller
      */
     public function attachDocument(Request $r){     
 
-        $nombre_archivo = uniqid() . '.txt';
+        $nombre_archivo = uniqid() . '.' . $r->file->getClientOriginalExtension();
 
         //return var_dump(array($nombre_archivo, $r->all()));
 
