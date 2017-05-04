@@ -273,11 +273,7 @@
 							$('#modal-text').html(data);
 							$('.modal-info').modal();
 							$('#form-new-request').trigger('reset');
-							id_adjunto = null;
-							$.get('nueva-solicitud' , function(data){
-					            $('.content-wrapper').html(data);
-					        });
-							
+							id_adjunto = null;																
 						},
 						error : function(data){
 							var html = '';
@@ -290,6 +286,10 @@
 							$('#errores-div').show();
 						}
 					})
+
+					$.get('nueva-solicitud' , function(data){
+			            $('.content-wrapper').html(data);
+			        });
 				}
 			})
 		});
