@@ -18,6 +18,7 @@ use App\Models\Solicitudes\Tipo;
 use App\Models\Solicitudes\Prioridad;
 use App\Models\Solicitudes\Operador;
 use App\Models\Solicitud;
+use App\Models\Solicitudes\Adjunto;
 use App\Models\Usuario;
 
 class SolicitudController extends Controller
@@ -42,7 +43,8 @@ class SolicitudController extends Controller
         $data = [
             'page_title' => 'Ingreso de nueva solicitud',
             'sectores' => $grupos,
-            'prioridades' => $prioridades
+            'prioridades' => $prioridades,
+            'id_usuario' => Auth::user()->id_usuario
         ];
         return view('requests.new' , $data);
     }
@@ -77,6 +79,9 @@ class SolicitudController extends Controller
         $s->prioridad = $r->prioridad;
         $s->tipo = $r->tipo_solicitud;
         $s->descripcion_solicitud = $r->descripcion;
+        if($r->id_adjunto){
+            $s->id_adjunto = $r->id_adjunto;    
+        }        
         if ($s->save()){
             
             $s->usuario_solicitante;
@@ -183,7 +188,7 @@ class SolicitudController extends Controller
     public function getSolicitud($id , $back){
         $s = Solicitud::with(['tipos' => function($q){
             $q->with('grupos');
-        },'estados','operador','prioridades'])->find($id);
+        },'estados','operador','prioridades','adjuntos'])->find($id);
         $data = [
             'solicitud' => $s,
             'back' => $back
@@ -390,5 +395,119 @@ class SolicitudController extends Controller
         });
 
         return 'Se ha notificado al usuario por email';
+    }
+
+    /**
+     * Devuelve la ruta donde guardar el archivo
+     * @param int $id
+     *
+     * @return string
+     */
+    protected function getName($route = FALSE){        
+        if ($route)
+            return '../storage/uploads/solicitudes';
+        else
+            return 'solicitudes';
+    }
+
+    /**
+     * Guarda el archivo en el sistema
+     * @param $r Request
+     *
+     * @return json
+     */
+    public function attachDocument(Request $r){     
+
+        $nombre_archivo = uniqid() . '.txt';
+
+        //return var_dump(array($nombre_archivo, $r->all()));
+
+        $destino = $this->getName(TRUE);
+        $a = new Adjunto;                
+        $a->nombre_original_solicitante = $r->file->getClientOriginalName();
+        $a->nombre_actual_solicitante = $nombre_archivo;
+        $a->size_solicitante = $r->file->getClientSize();                
+
+        try {
+            $r->file('file')->move($destino , $nombre_archivo);
+        } catch (FileException $e){
+            $a->delete();
+            return response()->json(['success' => 'false',
+                                            'errors'  => "Ha ocurrido un error: ". $e->getMessage()]);
+        }
+        if ($a->save()){                                
+            return response()->json(['success' => 'true', 'id_adjunto' => $a->id_adjunto, 'file' => $r->file->getClientOriginalName()]);
+            unset($s); 
+        }
+        else{
+            return response()->json(['success' => 'false',
+                                            'errors'  => 'Hubo un error al guardar el archivo']);
+        }
+    }
+
+    /**
+     * Guarda el adjunto de respuesta de la solicitud
+     * @param $r Request
+     *
+     * @return json
+     */
+    public function attachDocumentResponse(Request $r){     
+        
+        $destino = $this->getName(TRUE);
+
+        $s = Solicitud::find($r->id_solicitud);        
+        if(!($a = Adjunto::find($s->id_adjunto))){
+            $a = new Adjunto();
+        }
+
+        $nombre_archivo = 'REQ-' . $r->id_solicitud . ' SOLUCION' . '.' .$r->file->getClientOriginalExtension();      
+        $a->nombre_original_respuesta = $r->file->getClientOriginalName();
+        $a->nombre_actual_respuesta = $nombre_archivo; 
+        $a->size_respuesta = $r->file->getClientSize();                        
+
+        try {
+            $r->file('file')->move($destino , $nombre_archivo);
+        } catch (FileException $e){
+            $a->delete();
+            return response()->json(['success' => 'false',
+                                            'errors'  => "Ha ocurrido un error: ". $e->getMessage()]);
+        }
+        if ($a->save()){
+            
+            if(!$s->id_adjunto){
+                $s->id_adjunto = $a->id_adjunto;
+            } 
+            $s->save();
+
+            return response()->json(['success' => 'true', 'id_adjunto' => $a->id_adjunto, 'file' => $r->file->getClientOriginalName()]);
+            unset($s); 
+        }
+        else{
+            return response()->json(['success' => 'false',
+                                            'errors'  => 'Hubo un error al guardar el archivo']);
+        }
+
+        unset($s);
+        unset($a);
+    }
+
+    /**
+     * Decargar adjunto asociado a solicitud
+     *
+     * @return null
+     */
+    public function downloadAdjuntoSolicitante($id_adjunto){
+        $adjunto = Adjunto::find($id_adjunto);
+        return response()->download('../storage/uploads/solicitudes/'.$adjunto->nombre_actual_solicitante);
+    }
+
+    /**
+     * Decargar adjunto de cierre de la solicitud
+     *
+     * @return null
+     */
+    public function downloadAdjuntoCierre($id_adjunto){
+        $adjunto = Adjunto::find($id_adjunto);
+        return response()->download('../storage/uploads/solicitudes/'.$adjunto->nombre_actual_respuesta);
     }
 }

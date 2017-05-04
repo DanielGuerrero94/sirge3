@@ -51,6 +51,28 @@
 						</div>
 					</div>
 					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="descripcion">Adjuntar documento </label> <small> (si se trata de más de un archivo comprimirlo en un .zip o .rar)</small>
+								<br>
+								<span class="btn btn-success fileinput-button">
+								<i class="glyphicon glyphicon-plus"></i>
+								<span>Seleccionar archivo...</span>
+									<!-- The file input field used as target for the file upload widget -->
+									<input id="fileupload" type="file" name="file" multiple>
+								</span>
+								<br>
+								<br>
+								<!-- The global progress bar -->
+								<div id="progress" class="progress">
+									<div class="progress-bar progress-bar-success"></div>
+								</div>
+								<!-- The container for the uploaded files -->
+								<div id="files" class="files"></div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="descripcion">Descripción</label>
@@ -124,6 +146,8 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
+		var id_adjunto = null;
+
 		$('#errores-div').hide();
 		$('#fecha').inputmask('99/99/9999');
 		$('#fecha').datepicker({
@@ -156,6 +180,70 @@
 			}
 		})
 
+		$('#fileupload').bind('fileuploadsubmit', function (e, data) {
+			data.formData = {id_usuario : {{ $id_usuario }} }		
+		});
+
+	    $('#fileupload').fileupload({
+	        url: 'attach-document',
+	        dataType: 'json',
+	        maxChunkSize: 800000000, 
+	        add: function(e, data) {
+	        	$('#errores-div').hide();
+	            var uploadErrors = [];
+	            var notAcceptedFileTypes = /(dll)|(bin)|(bat)|(exe)|(deb)$/i;
+	        	
+	            if(data.originalFiles[0]['size'] > 1024 * 1024 * 1024 * 80) {
+					uploadErrors.push('Tamaño de archivo demasiado grande. Máximo : 25mb');
+	            }
+
+	            if(data.originalFiles[0]['type'].length && notAcceptedFileTypes.test(data.originalFiles[0]['type'])) {
+	                uploadErrors.push('Tipo de archivo no aceptado.');
+	            }
+
+	            if(uploadErrors.length > 0) {
+	            	var html = '';
+					$.each(uploadErrors , function (key , value){
+						html += '<li>' + value + '</li>';
+					});
+					$('#errores-form').html(html);
+					$('#errores-div').show();
+	            } else {
+	                data.submit();
+	            }
+	        },
+	        done: function (e, data) {        	
+	        	if(data.result.success == 'true'){
+	        		$('<p/>').text('Se ha subido el archivo : ' + data.result.file).appendTo('#files');
+
+	        		if(data.result.id_adjunto){
+	        			id_adjunto = data.result.id_adjunto;
+	        		}
+	        		else{
+	        			id_adjunto = null;	
+	        		}
+	        	}
+	        	else if(data.result.success == 'false'){
+	        		$('#errores-form').html(data.result.errors);
+					$('#errores-div').show();
+	        	}        	        	        	            
+	        },
+	        progressall: function (e, data) {
+	            var progress = parseInt(data.loaded / data.total * 100, 10);
+	            $('#progress .progress-bar').css(
+	                'width',
+	                progress + '%'
+	            );
+	        }, 
+	        fail : function (e, data){        	
+				var html = '<li>Ha ocurrido un error al subir el archivo</li>';
+				$('#errores-form').html(html);
+				$('#errores-div').show();
+	        }
+
+	    }).prop('disabled', !$.support.fileInput)
+	        .parent().addClass($.support.fileInput ? undefined : 'disabled');		
+
 		$('.save').click(function(){
 			$('#form-new-request').validate({
 				rules : {
@@ -179,12 +267,13 @@
 				submitHandler : function(form){
 					$.ajax({
 						method : 'post',
-						data : $(form).serialize(),
+						data : $(form).serialize() + '&id_adjunto='+id_adjunto,
 						url : 'nueva-solicitud',
 						success : function(data){
 							$('#modal-text').html(data);
 							$('.modal-info').modal();
 							$('#form-new-request').trigger('reset');
+							id_adjunto = null;
 						},
 						error : function(data){
 							var html = '';
@@ -192,6 +281,7 @@
 							$.each(e , function (key , value){
 								html += '<li>' + value[0] + '</li>';
 							});
+							id_adjunto = null;
 							$('#errores-form').html(html);
 							$('#errores-div').show();
 						}

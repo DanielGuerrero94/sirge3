@@ -55,6 +55,10 @@ Route::post('avisos-leidos' , 'InboxController@avisosLeidos');
 #	INGRESO
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
 Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
+Route::post('attach-document' , 'SolicitudController@attachDocument');
+Route::post('attach-document-cierre' , 'SolicitudController@attachDocumentResponse');
+Route::get('descargar-adjunto-solicitante/{id}' , 'SolicitudController@downloadAdjuntoSolicitante');
+Route::get('descargar-adjunto-cierre/{id}' , 'SolicitudController@downloadAdjuntoCierre');
 #	MIS SOLICITUDES
 Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
 Route::get('mis-solicitudes-table' , 'SolicitudController@myRequestsTable');
