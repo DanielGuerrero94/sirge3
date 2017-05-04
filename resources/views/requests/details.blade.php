@@ -13,6 +13,12 @@
 							<p class="form-control-static"><span class="label label-{{$solicitud->estados->css}}">{{ $solicitud->estados->descripcion }}</span></p>
 						</div>
 
+						<!-- USUARIO -->
+						<label class="col-md-5 control-label">Usuario solicitante : </label>
+						<div class="col-md-7">
+							<p class="form-control-static">{{ $solicitud->usuario->nombre }}</span></p>
+						</div>
+
 						<!-- SECTOR -->
 						<label class="col-md-5 control-label">Sector responsable de resolución : </label>
 						<div class="col-md-7">
@@ -60,7 +66,21 @@
 								{{ $solicitud->descripcion_solicitud }}
 							</p>
 						</div>
-
+						<!-- ARCHIVOS ADJUNTOS -->
+						<label class="col-md-5 control-label">Adjunto enviado : </label>
+						<div class="col-md-7">
+							@if (!isset($solicitud->adjuntos->nombre_actual_solicitante))
+							<p class="form-control-static">
+								<span class="label label-warning">SIN ADJUNTO</span>
+							</p>
+							@else
+								@if ($solicitud->usuario->id_menu == 1)
+									<p><a class="btn btn-default btn-xs" href="descargar-adjunto-solicitante/{{ $solicitud->id_adjunto }}"><i class="fa fa-download"></i> Ver</a></p>
+								@else
+									<p class="form-control-static">{{ $solicitud->adjuntos->nombre_original_solicitante }}</p>		
+								@endif
+							@endif			
+						</div>
 						<!-- FECHA ASIGNACION -->
 						<label class="col-md-5 control-label">Fecha de inicio de solución : </label>
 						<div class="col-md-7">
@@ -91,6 +111,17 @@
 							<p class="form-control-static">
 								{{ $solicitud->descripcion_solucion or 'REQUERIMIENTO PENDIENTE DE SOLUCIÓN' }}
 							</p>
+						</div>
+						<!-- ARCHIVOS ADJUNTOS -->
+						<label class="col-md-5 control-label">Solución adjunta : </label>
+						<div class="col-md-7">
+							@if (!isset($solicitud->adjuntos->nombre_actual_respuesta))
+							<p class="form-control-static">
+								<span class="label label-warning">SIN ADJUNTO</span>
+							</p>
+							@else
+							<p><a class="btn btn-success btn-xs" href="descargar-adjunto-cierre/{{ $solicitud->id_adjunto }}"><i class="fa fa-download"></i> Descargar</a></p>
+							@endif			
 						</div>
 					</div>
 				</form>
