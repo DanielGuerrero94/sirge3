@@ -78,9 +78,12 @@ class SolicitudController extends Controller
         $s->fecha_estimada_solucion = $r->fecha;
         $s->prioridad = $r->prioridad;
         $s->tipo = $r->tipo_solicitud;
-        $s->descripcion_solicitud = $r->descripcion;
-        if($r->id_adjunto){
+        $s->descripcion_solicitud = $r->descripcion;        
+        if($r->id_adjunto != "null"){
             $s->id_adjunto = $r->id_adjunto;    
+        }
+        else{
+            $s->id_adjunto = NULL;   
         }        
         if ($s->save()){
             
