@@ -377,7 +377,11 @@ class LotesController extends Controller
 				->select('lote')
 				->where('sistema.subidas.id_estado',5)
 				->whereRaw("fecha_subida + interval '12 hours' < now()")				
-				->lists('lote');		
+				->lists('lote');
+
+		Subida::where('id_estado',5)
+			  ->whereRaw("fecha_subida + interval '12 hours' < now()")				
+			  ->update(['id_estado' => 1]); 		
 
 		if(isset($lotes[0])){ 			
 			Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {
