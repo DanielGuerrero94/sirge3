@@ -151,7 +151,7 @@ class ProfeController extends Controller
 	 * @return string
 	 */
 	protected function sanitizeNombreApellido($data){
-		return mb_convert_encoding($data , 'UTF-8' , "ISO-8859-15");
+		return str_replace(",","",mb_convert_encoding($data, "UTF-8", mb_detect_encoding($data, "UTF-8, ISO-8859-1, ISO-8859-15", true)));
 	}
 
 	/**
