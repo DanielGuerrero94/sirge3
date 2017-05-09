@@ -151,7 +151,7 @@ class OspController extends Controller
 	 * @return string
 	 */
 	protected function sanitizeNombreApellido($data){
-		return mb_convert_encoding($data , 'UTF-8' , "ISO-8859-15");
+		return str_replace(",","",mb_convert_encoding($data, "UTF-8", mb_detect_encoding($data, "UTF-8, ISO-8859-1, ISO-8859-15", true)));
 	}
 
 	/**
@@ -224,7 +224,7 @@ class OspController extends Controller
 	}
 
 	/**
-	 * Procesa el archivo de prestaciones
+	 * Procesa el archivo de osp
 	 * @param int $id
 	 *
 	 * @return json
@@ -234,7 +234,7 @@ class OspController extends Controller
 		$bulk = [];				
 		$registros = $this->abrirArchivo($id);
 		$lote = Lote::where('id_subida',$id)->first()->lote;
-
+		
 		foreach ($registros as $key => $registro) {
 			$linea = explode('||' , trim($registro , "\r\n"));
 			$this->_error['lote'] = $lote;
