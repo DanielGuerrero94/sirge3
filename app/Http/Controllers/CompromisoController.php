@@ -384,6 +384,8 @@ class CompromisoController extends Controller
 						->where('year',$dt->format('Y'))
 						->orderBy('m.id_provincia')->get();
 
+		return json_encode(($provincias));
+
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
 			$series[0]['name'] = 'Datos reportables';
