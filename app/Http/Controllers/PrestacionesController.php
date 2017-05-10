@@ -471,7 +471,13 @@ class PrestacionesController extends AbstractPadronesController
 									break;
 							}
 						}
-					} else{
+					} 
+					else if(count($linea) == 1 && $linea[0] == ''){										
+						$this->_error['registro'] = json_encode($linea);
+						$this->_error['motivos'] = '{"registro invalido" : ["Linea en blanco"]}';				
+						Rechazo::insert($this->_error);
+					}	
+					else{
 						$this->_resumen['rechazados'] ++;						
 						$this->_error['registro'] = json_encode($linea);
 						$this->_error['motivos'] = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');						
