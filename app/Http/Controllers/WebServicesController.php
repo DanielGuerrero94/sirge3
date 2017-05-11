@@ -207,7 +207,7 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 1000;
+        $cantidad = 10;
 
         $dt = \DateTime::createFromFormat('Ym' , date('Ym'));
         $dt->modify('-2 months');
