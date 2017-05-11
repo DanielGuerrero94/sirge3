@@ -299,7 +299,7 @@ class SolicitudController extends Controller
      * @return string 
      */
     public function postCerrar(Request $r , $id){
-        $s = Solicitud::with(['usuario','operador'])->find($id);
+        $s = Solicitud::with(['usuario','operador','adjuntos'])->find($id);
         $s->fecha_solucion = date('Y-m-d H:i:s');
         $s->descripcion_solucion = $r->solucion;
         $s->estado = 3;
@@ -313,7 +313,9 @@ class SolicitudController extends Controller
             $pdf = PDF::loadView('pdf.cierre' , $data);
             $pdf->save($path);
 
-            Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id , 'hash' => $s->hash], function ($m) use ($user , $path , $id , $s) {
+            isset($s->adjuntos->nombre_actual_respuesta) ? $adjunto = 'S' : $adjunto = 'N';            
+
+            Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id , 'hash' => $s->hash, 'adjunto' => $adjunto], function ($m) use ($user , $path , $id , $s) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
                 $m->to($s->usuario->email);
                 $m->subject('Cierre requerimiento Nº ' . $id);
@@ -382,7 +384,7 @@ class SolicitudController extends Controller
      * @return string
      */
     public function notificarCierre($id){
-        $s = Solicitud::with(['usuario','operador'])->find($id);
+        $s = Solicitud::with(['usuario','operador','adjuntos'])->find($id);
         $path = base_path() . '/storage/pdf/soluciones/' . $id . '.pdf';
         $user = Auth::user();
         $data = [
@@ -391,7 +393,9 @@ class SolicitudController extends Controller
         $pdf = PDF::loadView('pdf.cierre' , $data);
         $pdf->save($path);
 
-        Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id , 'hash' => $s->hash], function ($m) use ($user , $path , $id , $s) {
+        isset($s->adjuntos->nombre_actual_respuesta) ? $adjunto = 'S' : $adjunto = 'N';            
+
+        Mail::send('emails.request-cierre', ['usuario' => $user , 'id' => $id , 'hash' => $s->hash, 'adjunto' => $adjunto], function ($m) use ($user , $path , $id , $s) {
             $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
             $m->to($s->usuario->email);
             $m->subject('Cierre requerimiento Nº ' . $id);
