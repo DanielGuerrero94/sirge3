@@ -6,6 +6,7 @@ use Auth;
 use Datatables;
 use PDF;
 use Mail;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -512,5 +513,47 @@ class SolicitudController extends Controller
     public function downloadAdjuntoCierre($id_adjunto){
         $adjunto = Adjunto::find($id_adjunto);
         return response()->download('../storage/uploads/solicitudes/'.$adjunto->nombre_actual_respuesta);
+    }
+
+    /**
+     * Devuelve JSON para la datatable del ranking de solicitudes realizadas
+     *
+     * @return json
+     */
+    public function getRanking(){
+        $data = [
+            'page_title' => 'Ranking solicitudes'
+        ];
+        return view('admin.estadisticas.ranking_solicitudes' , $data);
+    }
+
+    /**
+     * Devuelve JSON para la datatable del ranking de solicitudes realizadas
+     *
+     * @return json
+     */
+    public function getRankingSolicitantes(){
+        $solicitantes = Solicitud::join('sistema.usuarios as u' , 'solicitudes.solicitudes.usuario_solicitante' , '=' , 'u.id_usuario')
+            ->select(DB::raw('quitarhtml(u.nombre) as nombre'),DB::raw('count(*) as cantidad'))
+            ->where('estado','>',2)
+            ->groupBy('u.nombre')
+            ->orderBy(DB::raw('count(*)'),'DESC');
+        
+        return Datatables::of($solicitantes)->make(true);
+    }
+
+    /**
+     * Devuelve JSON para la datatable del ranking de cierre de solicitudes por operadores
+     *
+     * @return json
+     */
+    public function getRankingOperadores(){
+        $operadores = Solicitud::join('sistema.usuarios as u' , 'solicitudes.solicitudes.usuario_asignacion' , '=' , 'u.id_usuario')
+            ->select(DB::raw('quitarhtml(u.nombre) as nombre'),DB::raw('count(*) as cantidad'))
+            ->where('estado','>',2)
+            ->groupBy('u.nombre')
+            ->orderBy(DB::raw('count(*)'),'DESC');
+        
+        return Datatables::of($operadores)->make(true);
     }
 }

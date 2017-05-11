@@ -431,6 +431,10 @@ Route::post('deshabilitar-operador' , 'OperadoresController@disable');
 Route::get('new-operador' , 'OperadoresController@getNew');
 Route::post('new-operador' , 'OperadoresController@postNew');
 
+Route::get('ranking-solicitudes' , 'SolicitudController@getRanking');
+Route::get('listado-ranking-solicitantes' , 'SolicitudController@getRankingSolicitantes');
+Route::get('listado-ranking-operadores' , 'SolicitudController@getRankingOperadores');
+
 /********************************************************************************
  *							 	   MISC ROUTES 									*
  ********************************************************************************/
