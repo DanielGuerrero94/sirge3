@@ -207,7 +207,7 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 1000;
+        $cantidad = 10;
 
         $dt = \DateTime::createFromFormat('Ym' , date('Ym'));
         $dt->modify('-2 months');
@@ -221,7 +221,7 @@ class WebServicesController extends Controller
                                        $join->on('beneficiarios.beneficiarios.clave_beneficiario', '=',  'p.clave_beneficiario');
                                        $join->where('p.periodo','=', $periodo);
                                   })                        
-                                  ->leftjoin('siisa.inscriptos_padron as i' , DB::raw('beneficiarios.beneficiarios.numero_documento::int') , '=' , 'i.nrodocumento')
+                                  ->leftjoin('siisa.inscriptos_padron as i' , DB::raw('beneficiarios.beneficiarios.numero_documento::bigint') , '=' , DB::raw('i.nrodocumento::bigint'))
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')    
                                   ->where('id_provincia_alta' , '24')
@@ -231,12 +231,10 @@ class WebServicesController extends Controller
                                   ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
-                                  ->select(DB::raw('beneficiarios.beneficiarios.numero_documento::int'))    
+                                  ->select('beneficiarios.beneficiarios.numero_documento')    
                                   ->groupBy('beneficiarios.beneficiarios.numero_documento')                              
                                   ->get()
-                                  ->toArray(); 
-
-        //return var_dump($documentos);                                                                         
+                                  ->toArray();                                                                            
         
         try {
             DB::table("siisa.temporal_migracion_siisa")->insert($documentos);            
@@ -329,7 +327,7 @@ class WebServicesController extends Controller
 
         DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo, cantidad) VALUES (now(), ?, ?)", [$end, $cantidad]);
 
-        echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end;
+        echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end . "\n";
     }
 
      /**
