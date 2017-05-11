@@ -196,7 +196,7 @@
 				<div class="g3" style="height: 300px;"></div>
 			</div>
 		</div>
-	</div><!-- /.col --> -->
+	</div><!-- /.col -->
 
 </div>
 
