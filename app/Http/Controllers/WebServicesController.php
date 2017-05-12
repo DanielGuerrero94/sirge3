@@ -221,7 +221,7 @@ class WebServicesController extends Controller
                                        $join->on('beneficiarios.beneficiarios.clave_beneficiario', '=',  'p.clave_beneficiario');
                                        $join->where('p.periodo','=', $periodo);
                                   })                        
-                                  ->leftjoin('siisa.inscriptos_padron as i' , DB::raw('beneficiarios.beneficiarios.numero_documento::bigint') , '=' , DB::raw('i.nrodocumento::bigint'))
+                                  ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')    
                                   ->where('id_provincia_alta' , '24')
@@ -251,11 +251,12 @@ class WebServicesController extends Controller
             $datos_benef = $this->cruceSiisaXMLRequest((string) $documento['numero_documento'], $client);                            
             if($datos_benef && $datos_benef <> '{}'){                                                             
                 $data = (array) json_decode($datos_benef);                            
-                $data = (object) $data;                                                            
+                $data = (object) $data;
+                $data->nrodocumento = $documento['numero_documento'];                                                           
                 if(isset($data->resultado)){                    
                     if ($data->resultado == 'OK') {                                
                         $resultado[] = $this->guardarDatos($data);                       
-                        if (sizeof($resultado) % 2000 == 0){
+                        if (sizeof($resultado) % 1000 == 0){
                             try {
                                 InscriptosPadronSisa::insert($resultado);    
                             } catch (Exception $e) {
