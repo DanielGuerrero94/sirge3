@@ -188,13 +188,13 @@
 						    			<div class="form-group">
 							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
-								    			<select id="integrante" name="integrante" class="form-control">
+								    			<select id="integrante" name="integrante" class="form-control" readonly>
 								    				@if ($efector->integrante == 'S')
-								    					<option selected="selected" value="S" readonly>SI</option>
+								    					<option selected="selected" value="S">SI</option>
 								    					<option value="N">NO</option>
 								    				@else
 								    					<option value="S">SI</option>
-								    					<option selected="selected" value="N" readonly>NO</option>
+								    					<option selected="selected" value="N">NO</option>
 								    				@endif
 								    			</select>
 							    			</div>
