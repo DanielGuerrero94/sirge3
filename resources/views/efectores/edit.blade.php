@@ -188,7 +188,13 @@
 						    			<div class="form-group">
 							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
-								    			<select id="integrante" name="integrante" class="form-control" readonly>
+								    			@if ($efector->integrante == 'S')
+								    			<input type="text" readonly="readonly" class="form-control" id="integrante" name="integrante" value="S">SI
+								    			@else
+								    			<input type="text" readonly="readonly" class="form-control" id="integrante" name="integrante" value="N">NO
+								    			@endif
+								    			
+								    			<!-- <select id="integrante" name="integrante" class="form-control" readonly>
 								    				@if ($efector->integrante == 'S')
 								    					<option selected="selected" value="S">SI</option>
 								    					<option value="N">NO</option>
@@ -196,7 +202,7 @@
 								    					<option value="S">SI</option>
 								    					<option selected="selected" value="N">NO</option>
 								    				@endif
-								    			</select>
+								    			</select> -->
 							    			</div>
 						    			</div>
 						    		</div>
