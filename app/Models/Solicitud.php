@@ -113,4 +113,11 @@ class Solicitud extends Model
     public function prioridades(){
         return $this->hasOne('App\Models\Solicitudes\Prioridad' , 'id' , 'prioridad');
     }
+
+    /**
+     * Prioridad
+     */
+    public function adjuntos(){
+        return $this->hasOne('App\Models\Solicitudes\Adjunto' , 'id_adjunto' , 'id_adjunto');
+    }
 }

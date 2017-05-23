@@ -33,7 +33,11 @@
 					<br/>
 					<blockquote>
 						<small>{{ $solicitud->descripcion_solucion }}</small>
-					</blockquote>
+					</blockquote>					
+					<br/>
+					@if(isset($solicitud->adjuntos->nombre_actual_respuesta))
+					<b>Atencion!</b> Tiene documentos adjuntos en SIRGe sección "Mis solicitudes".
+					@endif
 					<br/>
 					<br/>
 					Para visualizar el estado y detalle de su solicitud ingrese al SIRGe Web, opción <b>SOLICITUDES</b>

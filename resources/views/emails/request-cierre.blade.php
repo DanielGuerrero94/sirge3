@@ -75,8 +75,16 @@ background-color: #f6f6f6;
                 </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                     Gracias por utilizar SIRGe Web.
                   </td>
-                </tr></table></td>
-          </tr></table></div>
+                </tr>                
+          </table>           
+          </tr>
+            @if($adjunto == 'S')               
+              <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="alert alert-warning" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #00cc00; margin: 0; padding: 20px;" align="center" bgcolor="#ff9933" valign="top">
+                Tiene documentos adjuntos en SIRGe sección "Mis solicitudes"
+                </td>
+              </tr>
+              @endif
+          </table></div>
     </td>
     <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
   </tr></table></body>

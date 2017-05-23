@@ -377,7 +377,7 @@ class LotesController extends Controller
 				->select('lote')
 				->where('sistema.subidas.id_estado',5)
 				->whereRaw("fecha_subida + interval '12 hours' < now()")				
-				->lists('lote');		
+				->lists('lote');		 	
 
 		if(isset($lotes[0])){ 			
 			Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {
@@ -387,7 +387,13 @@ class LotesController extends Controller
               	$m->to('rodrigo.cadaval.sumar@gmail.com');
 	            $m->subject('ALERTA LOTES DEMORADOS');	            
         	});	
-		}			
+		}
+
+		Subida::join('sistema.lotes','sistema.lotes.id_subida','=','sistema.subidas.id_subida')
+			  ->where('sistema.subidas.id_estado',5)
+			  ->where('sistema.lotes.id_estado','<>',4)
+			  ->whereRaw("fecha_subida + interval '12 hours' < now()")				
+			  ->update(['id_estado' => 1]);			
 			
 		return null;
 	}

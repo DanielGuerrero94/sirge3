@@ -221,22 +221,20 @@ class WebServicesController extends Controller
                                        $join->on('beneficiarios.beneficiarios.clave_beneficiario', '=',  'p.clave_beneficiario');
                                        $join->where('p.periodo','=', $periodo);
                                   })                        
-                                  ->leftjoin('siisa.inscriptos_padron as i' , DB::raw('beneficiarios.beneficiarios.numero_documento::int') , '=' , 'i.nrodocumento')
+                                  ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')    
-                                  ->where('id_provincia_alta' , '24')
+                                  ->where('id_provincia_alta' , '23')
                                   ->where('clase_documento' , 'P')
                                   //->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')                                  
                                   ->whereNull('e.numero_documento')                                                     
                                   ->take($cantidad)                                  
-                                  ->select(DB::raw('beneficiarios.beneficiarios.numero_documento::int'))    
+                                  ->select('beneficiarios.beneficiarios.numero_documento')    
                                   ->groupBy('beneficiarios.beneficiarios.numero_documento')                              
                                   ->get()
-                                  ->toArray(); 
-
-        //return var_dump($documentos);                                                                         
+                                  ->toArray();                                                                            
         
         try {
             DB::table("siisa.temporal_migracion_siisa")->insert($documentos);            
@@ -253,11 +251,12 @@ class WebServicesController extends Controller
             $datos_benef = $this->cruceSiisaXMLRequest((string) $documento['numero_documento'], $client);                            
             if($datos_benef && $datos_benef <> '{}'){                                                             
                 $data = (array) json_decode($datos_benef);                            
-                $data = (object) $data;                                                            
+                $data = (object) $data;
+                $data->nrodocumento = $documento['numero_documento'];                                                           
                 if(isset($data->resultado)){                    
                     if ($data->resultado == 'OK') {                                
                         $resultado[] = $this->guardarDatos($data);                       
-                        if (sizeof($resultado) % 2000 == 0){
+                        if (sizeof($resultado) % 1000 == 0){
                             try {
                                 InscriptosPadronSisa::insert($resultado);    
                             } catch (Exception $e) {
@@ -329,7 +328,7 @@ class WebServicesController extends Controller
 
         DB::statement("INSERT INTO siisa.tiempo_proceso (fecha,tiempo, cantidad) VALUES (now(), ?, ?)", [$end, $cantidad]);
 
-        echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end;
+        echo "Los beneficiarios se han insertado correctamente. Tiempo: " . $end . "\n";
     }
 
      /**

@@ -118,6 +118,7 @@ class CompromisoController extends Controller
 
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+			$periodo = $dt->format('Ym');
 			$vista = 'compromiso-anual.descentralizacion-periodo';
 		} else {
 
@@ -240,6 +241,7 @@ class CompromisoController extends Controller
 
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+			$periodo = $dt->format('Ym');
 			$vista = 'compromiso-anual.facturacion-periodo';
 		} else {
 			
@@ -361,6 +363,7 @@ class CompromisoController extends Controller
 
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+			$periodo = $dt->format('Ym');
 			$vista = 'compromiso-anual.datos-periodo';
 		} else {
 			
@@ -379,7 +382,7 @@ class CompromisoController extends Controller
                                          ->where('periodo','=',$periodo); 
                                 })
 						->where('year',$dt->format('Y'))
-						->orderBy('m.id_provincia')->get();
+						->orderBy('m.id_provincia')->get();		
 
 		foreach ($provincias as $key => $provincia){
 			$series[0]['type'] = 'column';
@@ -482,6 +485,7 @@ class CompromisoController extends Controller
 
 		if ($periodo) {
 			$dt = \DateTime::createFromFormat('Y-m' , $periodo);
+			$periodo = $dt->format('Ym');
 			$vista = 'compromiso-anual.dependencia-periodo';
 		} else {
 			

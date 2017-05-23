@@ -55,6 +55,10 @@ Route::post('avisos-leidos' , 'InboxController@avisosLeidos');
 #	INGRESO
 Route::get('nueva-solicitud' , 'SolicitudController@getNuevaSolicitud');
 Route::post('nueva-solicitud' , 'SolicitudController@postNuevaSolicitud');
+Route::post('attach-document' , 'SolicitudController@attachDocument');
+Route::post('attach-document-cierre' , 'SolicitudController@attachDocumentResponse');
+Route::get('descargar-adjunto-solicitante/{id}' , 'SolicitudController@downloadAdjuntoSolicitante');
+Route::get('descargar-adjunto-cierre/{id}' , 'SolicitudController@downloadAdjuntoCierre');
 #	MIS SOLICITUDES
 Route::get('mis-solicitudes' , 'SolicitudController@getMisSolicitudes');
 Route::get('mis-solicitudes-table' , 'SolicitudController@myRequestsTable');
@@ -278,7 +282,6 @@ Route::get('grafico-2/{periodo}' , 'GraficosController@getGrafico2');
 Route::get('grafico-3/{periodo}' , 'GraficosController@getGrafico3');
 Route::get('grafico-3-treemap/{periodo}' , 'GraficosController@getDistribucionGrafico3');
 Route::get('grafico-3-table/{periodo}' , 'GraficosController@getGrafico3Tabla');
-Route::get('grafico-3-dr/{periodo}' , 'GraficosController@getGrafico3Dr');
 Route::get('grafico-4/{periodo}' , 'GraficosController@getGrafico4');
 Route::get('grafico-4-table/{periodo}' , 'GraficosController@getGrafico4Tabla');
 Route::get('grafico-5/{periodo}' , 'GraficosController@getGrafico5');
@@ -428,6 +431,10 @@ Route::post('deshabilitar-operador' , 'OperadoresController@disable');
 Route::get('new-operador' , 'OperadoresController@getNew');
 Route::post('new-operador' , 'OperadoresController@postNew');
 
+Route::get('ranking-solicitudes' , 'SolicitudController@getRanking');
+Route::get('listado-ranking-solicitantes' , 'SolicitudController@getRankingSolicitantes');
+Route::get('listado-ranking-operadores' , 'SolicitudController@getRankingOperadores');
+
 /********************************************************************************
  *							 	   MISC ROUTES 									*
  ********************************************************************************/
@@ -479,7 +486,7 @@ Route::post('carga-odp' , 'ComponentesController@postCarga');
 Route::get('odp-resumen/{odp}/{periodo?}/{provincia?}' , 'ComponentesController@getDetalleProvinciaODP');
 Route::get('componentes-odp2-evolucion/{provincia?}' , 'ComponentesController@getEvolucionODP1');
 Route::get('descripcion-indicador/{indicador?}' , 'ComponentesController@getDescripcionIndicador');
-Route::get('metas-odp-indicador/{indicador}/{provincia}/{tipo_meta}/{year}' , 'ComponentesController@getFormularioMetas');
+Route::get('metas-odp-indicador/{indicador}/{provincia}/{tipo_meta}' , 'ComponentesController@getFormularioMetas');
 
 
 /**
