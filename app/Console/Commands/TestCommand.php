@@ -43,10 +43,12 @@ class TestCommand extends Command
      */
     public function handle()
     {        
+        unlink('/var/www/html/sirge3/storage/swap/puco.txt');
+        unlink('/var/www/html/sirge3/storage/swap/PUCO_2017-05.txt');
         //app('App\Http\Controllers\DatawarehouseController')->ejecutarTodas();
         //app('App\Http\Controllers\LotesController')->alertSubidasMalProcesadas();        
         //app('App\Http\Controllers\DatawarehouseController')->ejecutarTodas();        
-        app('App\Http\Controllers\WebServicesController')->cruzarBeneficiariosConSiisa();
+        //app('App\Http\Controllers\WebServicesController')->cruzarBeneficiariosConSiisa();
         //DB::table('test')->insert(['mensaje' => 'Hola cómo te va JAVIER MINSKY?, sos bastante gay!']);
     }
 }

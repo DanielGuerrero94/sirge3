@@ -420,21 +420,14 @@ class DatawarehouseController extends Controller
     public function run_multiple_statements($statement, $periodo = null)
     {          
         // split the statements, so DB::statement can execute them.
-        $statements = array_filter(array_map('trim', explode(';', $statement)));                
-        
-        /*if(isset($periodo)){
+        //$statements = array_filter(array_map('trim', explode(';', $statement)));                
+                
             foreach ($statements as $stmt) {            
-                if(! DB::connection('datawarehouse')->getPdo()->prepare($stmt)->bindParam(1, $periodo)->exec() ){
-                    echo "Error en la conexion o query";
-                }
-            }
-        } 
-        else{*/
-            foreach ($statements as $stmt) {            
-                if(! DB::connection('datawarehouse')->getPdo()->exec($stmt)){
-                    echo "Error en la conexion o query";
-                }
-            }
-       /* }   */     
+                try {
+                    DB::connection('datawarehouse')->getPdo()->exec($stmt);
+                } catch (Exception $e) {
+                    return json_encode($e->errorInfo());
+                }                
+            }      
      }
 }

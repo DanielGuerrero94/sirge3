@@ -372,7 +372,7 @@ class PrestacionesController extends AbstractPadronesController
 									$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));		
 								}
 								else {
-									$this->_error['motivos'] = json_encode($e->errorInfo);
+									$this->_error['motivos'] = json_encode($e->errorInfo());
 								}
 								Rechazo::insert($this->_error);
 							}		
@@ -454,18 +454,27 @@ class PrestacionesController extends AbstractPadronesController
 									if ($prestacion->count()){											
 										$prestacion = $prestacion->firstOrFail();
 										$drmodificado = new PrestacionDRModificado();
-										$drmodificado->id_prestacion = $prestacion->id;
+										$drmodificado->id_prestacion = $prestacion->id;		
 										$drmodificado->datos_reportables = $prestacion->datos_reportables;
 										$drmodificado->lote = $lote;
-										$drmodificado->save();	
-										$prestacion->datos_reportables = $prestacion_raw['datos_reportables'];	
+										
+										try {
+											$drmodificado->save();		
+										} catch (Exception $e) {
+											$this->_resumen['rechazados'] ++;										
+											$prestacion_raw['operacion'] = 'C';
+											$this->_error['registro'] = json_encode($prestacion_raw);					
+											$this->_error['motivos'] = '{"corrección" : ["Registro a corregir no encontrado"]}';						
+										}
+										
+										$prestacion->datos_reportables = $prestacion_raw['datos_reportables'];											
 										$prestacion->save();
 										$this->_resumen['modificados'] ++;
 									} else {
 										$this->_resumen['rechazados'] ++;										
 										$prestacion_raw['operacion'] = 'C';
 										$this->_error['registro'] = json_encode($prestacion_raw);					
-										$this->_error['motivos'] = '{"modificacion" : ["Registro a corregir no encontrado"]}';										
+										$this->_error['motivos'] = '{"corrección" : ["Registro a corregir no encontrado"]}';										
 										Rechazo::insert($this->_error);
 									}
 									break;
