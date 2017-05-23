@@ -412,7 +412,9 @@ class EfectoresController extends Controller
               $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
               $m->to('sirgeweb@gmail.com');
               $m->to('rodrigo.cadaval.sumar@gmail.com');
-              $m->to('maxi-mail@hotmail.com');              
+              $m->to('maxi-mail@hotmail.com');
+              $m->to('eridani.lucena@gmail.com');
+              $m->to('mariel_fucci@hotmail.com');
               $m->subject('Solicitud de baja de efector!');
             });
             
