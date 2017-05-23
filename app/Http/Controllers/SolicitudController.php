@@ -195,7 +195,8 @@ class SolicitudController extends Controller
         },'estados','operador','prioridades','adjuntos'])->find($id);
         $data = [
             'solicitud' => $s,
-            'back' => $back
+            'back' => $back,
+            'user_priority' => Auth::user()->id_menu
         ];
         return view('requests.details' , $data);
     }
