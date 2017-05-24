@@ -234,7 +234,9 @@ class EfectoresController extends Controller
               $m->to('sirgeweb@gmail.com');
               $m->to('javier.minsky@gmail.com');
               $m->to('rodrigo.cadaval.sumar@gmail.com');
-              $m->to('maxi-mail@hotmail.com');              
+              $m->to('maxi-mail@hotmail.com');
+              $m->to('eridani.lucena@gmail.com');
+              $m->to('mariel_fucci@hotmail.com');              
               $m->subject('Solicitud de alta de efector!');
           });
           
