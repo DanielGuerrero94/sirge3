@@ -42,7 +42,7 @@ class TestCommand extends Command
      * @return mixed
      */
     public function handle()
-    {        
+    {                
         //app('App\Http\Controllers\DatawarehouseController')->ejecutarTodas();
         //app('App\Http\Controllers\LotesController')->alertSubidasMalProcesadas();        
         //app('App\Http\Controllers\DatawarehouseController')->ejecutarTodas();        
