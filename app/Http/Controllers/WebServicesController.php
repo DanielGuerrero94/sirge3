@@ -225,7 +225,7 @@ class WebServicesController extends Controller
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')    
                                   ->where('id_provincia_alta' , '23')
-                                  ->where('clase_documento' , 'P')
+                                  ->where('clase_documento' , 'P')                                  
                                   //->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
                                   ->whereNull('t.numero_documento')                                  
@@ -380,7 +380,7 @@ class WebServicesController extends Controller
     public function guardarError($datos, $documento){             
         
         $devolver = array();
-        $noEncontrado = ErrorPadronSisa::find($documento);
+        $noEncontrado = ErrorPadronSisa::where('numero_documento',$documento)->first();
         
         if($noEncontrado){                
             $noEncontrado->error = $this->convertirEnTexto($datos->resultado);                   
@@ -392,9 +392,8 @@ class WebServicesController extends Controller
                 echo json_encode($e);
             }                        
         }
-        else{            
-            //$noEncontrado = new ErrorPadronSisa();
-            $devolver['numero_documento'] = intval($documento);                
+        else{                        
+            $devolver['numero_documento'] = $documento;                
             $devolver['error'] = isset($datos->error) ? $datos->mensaje : $this->convertirEnTexto($datos->resultado);
             $devolver['created_at'] = date('Y-m-d H:i:s');
             $devolver['updated_at'] = date('Y-m-d H:i:s');
