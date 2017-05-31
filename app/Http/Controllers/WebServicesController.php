@@ -207,7 +207,7 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 1000;
+        $cantidad = 10;
 
         $dt = \DateTime::createFromFormat('Ym' , date('Ym'));
         $dt->modify('-2 months');
@@ -224,7 +224,7 @@ class WebServicesController extends Controller
                                   ->leftjoin('siisa.inscriptos_padron as i' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t' , 'beneficiarios.beneficiarios.numero_documento' , '=' , 't.numero_documento')    
-                                  ->where('id_provincia_alta' , '23')
+                                  ->where('id_provincia_alta' , '22')
                                   ->where('clase_documento' , 'P')                                  
                                   //->whereIn('g.id_localidad', [1366,1386,1390,1402,1411])                                
                                   ->whereNull('i.nrodocumento')
@@ -234,7 +234,14 @@ class WebServicesController extends Controller
                                   ->select('beneficiarios.beneficiarios.numero_documento')    
                                   ->groupBy('beneficiarios.beneficiarios.numero_documento')                              
                                   ->get()
-                                  ->toArray();                                                                            
+                                  ->toArray();                                
+
+        if(count($documentos) == 0){
+            if(DB::table('siisa.temporal_migracion_siisa')->count() == 0){
+                Schema::dropIfExists('siisa.temporal_migracion_siisa');
+            }
+            die("No quedan más beneficiarios a procesar de dicha provincia");
+        }                                            
         
         try {
             DB::table("siisa.temporal_migracion_siisa")->insert($documentos);            
