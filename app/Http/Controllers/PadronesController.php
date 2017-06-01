@@ -100,6 +100,8 @@ class PadronesController extends Controller
 				$p = 'profe'; break;
 			case 6 :
 				$p = 'sss'; break;
+			case 7 :
+				$p = 'trazadoras'; break;
 			default:
 				break;
 		}
@@ -170,8 +172,8 @@ class PadronesController extends Controller
 		$nombre_archivo = uniqid() . '.txt';
 
 		$destino = $this->getName($r->id_padron , TRUE);
+		
 		$s = new Subida;
-
 		$s->id_usuario = Auth::user()->id_usuario;
 		$s->id_padron = $r->id_padron;
 		$s->nombre_original = $r->file->getClientOriginalName();
