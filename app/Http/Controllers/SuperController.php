@@ -258,7 +258,7 @@ class SuperController extends Controller
 					$sss_raw['fecha_nacimiento'] = $fnac->format('Y-m-d');
 
 					$limite_inferior = new \DateTime();
-					$limite_inferior->modify('-3 months');
+					$limite_inferior->modify('-5 months');
 					$limite_inferior->modify('first day of this month');
 
 					$periodo_reportado = \DateTime::createFromFormat('Ym' , $sss_raw['ultimo_aporte']);
