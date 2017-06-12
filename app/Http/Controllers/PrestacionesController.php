@@ -460,11 +460,11 @@ class PrestacionesController extends AbstractPadronesController
 										
 										try {
 											$drmodificado->save();		
-										} catch (Exception $e) {
+										} catch (QueryException $e) {
 											$this->_resumen['rechazados'] ++;										
 											$prestacion_raw['operacion'] = 'C';
 											$this->_error['registro'] = json_encode($prestacion_raw);					
-											$this->_error['motivos'] = '{"corrección" : ["Registro a corregir no encontrado"]}';						
+											$this->_error['motivos'] = '{"corrección" : ["Registro a corregir repetido"]}';						
 										}
 										
 										$prestacion->datos_reportables = $prestacion_raw['datos_reportables'];											
