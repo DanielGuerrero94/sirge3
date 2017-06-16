@@ -264,7 +264,7 @@ class SuperController extends Controller
 					$periodo_reportado = \DateTime::createFromFormat('Ym' , $sss_raw['ultimo_aporte']);
 
 					//if ($limite_inferior <= $periodo_reportado || (int)$sss_raw['codigo_os'] == 500807){
-					if ((int)$sss_raw['codigo_os'] == 500807){
+					if ((int)$sss_raw['codigo_os'] != 500807){
 						$this->_resumen['insertados'] ++;
 						$bulk[] = $sss_raw;
 						if (sizeof($bulk) % 4000 == 0){
