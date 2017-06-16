@@ -30,6 +30,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('CREATE SCHEMA estadisticas;');
 		DB::statement('CREATE SCHEMA chat;');
 		DB::statement('CREATE SCHEMA diccionarios;');
+		DB::statement('CREATE SCHEMA hcd;');
 	}
 
 	/**
@@ -58,6 +59,7 @@ class CreateEsquemas extends Migration {
 		DB::statement('DROP SCHEMA estadisticas CASCADE;');
 		DB::statement('DROP SCHEMA chat CASCADE;');
 		DB::statement('DROP SCHEMA diccionarios CASCADE;');
+		DB::statement('DROP SCHEMA hcd CASCADE;');
 
 	}
 }
