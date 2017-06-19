@@ -264,20 +264,20 @@ class SuperController extends Controller
 					$periodo_reportado = \DateTime::createFromFormat('Ym' , $sss_raw['ultimo_aporte']);
 
 					//if ($limite_inferior <= $periodo_reportado || (int)$sss_raw['codigo_os'] == 500807){
-					if ((int)$sss_raw['codigo_os'] != 500807){
-						$this->_resumen['insertados'] ++;
-						$bulk[] = $sss_raw;
-						if (sizeof($bulk) % 4000 == 0){
-							Super::insert($bulk);
-							unset($bulk);
-							$bulk = [];
-						}
-					} else {
+					//if ((int)$sss_raw['codigo_os'] != 500807){
+					$this->_resumen['insertados'] ++;
+					$bulk[] = $sss_raw;
+					if (sizeof($bulk) % 4000 == 0){
+						Super::insert($bulk);
+						unset($bulk);
+						$bulk = [];
+					}
+					/*} else {
 						$this->_resumen['rechazados'] ++;						
 						$this->_error['registro'] = json_encode($sss_raw);						
 						$this->_error['motivos'] = '{"codigo_os invalido" : ["El codigo_os no es valido"]}';
 						Rechazo::insert($this->_error);		
-					}
+					}*/
 				 }
 			} else {
 				$this->_resumen['rechazados'] ++;				
