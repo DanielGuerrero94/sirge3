@@ -28,7 +28,7 @@ class GeoController extends Controller
      * @return json
      */
     public function departamentos($provincia){
-    	$departamentos = Departamento::where('id_provincia' , $provincia)->get();
+    	$departamentos = Departamento::where('id_provincia' , $provincia)->orderBy('nombre_departamento','ASC')->get();
     	return response()->json($departamentos);
     }
 
@@ -40,7 +40,7 @@ class GeoController extends Controller
      * @return json
      */
     public function localidades($provincia , $departamento){
-    	$localidades = Localidad::where('id_provincia' , $provincia)->where('id_departamento' , $departamento)->get();
+    	$localidades = Localidad::where('id_provincia' , $provincia)->where('id_departamento' , $departamento)->orderBy('nombre_localidad','ASC')->get();
     	return response()->json($localidades);
     }
 }
