@@ -197,6 +197,33 @@
 						    			</div>
 						    		</div>
 						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+							    			<label for="hcd" class="col-sm-4 control-label">Historia Clinica Digital</label>
+							    			<div class="col-sm-8">
+								    			<select id="hcd" name="hcd" class="form-control">
+								    				<option value="S">SI</option>
+								    				<option value="N" selected>NO</option>
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+							    			<label for="sistema_hcd" class="col-sm-4 control-label">Sistema HCD</label>
+							    			<div class="col-sm-8">
+								    			<select class="form-control" id="sistema_hcd" name="sistema_hcd" disabled>
+		                    						<option value="">Seleccione...</option>
+		                    						@foreach($sistemas_hcd as $sistema_hcd)
+		                    						<option value="{{ $sistema_hcd->id_sistema }}"> {{ $sistema_hcd->nombre }} </option>
+		                    						@endforeach
+		                    					</select>
+							    			</div>
+						    			</div>
+						    		</div>						    		
+						    	</div>
 						    </div>
 						    <div class="tab-pane" id="domicilio">
 						    	<div class="row">
@@ -513,6 +540,15 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#hcd').change(function(){
+		var estado_hcd = $(this).val();
+		if (estado_hcd == 'N'){
+			$('#sistema_hcd').attr('disabled' , 'disabled');
+		} else {
+			$('#sistema_hcd').removeAttr('disabled');	
+		}
+	});
+
 	$('#indirecto').change(function(){
 		var estado = $(this).val();
 		if (estado == 'N'){
@@ -622,16 +658,20 @@ $(document).ready(function() {
 			}
 		},
 		submitHandler : function(form){
+
+			console.log($(form).serialize());
 			$.ajax({
 				method : 'post',
 				url : 'efectores-alta',
 				data : $(form).serialize(),
 				success : function(data){
+					console.log(data);
 					$('#modal-text').html(data);
 					$('.modal').modal();
 					$('form').trigger('reset');
 				},
 				error : function(data){
+					console.log(data);
 					var html = '';
 					var e = JSON.parse(data.responseText);
 					$.each(e , function (key , value){

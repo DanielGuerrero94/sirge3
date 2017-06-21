@@ -34,6 +34,7 @@ use App\Models\Efectores\Ppac;
 use App\Models\Efectores\Neonatal;
 use App\Models\Efectores\Obstetrico;
 use App\Models\Efectores\CategoriaPPAC;
+use App\Models\HCD\Sistemas as HCD;
 
 use App\Models\Geo\Provincia;
 use App\Models\Geo\Departamento;
@@ -124,12 +125,14 @@ class EfectoresController extends Controller
         $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
         $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
         $provincias = Provincia::all();
+        $sistemas_hcd = HCD::where('id_provincia',Auth::user()->id_provincia)->get();
         $data = [
             'page_title' => 'Alta de nuevo efector',
             'tipos' => $tipos,
             'dependencias' => $dependencias,
             'categorias' => $categorias,
-            'provincias' => $provincias
+            'provincias' => $provincias,
+            'sistemas_hcd' => $sistemas_hcd
         ];
 
         return view('efectores.alta' , $data);
@@ -204,7 +207,11 @@ class EfectoresController extends Controller
         $ef->dependencia_sanitaria = $r->dep_san;
         $ef->integrante = $r->integrante;
         $ef->compromiso_gestion = $r->compromiso;
-        $ef->priorizado = $r->priorizado;
+        $ef->priorizado = $r->priorizado;        
+        if(isset($r->hcd) && $r->hcd == 'S'){
+          $ef->hcd = $r->hcd;
+          $ef->id_sistema_hcd = $r->sistema_hcd;
+        }        
         $ef->id_estado = 2;
         
         $result = DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
@@ -239,7 +246,7 @@ class EfectoresController extends Controller
           
           return 'Se ha solicitado el alta del efector ' . $ef->nombre;
         } else {
-          return 'Ha ocurrido un error';
+          return json_encode(["resultado" => 'Ha ocurrido un error']);
         }
     }
 
@@ -528,6 +535,7 @@ class EfectoresController extends Controller
       $departamentos = Departamento::all();
       $localidades = Localidad::all();
       $addendas = TipoAddenda::whereNotIn('id' , $add_firmadas)->get();
+      $sistemas_hcd = HCD::where('id_provincia',Auth::user()->id_provincia)->get();
       $efector = Efector::with([
                 'estado' , 
                 'tipo' , 
@@ -598,6 +606,10 @@ class EfectoresController extends Controller
       $ef->compromiso_gestion = $r->compromiso;
       $ef->domicilio = $r->direccion;
       $ef->codigo_postal = $r->codigo_postal;
+      $ef->hcd = $r->hcd;
+      if($ef->hcd == 'S'){
+         $ef->id_sistema_hcd = $r->sistema_hcd;
+      }
       if ($ef->save()){
         $update = true;
       } else {

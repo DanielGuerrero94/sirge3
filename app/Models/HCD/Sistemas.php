@@ -18,7 +18,7 @@ class Sistemas extends Model
 	 *
 	 * @var string
 	 */
-	protected $primaryKey = 'id';
+	protected $primaryKey = 'id_sistema';
 
 	/**
 	 * Indicates if the model should be timestamped.
