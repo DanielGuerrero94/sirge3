@@ -197,4 +197,11 @@ class Efector extends Model
 	public function neonatal(){
 		return $this->hasOne('App\Models\Efectores\Neonatal' , 'siisa' , 'siisa');
 	}
+
+	/** 
+	 * Devuelve el sistema que utiliza de Historia Clinica Digital
+	 */
+	public function historiaclinica(){
+		return $this->hasOne('App\Models\HCD\Sistemas' , 'id_sistema' , 'id_sistema_hcd');
+	}
 }

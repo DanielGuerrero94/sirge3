@@ -123,6 +123,38 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<!-- TIPO -->
+							<div class="form-group">
+								<label class="col-md-6 control-label">Historia Clinica Digital</label>
+								<div class="col-md-6">
+									<p class="form-control-static">
+									@if ($efector->hcd == 'S')
+										<span class="label label-success">SI</span>
+										@else
+										<span class="label label-danger">NO</span>
+									@endif
+									</p>
+								</div>
+							</div>	
+						</div>
+						<div class="col-md-6">
+							<!-- SIISA -->
+							<div class="form-group">
+								<label class="col-md-6 control-label">Sistema HCD</label>
+								<div class="col-md-6">
+									<p class="form-control-static">
+									@if (isset($efector->historiaclinica->nombre))
+										{{ $efector->historiaclinica->nombre }}
+									@else
+										SIN DATOS
+									@endif									
+									</p>
+								</div>
+							</div>
+						</div>						
+					</div>
 					<h4>Información geográfica</h4>
 					<div class="row">
 						<div class="col-md-12">
