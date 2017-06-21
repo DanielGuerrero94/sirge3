@@ -65,6 +65,8 @@
 		<td class="table-header">CODIGO PROVINCIAL EFECTOR</th>
 		<td class="table-header">DEPENDENCIA SANITARIA</th>
 		<td class="table-header">INTEGRANTE</th>
+		<td class="table-header">HISTORIA CLINICA</th>
+		<td class="table-header">SISTEMA HCD</th>
 		<td class="table-header">COMPROMISO GESTION</th>
 		<td class="table-header">NUMERO COMPROMISO</th>
 		<td class="table-header">FIRMANTE</th>
@@ -123,6 +125,8 @@
 			<td>{{$efector->codigo_provincial_efector or '' }}</td>
 			<td>{{$efector->dependencia_sanitaria or '' }}</td>
 			<td>{{$efector->integrante or '' }}</td>
+			<td>{{$efector->hcd or '' }}</td>
+			<td>{{$efector->historiaclinica->nombre or '' }}</td>
 			<td>{{$efector->compromiso_gestion or '' }}</td>
 			<td>{{$efector->compromiso->numero_compromiso  or '' }}</td>
 			<td>{{$efector->compromiso->firmante  or '' }}</td>

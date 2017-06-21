@@ -163,6 +163,17 @@ return [
             'schema'   => 'prestaciones',
         ],
 
+        'hcd' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'hcd',
+        ],
+
         'comprobantes' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', 'localhost'),
@@ -197,6 +208,17 @@ return [
             'schema'   => 'indicadores',
         ],
 
+        'odp' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'odp',
+        ],
+
         'datawarehouse' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST_DW', 'localhost'),
@@ -210,10 +232,19 @@ return [
 
         'sqlsrv' => [
             'driver'   => 'sqlsrv',
-            'host'     => env('DB_HOST', 'localhost'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host'     => env('DB_HOST_SQLSERVER', 'localhost'),
+            'database' => env('DB_DATABASE_SQLSERVER', 'forge'),
+            'username' => env('DB_USERNAME_SQLSERVER', 'forge'),
+            'password' => env('DB_PASSWORD_SQLSERVER', ''),            
+            'prefix'   => '',
+        ],
+
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('DB_HOST_MDB', 'localhost'),
+            'database' => env('DB_DATABASE_MDB', 'forge'),
+            'username' => env('DB_USERNAME_MDB', 'forge'),
+            'password' => env('DB_PASSWORD_MDB', ''),
             'charset'  => 'utf8',
             'prefix'   => '',
         ],

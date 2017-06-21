@@ -234,6 +234,46 @@
 						    			</div>
 						    		</div>
 						    	</div>
+						    	<br />
+						    	<div class="row">
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+							    			<label for="hcd" class="col-sm-4 control-label">Historia Clinica Digital</label>
+							    			<div class="col-sm-8">
+								    			<select id="hcd" name="hcd" class="form-control">
+								    				@if ($efector->hcd == 'S')
+								    					<option selected="selected" value="S">SI</option>
+								    					<option value="N">NO</option>
+								    				@else
+								    					<option value="S">SI</option>
+								    					<option selected="selected" value="N">NO</option>
+								    				@endif				
+								    			</select>
+							    			</div>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<div class="form-group">
+							    			<label for="sistema_hcd" class="col-sm-4 control-label">Sistema HCD</label>
+							    			<div class="col-sm-8">
+								    			@if (!$efector->id_sistema_hcd)
+		                    						<select class="form-control" id="sistema_hcd" name="sistema_hcd" disabled>
+	                    						@else
+	                    							<select class="form-control" id="sistema_hcd" name="sistema_hcd">
+	                    						@endif
+	                    							<option value="">SIN SISTEMA</option>
+		                    						@foreach($sistemas_hcd as $sistema_hcd)
+		                    							@if ($efector->id_sistema_hcd == $sistema_hcd->id_sistema)
+		                    								<option value="{{ $sistema_hcd->id_sistema }}" selected="selected"> {{ $sistema_hcd->nombre }} </option>
+		                    							@else
+		                    								<option value="{{ $sistema_hcd->id_sistema }}"> {{ $sistema_hcd->nombre }} </option>
+		                    							@endif
+		                    						@endforeach
+		                    					</select>
+							    			</div>
+						    			</div>
+						    		</div>						    		
+						    	</div>
 						    </div>
 						    <div class="tab-pane" id="domicilio">
 						    	<div class="row">
@@ -772,6 +812,17 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#hcd').change(function(){
+		var estado_hcd = $(this).val();
+		if (estado_hcd == 'N'){
+			$('#sistema_hcd option[value=""]').attr('selected','selected');
+			$('#sistema_hcd').attr('disabled' , 'disabled');
+		} else {
+			$('#sistema_hcd option[value=""]').removeAttr('selected');
+			$('#sistema_hcd').removeAttr('disabled');	
+		}
+	});
+
 	$('#indirecto').change(function(){
 		var estado = $(this).val();
 		if (estado == 'N'){
@@ -816,6 +867,12 @@ $(document).ready(function() {
 				required : true
 			},
 			compromiso : {
+				required : true
+			},
+			hcd : {
+				required : true
+			},
+			sistema_hcd : {
 				required : true
 			},
 			direccion : {
