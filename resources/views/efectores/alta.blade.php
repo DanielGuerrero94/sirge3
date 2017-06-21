@@ -215,7 +215,7 @@
 							    			<label for="sistema_hcd" class="col-sm-4 control-label">Sistema HCD</label>
 							    			<div class="col-sm-8">
 								    			<select class="form-control" id="sistema_hcd" name="sistema_hcd" disabled>
-		                    						<option value="">Seleccione...</option>
+		                    						<option value="">SIN SISTEMA</option>
 		                    						@foreach($sistemas_hcd as $sistema_hcd)
 		                    						<option value="{{ $sistema_hcd->id_sistema }}"> {{ $sistema_hcd->nombre }} </option>
 		                    						@endforeach
@@ -543,8 +543,10 @@ $(document).ready(function() {
 	$('#hcd').change(function(){
 		var estado_hcd = $(this).val();
 		if (estado_hcd == 'N'){
+			$('#sistema_hcd option[value=""]').attr('selected','selected');
 			$('#sistema_hcd').attr('disabled' , 'disabled');
 		} else {
+			$('#sistema_hcd option[value=""]').removeAttr('selected');
 			$('#sistema_hcd').removeAttr('disabled');	
 		}
 	});
@@ -593,6 +595,12 @@ $(document).ready(function() {
 				required : true
 			},
 			compromiso : {
+				required : true
+			},
+			hcd : {
+				required : true
+			},
+			sistema_hcd : {
 				required : true
 			},
 			direccion : {

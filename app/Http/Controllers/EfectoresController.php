@@ -572,7 +572,8 @@ class EfectoresController extends Controller
         'categorias' => $categorias,
         'provincias' => $provincias,
         'efector' => $efector,
-        'addendas' => $addendas
+        'addendas' => $addendas,
+        'sistemas_hcd' => $sistemas_hcd
       ];
       return view('efectores.edit' , $data);
       
@@ -606,10 +607,14 @@ class EfectoresController extends Controller
       $ef->compromiso_gestion = $r->compromiso;
       $ef->domicilio = $r->direccion;
       $ef->codigo_postal = $r->codigo_postal;
-      $ef->hcd = $r->hcd;
-      if($ef->hcd == 'S'){
-         $ef->id_sistema_hcd = $r->sistema_hcd;
+      if(isset($r->hcd) && $r->hcd == 'S'){
+          $ef->hcd = $r->hcd;
+          $ef->id_sistema_hcd = $r->sistema_hcd;
       }
+      else{
+          $ef->hcd = 'N';
+          $ef->id_sistema_hcd = NULL;
+      }    
       if ($ef->save()){
         $update = true;
       } else {
