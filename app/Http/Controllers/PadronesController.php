@@ -152,7 +152,7 @@ class PadronesController extends Controller
 		else{
 			return array('status' => 'ok');
 		}
-	}
+	}	
 
 	/**
 	 * Guarda el archivo en el sistema
@@ -167,6 +167,14 @@ class PadronesController extends Controller
 		if($status['status'] == 'error'){
 			return response()->json(['success' => 'false',
         							 'errors'  => "No puede cargar nuevos archivos habiendo lotes pendientes en el mismo padrón. Dichos lotes son ". $status['detalle']]);
+		}
+
+		if($r->id_padron == 7){
+			$status_nombre = app('App\Http\Controllers\TrazadorasController')->identificarTrazadora($r->file->getClientOriginalName(),'Y');
+			if($status_nombre['status'] == 'error'){
+				return response()->json(['success' => 'false',
+	        							 'errors'  => "El nombre del archivo no cumple con las reglas" . "<br \>" . $status_nombre['detalle']]);
+			}	
 		}		
 
 		$nombre_archivo = uniqid() . '.txt';
