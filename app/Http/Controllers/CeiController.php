@@ -272,7 +272,7 @@ class CeiController extends Controller
 	 */
 	public function getReporte($id){
 
-		$periodos = Resultado::select('periodo')->groupBy('periodo')->lists('periodo');
+		$periodos = Resultado::select('periodo')->orderBy('periodo','desc')->groupBy('periodo')->lists('periodo');
 		$tipos = Tipo::select('cei.indicadores_tipo.*')->join('cei.indicadores' , 'cei.indicadores_tipo.id' , '=' , 'cei.indicadores.tipo')->where('indicador' , $id)->orderBy('cei.indicadores_tipo.id')->get();
 		$detalle = Detalle::findOrFail($id);
 
@@ -465,7 +465,7 @@ class CeiController extends Controller
 		    			$denominador = Denominador::where('indicador' , $id_indicador)
 		    									->where('id_provincia' , $provincia->id_provincia)
 		    									->firstOrFail();
-		    			$super_objeto['denominador'] = $denominador->denominador;
+		    			$super_objeto['denominador'] = intval($denominador->denominador);
 		    		}
 	    		// }
     		}
@@ -767,7 +767,7 @@ class CeiController extends Controller
 	    		}
 	    		elseif(in_array(Indicador::find($id_indicador)->tipo,array(2,3)) )
 	    		{	    			
-	    			$super_objeto['denominador'] = $oportuno->beneficiarios_cantidad_inicial;
+	    			$super_objeto['denominador'] = intval($oportuno->beneficiarios_cantidad_inicial);
 	    		}
 	    		
 
