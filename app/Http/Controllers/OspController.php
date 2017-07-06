@@ -233,6 +233,9 @@ class OspController extends Controller
 
 		$bulk = [];				
 		$registros = $this->abrirArchivo($id);
+		$codigo_os = SubidaOsp::findOrFail($id)->codigo_osp;
+		Osp::where('codigo_os' , $codigo_os)->delete();				
+
 		$lote = Lote::where('id_subida',$id)->first()->lote;
 		
 		foreach ($registros as $key => $registro) {
