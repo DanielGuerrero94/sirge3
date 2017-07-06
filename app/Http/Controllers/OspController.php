@@ -32,7 +32,7 @@ class OspController extends Controller
 			'numero_documento' => 'required|digits_between:4,9',
 			'nombre_apellido' => 'required|min:3|max:255|regex:/^[\pL\s\'\,\.]/',
 			'sexo' => 'required|string|size:1',
-			'id_provincia', => 'required|string|max:2',
+			'id_provincia' => 'required|string|max:2',
 			'tipo_afiliado' => 'required|in:T,A',
 			'codigo_os' => 'required|exists:puco.obras_sociales,codigo_osp',
 		],
