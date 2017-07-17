@@ -244,7 +244,40 @@
 </div>
 
 
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<script async>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<script async type="text/javascript">
+	$('#calendar').fullCalendar({
+		height: 550,		
+		lang: 'es',
+		eventClick: function(event) {
+			console.log(event);
+			if (event.url) {
+	            //window.open(event.url);
+	            $('.modal-title').html(event.title);
+	            var text = '';	            
+	            text += '<ul>';
+	            text += '<li><b>D&iacute;a:</b> ' + moment(event.start).format('DD/MM/YYYY') + '</li>';
+	            text += '<li><b>Desde:</b> ' + moment(event.start).format('hh:mm') + '</li>';
+	            text += '<li><b>Hasta:</b> ' + moment(event.end).format('hh:mm') + '</li>';
+	            text += '<li><b>Descripci&oacute;n:</b> ' + (event.description === undefined ? 'Sin datos' : event.description) + '</li>';	            
+	            text += '<li><b>Ubicaci&oacute;n:</b> ' + (event.location === undefined ? 'Sin datos' : event.location) + '</li>';  
+	            text += '</ul>';				
+
+	            $('#modal-text').html(text);	            
+	            $('.modal-footer #google-event-details').attr('href', event.url);
+	            $('.modal').modal();
+	            return false;
+	        }
+
+	    },
+	    googleCalendarApiKey : 'AIzaSyAY1AZ5aKTuMen9SBQcXmc9xtnXZkxYep8',
+	    events : {
+	    	googleCalendarId : 'sirgeweb@gmail.com'
+	    }
+	});
+</script>
+
 <script type="text/javascript">
 
 	$('.ajax-href').click(function(event){
@@ -435,36 +468,6 @@
 
 	$("#google-event-details").on('click', function(event) {		
 		window.open($(this).attr('href'));		
-	});
-
-	$('#calendar').fullCalendar({
-		height: 550,		
-		lang: 'es',
-		eventClick: function(event) {
-			console.log(event);
-			if (event.url) {
-	            //window.open(event.url);
-	            $('.modal-title').html(event.title);
-	            var text = '';	            
-	            text += '<ul>';
-	            text += '<li><b>D&iacute;a:</b> ' + moment(event.start).format('DD/MM/YYYY') + '</li>';
-	            text += '<li><b>Desde:</b> ' + moment(event.start).format('hh:mm') + '</li>';
-	            text += '<li><b>Hasta:</b> ' + moment(event.end).format('hh:mm') + '</li>';
-	            text += '<li><b>Descripci&oacute;n:</b> ' + (event.description === undefined ? 'Sin datos' : event.description) + '</li>';	            
-	            text += '<li><b>Ubicaci&oacute;n:</b> ' + (event.location === undefined ? 'Sin datos' : event.location) + '</li>';  
-	            text += '</ul>';				
-
-	            $('#modal-text').html(text);	            
-	            $('.modal-footer #google-event-details').attr('href', event.url);
-	            $('.modal').modal();
-	            return false;
-	        }
-
-	    },
-	    googleCalendarApiKey : 'AIzaSyAY1AZ5aKTuMen9SBQcXmc9xtnXZkxYep8',
-	    events : {
-	    	googleCalendarId : 'sirgeweb@gmail.com'
-	    }
-	});
+	});	
 </script>
 @endsection

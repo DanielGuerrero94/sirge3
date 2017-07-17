@@ -24,10 +24,13 @@ use App\Models\Beneficiarios\Periodos;
 use App\Models\Beneficiarios\Resumen;
 use App\Models\Beneficiarios\Score;
 use App\Models\Indicador;
-
 use App\Models\Entidad;
 
-
+/**
+ * Controlador que maneja la entidad Beneficiario y sus vistas
+ *
+ * @return view
+ */
 class BeneficiariosController extends Controller
 {
     /**
@@ -35,11 +38,12 @@ class BeneficiariosController extends Controller
      *
      * @return null
      */
-    public function index(){
-    	$data = [
-    		'page_title' => 'Beneficiarios'
-    	];
-    	return view('beneficiarios.listado' , $data);
+    public function index()
+    {
+        $data = [
+        'page_title' => 'Beneficiarios'
+        ];
+        return view('beneficiarios.listado', $data);
     }
 
     /**
@@ -47,76 +51,95 @@ class BeneficiariosController extends Controller
      *
      * @return json
      */
-    public function getListadoTabla(){
-    	$benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','numero_documento','clave_beneficiario');
+    public function getListadoTabla()
+    {
+        $benefs = Beneficiario::select('nombre', 'apellido', 'fecha_nacimiento', 'sexo', 'numero_documento', 'clave_beneficiario');
         return Datatables::of($benefs)
-            ->addColumn('action' , function($benef){
+        ->addColumn(
+            'action',
+            function ($benef) {
                 return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
-            })            
-            ->make(true);
+            }
+        )
+        ->make(true);
     }
 
     /**
      * Devuelve un json para la datatable
      *
+     * @param char(16) $valor "Clave de Beneficiario"
      * @return json
      */
-    public function busquedaBeneficiario($valor){        
-        if(strlen($valor) == 16){
-            $benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','numero_documento','clave_beneficiario')
-        ->where('clave_beneficiario',$valor);
-        return Datatables::of($benefs)
-            ->addColumn('action' , function($benef){
-                return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
-            })            
-            ->make(true);
-        } 
-        else
-        {
-            $benefs = Beneficiario::select('nombre','apellido','fecha_nacimiento','sexo','numero_documento','clave_beneficiario')
-            ->where('numero_documento',$valor);
+    public function busquedaBeneficiario($valor)
+    {
+        if (strlen($valor) == 16) {
+            $benefs = Beneficiario::select('nombre', 'apellido', 'fecha_nacimiento', 'sexo', 'numero_documento', 'clave_beneficiario')
+            ->where('clave_beneficiario', $valor);
             return Datatables::of($benefs)
-                ->addColumn('action' , function($benef){
+            ->addColumn(
+                'action',
+                function ($benef) {
                     return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
-                })            
+                }
+            )
             ->make(true);
-        }    
+        } else {
+            $benefs = Beneficiario::select('nombre', 'apellido', 'fecha_nacimiento', 'sexo', 'numero_documento', 'clave_beneficiario')
+            ->where('numero_documento', $valor);
+            return Datatables::of($benefs)
+            ->addColumn(
+                'action',
+                function ($benef) {
+                    return '<button clave-beneficiario="'.$benef->clave_beneficiario.'" class="ver-beneficiario btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
+                }
+            )
+            ->make(true);
+        }
     }
-
 
     /**
      * Devuelve la historia clinica del beneficiario
-     * @param int $clave_beneficiario
-     * 
+     *
+     * @param int $id id beneficiario
+     * @param string $back path to return
      * @return null
      */
-    public function historiaClinica($id , $back){
+    public function historiaClinica($id, $back)
+    {
 
-        $row_periodo = Indicador::select(DB::raw('max(periodo)'))->get();                
+        $row_periodo = Indicador::select(DB::raw('max(periodo)'))->get();
         $max_periodo = $row_periodo[0]['max'];
 
-        $beneficiario = Beneficiario::select(                
-                DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion,fecha_nacimiento)) as edad_inscripcion, activo')                
-                )->with([                
-                'geo' => function($q){ 
-                    $q->with(['provincia' , 'ndepartamento' , 'localidad']); 
-                }, 'susPrestaciones' => function($q){
-                    $q->with(['datosEfector',
-                        'datosPrestacion' => function($q){ $q->with(['tipoDePrestacion']);} 
-                    ])->orderBy('fecha_prestacion','desc');
+        $beneficiario = Beneficiario::select(
+            DB::raw('beneficiarios.*, extract(year from age(fecha_nacimiento)) as edad, extract(year from age(fecha_inscripcion,fecha_nacimiento)) as edad_inscripcion, activo')
+        )->with(
+            [
+                'geo' => function ($q) {
+                    $q->with(['provincia' , 'ndepartamento' , 'localidad']);
+                }, 'susPrestaciones' => function ($q) {
+                    $q->with(
+                        ['datosEfector',
+                        'datosPrestacion' => function ($q) {
+                            $q->with(['tipoDePrestacion']);
+                        }
+                        ]
+                    )->orderBy('fecha_prestacion', 'desc');
                 }
-                ])->leftJoin('beneficiarios.periodos', function($join) use ($max_periodo)
-                                {
-                                    $join->on('beneficiarios.periodos.clave_beneficiario','=','beneficiarios.beneficiarios.clave_beneficiario')
-                                         ->where('beneficiarios.periodos.periodo','=',$max_periodo); 
-                                })            
-        ->find($id);
-                    
-        $data = [
+                ]
+        )->leftJoin(
+            'beneficiarios.periodos',
+            function ($join) use ($max_periodo) {
+                    $join->on('beneficiarios.periodos.clave_beneficiario', '=', 'beneficiarios.beneficiarios.clave_beneficiario')
+                    ->where('beneficiarios.periodos.periodo', '=', $max_periodo);
+            }
+        )
+            ->find($id);
+
+            $data = [
             'page_title' => $beneficiario->nombre . ' ' . $beneficiario->apellido,
             'beneficiario' => $beneficiario,
-        'back' => $back
-        ];
-        return view('beneficiarios.historia-clinica' , $data);
+            'back' => $back
+            ];
+            return view('beneficiarios.historia-clinica', $data);
     }
 }

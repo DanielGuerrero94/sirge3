@@ -155,6 +155,12 @@ Route::get('check-sss/{archivo}' , 'SuperController@checkId');
 Route::post('nuevo-lote-sss/{id_subida}' , 'SuperController@nuevoLote');
 
 /**
+ * TRAZADORAS
+ */
+Route::get('procesar-trazadoras/{archivo}' , 'TrazadorasController@procesarArchivo');
+Route::post('nuevo-lote-trazadoras/{id_subida}' , 'TrazadorasController@nuevoLote');
+
+/**
  * PUCO
  */
 Route::get('puco-generar' , 'PucoController@getGenerar');

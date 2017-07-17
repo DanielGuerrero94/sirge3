@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use ErrorException;
+use Exception;
 use Illuminate\Database\QueryException;
 use Validator;
 use Auth;

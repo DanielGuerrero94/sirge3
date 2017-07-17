@@ -219,6 +219,17 @@ return [
             'schema'   => 'odp',
         ],
 
+        'geo' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'geo',
+        ],
+
         'datawarehouse' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST_DW', 'localhost'),
