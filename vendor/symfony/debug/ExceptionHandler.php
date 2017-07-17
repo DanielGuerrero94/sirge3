@@ -56,7 +56,7 @@ class ExceptionHandler
      * @param string|null $charset        The charset used by exception messages
      * @param string|null $fileLinkFormat The IDE link template
      *
-     * @return ExceptionHandler The registered exception handler
+     * @return static
      */
     public static function register($debug = true, $charset = null, $fileLinkFormat = null)
     {
@@ -204,7 +204,7 @@ class ExceptionHandler
      * @return Response A Response instance
      */
     public function createResponse($exception)
-    {        
+    {
         if (!$exception instanceof FlattenException) {
             $exception = FlattenException::create($exception);
         }
@@ -250,18 +250,14 @@ class ExceptionHandler
 EOF
                         , $ind, $total, $class, $this->formatPath($e['trace'][0]['file'], $e['trace'][0]['line']), $message);
                     foreach ($e['trace'] as $trace) {
-                        if(! in_array($trace['short_class'], array("Connector","PostgresConnector","ConnectionFactory")) ){
-                            if(! ($trace['short_class'] == "PDO" && $trace['function'] ==  "__construct")){                            
-                                $content .= '       <li>';
-                                if ($trace['function']) {                                   
-                                        $content .= sprintf('at %s%s%s(%s)', $this->formatClass($trace['class']), $trace['type'], $trace['function'], $this->formatArgs($trace['args']));                                                        
-                                }
-                                if (isset($trace['file']) && isset($trace['line'])) {
-                                    $content .= $this->formatPath($trace['file'], $trace['line']);
-                                }
-                                $content .= "</li>\n";
-                            }                   
+                        $content .= '       <li>';
+                        if ($trace['function']) {
+                            $content .= sprintf('at %s%s%s(%s)', $this->formatClass($trace['class']), $trace['type'], $trace['function'], $this->formatArgs($trace['args']));
                         }
+                        if (isset($trace['file']) && isset($trace['line'])) {
+                            $content .= $this->formatPath($trace['file'], $trace['line']);
+                        }
+                        $content .= "</li>\n";
                     }
 
                     $content .= "    </ol>\n</div>\n";
@@ -438,7 +434,7 @@ EOF;
     {
         @trigger_error('The '.__METHOD__.' method is deprecated since version 2.7 and will be removed in 3.0.', E_USER_DEPRECATED);
 
-        return htmlspecialchars($str, ENT_QUOTES | (PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), 'UTF-8');
+        return htmlspecialchars($str, ENT_QUOTES | (\PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), 'UTF-8');
     }
 
     /**
@@ -446,7 +442,7 @@ EOF;
      */
     private function escapeHtml($str)
     {
-        return htmlspecialchars($str, ENT_QUOTES | (PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), $this->charset);
+        return htmlspecialchars($str, ENT_QUOTES | (\PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), $this->charset);
     }
 
     /**
