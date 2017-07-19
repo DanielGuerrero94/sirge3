@@ -26,8 +26,9 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct(){
-    	$this->middleware('auth');
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
     /**
@@ -35,35 +36,36 @@ class UserController extends Controller
      *
      * @return view
      */
-    public function index(Request $r){
-    	$data = [
-    		'page_title' => 'ABM Usuarios'
-    	];
-		return view('admin.usuarios.usuarios' , $data);
+    public function index(Request $r)
+    {
+        $data = [
+            'page_title' => 'ABM Usuarios'
+        ];
+        return view('admin.usuarios.usuarios', $data);
     }
 
     /**
      * Devuelve el json para la datatable
-     * 
+     *
      * @return json
      */
-    public function tabla(){
+    public function tabla()
+    {
         $usuarios = Usuario::with(['provincia','area','menu','entidad'])->get();
 
-        for ($i=0; $i < count($usuarios); $i++) { 
-            if( isset($usuarios[$i]->area)){
-                $usuarios[$i]['nombre_area'] = $usuarios[$i]->area->nombre;    
+        for ($i=0; $i < count($usuarios); $i++) {
+            if (isset($usuarios[$i]->area)) {
+                $usuarios[$i]['nombre_area'] = $usuarios[$i]->area->nombre;
+            } else {
+                $usuarios[$i]['nombre_area'] = '';
             }
-            else{
-                $usuarios[$i]['nombre_area'] = '';       
-            }            
         }
         //return print_r(json_encode($usuarios));
         return Datatables::of($usuarios)
-            ->addColumn('action' , function($usuario){
+            ->addColumn('action', function ($usuario) {
                 return '<button id-usuario="'. $usuario->id_usuario .'" class="edit-user btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i></button>';
             })
-            ->setRowClass(function($usuario){
+            ->setRowClass(function ($usuario) {
                 return $usuario->activo == 'N' ? 'danger' : '';
             })
             ->make(true);
@@ -75,7 +77,8 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function getEdit($id){
+    public function getEdit($id)
+    {
         $user = Usuario::find($id);
         $provincias = Provincia::all();
         $entidades = Entidad::all();
@@ -90,7 +93,7 @@ class UserController extends Controller
             'menues' => $menues,
             'back' => 'ajustes'
         ];
-        return view ('admin.usuarios.edit' , $data);
+        return view('admin.usuarios.edit', $data);
     }
 
     /**
@@ -100,7 +103,8 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function postEdit($id , Request $r){
+    public function postEdit($id, Request $r)
+    {
         $usr = Usuario::find($id);
         $usr->nombre = $r->nombre;
         $usr->email = $r->email;
@@ -108,7 +112,7 @@ class UserController extends Controller
         $usr->id_entidad = $r->entidad;
         $usr->id_menu = $r->menu;
         $usr->id_area = $r->area;
-        if ($usr->save()){
+        if ($usr->save()) {
             return 'Se ha modificado el usuario ' . $usr->nombre;
         }
     }
@@ -119,10 +123,11 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function postBaja($id){
+    public function postBaja($id)
+    {
         $u = Usuario::find($id);
         $u->activo = 'N';
-        if ($u->save()){
+        if ($u->save()) {
             return 'Se ha bloqueado el acceso al usuario ' . $u->nombre;
         }
     }
@@ -133,21 +138,19 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function postUnblock($id){
+    public function postUnblock($id)
+    {
         $u = Usuario::find($id);
         $u->activo = 'S';
-        if ($u->save()){
-
+        if ($u->save()) {
             Mail::send('emails.alta', ['usuario' => $u], function ($m) use ($u) {
                 $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-                $m->to($u->email , $u->nombre);
-                $m->to('gustavo.hekel@gmail.com', $u->nombre);
+                $m->to($u->email, $u->nombre);
                 $m->to('rodrigo.cadaval.sumar@gmail.com', $u->nombre);
                 $m->subject('Usuario habilitado');
             });
 
             return 'Se desbloqueado el acceso al usuario ' . $u->nombre;
-
         }
     }
 
@@ -156,17 +159,18 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function getProfile(){
+    public function getProfile()
+    {
         $id = Auth::user()->id_usuario;
-        $user = Usuario::with(['provincia' , 'entidad' ,'area' , 'menu' , 'conexiones' => function($query){
-            $query->orderBy('fecha_login' , 'desc')->take(5);
-        }])->where('id_usuario' , $id)->get()[0];
+        $user = Usuario::with(['provincia' , 'entidad' ,'area' , 'menu' , 'conexiones' => function ($query) {
+            $query->orderBy('fecha_login', 'desc')->take(5);
+        }])->where('id_usuario', $id)->get()[0];
 
         $data = [
             'page_title' => 'Perfil',
             'usuario' => $user
         ];
-        return view('user.profile' , $data);
+        return view('user.profile', $data);
     }
 
     /**
@@ -174,7 +178,8 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function getEditProfile(){
+    public function getEditProfile()
+    {
         $id = Auth::user()->id_usuario;
         $usuario = Usuario::find($id);
         $provincias = Provincia::all();
@@ -188,7 +193,7 @@ class UserController extends Controller
             'entidades' => $entidades,
             'back' => 'ajustes'
         ];
-        return view('user.edit' , $data);
+        return view('user.edit', $data);
     }
 
     /**
@@ -197,11 +202,11 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function postEditProfile(UserEditProfileRequest $r){
+    public function postEditProfile(UserEditProfileRequest $r)
+    {
         $id = Auth::user()->id_usuario;
-        $email = Usuario::where('email' , $r->email)->where('id_usuario' , '<>' , $id)->get();
-        if (! count($email)){
-            
+        $email = Usuario::where('email', $r->email)->where('id_usuario', '<>', $id)->get();
+        if (! count($email)) {
             $user = Usuario::find($id);
             $user->nombre = $r->nombre;
             $user->usuario = $r->email;
@@ -210,19 +215,19 @@ class UserController extends Controller
             $user->id_entidad = $r->entidad;
             $user->id_area = $r->area;
             $user->fecha_nacimiento = $r->fecha_nacimiento;
-            $user->cargo = $r->cargo;            
-            $user->facebook = $r->fb;    
+            $user->cargo = $r->cargo;
+            $user->facebook = $r->fb;
             $user->twitter = $r->tw;
             $user->linkedin = $r->ln;
-            $user->google = $r->gp;                                            
+            $user->google = $r->gp;
             $user->skype = $r->skype;
             $user->telefono = $r->telefono;
             $user->mensaje = $r->mensaje;
-            if ($user->save()){
+            if ($user->save()) {
                 return 1;
             }
         } else {
-            return response('Error' , 422);
+            return response('Error', 422);
         }
     }
 
@@ -231,7 +236,8 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function getNewPassword(){
+    public function getNewPassword()
+    {
         return view('user.password');
     }
 
@@ -240,14 +246,15 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function postNewPassword(Request $r){
+    public function postNewPassword(Request $r)
+    {
         $this->validate($r, [
             'pass' => 'required|min:6',
         ]);
 
         $user = Auth::user();
         $user->password = bcrypt(md5($r->pass));
-        if ($user->save()){
+        if ($user->save()) {
             return 'Se ha modificado la contraseña';
         }
     }
@@ -257,13 +264,14 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function getAvatar(){
+    public function getAvatar()
+    {
 
         $data = [
             'page_title' => 'Cambiar imágen de perfil',
             'user' => Auth::user()
         ];
-        return view('user.avatar' , $data);
+        return view('user.avatar', $data);
     }
 
     /**
@@ -272,7 +280,8 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function postAvatar(Request $r){
+    public function postAvatar(Request $r)
+    {
         $crop = new Crop(
             ($r->file('avatar_src') !== null) ? $r->file('avatar_src') : null,
             $r->avatar_data,
@@ -298,30 +307,28 @@ class UserController extends Controller
      *
      * @return null
      */
-    public function modificarContrasenas(){
+    public function modificarContrasenas()
+    {
         
-        $usuarios = Usuario::where('id_entidad' ,'=', 1)->where('id_area','=', 1)->whereNotIn('usuario',['gustavo.hekel@gmail.com','rcadaval'])->get();
+        $usuarios = Usuario::where('id_entidad', '=', 1)->where('id_area', '=', 1)->whereNotIn('usuario', ['gustavo.hekel@gmail.com','rcadaval'])->get();
 
         //$usuarios = Usuario::where('usuario' ,'=', 'rcadaval')->get();
         
         //return json_encode($usuarios);
         $ok = 1;
 
-        if ($ok){
-        
+        if ($ok) {
             foreach ($usuarios as $unUsuario) {
-
                 $user = Usuario::find($unUsuario->id_usuario);
 
                 //return json_encode($user);
                 
                 $user->password = bcrypt(md5($user->password));
 
-                if ($user->save()){
+                if ($user->save()) {
                     $ok = 1;
-                }
-                else {                    
-                    die(response('Error' , 422));
+                } else {
+                    die(response('Error', 422));
                     $ok = 0;
                 }
             }
@@ -329,7 +336,4 @@ class UserController extends Controller
             die('Todo ok');
         }
     }
-
-
 }
-
