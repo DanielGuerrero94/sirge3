@@ -185,7 +185,7 @@ class PadronesController extends Controller
             $status_nombre = app('App\Http\Controllers\TrazadorasController')->identificarTrazadora($r->file->getClientOriginalName(), 'Y');
             if ($status_nombre['status'] == 'error') {
                 return response()->json(['success' => 'false',
-                                         'errors'  => "El nombre del archivo no cumple con las reglas" . "<br \>" . $status_nombre['detalle']]);
+                                         'errors' => $status_nombre['detalle']]);
             }
         }
 
