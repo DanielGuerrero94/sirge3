@@ -34,8 +34,8 @@
 	</table>
 	<p class="lugar-dia-hora"><b>{{ ucwords(strtolower($ddjj->provincia->descripcion)) }} , {{ $fecha_impresion }}</b></p>
 	<p style="font-weight: bold">
-		SEÑOR COORDINADOR NACIONAL<br/>
-		DR. ADOLFO RUBINSTEIN <br />		 
+		DIRECTOR NACIONAL DEL PROYECTO <br/>	
+		DR. JUAN CARLOS VASSALLO <br />
 		COBERTURA UNIVERSAL DE SALUD - SUMAR
 		
 	</p>
