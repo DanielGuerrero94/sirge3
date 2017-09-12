@@ -49,7 +49,8 @@ class EfectoresController extends Controller
      *
      * @return void
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -58,11 +59,12 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function listado(){
-      $data = [
+    public function listado()
+    {
+        $data = [
         'page_title' => 'Listado de efectores'
-      ];
-      return view('efectores.listado' , $data);
+        ];
+        return view('efectores.listado', $data);
     }
 
     /**
@@ -70,13 +72,14 @@ class EfectoresController extends Controller
      *
      * @return json
      */
-    public function listadoTabla(){
-      $hospitals = Efector::with(['estado']);        
+    public function listadoTabla()
+    {
+        $hospitals = Efector::with(['estado']);
         return Datatables::of($hospitals)
-          ->addColumn('label_estado' , function($hospital){
+          ->addColumn('label_estado', function ($hospital) {
             return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
           })
-          ->addColumn('action' , function($hospital){
+          ->addColumn('action', function ($hospital) {
               return '<button id-efector="'. $hospital->id_efector .'" class="ver-efector btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
           })
           ->make(true);
@@ -85,16 +88,17 @@ class EfectoresController extends Controller
     /**
      * Devuelve el detalle del efector
      * @param int $id
-     * 
+     *
      * @return null
      */
-    public function detalle($id , $back){
-      $efector = Efector::with([
-                'estado' , 
-                'tipo' , 
+    public function detalle($id, $back)
+    {
+        $efector = Efector::with([
+                'estado' ,
+                'tipo' ,
                 'categoria' ,
-                'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                'geo' => function ($q) {
+                    $q->with(['provincia' , 'departamento' , 'localidad']);
                 },
                 'dependencia',
                 'compromiso',
@@ -105,15 +109,15 @@ class EfectoresController extends Controller
                 'internet',
                 'convenio'
                 ])
-        ->find($id);        
+        ->find($id);
 
-      $data = [
+        $data = [
         'page_title' => $efector->nombre,
         'efector' => $efector,
         'back' => $back
-      ];
+        ];
       //return var_dump($efector);
-      return view('efectores.detalle' , $data);
+        return view('efectores.detalle', $data);
     }
 
     /**
@@ -121,12 +125,13 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function getAlta(){
-        $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
-        $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
-        $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();
+    public function getAlta()
+    {
+        $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa', '<>', 5)->get();
+        $tipos = Tipo::where('id_tipo_efector', '<>', 8)->get();
+        $categorias = Categoria::where('id_categorizacion', '<>', 10)->get();
         $provincias = Provincia::all();
-        $sistemas_hcd = HCD::where('id_provincia',Auth::user()->id_provincia)->get();
+        $sistemas_hcd = HCD::where('id_provincia', Auth::user()->id_provincia)->get();
         $data = [
             'page_title' => 'Alta de nuevo efector',
             'tipos' => $tipos,
@@ -136,7 +141,7 @@ class EfectoresController extends Controller
             'sistemas_hcd' => $sistemas_hcd
         ];
 
-        return view('efectores.alta' , $data);
+        return view('efectores.alta', $data);
     }
 
     /**
@@ -145,7 +150,8 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function postAlta(NuevoEfectorRequest $r){
+    public function postAlta(NuevoEfectorRequest $r)
+    {
         $ge = new Geografico([
             'id_provincia' => $r->provincia,
             'id_departamento' => $r->departamento,
@@ -183,7 +189,7 @@ class EfectoresController extends Controller
             'pago_indirecto' => $r->indirecto
             ]);
 
-        $ca = new Convenio([            
+        $ca = new Convenio([
             'numero_compromiso' => $r->convenio_numero,
             'firmante' => $r->convenio_firmante,
             'nombre_tercer_administrador' => $r->nombre_admin,
@@ -208,26 +214,28 @@ class EfectoresController extends Controller
         $ef->dependencia_sanitaria = $r->dep_san;
         $ef->integrante = $r->integrante;
         $ef->compromiso_gestion = $r->compromiso;
-        $ef->priorizado = $r->priorizado;        
-        if(isset($r->hcd) && $r->hcd == 'S'){
-          $ef->hcd = $r->hcd;
-          $ef->id_sistema_hcd = $r->sistema_hcd;
-        }        
+        $ef->priorizado = $r->priorizado;
+        if (isset($r->hcd) && $r->hcd == 'S') {
+            $ef->hcd = $r->hcd;
+            $ef->id_sistema_hcd = $r->sistema_hcd;
+        }
         $ef->id_estado = 2;
         
-        $result = DB::transaction(function() use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r){
+        $result = DB::transaction(function () use ($ef, $te, $em, $re, $de, $ge, $cg, $ca, $r) {
             $ef->save();
             $ef->referente()->save($re);
             $ef->internet()->save($de);
             $ef->geo()->save($ge);
 
-            if (strlen($r->tel))
-              $ef->telefonos()->save($te);
-            if (strlen($r->correo))
-              $ef->emails()->save($em);
+            if (strlen($r->tel)) {
+                $ef->telefonos()->save($te);
+            }
+            if (strlen($r->correo)) {
+                $ef->emails()->save($em);
+            }
 
-            if ($r->compromiso == 'S'){
-                if ($r->indirecto == 'S'){
+            if ($r->compromiso == 'S') {
+                if ($r->indirecto == 'S') {
                     $ef->compromiso()->save($cg);
                     $ef->convenio()->save($ca);
                 } else {
@@ -235,19 +243,18 @@ class EfectoresController extends Controller
                 }
             }
         });
-        if (is_null($result)){
-
-          Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
-              $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-              $m->to('sirgeweb@gmail.com');
-              $m->to('javier.minsky@gmail.com');
-              $m->to('rodrigo.cadaval.sumar@gmail.com');                            
-              $m->subject('Solicitud de alta de efector!');
-          });
+        if (is_null($result)) {
+            Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to('sirgeweb@gmail.com');
+                $m->to('javier.minsky@gmail.com');
+                $m->to('rodrigo.cadaval.sumar@gmail.com');
+                $m->subject('Solicitud de alta de efector!');
+            });
           
-          return 'Se ha solicitado el alta del efector ' . $ef->nombre;
+            return 'Se ha solicitado el alta del efector ' . $ef->nombre;
         } else {
-          return json_encode(["resultado" => 'Ha ocurrido un error']);
+            return json_encode(["resultado" => 'Ha ocurrido un error']);
         }
     }
 
@@ -258,7 +265,8 @@ class EfectoresController extends Controller
      * @return char
      */
 
-    protected function getLetra($provincia){
+    protected function getLetra($provincia)
+    {
         switch ($provincia) {
             case '01':
                 $l = 'C';
@@ -342,14 +350,15 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function getCuie($provincia){
+    public function getCuie($provincia)
+    {
         $disponible = false;
         $letra = $this->getLetra($provincia);
         $numero = 1;
 
-        while (! $disponible){
-            $cuie =  $letra . str_pad ($numero , 5 , '0' , STR_PAD_LEFT);
-            if (! (Efector::where('cuie' , $cuie)->count())) {
+        while (! $disponible) {
+            $cuie =  $letra . str_pad($numero, 5, '0', STR_PAD_LEFT);
+            if (! (Efector::where('cuie', $cuie)->count())) {
                 $disponible = true;
             } else {
                 $numero ++;
@@ -364,7 +373,8 @@ class EfectoresController extends Controller
      *
      * @return bigint
      */
-    public function getSiisa ($provincia){
+    public function getSiisa($provincia)
+    {
         $sql = "
         select '99999999' || '{$provincia}' || lpad ((max (substring (siisa from 11 for 4)) :: numeric + 1 ) :: varchar , 4 , '0') as siisa
         from
@@ -372,8 +382,8 @@ class EfectoresController extends Controller
         where
           substring (siisa from 1 for 8) = '99999999'
           and substring (siisa from 9 for 2) = ?";
-        $siisa = DB::select($sql , [$provincia]);
-        if (($siisa[0]->siisa)){
+        $siisa = DB::select($sql, [$provincia]);
+        if (($siisa[0]->siisa)) {
             return $siisa[0]->siisa;
         } else {
             return '99999999' . $provincia . '0001';
@@ -385,12 +395,13 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function getBaja(){
+    public function getBaja()
+    {
         $data = [
             'page_title' => 'Solicitar baja de efector'
         ];
 
-        return view('efectores.baja' , $data);
+        return view('efectores.baja', $data);
     }
 
     /**
@@ -399,8 +410,9 @@ class EfectoresController extends Controller
      *
      * @return json
      */
-    public function findCuie($cuie){
-        $data = Efector::select('cuie')->where('cuie' , 'ilike' , $cuie . '%')->orderBy('cuie')->take(10)->lists('cuie');
+    public function findCuie($cuie)
+    {
+        $data = Efector::select('cuie')->where('cuie', 'ilike', $cuie . '%')->orderBy('cuie')->take(10)->lists('cuie');
         return response()->json($data);
     }
 
@@ -410,18 +422,16 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function postBaja(Request $r){
-        $e = Efector::where('cuie' , $r->cuie)->get()[0];
+    public function postBaja(Request $r)
+    {
+        $e = Efector::where('cuie', $r->cuie)->get()[0];
         $e->id_estado = 3;
-        if ($e->save()){
-            
+        if ($e->save()) {
             Mail::send('emails.down-efector', ['efector' => $e], function ($m) use ($e) {
-              $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
-              $m->to('sirgeweb@gmail.com');
-              $m->to('rodrigo.cadaval.sumar@gmail.com');              
-              $m->to('eridani.lucena@gmail.com');
-              $m->to('mariel_fucci@hotmail.com');
-              $m->subject('Solicitud de baja de efector!');
+                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->to('sirgeweb@gmail.com');
+                $m->to('rodrigo.cadaval.sumar@gmail.com');
+                $m->subject('Solicitud de baja de efector!');
             });
             
             return 'Se ha solicitado la baja del efector ' . $e->cuie;
@@ -430,14 +440,15 @@ class EfectoresController extends Controller
 
     /**
      * Devuelve la vista para la revisión de solicitudes
-     * 
+     *
      * @return null
      */
-    public function getRevision(){
+    public function getRevision()
+    {
         $data = [
             'page_title' => 'Revisión de solicitudes'
         ];
-        return view('efectores.revision' , $data);
+        return view('efectores.revision', $data);
     }
 
     /**
@@ -445,23 +456,24 @@ class EfectoresController extends Controller
      *
      * @return json
      */
-    public function getRevisionTabla(){
-        $hospitals = Efector::with(['estado'])->whereIn('id_estado' , [2,3])->get();
+    public function getRevisionTabla()
+    {
+        $hospitals = Efector::with(['estado'])->whereIn('id_estado', [2,3])->get();
         return Datatables::of($hospitals)
-            ->addColumn('label_estado' , function($hospital){
+            ->addColumn('label_estado', function ($hospital) {
                 return '<span class="label label-'. $hospital->estado->css .'">'. $hospital->estado->descripcion .'</span>';
             })
-            ->addColumn('action' , function($hospital){
+            ->addColumn('action', function ($hospital) {
                 return '<button id-efector="'. $hospital->id_efector .'" class="ver-efector btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Ver</button>';
             })
-            ->addColumn('action_2' , function($hospital){
-                if ($hospital->id_estado == 2){
+            ->addColumn('action_2', function ($hospital) {
+                if ($hospital->id_estado == 2) {
                     return '<button id-efector="'. $hospital->id_efector .'" class="alta btn btn-success btn-xs"><i class="fa fa-pencil-square-o"></i> Aceptar alta</button>';
                 } else {
                     return '<button id-efector="'. $hospital->id_efector .'" class="baja btn btn-danger btn-xs"><i class="fa fa-pencil-square-o"></i> Aceptar baja</button>';
-                }  
+                }
             })
-            ->addColumn('action_3' , function($hospital){
+            ->addColumn('action_3', function ($hospital) {
                 return '<button id-efector="'. $hospital->id_efector .'" class="rechazo btn btn-warning btn-xs"><i class="fa fa-pencil-square-o"></i> Rechazar solicitud</button>';
             })
             ->make(true);
@@ -473,10 +485,11 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function alta(Request $r){
+    public function alta(Request $r)
+    {
         $e = Efector::find($r->id);
         $e->id_estado = 1;
-        if ($e->save()){
+        if ($e->save()) {
             return 'Se ha dado el alta definitiva del efector : ' . $e->nombre;
         }
     }
@@ -487,10 +500,11 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function baja(Request $r){
+    public function baja(Request $r)
+    {
         $e = Efector::findOrFail($r->id);
         $e->id_estado = 4;
-        if ($e->save()){
+        if ($e->save()) {
             return 'Se ha dado la baja definitiva del efector : ' . $e->nombre;
         }
     }
@@ -501,48 +515,51 @@ class EfectoresController extends Controller
      *
      * @return string
      */
-    public function rechazo(Request $r){
+    public function rechazo(Request $r)
+    {
         $e = Efector::find($r->id);
-        if ($e->id_estado == 2){
+        if ($e->id_estado == 2) {
             $e->id_estado = 5;
-        } else if ($e->id_estado == 3){
+        } elseif ($e->id_estado == 3) {
             $e->id_estado = 1;
         }
-        if ($e->save()){
+        if ($e->save()) {
             return 'Se ha reveertido la operación del efector : ' . $e->nombre;
         }
     }
 
-    public function getEdit(){
-      $data = [
+    public function getEdit()
+    {
+        $data = [
         'page_title' => 'Modificación de efectores'
-      ];
-      return view('efectores.edit-find' , $data);
+        ];
+        return view('efectores.edit-find', $data);
     }
     
-    public function getEditForm($cuie){
-      try {
-        $e = Efector::where('cuie' , $cuie)->firstOrFail();
-      } catch (ModelNotFoundException $e){
-        return response('No se ha encontrado el efector solicitado' , 422);
-      }
+    public function getEditForm($cuie)
+    {
+        try {
+            $e = Efector::where('cuie', $cuie)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return response('No se ha encontrado el efector solicitado', 422);
+        }
 
-      $add_firmadas = Addenda::where('id_efector' , $e->id_efector)->lists('id_addenda');
+        $add_firmadas = Addenda::where('id_efector', $e->id_efector)->lists('id_addenda');
 
-      $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa' , '<>' , 5)->get();
-      $tipos = Tipo::where('id_tipo_efector' , '<>' , 8)->get();
-      $categorias = Categoria::where('id_categorizacion' , '<>' , 10)->get();      
-      $provincias = Provincia::all();
-      $departamentos = Departamento::all();
-      $localidades = Localidad::all();
-      $addendas = TipoAddenda::whereNotIn('id' , $add_firmadas)->get();
-      $sistemas_hcd = HCD::where('id_provincia',Auth::user()->id_provincia)->get();
-      $efector = Efector::with([
-                'estado' , 
-                'tipo' , 
+        $dependencias = DependenciaAdministrativa::where('id_dependencia_administrativa', '<>', 5)->get();
+        $tipos = Tipo::where('id_tipo_efector', '<>', 8)->get();
+        $categorias = Categoria::where('id_categorizacion', '<>', 10)->get();
+        $provincias = Provincia::all();
+        $departamentos = Departamento::all();
+        $localidades = Localidad::all();
+        $addendas = TipoAddenda::whereNotIn('id', $add_firmadas)->get();
+        $sistemas_hcd = HCD::where('id_provincia', Auth::user()->id_provincia)->get();
+        $efector = Efector::with([
+                'estado' ,
+                'tipo' ,
                 'categoria' ,
-                'geo' => function($q){ 
-                    $q->with(['provincia' , 'departamento' , 'localidad']); 
+                'geo' => function ($q) {
+                    $q->with(['provincia' , 'departamento' , 'localidad']);
                 },
                 'dependencia',
                 'compromiso',
@@ -552,21 +569,21 @@ class EfectoresController extends Controller
                 'internet',
                 'convenio',
                 'perinatal',
-                'addendas' => function($q){
-                  $q->with(['tipo']);
+                'addendas' => function ($q) {
+                    $q->with(['tipo']);
                 }
                 ])
-        ->where('cuie' , $cuie)->firstOrFail();
+        ->where('cuie', $cuie)->firstOrFail();
 
       //return json_encode($efector);
 
-      if (Auth::user()->id_entidad != 1){
-        if ((Auth::user()->id_provincia != $efector->geo->provincia->id_provincia) && (substr($e->cuie,0,1) != $this->getLetra(Auth::user()->id_provincia))){        
-          return response('Está tratando de editar un efector que no pertenece a su jurisdicción' , 422);
+        if (Auth::user()->id_entidad != 1) {
+            if ((Auth::user()->id_provincia != $efector->geo->provincia->id_provincia) && (substr($e->cuie, 0, 1) != $this->getLetra(Auth::user()->id_provincia))) {
+                return response('Está tratando de editar un efector que no pertenece a su jurisdicción', 422);
+            }
         }
-      }
 
-      $data = [
+        $data = [
         'page_title' => 'Modificación de efector: ' . $efector->nombre,
         'tipos' => $tipos,
         'dependencias' => $dependencias,
@@ -575,9 +592,8 @@ class EfectoresController extends Controller
         'efector' => $efector,
         'addendas' => $addendas,
         'sistemas_hcd' => $sistemas_hcd
-      ];
-      return view('efectores.edit' , $data);
-      
+        ];
+        return view('efectores.edit', $data);
     }
 
     /**
@@ -589,190 +605,187 @@ class EfectoresController extends Controller
 
      * @return string
      */
-    public function postEdit(Request $r){      
+    public function postEdit(Request $r)
+    {
 
-      $update = false;
-      $ef = Efector::where('cuie' , $r->cuie)->firstOrFail();
+        $update = false;
+        $ef = Efector::where('cuie', $r->cuie)->firstOrFail();
       
-      $ef->siisa = $r->siisa;
-      $ef->id_tipo_efector = $r->tipo;
-      $ef->nombre = $r->nombre;
-      $ef->denominacion_legal = $r->legal;
-      $ef->id_dependencia_administrativa = $r->dep_adm;
-      $ef->dependencia_sanitaria = $r->dep_san;
-      $ef->cics = $r->cics;
-      $ef->rural = $r->rural;
-      $ef->id_categorizacion = $r->categoria;
-      $ef->integrante = $r->integrante;
-      $ef->priorizado = $r->priorizado;
-      $ef->compromiso_gestion = $r->compromiso;
-      $ef->domicilio = $r->direccion;
-      $ef->codigo_postal = $r->codigo_postal;
-      if(isset($r->hcd) && $r->hcd == 'S'){
-          $ef->hcd = $r->hcd;
-          $ef->id_sistema_hcd = $r->sistema_hcd;
-      }
-      else{
-          $ef->hcd = 'N';
-          $ef->id_sistema_hcd = NULL;
-      }    
-      if ($ef->save()){
-        $update = true;
-      } else {
-        return 'Ha fallado la actualización de datos';
-      }
-
-      $ge = Geografico::find($ef->id_efector);
-      $ge->id_departamento = $r->departamento;
-      $ge->id_localidad = $r->localidad;
-      $ge->ciudad = $r->ciudad;
-      if ($ge->save()){
-        $update = true;
-      } else {
-        return 'Ha fallado la actualización de datos';
-      }
-
-      if(Referente::find($ef->id_efector)){              
-        $re = Referente::where('id_efector' , $ef->id_efector)->firstOrFail();
-        $re->nombre = $r->refer;        
-      } 
-      else{
-         $re = new Referente();
-         $re->id_efector = $ef->id_efector;
-         $re->nombre = $r->refer;         
-      }
-      
-      if ($re->save()){
-          $update = true;
-      } 
-      else {
-          return 'Ha fallado la actualización de datos';
-      }
-
-      
-      if(Descentralizacion::find($ef->id_efector)){
-          $de = Descentralizacion::find($ef->id_efector);
-          $de->internet = $r->internet_efector;
-          $de->factura_descentralizada = $r->factura_descentralizada;
-          $de->factura_on_line = $r->factura_on_line;
-      }
-      else{
-          $de = new Descentralizacion();
-          $de->id_efector = $ef->id_efector;
-          $de->internet = $r->internet_efector;
-          $de->factura_descentralizada = $r->factura_descentralizada;
-          $de->factura_on_line = $r->factura_on_line;
-      }
-      
-      if ($de->save()){
-        $update = true;
-      } else {
-        return 'Ha fallado la actualización de datos';
-      }
-
-      if (strlen($r->addenda_perinatal)){
-        try {
-          $pp = Ppac::findOrFail($ef->id_efector);
-        } catch (ModelNotFoundException $e){
-          $pp = new Ppac;
-          $pp->id_efector = $ef->id_efector;
-        }
-        $pp->addenda_perinatal = $r->addenda_perinatal;
-        $pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal <> '' ? $r->fecha_addenda_perinatal : null;
-        $pp->perinatal_ac = $r->perinatal_ac;
-        if ($pp->save()){
-          $update = true;
+        $ef->siisa = $r->siisa;
+        $ef->id_tipo_efector = $r->tipo;
+        $ef->nombre = $r->nombre;
+        $ef->denominacion_legal = $r->legal;
+        $ef->id_dependencia_administrativa = $r->dep_adm;
+        $ef->dependencia_sanitaria = $r->dep_san;
+        $ef->cics = $r->cics;
+        $ef->rural = $r->rural;
+        $ef->id_categorizacion = $r->categoria;
+        $ef->integrante = $r->integrante;
+        $ef->priorizado = $r->priorizado;
+        $ef->compromiso_gestion = $r->compromiso;
+        $ef->domicilio = $r->direccion;
+        $ef->codigo_postal = $r->codigo_postal;
+        if (isset($r->hcd) && $r->hcd == 'S') {
+            $ef->hcd = $r->hcd;
+            $ef->id_sistema_hcd = $r->sistema_hcd;
         } else {
-          return 'Ha fallado la actualización de datos';
+            $ef->hcd = 'N';
+            $ef->id_sistema_hcd = null;
         }
-      }
+        if ($ef->save()) {
+            $update = true;
+        } else {
+            return 'Ha fallado la actualización de datos';
+        }
+
+        $ge = Geografico::find($ef->id_efector);
+        $ge->id_departamento = $r->departamento;
+        $ge->id_localidad = $r->localidad;
+        $ge->ciudad = $r->ciudad;
+        if ($ge->save()) {
+            $update = true;
+        } else {
+            return 'Ha fallado la actualización de datos';
+        }
+
+        if (Referente::find($ef->id_efector)) {
+            $re = Referente::where('id_efector', $ef->id_efector)->firstOrFail();
+            $re->nombre = $r->refer;
+        } else {
+             $re = new Referente();
+             $re->id_efector = $ef->id_efector;
+             $re->nombre = $r->refer;
+        }
+      
+        if ($re->save()) {
+            $update = true;
+        } else {
+            return 'Ha fallado la actualización de datos';
+        }
 
       
-      try {
-        $te = Telefono::where('id_efector' , $ef->id_efector)->firstOrFail();
-      } catch (ModelNotFoundException $e){
-        $te = new Telefono;
-        $te->id_efector = $ef->id_efector;
-      }
-      $te->numero_telefono = $r->tel;
-      $te->observaciones = $r->obs_tel;
-      if ($te->save()){
-        $update = true;
-      } else {
-        return 'Ha fallado la actualización de datos';
-      }
+        if (Descentralizacion::find($ef->id_efector)) {
+            $de = Descentralizacion::find($ef->id_efector);
+            $de->internet = $r->internet_efector;
+            $de->factura_descentralizada = $r->factura_descentralizada;
+            $de->factura_on_line = $r->factura_on_line;
+        } else {
+            $de = new Descentralizacion();
+            $de->id_efector = $ef->id_efector;
+            $de->internet = $r->internet_efector;
+            $de->factura_descentralizada = $r->factura_descentralizada;
+            $de->factura_on_line = $r->factura_on_line;
+        }
+      
+        if ($de->save()) {
+            $update = true;
+        } else {
+            return 'Ha fallado la actualización de datos';
+        }
+
+        if (strlen($r->addenda_perinatal)) {
+            try {
+                $pp = Ppac::findOrFail($ef->id_efector);
+            } catch (ModelNotFoundException $e) {
+                $pp = new Ppac;
+                $pp->id_efector = $ef->id_efector;
+            }
+            $pp->addenda_perinatal = $r->addenda_perinatal;
+            $pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal <> '' ? $r->fecha_addenda_perinatal : null;
+            $pp->perinatal_ac = $r->perinatal_ac;
+            if ($pp->save()) {
+                $update = true;
+            } else {
+                return 'Ha fallado la actualización de datos';
+            }
+        }
+
+      
+        try {
+            $te = Telefono::where('id_efector', $ef->id_efector)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $te = new Telefono;
+            $te->id_efector = $ef->id_efector;
+        }
+        $te->numero_telefono = $r->tel;
+        $te->observaciones = $r->obs_tel;
+        if ($te->save()) {
+            $update = true;
+        } else {
+            return 'Ha fallado la actualización de datos';
+        }
       
 
-      if (strlen($r->correo)){
-        try {
-          $em = Email::where('id_efector' , $ef->id_efector)->firstOrFail();
-        } catch (ModelNotFoundException $e){
-          $em = new Email;
-          $em->id_efector = $ef->id_efector;
+        if (strlen($r->correo)) {
+            try {
+                $em = Email::where('id_efector', $ef->id_efector)->firstOrFail();
+            } catch (ModelNotFoundException $e) {
+                $em = new Email;
+                $em->id_efector = $ef->id_efector;
+            }
+            $em->email = $r->correo;
+            $em->observaciones = $r->obs_correo;
+            if ($em->save()) {
+                $update = true;
+            } else {
+                return 'Ha fallado la actualización de datos';
+            }
         }
-        $em->email = $r->correo;
-        $em->observaciones = $r->obs_correo;
-        if ($em->save()){
-          $update = true;
-        } else {
-          return 'Ha fallado la actualización de datos';
-        }
-      }
 
-      if ($r->integrante == 'S' && $r->compromiso == 'S'){
-        try {
-          $cg = Gestion::findOrFail($ef->id_efector);
-        } catch (ModelNotFoundException $e){
-          $cg = new Gestion;
-          $cg->id_efector = $ef->id_efector;
+        if ($r->integrante == 'S' && $r->compromiso == 'S') {
+            try {
+                $cg = Gestion::findOrFail($ef->id_efector);
+            } catch (ModelNotFoundException $e) {
+                $cg = new Gestion;
+                $cg->id_efector = $ef->id_efector;
+            }
+            $cg->numero_compromiso = $r->numero_compromiso;
+            $cg->firmante = $r->firmante_compromiso;
+            $cg->fecha_suscripcion = $r->compromiso_fsus;
+            $cg->fecha_inicio = $r->compromiso_fini;
+            $cg->fecha_fin = $r->compromiso_ffin;
+            $cg->pago_indirecto = $r->indirecto;
+            if ($cg->save()) {
+                $update = true;
+            } else {
+                return 'Ha fallado la actualización de datos';
+            }
         }
-        $cg->numero_compromiso = $r->numero_compromiso;
-        $cg->firmante = $r->firmante_compromiso;
-        $cg->fecha_suscripcion = $r->compromiso_fsus;
-        $cg->fecha_inicio = $r->compromiso_fini;
-        $cg->fecha_fin = $r->compromiso_ffin;
-        $cg->pago_indirecto = $r->indirecto;
-        if ($cg->save()){
-          $update = true;
-        } else {
-          return 'Ha fallado la actualización de datos';
-        }
-      }
 
-      if ($r->indirecto == 'S'){
-        try {
-          $ca = Convenio::findOrFail($ef->id_efector);
-        } catch (ModelNotFoundException $e){
-          $ca = new Convenio;
-          $ca->id_efector = $ef->id_efector;
+        if ($r->indirecto == 'S') {
+            try {
+                $ca = Convenio::findOrFail($ef->id_efector);
+            } catch (ModelNotFoundException $e) {
+                $ca = new Convenio;
+                $ca->id_efector = $ef->id_efector;
+            }
+            $ca->numero_compromiso = $r->convenio_numero;
+            $ca->firmante = $r->convenio_firmante;
+            $ca->nombre_tercer_administrador = $r->nombre_admin;
+            $ca->codigo_tercer_administrador = $r->cuie_admin;
+            $ca->fecha_suscripcion = $r->convenio_fsus;
+            $ca->fecha_inicio = $r->convenio_fini;
+            $ca->fecha_fin = $r->convenio_ffin;
+            if ($ca->save()) {
+                $update = true;
+            } else {
+                return 'Ha fallado la actualización de datos';
+            }
         }
-        $ca->numero_compromiso = $r->convenio_numero;
-        $ca->firmante = $r->convenio_firmante;
-        $ca->nombre_tercer_administrador = $r->nombre_admin;
-        $ca->codigo_tercer_administrador = $r->cuie_admin;
-        $ca->fecha_suscripcion = $r->convenio_fsus;
-        $ca->fecha_inicio = $r->convenio_fini;
-        $ca->fecha_fin = $r->convenio_ffin;        
-        if ($ca->save()){
-          $update = true;
-        } else {
-          return 'Ha fallado la actualización de datos';
-        }
-      }
 
-      if (strlen($r->tipo_addenda)){
-        $ad = new Addenda;
-        $ad->id_efector = $ef->id_efector;
-        $ad->id_addenda = $r->tipo_addenda;
-        $ad->fecha_addenda = $r->fecha_firma;
-        if ($ad->save()){
-          $update = true;
+        if (strlen($r->tipo_addenda)) {
+            $ad = new Addenda;
+            $ad->id_efector = $ef->id_efector;
+            $ad->id_addenda = $r->tipo_addenda;
+            $ad->fecha_addenda = $r->fecha_firma;
+            if ($ad->save()) {
+                $update = true;
+            }
         }
-      }
 
-      if ($update) {
-        return 'Se ha actualizado la información del efector : ' . $ef->nombre;
-      }
+        if ($update) {
+            return 'Se ha actualizado la información del efector : ' . $ef->nombre;
+        }
     }
 
     /**
@@ -780,14 +793,15 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function generarTabla(){
+    public function generarTabla()
+    {
 
-      $efectores = Efector::with([
-        'estado' , 
-        'tipo' , 
+        $efectores = Efector::with([
+        'estado' ,
+        'tipo' ,
         'categoria' ,
-        'geo' => function($q){ 
-            $q->with(['provincia' , 'departamento' , 'localidad']); 
+        'geo' => function ($q) {
+            $q->with(['provincia' , 'departamento' , 'localidad']);
         },
         'dependencia',
         'compromiso',
@@ -797,45 +811,45 @@ class EfectoresController extends Controller
         'referente',
         'internet',
         'convenio',
-        'neonatal' => function($q){
-          $q->with('info');
+        'neonatal' => function ($q) {
+            $q->with('info');
         },
-        'obstetrico' => function($q){
-          $q->with('info');
+        'obstetrico' => function ($q) {
+            $q->with('info');
         },
-        'addendas' => function($q){
-          $q->with('tipo');
+        'addendas' => function ($q) {
+            $q->with('tipo');
         }
         ])
         //->where('id_estado' , 1)
         //->take(50)
-        ->orderBy('cuie' , 'asc')        
-        ->get();        
+        ->orderBy('cuie', 'asc')
+        ->get();
       
-      $data = ['efectores' => $efectores];
+        $data = ['efectores' => $efectores];
 
-      if(file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls')){
-        unlink('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls');  
-      }
-      if(file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip')){
-        unlink('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip');
-      }   
+        if (file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls')) {
+            unlink('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls');
+        }
+        if (file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip')) {
+            unlink('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip');
+        }
 
-      Excel::create('Efectores_SUMAR' , function ($e) use ($data){
-        $e->sheet('Tabla_SUMAR' , function ($s) use ($data){
-          $s->setHeight(1, 20);
-          $s->setColumnFormat([
-              'B' => '00000000000000'
-            ]);
-          $s->loadView('efectores.tabla' , $data);
-        });
-      })
-      ->store('xls');
+        Excel::create('Efectores_SUMAR', function ($e) use ($data) {
+            $e->sheet('Tabla_SUMAR', function ($s) use ($data) {
+                $s->setHeight(1, 20);
+                $s->setColumnFormat([
+                  'B' => '00000000000000'
+                ]);
+                $s->loadView('efectores.tabla', $data);
+            });
+        })
+        ->store('xls');
 
-      $zip = new ZipArchive();
-      $zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);      
-      $zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls', 'Efectores_SUMAR.xls');      
-      $zip->close();
+        $zip = new ZipArchive();
+        $zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
+        $zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xls', 'Efectores_SUMAR.xls');
+        $zip->close();
     }
 
     /**
@@ -843,8 +857,8 @@ class EfectoresController extends Controller
      *
      * @return null
      */
-    public function descargarTabla(){
-      return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
+    public function descargarTabla()
+    {
+        return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
     }
-
 }
