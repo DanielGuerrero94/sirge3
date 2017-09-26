@@ -28,17 +28,17 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {                    
+    {
         //$schedule->call('App\Http\Controllers\HomeController@test', ['Alejandro'])->everyMinute();
         
-        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado',1)->first()->max;
+        $periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado', 1)->first()->max;
         
         $schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('21:30');
         $schedule->call('App\Http\Controllers\PssController@generarTabla')->dailyAt('22:00');
         $schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->hourly();
-        $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('57 16 18 * * *');
+        $schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('31 15 26 * * *');
                 
-        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:02');    
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:02');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:05');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:08');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:25');
@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:39');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:43');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:47');
-        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:51');            
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:51');
         //BORRO LA TABLA DE TEMPORALES
         $schedule->call('App\Http\Controllers\WebServicesController@borrarTablaTemporal')->dailyAt('23:55');
         $schedule->call('App\Http\Controllers\WebServicesController@borrarTablaTemporal')->dailyAt('05:55');
@@ -70,14 +70,14 @@ class Kernel extends ConsoleKernel
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:28');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:32');
         $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:36');
-        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:40');       
+        $schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('01:40');
 
 
         $schedule->command('scheduler:execute')->cron('* * * * * *');
         $schedule->call('App\Http\Controllers\LotesController@alertSubidasMalProcesadas')->dailyAt('04:00');
         $schedule->call('App\Http\Controllers\LotesController@alertLotesPendientes')->dailyAt('03:00');
         
-       /* ->when(function ($periodo_a_automatizar) {                                                
+       /* ->when(function ($periodo_a_automatizar) {
 
                     $estado = Scheduler::select('estado')
                                 ->where('contexto','migracion_beneficiarios')
