@@ -219,7 +219,7 @@ class SolicitudController extends Controller
         $s = Solicitud::with('tipos')->find($id);
         $operadores = Operador::with(['usuario' => function ($q) {
             $q->orderBy('id_usuario');
-        }])->where('id_grupo', $s->tipos->grupo)->where('habilitado', 'S')->where('id_usuario', '<>', Auth::user()->id_usuario)->get();
+        }])->where('id_grupo', $s->tipos->grupo)->where('habilitado', 'S')->where('id_usuario', '<>', $s->usuario_solicitante)->get();
         $data = [
             'operadores' => $operadores,
             'id_solicitud' => $id
