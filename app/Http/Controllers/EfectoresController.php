@@ -539,7 +539,9 @@ class EfectoresController extends Controller
     public function getEditForm($cuie)
     {
         try {
-            $e = Efector::where('cuie', $cuie)->firstOrFail();
+            $e = Efector::with(['geo' => function ($q) {
+                    $q->with(['provincia' , 'departamento' , 'localidad']);
+            }])->where('cuie', $cuie)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             return response('No se ha encontrado el efector solicitado', 422);
         }
@@ -553,7 +555,7 @@ class EfectoresController extends Controller
         $departamentos = Departamento::all();
         $localidades = Localidad::all();
         $addendas = TipoAddenda::whereNotIn('id', $add_firmadas)->get();
-        $sistemas_hcd = HCD::where('id_provincia', Auth::user()->id_provincia)->get();
+        $sistemas_hcd = HCD::where('id_provincia', $e->geo->provincia->id_provincia)->get();
         $efector = Efector::with([
                 'estado' ,
                 'tipo' ,
