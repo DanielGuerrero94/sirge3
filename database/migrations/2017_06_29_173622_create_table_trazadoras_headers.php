@@ -13,16 +13,19 @@ class CreateTableTrazadorasHeaders extends Migration
     public function up()
     {
         Schema::create('trazadoras.headers', function (Blueprint $table) {
-            $table->integer('lote'); 
-            $table->smallInteger('trazadora');            
+            $table->integer('lote')->primary();
+            $table->smallInteger('trazadora');
+            $table->integer('periodo');
+            $table->char('provincia', 2);
+            $table->char('detalle', 1)->default('N');
             $table->integer('casos_positivos');
             $table->date('fecha_generacion')->nullable();
-            $table->string('hora_generacion',8)->nullable();
-            $table->string('usuario_generacion',25)->nullable();
-            $table->string('version_aplicativo',10)->nullable();
+            $table->string('hora_generacion', 8)->nullable();
+            $table->string('usuario_generacion', 25)->nullable();
+            $table->string('version_aplicativo', 10)->nullable();
             $table->timestamps();
             $table->foreign('lote')->references('lote')->on('sistema.lotes');
-        });        
+        });
     }
 
     /**

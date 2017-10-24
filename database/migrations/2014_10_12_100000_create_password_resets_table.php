@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnsTableEfectoresEfectores extends Migration
+class CreatePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class AddColumnsTableEfectoresEfectores extends Migration
      */
     public function up()
     {
-        Schema::table('efectores.efectores', function ($table) {
-            $table->char('hcd', 1)->default('N');
-            $table->smallInteger('id_sistema_hcd')->nullable();
-            $table->foreign('id_sistema_hcd')->references('id_sistema')->on('hcd.sistemas');
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token')->index();
+            $table->timestamp('created_at');
         });
     }
 
@@ -26,5 +26,6 @@ class AddColumnsTableEfectoresEfectores extends Migration
      */
     public function down()
     {
+        Schema::drop('password_resets');
     }
 }

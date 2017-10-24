@@ -13,9 +13,9 @@ class CreateTableHcdSistemas extends Migration
     public function up()
     {
         Schema::create('hcd.sistemas', function (Blueprint $table) {
-            $table->increments('id_sistema');            
-            $table->char('id_provincia',2);
-            $table->string('nombre',50);
+            $table->increments('id_sistema');
+            $table->char('id_provincia', 2);
+            $table->string('nombre', 50);
             $table->foreign('id_provincia')->references('id_provincia')->on('geo.provincias');
         });
     }
