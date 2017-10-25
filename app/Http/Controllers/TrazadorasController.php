@@ -1000,7 +1000,7 @@ class TrazadorasController extends AbstractPadronesController
             $new_header->save();
             unset($new_header);
         } catch (Exception $e) {
-            echo json_encode(['success' => 'false', 'errors' => $e->getMessage()]);
+            return response()->json(['success' => 'false', 'errors' => $e->getMessage()]);
         }
 
         $info = Subida::findOrFail($id_subida);
