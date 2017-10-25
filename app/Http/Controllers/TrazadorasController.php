@@ -887,7 +887,6 @@ class TrazadorasController extends AbstractPadronesController
             }
             unset($result);
         } catch (ErrorException $e) {
-            var_dump("LLEGO ACA CATCH abrirArchivo");
             return false;
         }
             return $fh;
@@ -970,11 +969,9 @@ class TrazadorasController extends AbstractPadronesController
 
     public function procesarArchivo($id_subida)
     {
-        var_dump("LLEGO ACA 1");
         $fh = $this->abrirArchivo($id_subida);
         
         if (!$fh) {
-            var_dump("LLEGO ACA 2");
             return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
         }
                 
@@ -1038,7 +1035,7 @@ class TrazadorasController extends AbstractPadronesController
 
             //Transforming line into an array
             preg_match("/(?:Total\ import\ time)(?:\ +)(\d+)(?:\ +)(\d+)(?:\ +)(\d+)(?:\ +)(\d+\.\d+s)/", $result, $procesado);
-                        
+            die(json_encode($procesado, JSON_PRETTY_PRINT));
             $this->_resumen['insertados'] = $procesado[2];
             $this->_resumen['rechazados'] = $procesado[3];
             system("sudo rm " . $this->_process_data['LOGIC_DIR'] . $unique_file);

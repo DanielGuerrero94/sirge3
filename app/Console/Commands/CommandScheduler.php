@@ -85,7 +85,6 @@ class CommandScheduler extends Command
                         Auth::logout();
                         Subida::where('id_subida', $subida->id_subida)->update(['id_estado' => 3]);
                     } catch (Exception $e) {
-                        var_dump($e->getMessage());
                         return json_encode($e->getMessage());
                     }
                 }
