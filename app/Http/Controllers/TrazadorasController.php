@@ -1035,7 +1035,7 @@ class TrazadorasController extends AbstractPadronesController
 
             //Transforming line into an array
             preg_match("/(?:Total\ import\ time)(?:\ +)(\d+)(?:\ +)(\d+)(?:\ +)(\d+)(?:\ +)(\d+\.\d+s)/", $result, $procesado);
-            die(json_encode($procesado, JSON_PRETTY_PRINT));
+            echo json_encode($procesado, JSON_PRETTY_PRINT);
             $this->_resumen['insertados'] = $procesado[2];
             $this->_resumen['rechazados'] = $procesado[3];
             system("sudo rm " . $this->_process_data['LOGIC_DIR'] . $unique_file);
