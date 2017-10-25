@@ -982,7 +982,6 @@ class TrazadorasController extends AbstractPadronesController
         $header = preg_split("/[\t]/", fgets($fh));
              
         try {
-            var_dump("LLEGO ACA 3");
             $ins_header = $this->procesarHeader($header);
                 
             $new_header = new Header();
@@ -1035,7 +1034,7 @@ class TrazadorasController extends AbstractPadronesController
 
             //Transforming line into an array
             preg_match("/(?:Total\ import\ time)(?:\ +)(\d+)(?:\ +)(\d+)(?:\ +)(\d+)(?:\ +)(\d+\.\d+s)/", $result, $procesado);
-            echo json_encode($procesado, JSON_PRETTY_PRINT);
+                        
             $this->_resumen['insertados'] = $procesado[2];
             $this->_resumen['rechazados'] = $procesado[3];
             system("sudo rm " . $this->_process_data['LOGIC_DIR'] . $unique_file);
