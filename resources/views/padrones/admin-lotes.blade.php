@@ -76,7 +76,11 @@
 	            columns: [
 	                { data: 'lote', name: 'lote' },
 	                { data: 'inicio' , name: 'inicio'},
+	                @if ($id_padron == 7)
+	                { data: 'tr_provincia' , name: 'tr_provincia'},
+	                @else
 	                { data: 'id_provincia' , name: 'id_provincia'},
+	                @endif
 	                @if ($id_padron == 7)
 	                { data: 'nro_trazadora' , name: 'nro_trazadora'},
 	                @endif
