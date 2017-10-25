@@ -18,17 +18,27 @@
 	                    <th>Lote</th>
 	                    <th>Fecha</th>
 	                    <th>Provincia</th>
+	                    @if ($id_padron == 7)
+	                    	<th>Trazadora</th>
+	                   	@endif 
 	                    <th>Registros IN</th>
 	                    <th>Registros OUT</th>
-	                    <th>Registros MOD</th>
+	                    @if ($id_padron != 7)
+	                    	<th>Registros MOD</th>
+	                   	@endif 
 	                    <th>Estado</th>
 	                    <th></th>
 	                  @else
 	                  	<th>Lote</th>
 	                    <th>Fecha</th>	                    
+	                    @if ($id_padron == 7)
+	                    	<th>Trazadora</th>
+	                   	@endif 
 	                    <th>Registros IN</th>
 	                    <th>Registros OUT</th>
-	                    <th>Registros MOD</th>
+	                    @if ($id_padron != 7)
+	                    	<th>Registros MOD</th>
+	                   	@endif 
 	                    <th>Estado</th>
 	                    <th></th>
 	                  @endif
@@ -67,9 +77,14 @@
 	                { data: 'lote', name: 'lote' },
 	                { data: 'inicio' , name: 'inicio'},
 	                { data: 'id_provincia' , name: 'id_provincia'},
+	                @if ($id_padron == 7)
+	                { data: 'nro_trazadora' , name: 'nro_trazadora'},
+	                @endif
 	                { data: 'registros_in'},
 	                { data: 'registros_out'},
+	                @if ($id_padron != 7)
 	                { data: 'registros_mod'},
+	                @endif	                
 	                { data: 'estado_css' , name: 'estado_css'},
 	                { data: 'action' }
 	            ],
@@ -85,9 +100,14 @@
 	            columns: [
 	                { data: 'lote', name: 'lote' },
 	                { data: 'inicio' , name: 'inicio'},
+	                @if ($id_padron == 7)
+	                { data: 'nro_trazadora' , name: 'nro_trazadora'},
+	                @endif
 	                { data: 'registros_in'},
 	                { data: 'registros_out'},
+	                @if ($id_padron != 7)
 	                { data: 'registros_mod'},
+	                @endif	                
 	                { data: 'estado_css' , name: 'estado_css'},
 	                { data: 'action' }
 	            ],

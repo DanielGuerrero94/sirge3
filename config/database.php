@@ -195,7 +195,7 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'ddjj',
-        ],
+         ],
 
         'indicadores' => [
             'driver'   => 'pgsql',
@@ -219,7 +219,7 @@ return [
             'schema'   => 'odp',
         ],
 
-        'geo' => [
+         'geo' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', 'localhost'),
             'database' => env('DB_DATABASE', 'forge'),
@@ -228,6 +228,17 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'geo',
+         ],
+
+        'trazadoras' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'trazadoras',
         ],
 
         'datawarehouse' => [
@@ -241,14 +252,14 @@ return [
             'schema'   => 'public',
         ],
 
-        'sqlsrv' => [
+         'sqlsrv' => [
             'driver'   => 'sqlsrv',
             'host'     => env('DB_HOST_SQLSERVER', 'localhost'),
             'database' => env('DB_DATABASE_SQLSERVER', 'forge'),
             'username' => env('DB_USERNAME_SQLSERVER', 'forge'),
-            'password' => env('DB_PASSWORD_SQLSERVER', ''),            
+            'password' => env('DB_PASSWORD_SQLSERVER', ''),
             'prefix'   => '',
-        ],
+         ],
 
         'mongodb' => [
             'driver'   => 'mongodb',
