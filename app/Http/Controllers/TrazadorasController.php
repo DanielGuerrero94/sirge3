@@ -887,6 +887,7 @@ class TrazadorasController extends AbstractPadronesController
             }
             unset($result);
         } catch (ErrorException $e) {
+            var_dump("LLEGO ACA CATCH abrirArchivo");
             return false;
         }
             return $fh;
@@ -969,11 +970,11 @@ class TrazadorasController extends AbstractPadronesController
 
     public function procesarArchivo($id_subida)
     {
-        
+        var_dump("LLEGO ACA 1");
         $fh = $this->abrirArchivo($id_subida);
         
         if (!$fh) {
-            var_dump("LLEGO ACA 1");
+            var_dump("LLEGO ACA 2");
             return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
         }
                 
@@ -984,7 +985,7 @@ class TrazadorasController extends AbstractPadronesController
         $header = preg_split("/[\t]/", fgets($fh));
              
         try {
-            var_dump("LLEGO ACA 2");
+            var_dump("LLEGO ACA 3");
             $ins_header = $this->procesarHeader($header);
                 
             $new_header = new Header();
