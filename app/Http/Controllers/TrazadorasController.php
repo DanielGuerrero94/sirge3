@@ -973,6 +973,7 @@ class TrazadorasController extends AbstractPadronesController
         $fh = $this->abrirArchivo($id_subida);
         
         if (!$fh) {
+            var_dump("LLEGO ACA 1");
             return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse"]);
         }
                 
@@ -983,6 +984,7 @@ class TrazadorasController extends AbstractPadronesController
         $header = preg_split("/[\t]/", fgets($fh));
              
         try {
+            var_dump("LLEGO ACA 2");
             $ins_header = $this->procesarHeader($header);
                 
             $new_header = new Header();
