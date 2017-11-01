@@ -189,7 +189,7 @@
 							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
 								    			<select id="integrante" name="integrante" class="form-control" 
-									    			@if (Auth::user()->id_area == 5)
+									    			@if (Auth::user()->id_area == 5 && Auth::user()->id_area == 16)
 									    				> 
 									    				@if ($efector->integrante == 'S')
 									    					<option selected="selected" value="S">SI</option>
