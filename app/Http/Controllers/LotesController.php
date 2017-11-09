@@ -68,7 +68,7 @@ class LotesController extends Controller
             ->join('sistema.subidas', 'sistema.lotes.id_subida', '=', 'sistema.subidas.id_subida')
             ->leftJoin('trazadoras.headers', 'sistema.lotes.lote', '=', 'trazadoras.headers.lote')
             ->where('id_padron', $id)
-            ->select('sistema.lotes.*', DB::raw('case trazadoras.headers.detalle when \'S\' then trazadora::text || \' det\' else trazadora::text end as nro_trazadora, provincia as tr_provincia'));
+            ->select('sistema.lotes.*', DB::raw('case trazadoras.headers.detalle when \'S\' then trazadora::text || \' det\' else trazadora::text end as nro_trazadora, provincia as tr_provincia, periodo'));
 
         if (Auth::user()->id_entidad == 2) {
             $lotes = $lotes->where('id_provincia', Auth::user()->id_provincia);

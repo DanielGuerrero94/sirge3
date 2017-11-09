@@ -4,21 +4,21 @@ namespace App\Models\Trazadoras;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Header extends Model
+class Beneficiario extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'trazadoras.headers';
+    protected $table = 'trazadoras.beneficiarios';
 
     /**
      * Primary key asociated with the table.
      *
      * @var string
      */
-    protected $primaryKey = 'lote';
+    protected $primaryKey = 'numero_documento';
 
     /**
      * Indicates if the model should be timestamped.
@@ -28,12 +28,12 @@ class Header extends Model
     public $timestamps = true;
 
     /**
-     * Devuelve la fecha de generacion
+     * Devuelve la fecha de nacimiento
      *
      * @param  string  $value
      * @return string
      */
-    public function getFechaSuscripcionAttribute($value)
+    public function getFechaNacimientoAttribute($value)
     {
         return date('d/m/Y', strtotime($value));
     }

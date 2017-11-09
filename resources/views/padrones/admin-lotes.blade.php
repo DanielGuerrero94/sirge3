@@ -20,6 +20,7 @@
 	                    <th>Provincia</th>
 	                    @if ($id_padron == 7)
 	                    	<th>Trazadora</th>
+	                    	<th>Periodo</th>
 	                   	@endif 
 	                    <th>Registros IN</th>
 	                    <th>Registros OUT</th>
@@ -33,6 +34,7 @@
 	                    <th>Fecha</th>	                    
 	                    @if ($id_padron == 7)
 	                    	<th>Trazadora</th>
+	                    	<th>Periodo</th>
 	                   	@endif 
 	                    <th>Registros IN</th>
 	                    <th>Registros OUT</th>
@@ -77,12 +79,13 @@
 	                { data: 'lote', name: 'lote' },
 	                { data: 'inicio' , name: 'inicio'},
 	                @if ($id_padron == 7)
-	                { data: 'tr_provincia' , name: 'tr_provincia'},
+	                { data: 'tr_provincia' , name: 'tr_provincia'},	                
 	                @else
 	                { data: 'id_provincia' , name: 'id_provincia'},
 	                @endif
 	                @if ($id_padron == 7)
 	                { data: 'nro_trazadora' , name: 'nro_trazadora'},
+	                { data: 'periodo' , name: 'periodo'},
 	                @endif
 	                { data: 'registros_in'},
 	                { data: 'registros_out'},
@@ -106,6 +109,7 @@
 	                { data: 'inicio' , name: 'inicio'},
 	                @if ($id_padron == 7)
 	                { data: 'nro_trazadora' , name: 'nro_trazadora'},
+	                { data: 'periodo' , name: 'periodo'},
 	                @endif
 	                { data: 'registros_in'},
 	                { data: 'registros_out'},

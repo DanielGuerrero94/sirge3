@@ -184,7 +184,8 @@ class PadronesController extends Controller
      */
     public function postUpload(Request $r)
     {
-
+        
+        $r = (object) $r;
         $status = $this->checkNoPending($r->id_padron);
 
         if ($status['status'] == 'error') {
@@ -568,7 +569,7 @@ class PadronesController extends Controller
                     ->where('provincia', $archivo[1])
                     ->where('detalle', $detalle)
                     ->count() == 1) {
-                return array('status' => 'error', 'detalle' => json_encode(["mensaje" => "La trazadora para dicha provincia ya ha sido cargada en el periodo", "valores" => array($trazadora,$periodo,$archivo[1],$detalle)]));
+                return array('status' => 'error', 'detalle' => json_encode(["mensaje" => "La trazadora para dicha provincia ya ha sido cargada en el periodo", "valores" => array("Trazadora: " => $trazadora,"Periodo: " => $periodo,"Provincia: " => $archivo[1],"Detalle: " => $detalle)]));
             } else {
                 return array('status' => 'ok');
             }
