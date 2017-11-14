@@ -108,6 +108,7 @@ class RechazosController extends Controller
         ->where('lote', $lote)
         ->whereIn('sistema.lotes.id_estado', [1,3])
         ->where('sistema.lotes.registros_out', '>', 0)
+        ->where('id_padron', '<>', 7)
         ->select('id_padron', 'registros_out')
         ->first();
 
@@ -165,6 +166,7 @@ class RechazosController extends Controller
         ->where('lote', $lote)
         ->whereIn('sistema.lotes.id_estado', [1,3])
         ->where('sistema.lotes.registros_out', '>', 0)
+        ->where('id_padron', '<>', 7)
         ->select('id_padron', 'registros_out')
         ->first();
 
