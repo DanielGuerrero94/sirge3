@@ -12,4 +12,11 @@ class Grupo extends Model
 	 * @var string
 	 */
 	protected $table = 'cei.grupos_etarios_cei';
+
+/**
+	 * Indicates if the model should be timestamped.
+	 *
+	 * @var bool
+	 */
+	public $timestamps = false;
 }

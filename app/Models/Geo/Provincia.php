@@ -24,7 +24,9 @@ class Provincia extends Model {
 	 *
 	 * @var bool
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
+
+	public $incrementing = false; 
 
 	/**
      * Nombre de la provincia
