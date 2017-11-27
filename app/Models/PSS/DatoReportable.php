@@ -28,6 +28,20 @@ class DatoReportable extends Model
 	protected $primaryKey = 'codigo_prestacion';
 
 	/**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+	/**
 	 * Devuelve los datos del código de prestacion
 	 */
 	public function prestacion()
