@@ -28,6 +28,13 @@ class Descripcion extends Model
 	public $timestamps = false;
 
 	/**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+	public $incrementing = false;
+
+	/**
      * Mostrar la descripcion del indicador.
      *
      * @param  string  $value

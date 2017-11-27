@@ -57,14 +57,10 @@ class LaravelUpCommand extends Command
             $key = $hasPrimaryKey?$key[1]:'';
 
             $isIdLike = preg_match("/id.*/", $key);
-            
-            if ($hasNameClass && $hasPrimaryKey && !$isIdLike) {
-                // $this->warn("Class {$name} has {$key} as primary key.");
-                $counter++;
 
-                if ( preg_match("/clave_beneficiario/", $key)) {
-                    $this->info("{$name} replace en estas clases.");
-                }
+            if ($hasNameClass && $hasPrimaryKey && !$isIdLike) {
+                $this->warn("Class {$name} has {$key} as primary key.");
+                $counter++;
             }
         }
 

@@ -26,4 +26,11 @@ class TipoPrestacion extends Model
 	 * @var bool
 	 */
 	public $timestamps = false;
+
+	/**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+	public $incrementing = false;
 }
