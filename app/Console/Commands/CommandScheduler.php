@@ -17,10 +17,9 @@ class CommandScheduler extends Command
      *
      * @var string
      */
-    //protected $signature = 'scheduler:execute {periodo}';
-    protected $signature = 'scheduler:execute';
+    protected $signature = 'scheduler:execute {--periodo= : Especifica un periodo(TODO)}';
 
-    /**2
+    /**
      * The console command description.
      *
      * @var string
@@ -45,7 +44,7 @@ class CommandScheduler extends Command
     public function handle()
     {
         
-        $subidas = Subida::where('id_estado', 1)->orderBy('fecha_subida', 'DESC')->get()->pluck('id_subida')->all();
+        $subidas = Subida::where('id_estado', 1)->orderBy('fecha_subida', 'DESC')->pluck('id_subida')->all();
         $subidas = array_values($subidas);
 
         while ($subidas) {
