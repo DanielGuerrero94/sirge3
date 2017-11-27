@@ -18,7 +18,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\Inspire::class,
         \App\Console\Commands\CommandScheduler::class,
-        \App\Console\Commands\TestCommand::class
+        \App\Console\Commands\TestCommand::class,
+        \App\Console\Commands\LaravelUpCommand::class,
     ];
 
     /**
