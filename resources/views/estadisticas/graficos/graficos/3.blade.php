@@ -53,6 +53,30 @@
         </div>
     </div>
 </div>
+<div class="row">            
+    <div class="col-md-12">
+        <div class="box box-info">
+            <div class="box-header">
+                <h2 class="box-title">DR presentados en periodo</h2>
+            </div>
+            <div class="box-body">
+                <div id="container4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">            
+    <div class="col-md-12">
+        <div class="box box-info">
+            <div class="box-header">
+                <h2 class="box-title">DR presentados en periodo</h2>
+            </div>
+            <div class="box-body">
+                <div id="container5"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 
     $('.back').click(function(){
@@ -198,6 +222,106 @@
             },
             series: data.series
         });
+    });
+
+    $.get('grafico-3-drlote/{{ $periodo }}' , function(data){
+
+        console.log(data);
+
+        $('#container4').highcharts({   
+            chart: {
+                type: 'bar',
+                height: 900
+            },
+            title: {
+                text: 'Datos reportables en periodo segun fecha de lote'
+            },
+            xAxis: {
+                categories: data.categorias
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },            
+            subtitle: {
+                text: 'Fuente: SIRGe Web.'
+            },
+            series: data.series
+        });
+    });
+
+    $.get('grafico-3-drlote-2/{{ $periodo }}' , function(data) {
+
+        console.log(data);
+
+        $('#container5').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Datos reportables en periodo segun fecha de lote'
+            },
+            xAxis: {
+                categories: data.categorias,
+                labels: {
+                    rotation: 0,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total prestaciones'
+                },
+                labels: {
+                    formatter: function() {
+                     return this.value+"%";
+                 }
+             }
+         },
+         tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}/{point.total}</b> ({point.percentage:.0f}%)<br/>',
+            shared: true
+        },
+        plotOptions: {
+            column: {
+                stacking: 'percent'
+            }
+        },
+        subtitle: {
+            text: 'Fuente: SIRGe Web.'
+        },
+        series: data.series
+    });
     });
 </script>
 @endsection

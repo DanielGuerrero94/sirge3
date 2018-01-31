@@ -289,6 +289,8 @@ Route::get('grafico-3/{periodo}' , 'GraficosController@getGrafico3');
 Route::get('grafico-3-treemap/{periodo}' , 'GraficosController@getDistribucionGrafico3');
 Route::get('grafico-3-table/{periodo}' , 'GraficosController@getGrafico3Tabla');
 Route::get('grafico-3-dr/{periodo}' , 'GraficosController@getGrafico3Dr');
+Route::get('grafico-3-drlote/{periodo}' , 'GraficosController@getGrafico3DrLote');
+Route::get('grafico-3-drlote-2/{periodo}' , 'GraficosController@getGrafico3DrLote2');
 Route::get('grafico-4/{periodo}' , 'GraficosController@getGrafico4');
 Route::get('grafico-4-table/{periodo}' , 'GraficosController@getGrafico4Tabla');
 Route::get('grafico-5/{periodo}' , 'GraficosController@getGrafico5');
