@@ -146,14 +146,14 @@ class Efector extends Model
 	 * Devuelvo los teléfonos
 	 */
 	public function telefonos(){
-		return $this->hasOne('App\Models\Efectores\Telefono' , 'id_efector' , 'id_efector');
+		return $this->hasMany('App\Models\Efectores\Telefono' , 'id_efector' , 'id_efector');
 	}
 
 	/**
 	 * Devuelvo los emails
 	 */
 	public function emails(){
-		return $this->hasOne('App\Models\Efectores\Email' , 'id_efector' , 'id_efector');
+		return $this->hasMany('App\Models\Efectores\Email' , 'id_efector' , 'id_efector');
 	}
 
 	/**
