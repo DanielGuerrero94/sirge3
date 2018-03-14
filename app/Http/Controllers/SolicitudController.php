@@ -193,7 +193,7 @@ class SolicitudController extends Controller {
 		$data = [
 			'solicitud'     => $s,
 			'back'          => $back,
-			'user_priority' => (Auth::user()->id_menu == 1 || (Auth::user()->id_menu == 7 && Auth::user()->id_entidad == 1))? 1:0;
+			'user_priority' => (Auth::user()->id_menu == 1 || (Auth::user()->id_menu == 7 && Auth::user()->id_entidad == 1))?1:0
 		];
 		return view('requests.details', $data);
 	}
