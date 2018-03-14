@@ -104,8 +104,6 @@ class EfectoresController extends Controller {
 			])
 			->find($id);
 
-		logger(json_encode($efector));
-
 		$data = [
 			'page_title' => $efector->nombre,
 			'efector'    => $efector,
@@ -588,8 +586,6 @@ class EfectoresController extends Controller {
 	 * @return string
 	 */
 	public function postEdit(Request $r) {
-
-		logger(json_encode($r->all()));
 
 		$update = false;
 		$ef     = Efector::where('cuie', $r->cuie)->firstOrFail();
