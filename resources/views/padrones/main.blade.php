@@ -16,6 +16,7 @@
 			</div>
 		</div>
 	</div>
+	<!--
 	<div class="col-md-4">
 		<div class="box box-primary">
 			<div class="box-header">
@@ -38,6 +39,7 @@
 			</div>
 		</div>
 	</div>
+	-->
 	<div class="col-md-4">
 		<div class="box box-primary">
 			<div class="box-header">
@@ -77,11 +79,13 @@
 			</div>
 			<div class="box-footer">
 				<div class="btn-group" role="group">
-					<button href="listado-lotes-cerrados/{{ $id_padron }}" class="action btn btn-info">Informar lote(s)</button>
+					<button href="listado-lotes-cerrados/{{ $id_padron }}" class="action btn btn-primary">Informar lote(s)</button>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="row">
 	<div class="col-md-4">
 		<div class="box box-info">
 			<div class="box-header">

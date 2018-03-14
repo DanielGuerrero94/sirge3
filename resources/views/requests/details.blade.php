@@ -77,9 +77,9 @@
 								@if ($user_priority == 1)
 									<p><a class="btn btn-default btn-xs" href="descargar-adjunto-solicitante/{{ $solicitud->id_adjunto }}"><i class="fa fa-download"></i> Ver</a></p>
 								@else
-									<p class="form-control-static">{{ $solicitud->adjuntos->nombre_original_solicitante }}</p>		
+									<p class="form-control-static">{{ $solicitud->adjuntos->nombre_original_solicitante }}</p>
 								@endif
-							@endif			
+							@endif
 						</div>
 						<!-- FECHA ASIGNACION -->
 						<label class="col-md-5 control-label">Fecha de inicio de solución : </label>
@@ -88,7 +88,7 @@
 							<p class="form-control-static">
 								<span class="label label-warning">ASIGNACIÓN PENDIENTE</span>
 							</p>
-							@else	
+							@else
 							<p class="form-control-static">{{ $solicitud->fecha_asignacion }}</p>
 							@endif
 						</div>
@@ -100,7 +100,7 @@
 							<p class="form-control-static">
 								<span class="label label-danger">SOLUCIÓN PENDIENTE</span>
 							</p>
-							@else	
+							@else
 							<p class="form-control-static">{{ $solicitud->fecha_solucion }}</p>
 							@endif
 						</div>
@@ -121,7 +121,7 @@
 							</p>
 							@else
 							<p><a class="btn btn-success btn-xs" href="descargar-adjunto-cierre/{{ $solicitud->id_adjunto }}"><i class="fa fa-download"></i> Descargar</a></p>
-							@endif			
+							@endif
 						</div>
 					</div>
 				</form>

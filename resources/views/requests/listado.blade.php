@@ -15,6 +15,7 @@
                         <th>Fecha ingreso</th>
                         <th>Tipo</th>
                         <th>Estado</th>
+                        <th>Responsable</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -41,7 +42,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
          var dt = $('#listado-requests-table').DataTable({
             processing: true,
             serverSide: true,
@@ -51,8 +52,9 @@
                 { data: 'usuario.nombre', name: 'usuario.nombre' },
                 { data: 'fecha_solicitud', name: 'fecha_solicitud' },
                 { data: 'tipos.descripcion', name: 'tipo' },
-                { data: 'estado_label', name: 'estado_label' },
-                { data: 'action', name: 'action'}
+                { data: 'estado_label', name: 'estado_label', orderable: false, searchable:false},
+                { data: 'responsable', name: 'usuario_asignacion' },
+                { data: 'action', name: 'action', orderable: false, searchable:false}
             ],
             order : [[0,'desc']]
         });
@@ -72,6 +74,6 @@
                 $('.modal').modal();
             })
         });
-    }); 
+    });
 </script>
 @endsection

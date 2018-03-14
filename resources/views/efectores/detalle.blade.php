@@ -28,7 +28,7 @@
 								<div class="col-md-6">
 									<p class="form-control-static">{{ $efector->cuie }}</p>
 								</div>
-							</div>	
+							</div>
 						</div>
 						<div class="col-md-2">
 							<!-- SIISA -->
@@ -56,7 +56,7 @@
 									<p class="form-control-static">
 									@if ($efector->priorizado == 'S')
 										<span class="label label-success">SI</span>
-									@else 
+									@else
 										<span class="label label-danger">NO</span>
 									@endif
 									</p>
@@ -71,7 +71,7 @@
 									<p class="form-control-static">
 									@if ($efector->integrante == 'S')
 										<span class="label label-success">SI</span>
-									@else 
+									@else
 										<span class="label label-danger">NO</span>
 									@endif
 									</p>
@@ -86,7 +86,7 @@
 									<p class="form-control-static">
 									@if ($efector->ppac == 'S')
 										<span class="label label-success">SI</span>
-									@else 
+									@else
 										<span class="label label-danger">NO</span>
 									@endif
 									</p>
@@ -102,7 +102,7 @@
 								<div class="col-md-6">
 									<p class="form-control-static">{{ $efector->tipo->descripcion }}</p>
 								</div>
-							</div>	
+							</div>
 						</div>
 						<div class="col-md-4">
 							<!-- SIISA -->
@@ -137,7 +137,7 @@
 									@endif
 									</p>
 								</div>
-							</div>	
+							</div>
 						</div>
 						<div class="col-md-6">
 							<!-- SIISA -->
@@ -149,11 +149,11 @@
 										{{ $efector->historiaclinica->nombre }}
 									@else
 										SIN DATOS
-									@endif									
+									@endif
 									</p>
 								</div>
 							</div>
-						</div>						
+						</div>
 					</div>
 					<h4>Información geográfica</h4>
 					<div class="row">
@@ -321,7 +321,7 @@
               		</div>
 					@endif
 					@if (count($efector->referente))
-					<h4>Referente</h4>						
+					<h4>Referente</h4>
 							<div class="row">
 								<div class="col-md-12">
 									<!-- NOMBRE -->
@@ -332,7 +332,7 @@
 										</div>
 									</div>
 								</div>
-							</div>						
+							</div>
 					@else
 					<div class="callout callout-warning">
                 		<h4>Atención!</h4>
