@@ -53,7 +53,7 @@ class BeneficiariosController extends Controller
      */
     public function getListadoTabla()
     {
-        $benefs = Beneficiario::select('nombre', 'apellido', 'fecha_nacimiento', 'sexo', 'numero_documento', 'clave_beneficiario');
+        $benefs = Beneficiario::select('nombre', 'apellido', 'fecha_nacimiento', 'sexo', 'numero_documento', 'clave_beneficiario')->take(10000);
         return Datatables::of($benefs)
         ->addColumn(
             'action',
