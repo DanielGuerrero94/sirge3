@@ -11,7 +11,11 @@ img {
 max-width: 100%;
 }
 body {
--webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
+-webkit-font-smoothing: antialiased;
+ -webkit-text-size-adjust: none;
+ width: 100% !important;
+ height: 100%;
+ line-height: 1.6em;
 }
 body {
 background-color: #f6f6f6;
@@ -21,16 +25,20 @@ background-color: #f6f6f6;
     padding: 0 !important;
   }
   h1 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h2 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h3 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h4 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h1 {
     font-size: 22px !important;
@@ -42,7 +50,8 @@ background-color: #f6f6f6;
     font-size: 16px !important;
   }
   .container {
-    padding: 0 !important; width: 100% !important;
+    padding: 0 !important;
+ width: 100% !important;
   }
   .content {
     padding: 0 !important;
@@ -68,9 +77,9 @@ background-color: #f6f6f6;
           </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">
               <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                     Estimados integrantes del area Supervision y Auditoria de la UEC:
-                    <ul>                    
+                    <ul>
                       <li>El usuario <b> {{ $user->nombre }} </b> perteneciente a <b> {{ $indicador->provincias->descripcion }}</b> area <b> {{ $user->area->nombre }} - {{ $user->entidad->descripcion }} </b> ha respondido a la observacion realizada en el indicador {{ $indicador->indicador}} del periodo {{$indicador->periodo}} con el siguiente mensaje:</li>
-                      <li><i>{{ $mensaje }}.</i></li>                      
+                      <li><i>"{{ $mensaje }}".</i></li>
                     </ul>
                   </td>
                 </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">

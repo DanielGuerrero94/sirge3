@@ -540,6 +540,7 @@ class CeiController extends Controller {
 		$fechas['max'] = $dt->format('Y-m-d');
 
 		foreach ($provincias as $provincia) {
+
 			if (isset($calculo->numerador->sexo)) {
 				$beneficiarios = Beneficiario::whereBetween('fecha_nacimiento', [$fechas['min'], $fechas['max']])
 					->where('id_provincia_alta', $provincia->id_provincia)
@@ -594,6 +595,7 @@ class CeiController extends Controller {
 
 			foreach ($beneficiarios as $key => $beneficiario) {
 				$coincidence = false;
+
 				foreach ($calculo_inicial->denominador->prestaciones as $prestacion) {
 					$dt = \DateTime::createFromFormat('Y-m', $periodo);
 					$dt->modify('first day of this month');

@@ -203,7 +203,7 @@ class WebServicesController extends Controller
 
         $client = $this->create();
 
-        $cantidad = 1000;
+        $cantidad = 100;
 
         $dt = \DateTime::createFromFormat('Ym', date('Ym'));
         $dt->modify('-2 months');
@@ -219,7 +219,7 @@ class WebServicesController extends Controller
                                   ->leftjoin('siisa.inscriptos_padron as i', 'beneficiarios.beneficiarios.numero_documento', '=', 'i.nrodocumento')
                                   ->leftjoin('siisa.error_padron_siisa as e', 'beneficiarios.beneficiarios.numero_documento', '=', 'e.numero_documento')
                                   ->leftjoin('siisa.temporal_migracion_siisa as t', 'beneficiarios.beneficiarios.numero_documento', '=', 't.numero_documento')
-                                  ->where('id_provincia_alta', '14')
+                                  ->where('id_provincia_alta', '05')
                                   ->where('clase_documento', 'P')
                                   //->where('g.id_departamento', 370)
                                   ->whereNull('i.nrodocumento')
@@ -251,7 +251,6 @@ class WebServicesController extends Controller
 
         foreach ($documentos as $documento) {
             $datos_benef = $this->cruceSiisaXMLRequest((string) $documento['numero_documento'], $client);
-            echo json_encode($datos_benef);
             if ($datos_benef && $datos_benef <> '{}') {
                 $data = (array) json_decode($datos_benef);
                 $data = (object) $data;

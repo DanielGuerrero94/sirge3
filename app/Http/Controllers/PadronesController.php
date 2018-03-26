@@ -592,13 +592,13 @@ class PadronesController extends Controller {
 		}
 
 		if (!$fh) {
-			return response()->json(['success' => 'false', 'errors' => "El archivo no ha podido procesarse"]);
+			return response()->json(['status' => 'error', 'detalle' => "El archivo no ha podido procesarse"]);
 		}
 
-		fgets($fh);
-		$linea    = explode(',', trim(fgets($fh), "\r\n"));
-		$datetime = DateTime::createFromFormat('d/m/Y', $linea[0]);
-		$periodo  = $datetime->format('Y-m');
-		return array('status' => 'error', 'detalle' => json_encode(["mensaje" => "El periodo ingresado ya fue aceptado"]));
+		/*fgets($fh);
+	$linea    = explode(',', trim(fgets($fh), "\r\n"));
+	$datetime = DateTime::createFromFormat('d/m/Y', $linea[0]);
+	$periodo  = $datetime->format('Y-m');
+	return array('status' => 'error', 'detalle' => json_encode(["mensaje" => "El periodo ingresado ya fue aceptado"]));*/
 	}
 }

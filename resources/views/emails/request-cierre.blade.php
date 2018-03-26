@@ -11,7 +11,11 @@ img {
 max-width: 100%;
 }
 body {
--webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
+-webkit-font-smoothing: antialiased;
+ -webkit-text-size-adjust: none;
+ width: 100% !important;
+ height: 100%;
+ line-height: 1.6em;
 }
 body {
 background-color: #f6f6f6;
@@ -21,16 +25,20 @@ background-color: #f6f6f6;
     padding: 0 !important;
   }
   h1 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h2 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h3 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h4 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
+    font-weight: 800 !important;
+ margin: 20px 0 5px !important;
   }
   h1 {
     font-size: 22px !important;
@@ -42,7 +50,8 @@ background-color: #f6f6f6;
     font-size: 16px !important;
   }
   .container {
-    padding: 0 !important; width: 100% !important;
+    padding: 0 !important;
+ width: 100% !important;
   }
   .content {
     padding: 0 !important;
@@ -69,16 +78,16 @@ background-color: #f6f6f6;
               <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                     Estimado usuario, en el adjunto podrá encontrar información con respecto a la solución a la solicitud ingresada. <br />
                     <b>Le solicitamos que nos confirme que la solución es satisfactoria haciendo click en uno de los siguientes enlaces según corresponda:</b><br /><br />
-                    <b><a href="http://200.69.210.3/sirge3/public/solicitud-final/{{ $id }}/{{ $hash }}">Confirmar cierre de solicitud desde Internet</a></b><br /><br />
+                    <b><a href="http://138.0.104.196/sirge3/public/solicitud-final/{{ $id }}/{{ $hash }}">Confirmar cierre de solicitud desde Internet</a></b><br /><br />
                     <b><a href="http://192.6.0.224/sirge3/public/solicitud-final/{{ $id }}/{{ $hash }}">Confirmar cierre de solicitud desde UEC (para usuarios en red local)</a></b>
                   </td>
                 </tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                     Gracias por utilizar SIRGe Web.
                   </td>
-                </tr>                
-          </table>           
+                </tr>
+          </table>
           </tr>
-            @if($adjunto == 'S')               
+            @if($adjunto == 'S')
               <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="alert alert-warning" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #00cc00; margin: 0; padding: 20px;" align="center" bgcolor="#ff9933" valign="top">
                 Tiene documentos adjuntos en SIRGe sección "Mis solicitudes"
                 </td>

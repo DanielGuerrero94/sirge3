@@ -15,7 +15,7 @@
 						  <a class="rechazar-indicador btn btn-danger" href="indicadores-rechazar"><i class="fa fa-pencil-square-o"></i> Rechazar</a>
                         </div>
                         <div data-toggle="descargar-tooltip" data-placement="bottom" style="display:inline-block;">
-                            <a class="descargar-indicador btn btn-warning" href="tablero-descargar-tabla"><i class="fa fa-download"></i> Descargar tabla</a>
+                            <a class="descargar-indicador btn btn-warning" href="listado-descargar-tabla"><i class="fa fa-download"></i> Descargar tabla</a>
                         </div>
                     </div>
 				@endif
@@ -77,20 +77,24 @@ $(function() {
 		$('.aceptar-indicador, .rechazar-indicador').show();
 	}
 
-	url = 'tablero-listado-table/{{$periodo}}/{{$provincia}}';
+	//url = 'tablero-listado-table/{{$periodo}}/{{$provincia}}';
 
     table = $('#tablero-table').DataTable({
+        type: 'get',
         processing: true,
         serverSide: true,
         sortable: true,
-        pageLength: 23,
-        ajax : url,
+        pageLength: 17,
+        dataType: 'json',
+        ajax : {
+                url: '{{url("/tablero-listado-table")}}/'+ '{{$periodo}}' + '/' + '{{$provincia}}'
+        },
         columns: [
             { data: 'periodo'},
             { data: 'provincias.descripcion'},
-            { data: 'indicador'},
-            { data: 'numerador'},
-            { data: 'denominador'},
+            { data: 'indicador_real'},
+            { data: 'numerador_format'},
+            { data: 'denominador_format'},
             { data: 'estado'},
             { data: 'action'}
         ],
@@ -214,6 +218,14 @@ $(function() {
                         })
                     }
                 });
+    });
+
+    $('.descargar-indicador').click(function(event){
+        event.preventDefault();
+
+        var url = $(this).attr('href') + '/' + '{{$periodo}}' + '/' + '{{$provincia}}';
+
+        location.href = url;
     });
 
 });

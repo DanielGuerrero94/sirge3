@@ -30,7 +30,7 @@
 <table class="table">
 	<tr>
 		<td class="title-sumar">PROGRAMA SUMAR</td>
-		<td class="title-sumar">Rechazados Tablero de Control</td>
+		<td class="title-sumar">Ingresos Tablero de Control - {{$periodo}}</td>
 	</tr>
 	<tr>
 		<td>Fecha de &uacute;
@@ -44,25 +44,21 @@ n: </td>
 	</tr>
 	<tr></tr>
 	<tr>
-		<td class="table-header">ID</th>
-		<td class="table-header">FECHA</th>
 		<td class="table-header">PERIODO</th>
-		@if($id_entidad == 1)
-		    <td class="table-header">PROVINCIA</th>
-        @endif
-		<td class="table-header">RESUELTO POR</th>
+		<td class="table-header">PROVINCIA</th>
+		<td class="table-header">INDICADOR</th>
+		<td class="table-header">NUMERADOR</th>
+		<td class="table-header">DENOMINADOR</th>
 		<td class="table-header">ESTADO</th>
 	</tr>
 	@foreach($tablero as $key => $registro)
 		<tr>
-			<td>{{$registro['id']  or '' }}</td>
-			<td>{{$registro['fecha']}}</td>
 			<td>{{$registro['periodo']  or '' }}</td>
-			@if($id_entidad == 1)
-				<td>{{$registro['provincia_descripcion']  or '' }}</td>
-			@endif
-			<td>{{$registro['nombre']  or '' }}</td>
-			<td>{{$registro['estado']  or '' }}</td>
+			<td>{{$registro['provincia']  or '' }}</td>
+			<td>{{$registro['indicador']  or '' }}</td>
+			<td>{{$registro['numerador']  or '' }}</td>
+			<td>{{$registro['denominador']  or '' }}</td>
+			<td>{{$registro['estado'] or ''}}</td>
 		</tr>
 	@endforeach
 </table>
