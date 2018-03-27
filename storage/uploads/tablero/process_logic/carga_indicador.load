@@ -1,0 +1,42 @@
+
+LOAD CSV
+	FROM :FILE_PATH WITH ENCODING latin1
+	HAVING FIELDS
+	(
+		periodo [date format 'DD/MM/YYYY', trim both whitespace],
+		indicador,
+		provincia [trim both whitespace],
+		numerador [null if blanks, trim both whitespace],
+		denominador [null if blanks, trim both whitespace]
+	)
+
+	INTO postgresql://postgres:BernardoCafe008@192.6.0.153:5432/sirge3?tablero.:TABLE_NAME
+	TARGET COLUMNS
+	(
+		periodo,
+		indicador,
+		provincia,
+		numerador,
+		denominador,		
+		lote integer using ":NUMBER_LOTE"
+	)
+	WITH skip header = 1,
+	     fields terminated by '\t',
+	     fields optionally enclosed by '"'
+
+BEFORE LOAD DO       	 
+	 $$ CREATE TABLE IF NOT EXISTS trazadoras.ingresos
+        (
+	 	id serial PRIMARY KEY,
+		periodo character varying(7) NOT NULL,
+		indicador character varying(5) NOT NULL,
+		provincia character(2) NOT NULL,
+		numerador text,
+		denominador text,
+		observaciones jsonb,
+		lote integer NOT NULL
+        );
+        $$,
+	$$ CREATE INDEX IF NOT EXISTS idx_tablero_ingresos_lote ON tablero.ingresos(lote); $$
+
+	;
