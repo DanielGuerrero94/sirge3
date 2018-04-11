@@ -141,7 +141,7 @@ class TableroController extends AbstractPadronesController {
 			$unIndicador->numerador   = $r->numerador;
 			$unIndicador->denominador = $r->denominador;
 			$unIndicador->save();
-		} catch (\Exception|QueryException $e) {
+		} catch (\Exception $e) {
 			return json_encode(["resultado" => 'Ha ocurrido un error']);
 		}
 		return 'Se han modificado los datos correctamente.';
@@ -555,7 +555,7 @@ class TableroController extends AbstractPadronesController {
 			$this->_resumen['rechazados'] = $procesado[3];
 			system("sudo rm ".$this->_process_data['LOGIC_DIR'].$unique_file);
 			system("sudo rm ".$complete_result_file);
-		} catch (\Exception|QueryException $e) {
+		} catch (\Exception $e) {
 			$this->_error['lote']       = $lote;
 			$this->_error['created_at'] = date("Y-m-d H:i:s");
 			$this->_error['registro']   = json_encode("PgLoader Error");
@@ -768,7 +768,7 @@ class TableroController extends AbstractPadronesController {
 
 			$arrayreturns = $this->prepareArray($arrayreturns);
 
-		} catch (\Exception|QueryException $e) {
+		} catch (\Exception $e) {
 			logger($e->getErrors());
 		}
 
