@@ -80,6 +80,13 @@ return [
             'url_type'  => 'publicURL',
         ],
 
+	'dbsftp' => [
+	    'driver'   => 'sftp',
+            'host'     => '192.6.0.66',
+            'username' => env('SSH_USER'),
+            'password' => env('SSH_PASS'),
+	],
+
     ],
 
 ];
