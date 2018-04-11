@@ -12,7 +12,7 @@ class CreateTableResultados extends Migration {
 	public function up() {
 		Schema::create('tablero.ingresos', function (Blueprint $table) {
 				$table->increments('id');
-				$table->string('indicador', 5);
+				$table->string('indicador', 4);
 				$table->string('periodo', 7);
 				$table->char('id_provincia', 2);
 				$table->text('numerador')->nullable();

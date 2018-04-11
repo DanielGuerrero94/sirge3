@@ -8,6 +8,7 @@ use App\Models\Rechazo;
 use App\Models\Subida;
 
 use App\Models\Tablero\Administracion;
+use App\Models\Tablero\Detail;
 use App\Models\Tablero\Ingreso;
 use App\Models\Tablero\Rango;
 use App\Models\Tablero\YearIndicadores;
@@ -140,7 +141,7 @@ class TableroController extends AbstractPadronesController {
 			$unIndicador->numerador   = $r->numerador;
 			$unIndicador->denominador = $r->denominador;
 			$unIndicador->save();
-		} catch (Exception $e) {
+		} catch (\Exception|QueryException $e) {
 			return json_encode(["resultado" => 'Ha ocurrido un error']);
 		}
 		return 'Se han modificado los datos correctamente.';
@@ -334,7 +335,7 @@ class TableroController extends AbstractPadronesController {
 			$value                = $interval_diff->format('%a');
 			return $value;
 		} elseif (in_array($indicador, ['5|4', '5|5'])) {
-			Log::info("CHECK_VALUE", ['type' => 'value', 'user' => Auth::user()->id_usuario, 'value' => (float) $id->numerador]);
+			//Log::info("CHECK_VALUE", ['type' => 'value', 'user' => Auth::user()->id_usuario, 'value' => (float) $id->numerador]);
 			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
 		} else {
 			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
@@ -554,7 +555,7 @@ class TableroController extends AbstractPadronesController {
 			$this->_resumen['rechazados'] = $procesado[3];
 			system("sudo rm ".$this->_process_data['LOGIC_DIR'].$unique_file);
 			system("sudo rm ".$complete_result_file);
-		} catch (Exception $e) {
+		} catch (\Exception|QueryException $e) {
 			$this->_error['lote']       = $lote;
 			$this->_error['created_at'] = date("Y-m-d H:i:s");
 			$this->_error['registro']   = json_encode("PgLoader Error");
@@ -767,7 +768,7 @@ class TableroController extends AbstractPadronesController {
 
 			$arrayreturns = $this->prepareArray($arrayreturns);
 
-		} catch (Exception $e) {
+		} catch (\Exception|QueryException $e) {
 			logger($e->getErrors());
 		}
 
@@ -928,5 +929,140 @@ class TableroController extends AbstractPadronesController {
 		}
 
 		return $returned_array;
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function getSelectGraficosTablero() {
+		$data = [
+			'page_title'   => 'Seleccione el periodo a visualizar',
+			'id_provincia' => Auth::user()->id_provincia,
+			'provincias'   => Provincia::all(),
+			'indicadores'  => Detail::where('indicador', 'NOT LIKE', '%.%')->get()
+		];
+		return view('tablero.select-periodo-graficos', $data);
+	}
+
+	/**
+	 * Devuelve la vista de los indicadores
+	 * @param string $id
+	 *
+	 * @return null
+	 */
+	public function getGraficoTablero($periodo, $id_provincia) {
+
+		$indicador  = $this->datosListadoTabla($periodo, $id_provincia);
+		$collection = collect($indicador->get());
+		//Log::info("CHECK_VALUE", ['type' => 'value', 'user' => Auth::user()->id_usuario, 'value' => $indicador]);
+
+		$collection->transform(function ($item, $key) {
+				$item->detail = $this->getDetails($item->indicador);
+				return $item;
+			});
+
+		foreach ($collection as $field => $item) {
+			$indicadorActual['indicador']      = $item->indicador;
+			$result                            = $this->checkState($item->id);
+			$indicadorActual['resultadoTotal'] = $result['value'];
+			$indicadorActual['color']          = $result['color'];
+		}
+
+		$provincia = Provincia::find($id_provincia);
+
+		$grafico = $this->getGraficoEvolucion($periodo, $id_provincia);
+
+		die(var_dump($grafico));
+
+		$data = [
+			'page_title'   => 'Indicadores Tablero: '.$provincia->descripcion.' periodo: '.$periodo,
+			'indicadores'  => $indicadorActual,
+			'back'         => 'select-graficos-tablero',
+			'id_provincia' => $id_provincia,
+			'provincia'    => $provincia,
+			'periodo'      => $periodo,
+			'grafico'      => $grafico
+		];
+
+		return view('tablero.grafico_tablero', $data);
+
+	}
+
+	/**
+	 * Devuelve los datos para los highcharts de evolucion
+	 * @param string $id
+	 * @param string $periodo
+	 *
+	 * @return array
+	 */
+	public function getGraficoEvolucion($periodo, $provincia) {
+
+		$indicador = $this->datosListadoTabla($periodo, $provincia)->get();
+		$i         = 0;
+
+		if (!empty($indicador)) {
+			foreach ($indicador as $field => $item) {
+
+				$grafico[$i]['indicador'] = $item->indicador;
+				//DEBO CALCULAR RANGOS $grafico[$i]['rangos']     = $item['rangoIndicador'];
+				Log::info("CHECK_VALUE", ['type' => 'parameter', 'user' => Auth::user()->id_usuario, 'value' => $item->id]);
+				$grafico[$i]['resultados'] = $this->getUltimosIndicadores($item);
+				$grafico[$i]['categories'] = array();
+				$grafico[$i]['data']       = array();
+
+				foreach ($grafico[$i]['resultados'] as $item) {
+					$dt     = \DateTime::createFromFormat('Y-m', $item['periodo']);
+					$period = date('m/y', strtotime($dt->format('Y-m')));
+					array_unshift($grafico[$i]['categories'], $period);
+					array_unshift($grafico[$i]['data'], $item['periodo']);
+				}
+				$i++;
+			}
+			return $grafico;
+		}
+		return null;
+	}
+
+	/**
+	 * Devuelve el resultado del indicador en los ultimos periodos
+	 *
+	 * @param  integer  $id
+	 * @return array[float]
+	 */
+	public function getUltimosIndicadores($id) {
+
+		$periodos = $this->getDateInterval6Months($id->periodo);
+
+		$rows = Ingreso::whereIn('periodo', array_values($periodos))
+			->where(DB::raw("replace(indicador,'.','|')"), $id->indicador)
+			->orderBy('periodo', 'desc')
+			->get();
+
+		$i = 0;
+		foreach ($rows as $field => $one) {
+			$grafico[$i]['periodo']   = $one->periodo;
+			$grafico[$i]['resultado'] = $this->checkStateValue($one);
+			$i++;
+		}
+
+		return $grafico;
+	}
+
+	protected function getDateInterval6Months($periodo) {
+
+		$dt         = \DateTime::createFromFormat('Y-m', $periodo);
+		$interval[] = $dt->format('Y-m');
+
+		for ($i = 0; $i < 6; $i++) {
+			$dt->modify('-1 month');
+			$interval[] = $dt->format('Y-m');
+		}
+		return $interval;
+	}
+
+	protected function getDetails($indicador) {
+		return Detail::find($indicador);
 	}
 }
