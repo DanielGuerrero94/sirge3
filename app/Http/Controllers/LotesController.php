@@ -317,6 +317,10 @@ class LotesController extends Controller {
 				return 'PROGRAMA FEDERAL DE SALUD';
 			case 6:
 				return 'SUPERINTENDENCIA DE SERVICIOS DE SALUD';
+			case 7:
+				return 'TRAZADORAS';
+			case 8:
+				return 'TABLERO DE CONTROL';
 			default:
 				break;
 		}
