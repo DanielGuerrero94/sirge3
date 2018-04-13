@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\MyShellException;
 use App\Models\Geo\Provincia;
 use App\Models\Lote;
+
 use App\Models\Rechazo;
 use App\Models\Subida;
-
 use App\Models\Tablero\Administracion;
 use App\Models\Tablero\Detail;
 use App\Models\Tablero\Ingreso;
 use App\Models\Tablero\Rango;
 use App\Models\Tablero\YearIndicadores;
-use App\Models\Usuario;
 
+use App\Models\Usuario;
 use Auth;
 use Datatables;
 use DateTime;
@@ -168,11 +169,11 @@ class TableroController extends AbstractPadronesController {
 			'numerador_format',
 			function ($result) {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
-					return $result->numerador;
+					return empty($result->numerador)?null:($result->numerador);
 				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4'])) {
-					return number_format($result->numerador, 0, ',', '.');
+					return empty($result->numerador)?null:(number_format($result->numerador, 0, ',', '.'));
 				}
-				return '$ '.number_format($result->numerador, 2, ',', '.');
+				return empty($result->numerador)?null:('$ '.number_format($result->numerador, 2, ',', '.'));
 
 			}
 		)
@@ -180,11 +181,11 @@ class TableroController extends AbstractPadronesController {
 			'denominador_format',
 			function ($result) {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
-					return $result->denominador;
+					return empty($result->denominador)?null:($result->denominador);
 				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4', '5|4', '5|5'])) {
-					return number_format($result->denominador, 0, ',', '.');
+					return empty($result->denominador)?null:(number_format($result->denominador, 0, ',', '.'));
 				}
-				return '$ '.number_format($result->denominador, 2, ',', '.');
+				return empty($result->denominador)?null:('$ '.number_format($result->denominador, 2, ',', '.'));
 			}
 		)
 			->addColumn(
@@ -228,8 +229,6 @@ class TableroController extends AbstractPadronesController {
 
 		$this->_user = Auth::user();
 
-		Log::info("QUERY", ['type' => 'sql', 'user' => Auth::user()->id_usuario, 'query' => $results->toSql()]);
-
 		return $results;
 	}
 
@@ -246,7 +245,6 @@ class TableroController extends AbstractPadronesController {
 		$results->transform(function ($item, $key) {
 				$item->estado = $this->checkStateValue($item);
 				$item->indicador = strtr($item->indicador, array("|" => "."));
-				Log::info("CHECK_VALUE", ['type'                     => 'array', 'user'                     => Auth::user()->id_usuario, 'value'                     => $item]);
 				return $item;
 			});
 
@@ -335,7 +333,6 @@ class TableroController extends AbstractPadronesController {
 			$value                = $interval_diff->format('%a');
 			return $value;
 		} elseif (in_array($indicador, ['5|4', '5|5'])) {
-			//Log::info("CHECK_VALUE", ['type' => 'value', 'user' => Auth::user()->id_usuario, 'value' => (float) $id->numerador]);
 			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
 		} else {
 			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
@@ -534,7 +531,7 @@ class TableroController extends AbstractPadronesController {
 			$complete_result_file = $this->_process_data['LOGIC_DIR'].$unique_file.'.result';
 
 			//EJECUTO pgloader enviando los resultados a un archivo
-			system("sudo pgloader ".$this->_process_data['LOGIC_DIR'].$unique_file.' > '.$complete_result_file);
+			MyShellException::execute("sudo pgloader ".$this->_process_data['LOGIC_DIR'].$unique_file.' > '.$complete_result_file);
 
 			//PASS errores to a variable
 			exec('grep -A 1 "ERROR" '.$complete_result_file, $errors);
@@ -555,6 +552,12 @@ class TableroController extends AbstractPadronesController {
 			$this->_resumen['rechazados'] = $procesado[3];
 			system("sudo rm ".$this->_process_data['LOGIC_DIR'].$unique_file);
 			system("sudo rm ".$complete_result_file);
+		} catch (MyShellException $e) {
+			$this->_error['lote']       = $lote;
+			$this->_error['created_at'] = date("Y-m-d H:i:s");
+			$this->_error['registro']   = json_encode("PgLoader Error");
+			$this->_error['motivos']    = json_encode($e->getMessage());
+			Rechazo::insert($this->_error);
 		} catch (\Exception $e) {
 			$this->_error['lote']       = $lote;
 			$this->_error['created_at'] = date("Y-m-d H:i:s");
@@ -952,38 +955,43 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return null
 	 */
-	public function getGraficoTablero($periodo, $id_provincia) {
+	public function getGraficoTablero($periodo, $id_provincia, $sigla_indicador) {
 
-		$indicador  = $this->datosListadoTabla($periodo, $id_provincia);
+		$indicador = $this->datosListadoTabla($periodo, $id_provincia);
+		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
 		$collection = collect($indicador->get());
-		//Log::info("CHECK_VALUE", ['type' => 'value', 'user' => Auth::user()->id_usuario, 'value' => $indicador]);
+
+		$tipo_indicador = Detail::find($sigla_indicador);
 
 		$collection->transform(function ($item, $key) {
 				$item->detail = $this->getDetails($item->indicador);
 				return $item;
 			});
 
+		$i = 0;
 		foreach ($collection as $field => $item) {
-			$indicadorActual['indicador']      = $item->indicador;
-			$result                            = $this->checkState($item->id);
-			$indicadorActual['resultadoTotal'] = $result['value'];
-			$indicadorActual['color']          = $result['color'];
+			$indicadorActual[$i]['indicador']      = $item->indicador;
+			$indicadorActual[$i]['detalles']       = Detail::find(strtr($item->indicador, array("|" => ".")));
+			$result                                = $this->checkState($item->id);
+			$indicadorActual[$i]['resultadoTotal'] = $result['value'];
+			$indicadorActual[$i]['color']          = ($result['color'] == 'success')?'green':($result['color'] == 'warning'?'yellow':'red');
+			$i++;
 		}
+		unset($i);
 
 		$provincia = Provincia::find($id_provincia);
 
-		$grafico = $this->getGraficoEvolucion($periodo, $id_provincia);
-
-		die(var_dump($grafico));
+		$grafico = $this->getGraficoEvolucion($periodo, $id_provincia, $sigla_indicador);
 
 		$data = [
-			'page_title'   => 'Indicadores Tablero: '.$provincia->descripcion.' periodo: '.$periodo,
-			'indicadores'  => $indicadorActual,
-			'back'         => 'select-graficos-tablero',
-			'id_provincia' => $id_provincia,
-			'provincia'    => $provincia,
-			'periodo'      => $periodo,
-			'grafico'      => $grafico
+			'page_title'     => 'Indicadores Tablero: '.$provincia->descripcion.' periodo: '.$periodo,
+			'indicadores'    => $indicadorActual,
+			'back'           => 'select-graficos-tablero',
+			'id_provincia'   => $id_provincia,
+			'provincia'      => $provincia,
+			'periodo'        => $periodo,
+			'grafico'        => $grafico,
+			'tipo_indicador' => $tipo_indicador
 		];
 
 		return view('tablero.grafico_tablero', $data);
@@ -997,9 +1005,11 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return array
 	 */
-	public function getGraficoEvolucion($periodo, $provincia) {
+	public function getGraficoEvolucion($periodo, $provincia, $sigla_indicador) {
 
-		$indicador = $this->datosListadoTabla($periodo, $provincia)->get();
+		$indicador = $this->datosListadoTabla($periodo, $provincia);
+		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
+		$indicador = $indicador->get();
 		$i         = 0;
 
 		if (!empty($indicador)) {
@@ -1007,8 +1017,8 @@ class TableroController extends AbstractPadronesController {
 
 				$grafico[$i]['indicador'] = $item->indicador;
 				//DEBO CALCULAR RANGOS $grafico[$i]['rangos']     = $item['rangoIndicador'];
-				Log::info("CHECK_VALUE", ['type' => 'parameter', 'user' => Auth::user()->id_usuario, 'value' => $item->id]);
 				$grafico[$i]['resultados'] = $this->getUltimosIndicadores($item);
+				$grafico[$i]['rangos']     = $this->getRangos($item);
 				$grafico[$i]['categories'] = array();
 				$grafico[$i]['data']       = array();
 
@@ -1016,7 +1026,7 @@ class TableroController extends AbstractPadronesController {
 					$dt     = \DateTime::createFromFormat('Y-m', $item['periodo']);
 					$period = date('m/y', strtotime($dt->format('Y-m')));
 					array_unshift($grafico[$i]['categories'], $period);
-					array_unshift($grafico[$i]['data'], $item['periodo']);
+					array_unshift($grafico[$i]['data'], $item['resultado']);
 				}
 				$i++;
 			}
@@ -1037,6 +1047,7 @@ class TableroController extends AbstractPadronesController {
 
 		$rows = Ingreso::whereIn('periodo', array_values($periodos))
 			->where(DB::raw("replace(indicador,'.','|')"), $id->indicador)
+			->where('provincia', $id->provincia)
 			->orderBy('periodo', 'desc')
 			->get();
 
@@ -1064,5 +1075,68 @@ class TableroController extends AbstractPadronesController {
 
 	protected function getDetails($indicador) {
 		return Detail::find($indicador);
+	}
+
+	protected function getRangos($indicador) {
+		$rangos = Rango::where(DB::raw("replace(indicador,'.','|')"), $indicador->indicador)
+		                                                                        ->where('year', intval(substr($indicador->periodo, 0, 4)))
+			->where('id_provincia', $indicador->provincia)->first();
+
+		$red = 100;
+		foreach (json_decode($rangos->red) as $key => $value) {
+			if (isset($value->multiple_condicion_1)) {
+				foreach ($value as $clave => $valor) {
+					foreach ($valor as $k2   => $v2) {
+						Log::info($v2->valor);
+						if ($red > $v2->valor) {
+							$red = $v2->valor;
+						}
+					}
+				}
+			} else {
+				Log::info($value->valor);
+				if ($red > $value->valor) {
+					$red = $value->valor;
+				}
+			}
+		}
+		$yellow = 100;
+		foreach (json_decode($rangos->yellow) as $key => $value) {
+			if (isset($value->multiple_condicion_1)) {
+				foreach ($value as $clave => $valor) {
+					foreach ($valor as $k2   => $v2) {
+						Log::info($v2->valor);
+						if ($yellow > $v2->valor) {
+							$yellow = $v2->valor;
+						}
+					}
+				}
+			} else {
+				Log::info($value->valor);
+				if ($yellow > $value->valor) {
+					$yellow = $value->valor;
+				}
+			}
+		}
+		$green = 100;
+		foreach (json_decode($rangos->green) as $key => $value) {
+			if (isset($value->multiple_condicion_1)) {
+				foreach ($value as $clave => $valor) {
+					foreach ($valor as $k2   => $v2) {
+						Log::info($v2->valor);
+						if ($green > $v2->valor) {
+							$green = $v2->valor;
+						}
+					}
+				}
+			} else {
+				Log::info($value->valor);
+				if ($green > $value->valor) {
+					$green = $value->valor;
+				}
+			}
+		}
+
+		return array('min_rojo' => $red, 'min_yellow' => $yellow, 'min_verde' => $green);
 	}
 }
