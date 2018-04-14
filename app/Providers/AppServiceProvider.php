@@ -20,10 +20,10 @@ class AppServiceProvider extends ServiceProvider {
 					$d = DateTime::createFromFormat('d/m/Y', '5/9/2017');
 					return checkdate($d->format('m'), $d->format('d'), $d->format('Y'));
 				} else {
-					return is_numeric($value);
+					return true;
 				}
 
-			});
+			}, 'El campo no cumple con el formato para este indicador');
 	}
 
 	/**
