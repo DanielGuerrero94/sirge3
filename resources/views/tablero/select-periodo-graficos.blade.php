@@ -36,6 +36,17 @@
 	    					<input type="text" class="form-control" id="periodo" name="periodo">
 	  					</div>
 	    			</div>
+	    			<br />
+	    			<div class="form-group">
+	      				<label for="periodo" class="col-sm-3 control-label">Indicador</label>
+	  					<div class="col-sm-9">
+	    					<select id="indicador" name="indicador" class="form-control">
+							@foreach ($indicadores as $main)
+									<option value="{{ $main->indicador }}">{{ $main->indicador . ' - ' . $main->descripcion }}</option>
+							@endforeach
+							</select>
+	  					</div>
+	    			</div>
 				</div>
 				<div class="box-footer">
 					<div class="btn-group" role="group">
@@ -82,7 +93,7 @@
 				}
 			},
 			submitHandler : function(form){
-				$.get('main-tablero/' + $('#periodo').val() + '/' + $('#provincia').val(), function(data){
+				$.get('graficos-tablero/' + $('#periodo').val() + '/' + $('#provincia').val() + '/' + $('#indicador').val(), function(data){
 					if(data != 'error'){
 						$('.content-wrapper').html(data);
 					}
@@ -90,7 +101,7 @@
 						$('#modal-text').html("No existe ningún indicador en el periodo");
 						$('.modal').modal();
 						$('.modal').on('hidden.bs.modal', function (e) {
-							$.get('tablero' , function(data){
+							$.get('select-graficos-tablero' , function(data){
 								$('.content-wrapper').html(data);
 							});
 						});
