@@ -29,10 +29,8 @@ use Validator;
 class TableroController extends AbstractPadronesController {
 	private $_rules,
 	$_messages = [
-		'periddo'     => 'El formato de fecha debe ser DD-MM-YYYY',
-		'indicador'   => 'El indicador es invalido',
-		'numerador'   => 'El numerador no cumple con el formato para este indicador',
-		'denominador' => 'El denominador no cumple con el formato para este indicador'
+		'periddo'   => 'El formato de fecha debe ser DD-MM-YYYY',
+		'indicador' => 'El indicador es invalido'
 	],
 	$_data = [
 		'periodo',
@@ -561,12 +559,12 @@ class TableroController extends AbstractPadronesController {
 		fgets($fh);
 		while (!feof($fh)) {
 			$nro_linea++;
-			$linea = explode("\t", trim(fgets($fh), "\r\n"));
-			$linea = array_map('trim', $linea);
-			array_push($linea, $lote);
+			$linea                      = explode("\t", trim(fgets($fh), "\r\n"));
+			$linea                      = array_map('trim', $linea);
 			$this->_error['lote']       = $lote;
 			$this->_error['created_at'] = date("Y-m-d H:i:s");
-			if (count($this->_data) == count($linea)) {
+			if ((count($this->_data)-1) == count($linea)) {
+				array_push($linea, $lote);
 				$tablero_raw = array_combine($this->_data, $linea);
 				$v           = Validator::make($tablero_raw, $this->_rules);
 				if ($v->fails()) {
