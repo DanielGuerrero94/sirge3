@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Exceptions\MyShellException;
 use App\Models\Geo\Provincia;
 use App\Models\Lote;
-
 use App\Models\Rechazo;
+
 use App\Models\Subida;
 use App\Models\Tablero\Administracion;
 use App\Models\Tablero\Detail;
 use App\Models\Tablero\Ingreso;
 use App\Models\Tablero\Rango;
+use App\Models\Tablero\VWIngreso;
 use App\Models\Tablero\YearIndicadores;
-
 use App\Models\Usuario;
+
 use Auth;
 use Datatables;
 use DateTime;
@@ -23,15 +24,25 @@ use Excel;
 use Illuminate\Http\Request;
 use Log;
 use Mail;
+use Validator;
 
 class TableroController extends AbstractPadronesController {
-	private
-	$_id        = 0,
-	$_indicador = '',
-	$_year      = 0,
-	$_provincia = '',
-	$_user      = NULL,
-	$_resumen   = [
+	private $_rules,
+	$_messages = [
+		'periddo'     => 'El formato de fecha debe ser DD-MM-YYYY',
+		'indicador'   => 'El indicador es invalido',
+		'numerador'   => 'El numerador no cumple con el formato para este indicador',
+		'denominador' => 'El denominador no cumple con el formato para este indicador'
+	],
+	$_data = [
+		'periodo',
+		'indicador',
+		'provincia',
+		'numerador',
+		'denominador',
+		'lote'
+	],
+	$_resumen = [
 		'insertados'  => 0,
 		'rechazados'  => 0,
 		'modificados' => 0
@@ -49,7 +60,31 @@ class TableroController extends AbstractPadronesController {
 		'NUMBER_LOTE'     => '',
 		'LOGIC_DIR'       => '/var/www/html/sirge3/storage/uploads/tablero/process_logic/',
 		'LOGIC_FILE_NAME' => 'carga_indicador.load'
-	];
+	],
+	$_id,
+	$_indicador,
+	$_year,
+	$_provincia,
+	$_user;
+
+	/**
+	 * Constructor.
+	 *
+	 *
+	 */
+	public function __construct() {
+		$this->_id        = 0;
+		$this->_indicador = '';
+		$this->_year      = 0;
+		$this->_provincia = '';
+		$this->_user      = NULL;
+		$this->_rules     = ['periodo' => 'required|date_format:d/m/Y|before:'.date("Y/m/d").'|after:2004-01-01',
+			'provincia'                   => 'required|max:100',
+			'indicador'                   => 'required|exists:tablero.descripcion,indicador',
+			'numerador'                   => 'required_without:denominador|valor_tablero',
+			'denominador'                 => 'required_without:numerador|valor_tablero',
+			'lote'                        => 'required|integer'];
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -505,7 +540,89 @@ class TableroController extends AbstractPadronesController {
 		return $fh;
 	}
 
-	public function procesarArchivo($id_subida) {
+	/**
+	 * Procesa el archivo del tablero
+	 * @param int $id
+	 *
+	 * @return json
+	 */
+	public function procesarArchivo($id) {
+
+		$fh = $this->abrirArchivo($id);
+		Log::info($id);
+		Log::info(Lote::where('id_subida', $id)->first());
+		$lote = Lote::where('id_subida', $id)->first()->lote;
+
+		if (!$fh) {
+			return response()->json(['success' => 'false', 'errors' => "El archivo no ha podido procesarse"]);
+		}
+		$nro_linea = 1;
+
+		fgets($fh);
+		while (!feof($fh)) {
+			$nro_linea++;
+			$linea = explode("\t", trim(fgets($fh), "\r\n"));
+			$linea = array_map('trim', $linea);
+			array_push($linea, $lote);
+			$this->_error['lote']       = $lote;
+			$this->_error['created_at'] = date("Y-m-d H:i:s");
+			if (count($this->_data) == count($linea)) {
+				$tablero_raw = array_combine($this->_data, $linea);
+				$v           = Validator::make($tablero_raw, $this->_rules);
+				if ($v->fails()) {
+					$this->_resumen['rechazados']++;
+					$this->_error['registro'] = json_encode($tablero_raw);
+					$this->_error['motivos']  = json_encode($v->errors());
+					try {
+						Rechazo::insert($this->_error);
+					} catch (QueryException $e) {
+						if ($e->getCode() == 23505) {
+							$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+						} else if ($e->getCode() == 22021 || $e->getCode() == '22P05') {
+							$this->_error['registro'] = json_encode(parent::vaciarArray($tablero_raw));
+							$this->_error['motivos']  = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+						} else {
+							$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'error' => $e->getMessage()));
+						}
+						Rechazo::insert($this->_error);
+					}
+				} else {
+					try {
+						VWIngreso::insert($tablero_raw);
+						$this->_resumen['insertados']++;
+					} catch (QueryException $e) {
+						$this->_resumen['rechazados']++;
+						$this->_error['lote']       = $lote;
+						$this->_error['registro']   = json_encode($tablero_raw);
+						$this->_error['created_at'] = date("Y-m-d H:i:s");
+						if ($e->getCode() == 23505) {
+							$this->_error['motivos'] = '{"pkey" : ["Registro ya informado"]}';
+						} else if ($e->getCode() == 22021 || $e->getCode() == '22P05') {
+							$this->_error['registro'] = json_encode(parent::vaciarArray($tablero_raw));
+							$this->_error['motivos']  = json_encode(array('code' => $e->getCode(), 'linea' => $nro_linea, 'error' => 'El formato de caracteres es inválido para la codificación UTF-8. No se pudo convertir. Intente convertir esas lineas a UTF-8 y vuelva a procesarlas.'));
+						} else {
+							$this->_error['motivos'] = json_encode(array('code' => $e->getCode(), 'error' => $e->getMessage()));
+						}
+						Rechazo::insert($this->_error);
+					}
+				}
+			} elseif (count($linea) == 1 && $linea[0] == '') {
+				$this->_error['registro'] = json_encode($linea);
+				$this->_error['motivos']  = '{"registro invalido" : ["Linea en blanco"]}';
+				Rechazo::insert($this->_error);
+			} else {
+				$this->_resumen['rechazados']++;
+				$this->_error['registro'] = json_encode($linea);
+				$this->_error['motivos']  = json_encode('La cantidad de columnas ingresadas en la fila no es correcta');
+				Rechazo::insert($this->_error);
+			}
+		}
+		$this->actualizaLote($lote, $this->_resumen);
+		$this->actualizaSubida($id);
+		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
+	}
+
+	public function procesarArchivoPgLoader($id_subida) {
 		$fh = $this->abrirArchivo($id_subida);
 
 		if (!$fh) {
