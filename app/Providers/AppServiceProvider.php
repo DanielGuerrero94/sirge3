@@ -17,10 +17,11 @@ class AppServiceProvider extends ServiceProvider {
 				if (in_array(array_get($validator->getData(), 'indicador'), ['5.1', '5.3'])) {
 					try {
 						$d = DateTime::createFromFormat('d/m/Y', $value);
+						if (!$d) {
+							return false;
+						}
 						return checkdate($d->format('m'), $d->format('d'), $d->format('Y'));
 					} catch (\Exception $e) {
-						return false;
-					} catch (FatalErrorException $e) {
 						return false;
 					}
 				} else {
