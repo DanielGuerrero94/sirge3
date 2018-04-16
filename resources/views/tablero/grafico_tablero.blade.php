@@ -18,13 +18,13 @@
 
 				<!-- INDICADOR -->
 				@foreach ($indicadores as $unIndicador)
-				<h4>{{ $unIndicador["indicador"] }}</h4>
+				<h4>{{ preg_replace(array("/\-/","/\|/"),".",$unIndicador['indicador']) }}</h4>
 				<div class="row">
 					<div class="col-md-4">
 						<div class="info-box bg-{{$unIndicador['color']}}">
 							<span class="info-box-icon"><i class="fa fa-stethoscope"></i></span>
 							<div class="info-box-content">
-								<span class="info-box-text">INDICADOR {{ $unIndicador['indicador'] }}</span>
+								<span class="info-box-text">RESULTADO {{ preg_replace(array("/\-/","/\|/"),".",$unIndicador['indicador']) }}</span>
 								<span class="info-box-number">{{ number_format((float)$unIndicador['resultadoTotal'], 2, '.', '') }}%</span>
 								<div class="progress">
 									<div class="progress-bar" style="width: 25%"></div>
@@ -67,7 +67,7 @@
 		@foreach ($grafico as $unGrafico)
 			$('.indicador-{{ preg_replace(array("/\./","/\|/"),"-",$unGrafico["indicador"]) }}').highcharts({
 			title: {
-				text: 'Evolución indicador {{$unGrafico["indicador"]}}',
+				text: 'Evolución',
 			},
 			xAxis: {
 				// ULTIMOS 6 MESES

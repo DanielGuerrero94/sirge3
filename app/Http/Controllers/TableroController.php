@@ -364,7 +364,7 @@ class TableroController extends AbstractPadronesController {
 			$datetime_numerador   = DateTime::createFromFormat('d/m/Y', $id->numerador);
 			$interval_diff        = $datetime_numerador->diff($datetime_denominador);
 			$value                = $interval_diff->format('%a');
-			return $value;
+			return (integer) $value;
 		} elseif (in_array($indicador, ['5|4', '5|5'])) {
 			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
 		} else {
