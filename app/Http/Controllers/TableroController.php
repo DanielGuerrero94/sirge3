@@ -546,9 +546,7 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function procesarArchivo($id) {
 
-		$fh = $this->abrirArchivo($id);
-		Log::info($id);
-		Log::info(Lote::where('id_subida', $id)->first());
+		$fh   = $this->abrirArchivo($id);
 		$lote = Lote::where('id_subida', $id)->first()->lote;
 
 		if (!$fh) {
@@ -1202,14 +1200,12 @@ class TableroController extends AbstractPadronesController {
 			if (isset($value->multiple_condicion_1)) {
 				foreach ($value as $clave => $valor) {
 					foreach ($valor as $k2   => $v2) {
-						Log::info($v2->valor);
 						if ($red > $v2->valor) {
 							$red = $v2->valor;
 						}
 					}
 				}
 			} else {
-				Log::info($value->valor);
 				if ($red > $value->valor) {
 					$red = $value->valor;
 				}
@@ -1220,14 +1216,12 @@ class TableroController extends AbstractPadronesController {
 			if (isset($value->multiple_condicion_1)) {
 				foreach ($value as $clave => $valor) {
 					foreach ($valor as $k2   => $v2) {
-						Log::info($v2->valor);
 						if ($yellow > $v2->valor) {
 							$yellow = $v2->valor;
 						}
 					}
 				}
 			} else {
-				Log::info($value->valor);
 				if ($yellow > $value->valor) {
 					$yellow = $value->valor;
 				}
@@ -1238,14 +1232,12 @@ class TableroController extends AbstractPadronesController {
 			if (isset($value->multiple_condicion_1)) {
 				foreach ($value as $clave => $valor) {
 					foreach ($valor as $k2   => $v2) {
-						Log::info($v2->valor);
 						if ($green > $v2->valor) {
 							$green = $v2->valor;
 						}
 					}
 				}
 			} else {
-				Log::info($value->valor);
 				if ($green > $value->valor) {
 					$green = $value->valor;
 				}
