@@ -41,9 +41,10 @@
 					<div class="col-md-4">
 
 							<p><b>Numerador</b></p>
-							<p>{!! ((object) $unIndicador['detalles'])->numerador !!}</p>
+<?php $o_detalles = (object) $unIndicador['detalles']?>
+							<p>{!! $o_detalles->numerador !!}</p>
 							<p><b>Denominador</b></p>
-							<p>{!! ((object) $unIndicador['detalles'])->denominador !!}</p>
+							<p>{!! $o_detalles->denominador !!}</p>
 
 					</div>
 				</div>
