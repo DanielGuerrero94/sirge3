@@ -5,7 +5,6 @@ namespace App\Providers;
 use DateTime;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use Log;
 
 class AppServiceProvider extends ServiceProvider {
 	/**
@@ -18,7 +17,6 @@ class AppServiceProvider extends ServiceProvider {
 				if (in_array(array_get($validator->getData(), 'indicador'), ['5.1', '5.3'])) {
 					try {
 						$d = DateTime::createFromFormat('d/m/Y', $value);
-						Log::info($d->format('d-m-Y'));
 					} catch (\Exception $e) {
 						return false;
 					}
