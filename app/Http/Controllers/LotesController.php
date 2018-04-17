@@ -13,6 +13,7 @@ use App\Models\Geo\Provincia;
 
 use App\Models\Lote;
 use App\Models\LoteAceptado;
+use App\Models\Dw\DR\ResumenLote;
 
 use App\Models\Prestacion;
 use App\Models\PUCO\Osp;
@@ -24,6 +25,7 @@ use Auth;
 use Datatables;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mail;
 use PDF;
 
@@ -94,6 +96,20 @@ class LotesController extends Controller {
 		$rechazo                      = GenerarRechazoLote::where('lote', $nro_lote)->where('estado', 2)->first();
 		$rechazo?$descarga_disponible = true:$descarga_disponible = false;
 
+		try {
+		    $revision_DR = ResumenLote::findOrFail($nro_lote);
+		} catch (ModelNotFoundException $e) {
+		    $dr_counts = [
+		    	'validos' => 0,
+			'ausentes' => 0,
+			'errores' => 0
+		    ];	
+		    
+	            $revision_DR = (object) $dr_counts;
+		} finally {
+		    $revision_DR->requieren = $revision_DR->validos + $revision_DR->ausentes + $revision_DR->errores; 
+		}		
+
 		$minutos_faltantes = 0;
 
 		if (!isset($rechazo)) {
@@ -111,7 +127,8 @@ class LotesController extends Controller {
 			'page_title'          => 'Detalle lote '.$lote->lote,
 			'descarga_disponible' => $descarga_disponible,
 			'minutos_faltantes'   => intval($minutos_faltantes),
-			'lote'                => $lote
+			'lote'                => $lote,
+			'revision_DR'         => $revision_DR
 		];
 
 		return view('padrones.detail-lote', $data);

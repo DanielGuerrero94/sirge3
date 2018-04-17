@@ -527,3 +527,6 @@ Route::get('tablero-rechazados-table', 'TableroController@listadoRechazadosTabla
 Route::get('listado-descargar-tabla/{periodo}/{provincia}', 'TableroController@excelListadoTabla');
 Route::get('rechazados-descargar-tabla', 'TableroController@excelRechazadosTabla');
 Route::get('rechazados-tablero', 'TableroController@rechazados');
+
+
+Route::get('prestaciones/revision/dr/{lote}', 'PrestacionesDRController@revision');

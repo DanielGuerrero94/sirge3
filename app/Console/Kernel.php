@@ -18,7 +18,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\Inspire::class,
         \App\Console\Commands\CommandScheduler::class,
-        \App\Console\Commands\TestCommand::class
+        \App\Console\Commands\TestCommand::class,
+	\App\Console\Commands\DatosReportablesCommand::class
     ];
 
     /**
@@ -76,21 +77,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('scheduler:execute')->cron('* * * * * *');
         $schedule->call('App\Http\Controllers\LotesController@alertSubidasMalProcesadas')->dailyAt('04:00');
         $schedule->call('App\Http\Controllers\LotesController@alertLotesPendientes')->dailyAt('03:00');
-        
-       /* ->when(function ($periodo_a_automatizar) {
-
-                    $estado = Scheduler::select('estado')
-                                ->where('contexto','migracion_beneficiarios')
-                                ->where('periodo',$periodo_a_automatizar)
-                                ->first()->estado;                    
-                    
-                    if($estado == 0){
-                        return true;
-                    }
-                    else{
-                        return false;
-                    }
-
-        });*/
+        $schedule->command('queue:listen')->cron('* * * * * *');
     }
 }

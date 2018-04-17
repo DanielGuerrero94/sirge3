@@ -6,6 +6,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Detalle lote {{ $lote->lote }}</h2>
 				<div class="box-tools pull-right">
+					<a href="{{url('/prestaciones/revision/dr') . '/' . $lote->lote}}" class="btn btn-sm btn-primary"><i class="fa fa-gear"></i> Revision DR</a>
 					@if ($lote->registros_out != 0)
 					<button lote="{{$lote->lote}}" class="view-rechazos btn btn-sm btn-warning"><i class="fa fa-pencil-square-o"></i> Ver rechazos</button>
 					@else
@@ -71,6 +72,32 @@
 						<div class="col-md-7">
 							<p class="form-control-static"> {{ $lote->registros_mod }} </p>
 						</div>
+						<hr>
+
+						<!-- REQUIEREN DR -->
+						<label class="col-md-5 control-label">Requieren DR</label>
+						<div class="col-md-7">
+							<p class="form-control-static"> {{ $revision_DR->requieren }} </p>
+						</div>
+
+						<!-- DR VALIDOS -->
+						<label class="col-md-5 control-label">DR Validos</label>
+						<div class="col-md-7">
+							<p class="form-control-static"><label class="label label-success">{{ $revision_DR->validos }}</label></p>
+						</div>
+
+						<!-- DR AUSENTES -->
+						<label class="col-md-5 control-label">DR Ausentes</label>
+						<div class="col-md-7">
+							<p class="form-control-static"><label class="label label-warning">{{ $revision_DR->ausentes }}</label></p>
+						</div>
+
+						<!-- DR ERRORES -->
+						<label class="col-md-5 control-label">DR Errores</label>
+						<div class="col-md-7">
+							<p class="form-control-static"><label class="label label-danger">{{ $revision_DR->errores }}</label></p>
+						</div>
+						<hr>
 
 						<!-- INICIO -->
 						<label class="col-md-5 control-label">Fecha inicio</label>

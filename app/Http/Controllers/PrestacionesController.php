@@ -490,7 +490,9 @@ class PrestacionesController extends AbstractPadronesController
         }
             $this->actualizaLote($lote, $this->_resumen);
             $this->actualizaSubida($id);
-        
+	
+	//Async si esta seteado database en la config, lo levante queue:listen por cron	
+	$this->dispatch(new RevisarDatosReportables($lote));
         
         unset($fh);
         unset($lote);

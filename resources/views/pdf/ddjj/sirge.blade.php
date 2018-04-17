@@ -41,6 +41,12 @@
 				<th>Ingresados</th>
 				<th>Modificados</th>
 				<th>Rechazados</th>
+				@if ($padron == 1)
+				<th>Validos</th>
+				<th>Ausentes</th>
+				<th>Errores</th>
+				@endif
+
 			</tr>
 		@foreach ($lotes as $lote)
 			<tr style="text-align:right;">
@@ -51,6 +57,11 @@
 				<td>{{ number_format($lote->registros_in) }}</td>
 				<td>{{ number_format($lote->registros_mod) }}</td>
 				<td>{{ number_format($lote->registros_out) }}</td>
+				@if ($padron == 1)
+				<td>{{ number_format($lote->validos) }}</td>
+				<td>{{ number_format($lote->ausentes) }}</td>
+				<td>{{ number_format($lote->errores) }}</td>
+				@endif
 			</tr>
 		@endforeach
 			<tr class="active">
@@ -61,6 +72,11 @@
 				<td class="resumen">{{ number_format($resumen['in']) }}</td>
 				<td class="resumen">{{ number_format($resumen['mod']) }}</td>
 				<td class="resumen">{{ number_format($resumen['out']) }}</td>
+				@if ($padron == 1)
+				<td class="resumen">{{ number_format($resumen['validos']) }}</td>
+				<td class="resumen">{{ number_format($resumen['ausentes']) }}</td>
+				<td class="resumen">{{ number_format($resumen['errores']) }}</td>
+				@endif
 			</tr>
 		</table>
 	</div>
