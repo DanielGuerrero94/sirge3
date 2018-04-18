@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 		Validator::extend('valor_tablero', function ($attribute, $value, $parameters, $validator) {
-				if (in_array(array_get($validator->getData(), 'indicador'), ['5.1', '5.3'])) {
+				if (in_array(strtr(array_get($validator->getData(), 'indicador'), array("." => "|")), ['5|1', '5|3'])) {
 					try {
 						$d = DateTime::createFromFormat('d/m/Y', $value);
 						if (!$d) {
