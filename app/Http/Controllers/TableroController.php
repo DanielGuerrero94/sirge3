@@ -29,7 +29,7 @@ use Validator;
 class TableroController extends AbstractPadronesController {
 	private $_rules,
 	$_messages = [
-		'periddo'   => 'El formato de fecha debe ser DD-MM-YYYY',
+		'periodo'   => 'El formato de fecha debe ser DD-MM-YYYY',
 		'indicador' => 'El indicador es invalido'
 	],
 	$_data = [
@@ -202,11 +202,11 @@ class TableroController extends AbstractPadronesController {
 			'numerador_format',
 			function ($result) {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
-					return empty($result->numerador)?null:($result->numerador);
+					return (empty($result->numerador) && !is_numeric($result->numerador))?null:($result->numerador);
 				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4'])) {
-					return empty($result->numerador)?null:(number_format($result->numerador, 0, ',', '.'));
+					return (empty($result->numerador) && !is_numeric($result->numerador))?null:(number_format($result->numerador, 0, ',', '.'));
 				}
-				return empty($result->numerador)?null:('$ '.number_format($result->numerador, 2, ',', '.'));
+				return (empty($result->numerador) && !is_numeric($result->numerador))?null:('$ '.number_format($result->numerador, 2, ',', '.'));
 
 			}
 		)
@@ -214,18 +214,23 @@ class TableroController extends AbstractPadronesController {
 			'denominador_format',
 			function ($result) {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
-					return empty($result->denominador)?null:($result->denominador);
+					return (empty($result->denominador) && !is_numeric($result->denominador))?null:($result->denominador);
 				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4', '5|4', '5|5'])) {
-					return empty($result->denominador)?null:(number_format($result->denominador, 0, ',', '.'));
+					return (empty($result->denominador) && !is_numeric($result->denominador))?null:(number_format($result->denominador, 0, ',', '.'));
 				}
-				return empty($result->denominador)?null:('$ '.number_format($result->denominador, 2, ',', '.'));
+				return (empty($result->denominador) && !is_numeric($result->denominador))?null:('$ '.number_format($result->denominador, 2, ',', '.'));
 			}
 		)
 			->addColumn(
 			'estado',
 			function ($result) {
 				$var_state = $this->checkState($result->id);
-				return '<button class="btn btn-'.$var_state['color'].' btn-xs"> '.$var_state['value'].'</button>';
+				if (!in_array($result->indicador, ['5|1', '5|3', '5|4', '5|5'])) {
+					$tipo_valor = " % ";
+				} else {
+					$tipo_valor = "";
+				}
+				return '<button class="btn btn-'.$var_state['color'].' btn-xs"> '.$var_state['value'].$tipo_valor.'</button>';
 			}
 		)
 			->addColumn(
@@ -360,15 +365,19 @@ class TableroController extends AbstractPadronesController {
 		$indicador = strtr($id->indicador, array("." => "|"));
 
 		if (in_array($indicador, ['5|1', '5|3'])) {
-			$datetime_denominador = DateTime::createFromFormat('d/m/Y', $id->denominador);
-			$datetime_numerador   = DateTime::createFromFormat('d/m/Y', $id->numerador);
-			$interval_diff        = $datetime_numerador->diff($datetime_denominador);
-			$value                = $interval_diff->format('%a');
+			if (empty($id->numerador)) {
+				return 0;
+			} else {
+				$datetime_denominador = DateTime::createFromFormat('d/m/Y', $id->denominador);
+				$datetime_numerador   = DateTime::createFromFormat('d/m/Y', $id->numerador);
+				$interval_diff        = $datetime_numerador->diff($datetime_denominador);
+				$value                = $interval_diff->format('%a');
+			}
 			return (integer) $value;
 		} elseif (in_array($indicador, ['5|4', '5|5'])) {
-			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
+			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
 		} else {
-			return (!empty($id->denominador) && !empty($id->numerador))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
+			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
 		}
 	}
 

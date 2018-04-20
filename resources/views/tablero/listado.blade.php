@@ -60,7 +60,10 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div>
-
+<style type="text/css">
+    .moveright { text-align: right; margin-right: 10px; }
+    .movecenter { text-align: center; }
+</style>
 <script>
 $(function() {
 
@@ -92,11 +95,11 @@ $(function() {
         columns: [
             { data: 'periodo'},
             { data: 'provincias.descripcion'},
-            { data: 'indicador_real'},
-            { data: 'numerador_format'},
-            { data: 'denominador_format'},
-            { data: 'estado'},
-            { data: 'action'}
+            { data: 'indicador_real',"sClass": "movecenter" },
+            { data: 'numerador_format',"sClass": "moveright" },
+            { data: 'denominador_format',"sClass": "moveright"},
+            { data: 'estado',"sClass": "movecenter" },
+            { data: 'action',"sClass": "movecenter" }
         ],
         "initComplete": function(){
             if($("#tablero-table tbody tr .dataTables_empty").length > 0){
