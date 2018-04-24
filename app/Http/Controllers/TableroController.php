@@ -226,7 +226,7 @@ class TableroController extends AbstractPadronesController {
 			function ($result) {
 				$var_state = $this->checkState($result->id);
 				if (!in_array($result->indicador, ['5|1', '5|3', '5|4', '5|5'])) {
-					$tipo_valor = " % ";
+					$var_state['value'] == 'INCOMPLETO'?$tipo_valor = "":$tipo_valor = " % ";
 				} else {
 					$tipo_valor = "";
 				}
