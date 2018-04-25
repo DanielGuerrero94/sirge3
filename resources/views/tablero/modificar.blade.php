@@ -12,11 +12,12 @@
 				        <ul id="errores-form">
 				        </ul>
 				    </div>
+
 				    <div class="row" id="id">
-			    		<div class="col-md-4">
+			    		<div class="col-md-1">
 							<div class="form-group">
 				    			<div class="col-sm-9">
-					    			<input type="text" name="id" class="form-control" id="numerador" value="{{ $indicador->id }}">
+					    			<input type="text" name="id" class="form-control" id="id" value="{{ $indicador->id }}">
 				    			</div>
 			    			</div>
 			    		</div>
@@ -24,8 +25,8 @@
 					<div class="row">
 			    		<div class="col-md-4">
 							<div class="form-group">
-				    			<label for="provincia" class="col-sm-3 control-label">Provincia</label>
-				    			<div class="col-sm-9">
+				    			<label for="provincia" class="col-sm-4 control-label">Provincia</label>
+				    			<div class="col-sm-8">
 					    			<select id="provincia" name="provincia" class="form-control">
 					    				@foreach($provincias as $provincia)
 					    						@if($provincia->id_provincia == $user->id_provincia)
@@ -38,37 +39,38 @@
 				    			</div>
 			    			</div>
 			    		</div>
-			    		<div class="col-md-4">
+			    		<div class="col-md-3">
 			    			<div class="form-group">
-				    			<label for="indicador" class="col-sm-3 control-label">Indicador</label>
-				    			<div class="col-sm-9">
+				    			<label for="indicador" class="col-sm-5 control-label">Indicador</label>
+				    			<div class="col-sm-7">
 					    			<input type="text" name="indicador" class="form-control" id="indicador" value="{{ $indicador->indicador}}" disabled>
 				    			</div>
 			    			</div>
 			    		</div>
 			    		<div class="col-md-4">
 							<div class="form-group">
-				    			<label for="periodo" class="col-sm-3 control-label">Periodo</label>
-				    			<div class="col-sm-9">
+				    			<label for="periodo" class="col-sm-4 control-label">Periodo</label>
+				    			<div class="col-sm-8">
 					    			<input type="text" name="periodo" class="form-control" id="periodo" value="{{ $indicador->periodo }}" disabled>
 				    			</div>
 			    			</div>
 			    		</div>
+
 		    		</div>
 			    	<br />
 			    	<div class="row">
 			    		<div class="col-md-4">
 							<div class="form-group">
-				    			<label for="numerador" class="col-sm-3 control-label">Numerador</label>
-				    			<div class="col-sm-9">
+				    			<label for="numerador" class="col-sm-4 control-label">Numerador</label>
+				    			<div class="col-sm-8">
 					    			<input type="text" name="numerador" class="form-control" id="numerador" value="{{ $indicador->numerador }}">
 				    			</div>
 			    			</div>
 			    		</div>
 			    		<div class="col-md-4">
 							<div class="form-group">
-				    			<label for="denominador" class="col-sm-3 control-label">Denominador</label>
-				    			<div class="col-sm-9">
+				    			<label for="denominador" class="col-sm-4 control-label">Denominador</label>
+				    			<div class="col-sm-8">
 					    			<input type="text" name="denominador" class="form-control" id="denominador" value="{{ $indicador->denominador }}">
 				    			</div>
 			    			</div>
