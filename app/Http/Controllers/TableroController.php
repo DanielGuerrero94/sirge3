@@ -771,7 +771,7 @@ class TableroController extends AbstractPadronesController {
 		$admin->usuario_accion = Auth::user()->id_usuario;
 		$admin->save();
 		Ingreso::where('periodo', $r->periodo)->where('provincia', $r->provincia)->delete();
-		return response()->json("OK");
+		return response()->json(array("status" => "ok", "msj" => "Se ha rechazado el periodo para la provincia"));
 	}
 
 	/**

@@ -124,15 +124,21 @@ $( document ).ready(function() {
 
 	$('#tablero-administracion-table').on('click', '#aceptar-periodo,#rechazar-periodo', function (){
 
+			console.log($(this).attr('id_ingreso'));
+			console.log($(this).attr('id'));
+
             $.ajax({
                     method : 'post',
                     data : { 'id_ingreso' : $(this).attr('id_ingreso') },
                     url  : $(this).attr('id'),
                     success : function(data){
-                        if($('.modal').hasClass('modal-danger')){
+                    	console.log(data);
+                        if(data.status == "ok"){
+                        	if($('.modal').hasClass('modal-danger')){
                                 $('.modal').removeClass('modal-danger').addClass('modal-success');
+                        	}
                         }
-                        $('#modal-text').html('Se haejecutado la accion correctamente');
+                        $('#modal-text').html(data.msj);
                         $('.modal').modal();
 
                         $('.modal .modal-dialog button').on('click', function(){
