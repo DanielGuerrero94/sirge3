@@ -51,7 +51,7 @@
 							<div class="form-group">
 				    			<label for="periodo" class="col-sm-4 control-label">Periodo</label>
 				    			<div class="col-sm-8">
-					    			<input type="text" name="periodo" class="form-control" id="periodo" value="{{ $indicador->periodo }}" disabled>
+					    			<input type="text" name="periodo" class="form-control" id="periodo" value="{{ $indicador->periodo }}" readonly>
 				    			</div>
 			    			</div>
 			    		</div>

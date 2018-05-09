@@ -169,9 +169,11 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function postModificar(Request $r) {
 
+		Log::info($r->all());
+
 		try {
-			$unIndicador              = Ingreso::find($r->id);
-			$unIndicador->periodo     = $r->periodo;
+			$unIndicador = Ingreso::find($r->id);
+			//$unIndicador->periodo     = $r->periodo;
 			$unIndicador->numerador   = $r->numerador;
 			$unIndicador->denominador = $r->denominador;
 			$unIndicador->save();
@@ -780,8 +782,10 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function aceptar(Request $r) {
 
+		Log::info($r->all());
+
 		if (Administracion::where('periodo', $r->periodo)->where('provincia', $r->provincia)->where('estado', 3)->count() > 0) {
-			return 'Ya fueron aceptados los indicadores de la provincia en el periodo';
+			response()->json(array("status" => "error", "msj" => "Ya fueron aceptados los indicadores de la provincia en el periodo"));
 		}
 
 		$admin                 = new Administracion();
@@ -790,7 +794,7 @@ class TableroController extends AbstractPadronesController {
 		$admin->estado         = 3;
 		$admin->usuario_accion = Auth::user()->id_usuario;
 		$admin->save();
-		return response()->json("OK");
+		return response()->json(array("status" => "OK", "msj" => "Se ha ejecutado la accion correctamente"));
 	}
 
 	/**
@@ -823,9 +827,9 @@ class TableroController extends AbstractPadronesController {
 
 		$ingreso = Ingreso::find($id_ingreso);
 
-		$a            = new Request();
-		$a->periodo   = $ingreso->periodo;
-		$a->provincia = $ingreso->provincia;
+		$a = new \Illuminate\Http\Request();
+		$a->setMethod('POST');
+		$a->request->add(['periodo' => $ingreso->periodo, 'provincia' => $ingreso->provincia]);
 
 		return $a;
 	}
@@ -876,7 +880,8 @@ class TableroController extends AbstractPadronesController {
 			$results->unionAll($rechazados);
 
 			$results->orderBy(DB::raw('3'), 'desc')
-			        ->orderBy(DB::raw('4'), 'asc');
+			        ->orderBy(DB::raw('4'), 'asc')
+			        ->orderBy(DB::raw('1'), 'desc');
 
 			$results->get()->each(function ($item, $key) use (&$arrayreturns) {
 					$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['usuario_nombre'] = $item['usuario_nombre'];
