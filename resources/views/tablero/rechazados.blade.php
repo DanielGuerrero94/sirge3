@@ -60,13 +60,13 @@ function datatable(){
 				    	},
 				        columns: [
 				        	{ data: 'id'},
-				        	{ data: 'fecha'},
-				            { data: 'periodo', orderable:false},
+				        	{ data: 'fecha', searchable:false},
+				            { data: 'periodo', orderable:true},
 				            @if($user->id_entidad == 1)
-					        { data: 'provincia_descripcion'},
+					        { data: 'provincias.descripcion'},
 					        @endif
-				            { data: 'nombre'},
-				            { data: 'estado'}
+				            { data: 'usuario.nombre'},
+				            { data: 'estado', searchable: false}
 				        ],
 				        "initComplete": function(){
 				            if($("#tablero-rechazados-table tbody tr .dataTables_empty").length > 0){

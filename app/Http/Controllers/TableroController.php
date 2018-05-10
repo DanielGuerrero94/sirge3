@@ -169,8 +169,6 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function postModificar(Request $r) {
 
-		Log::info($r->all());
-
 		try {
 			$unIndicador = Ingreso::find($r->id);
 			//$unIndicador->periodo     = $r->periodo;
@@ -860,46 +858,75 @@ class TableroController extends AbstractPadronesController {
 
 		$arrayreturns = [];
 		try {
-			$results = Ingreso::select('tablero.ingresos.id as id_ingreso', DB::raw('NULL as id_estado'), 'tablero.ingresos.periodo as ingresos_periodo', 'tablero.ingresos.provincia as ingresos_provincia', DB::raw('public.clean_errors(geo.provincias.descripcion) as provincia_descripcion'), 'indicador', DB::raw('NULL as usuario_accion'), DB::raw('NULL as usuario_nombre'))
-				->leftjoin('geo.provincias', 'tablero.ingresos.provincia', '=', 'geo.provincias.id_provincia');
 
-			$rechazados = Administracion::select(DB::raw('NULL as id_ingreso'), 'estado as id_estado', 'periodo as ingresos_periodo', 'provincia as ingresos_provincia', DB::raw('public.clean_errors(geo.provincias.descripcion) as provincia_descripcion'), DB::raw('NULL as indicador'), 'usuario_accion', 'nombre as usuario_nombre')
+			$results = DB::table('tablero.ingresos as ing1')
+				->selectRaw('NULL as id_estado, ing1.periodo as ingresos_periodo, ing1.provincia as ingresos_provincia, public.clean_errors(geo.provincias.descripcion) as provincia_descripcion, NULL as usuario_accion, NULL as usuario_nombre')
+				->selectSub(function ($query) {
+
+					/** @var $query \Illuminate\Database\Query\Builder */
+					$query->from('tablero.ingresos as ing2')
+						->selectRaw('array_to_json(array_agg(indicador))')
+					->whereRaw('ing2.provincia = ing1.provincia')
+						->whereRaw('ing2.periodo = ing1.periodo');
+				}, 'indicadores')
+				->selectSub(function ($query) {
+
+					/** @var $query \Illuminate\Database\Query\Builder */
+					$query->from('tablero.ingresos as ing3')
+						->select('id')
+					->whereRaw('ing3.provincia = ing1.provincia')
+						->whereRaw('ing3.periodo = ing1.periodo')
+					->take(1);
+				}, 'id_ingreso')
+
+				->leftjoin('geo.provincias', 'ing1.provincia', '=', 'geo.provincias.id_provincia')
+				->groupBy(DB::raw('1'), DB::raw('2'), DB::raw('3'), DB::raw('4'));
+
+			$rechazados = Administracion::selectRaw('estado as id_estado, periodo as ingresos_periodo, provincia as ingresos_provincia, public.clean_errors(geo.provincias.descripcion) as provincia_descripcion, usuario_accion, nombre as usuario_nombre, NULL as indicadores, NULL as id_ingreso')
 				->leftjoin('geo.provincias', 'tablero.administracion.provincia', '=', 'geo.provincias.id_provincia')
 				->leftjoin('sistema.usuarios', 'tablero.administracion.usuario_accion', '=', 'sistema.usuarios.id_usuario')
 				->where('estado', '3');
 
 			if ($provincia != 0) {
-				$results->where('tablero.ingresos.provincia', $provincia);
+				$results->where('ing1.provincia', $provincia);
 				$rechazados->where('provincia', $provincia);
 			}
 			if ($periodo != '9999-99') {
-				$results->where('tablero.ingresos.periodo', $periodo);
+				$results->where('ing1.periodo', $periodo);
 				$rechazados->where('periodo', $periodo);
 			}
 
 			$results->unionAll($rechazados);
 
-			$results->orderBy(DB::raw('3'), 'desc')
-			        ->orderBy(DB::raw('4'), 'asc')
-			        ->orderBy(DB::raw('1'), 'desc');
+			$results->orderBy(DB::raw('2'), 'desc')
+			        ->orderBy(DB::raw('3'), 'asc')
+			        ->orderBy(DB::raw('1'), 'asc');
 
-			$results->get()->each(function ($item, $key) use (&$arrayreturns) {
-					$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['usuario_nombre'] = $item['usuario_nombre'];
-					$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['provincia_descripcion'] = $item['provincia_descripcion'];
-					$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['id_estado'] = $item['id_estado'];
-					$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['id_ingreso'] = $item['id_ingreso'];
-					if ($item['usuario_accion'] == NULL) {
-						$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['indicadores'][] = $item['indicador'];
-						$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['estado'] = 'PENDIENTE';
-					} else {
-						$arrayreturns[$item['ingresos_periodo']][$item['ingresos_provincia']]['estado'] = 'ACEPTADO';
+			$results = $results->get();			
+
+			foreach ($results as $item) {
+
+				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['provincia_descripcion'] = $item->provincia_descripcion;
+				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_ingreso']            = $item->id_ingreso;
+                $arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['periodo']            = $item->ingresos_periodo;
+				if ($item->usuario_accion != NULL) {
+					$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['estado']         = 'ACEPTADO';
+					$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['usuario_nombre'] = $item->usuario_nombre;
+					$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_estado']      = $item->id_estado;
+				} else {
+					if (!isset($arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_estado'])) {
+						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['indicadores']    = json_decode($item->indicadores);
+						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['estado']         = 'PENDIENTE';
+                        $arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_estado']         = NULL;
+						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['usuario_nombre'] = NULL;
 					}
-				});
+				}				
+			}
 
 			$arrayreturns = $this->prepareArray($arrayreturns);
 
 		} catch (\Exception $e) {
-			logger($e->getErrors());
+			logger($e->getMessage());
 		}
 
 		return $arrayreturns;
@@ -913,15 +940,15 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function listadoAdministracionTabla($provincia, $periodo = null) {
 
-		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);
+		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);		
 
 		return Datatables::of(collect($arrayreturns))
 			->addColumn(
 			'action',
-			function ($arrayreturn) {
+			function ($arrayreturn) {                
+				$arrayreturn = (object) $arrayreturn;                
 
-				$arrayreturn = (object) $arrayreturn;
-				$botones = '';
+				$botones = '';                                
 
 				if ($arrayreturn->id_estado == 3) {
 					$botones = ' <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="rechazar-periodo" class="btn btn-danger btn-xs"> RECHAZAR</button> ';
@@ -1022,16 +1049,15 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function datosRechazadosTabla() {
 
-		$results = Administracion::select('id', 'periodo', DB::raw('public.clean_errors(geo.provincias.descripcion) as provincia_descripcion'), DB::raw('\'RECHAZADO\' as estado'), 'sistema.usuarios.nombre', DB::raw('tablero.administracion.updated_at::date as fecha'))
-			->leftjoin('geo.provincias', 'tablero.administracion.provincia', '=', 'geo.provincias.id_provincia')
-			->leftjoin('sistema.usuarios', 'tablero.administracion.usuario_accion', '=', 'sistema.usuarios.id_usuario')
+		$results = Administracion::select('id', 'periodo', 'provincia', 'usuario_accion', DB::raw('\'RECHAZADO\' as estado'), DB::raw('tablero.administracion.updated_at::date as fecha'))
+			->with(['provincias','usuario'])            
 			->where('estado', '4');
 
 		if (Auth::user()->id_entidad != 1) {
 			$results->where('provincia', Auth::user()->id_provincia);
 		}
 
-		$results->orderBy('fecha', 'desc');
+		$results->orderBy('updated_at', 'desc');
 
 		return $results;
 	}
@@ -1048,8 +1074,14 @@ class TableroController extends AbstractPadronesController {
 
 		foreach ($fullarray as $field  => $value) {
 			foreach ($value as $provincia => $datos) {
+                //Log::info(dd($datos));                
+
 				if ($datos['estado'] == 'PENDIENTE') {
-					(count($datos['indicadores']) == 17?($datos['estado'] = 'COMPLETADO SIN ACEPTAR') && ($datos['completado'] = 17):$datos['completado'] = count($datos['indicadores']));
+                    $indicadores      = array_values(explode(',', substr(YearIndicadores::find(substr($datos['periodo'], 0, 4))->indicadores, 1, -1)));                    
+                    sort($indicadores);                    
+                    sort($datos['indicadores']);
+                    $indicadores_full = $indicadores == $datos['indicadores'];                    
+					$indicadores_full?(($datos['estado'] = 'COMPLETADO SIN ACEPTAR') && ($datos['completado'] = 17)):($datos['completado'] = count($datos['indicadores']));
 				} else {
 					$datos['completado'] = 17;
 				}
