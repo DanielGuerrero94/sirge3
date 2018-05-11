@@ -215,7 +215,7 @@ class WebServicesController extends Controller {
 			->leftjoin('siisa.inscriptos_padron as i', 'beneficiarios.beneficiarios.numero_documento', '=', 'i.nrodocumento')
 			->leftjoin('siisa.error_padron_siisa as e', 'beneficiarios.beneficiarios.numero_documento', '=', 'e.numero_documento')
 			->leftjoin('siisa.temporal_migracion_siisa as t', 'beneficiarios.beneficiarios.numero_documento', '=', 't.numero_documento')
-			->where('id_provincia_alta', '14')
+			->where('id_provincia_alta', '13')
 			->where('clase_documento', 'P')
 		//->where('g.id_departamento', 370)
 			->whereNull('i.nrodocumento')
