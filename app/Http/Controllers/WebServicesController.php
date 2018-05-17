@@ -417,7 +417,7 @@ class WebServicesController extends Controller {
 
 		$client = $this->createLocationIQ();
 
-		$cantidad = 50;
+		$cantidad = 1000;
 
 		$dt = \DateTime::createFromFormat('Ym', date('Ym'));
 		$dt->modify('-2 months');
@@ -434,7 +434,6 @@ class WebServicesController extends Controller {
 			->where('clase_documento', 'P')
 		//->where('g.id_departamento', 370)
 			->take($cantidad)
-			->offset(100)
 			->select('beneficiarios.beneficiarios.numero_documento', 'g.calle', 'g.numero', 'geo.departamentos.nombre_departamento as departamento', 'geo.provincias.descripcion as provincia')
 			->get();
 
