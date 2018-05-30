@@ -529,3 +529,5 @@ Route::get('rechazados-descargar-tabla', 'TableroController@excelRechazadosTabla
 Route::get('rechazados-tablero', 'TableroController@rechazados');
 Route::get('select-graficos-tablero', 'TableroController@getSelectGraficosTablero');
 Route::get('graficos-tablero/{periodo}/{provincia}/{indicador}', 'TableroController@getGraficoTablero');
+Route::get('log-acciones', 'TableroController@getLogAcciones');
+Route::get('tablero-log-acciones-table', 'TableroController@listadoAcciones');

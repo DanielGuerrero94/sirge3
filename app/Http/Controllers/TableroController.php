@@ -11,6 +11,7 @@ use App\Models\Subida;
 use App\Models\Tablero\Administracion;
 use App\Models\Tablero\Detail;
 use App\Models\Tablero\Ingreso;
+use App\Models\Tablero\LogAcciones;
 use App\Models\Tablero\Rango;
 use App\Models\Tablero\VWIngreso;
 use App\Models\Tablero\YearIndicadores;
@@ -170,14 +171,21 @@ class TableroController extends AbstractPadronesController {
 	public function postModificar(Request $r) {
 
 		try {
-			$unIndicador = Ingreso::find($r->id);
-			//$unIndicador->periodo     = $r->periodo;
+			$unIndicador              = Ingreso::find($r->id);
+			$estado_anterior          = array("numerador" => $unIndicador->numerador, "denominador" => $unIndicador->denominador);
 			$unIndicador->numerador   = $r->numerador;
 			$unIndicador->denominador = $r->denominador;
 			$unIndicador->save();
 		} catch (\Exception $e) {
 			return json_encode(["resultado" => 'Ha ocurrido un error']);
 		}
+
+		$log            = new LogAcciones();
+		$log->provincia = $unIndicador->provincia;
+		$log->usuario   = Auth::user()->id_usuario;
+		$log->accion    = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => $r->numerador, "denominador" => $r->denominador)));
+		$log->save();
+
 		return 'Se han modificado los datos correctamente.';
 	}
 
@@ -288,6 +296,12 @@ class TableroController extends AbstractPadronesController {
 
 		$data = ['tablero' => $results, 'id_entidad' => Auth::user()->id_entidad, 'periodo' => $periodo];
 		$name = 'Ingresos en $periodo - Tablero de Control SUMAR';
+
+		$log            = new LogAcciones();
+		$log->provincia = $provincia;
+		$log->usuario   = Auth::user()->id_usuario;
+		$log->accion    = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log->save();
 
 		Excel::create("Indicadores - $provincia - " .date('Y-m-d'), function ($e) use ($data) {
 				$e->sheet('Ingresos_SUMAR', function ($s) use ($data) {
@@ -622,6 +636,13 @@ class TableroController extends AbstractPadronesController {
 				Rechazo::insert($this->_error);
 			}
 		}
+
+		$log            = new LogAcciones();
+		$log->provincia = Auth::user()->id_provincia;
+		$log->usuario   = Auth::user()->id_usuario;
+		$log->accion    = json_encode(array("accion" => "Subida de archivo", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log->save();
+
 		$this->actualizaLote($lote, $this->_resumen);
 		$this->actualizaSubida($id);
 		return response()->json(array('success' => 'true', 'data' => $this->_resumen));
@@ -902,13 +923,13 @@ class TableroController extends AbstractPadronesController {
 			        ->orderBy(DB::raw('3'), 'asc')
 			        ->orderBy(DB::raw('1'), 'asc');
 
-			$results = $results->get();			
+			$results = $results->get();
 
 			foreach ($results as $item) {
 
 				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['provincia_descripcion'] = $item->provincia_descripcion;
 				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_ingreso']            = $item->id_ingreso;
-                $arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['periodo']            = $item->ingresos_periodo;
+				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['periodo']               = $item->ingresos_periodo;
 				if ($item->usuario_accion != NULL) {
 					$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['estado']         = 'ACEPTADO';
 					$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['usuario_nombre'] = $item->usuario_nombre;
@@ -917,10 +938,10 @@ class TableroController extends AbstractPadronesController {
 					if (!isset($arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_estado'])) {
 						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['indicadores']    = json_decode($item->indicadores);
 						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['estado']         = 'PENDIENTE';
-                        $arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_estado']         = NULL;
+						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_estado']      = NULL;
 						$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['usuario_nombre'] = NULL;
 					}
-				}				
+				}
 			}
 
 			$arrayreturns = $this->prepareArray($arrayreturns);
@@ -940,19 +961,19 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function listadoAdministracionTabla($provincia, $periodo = null) {
 
-		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);		
+		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);
 
 		return Datatables::of(collect($arrayreturns))
 			->addColumn(
 			'action',
-			function ($arrayreturn) {                
-				$arrayreturn = (object) $arrayreturn;                
+			function ($arrayreturn) {
+				$arrayreturn = (object) $arrayreturn;
 
-				$botones = '';                                
+				$botones = '';
 
 				if ($arrayreturn->id_estado == 3) {
 					$botones = ' <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="rechazar-periodo" class="btn btn-danger btn-xs"> RECHAZAR</button> ';
-				} else if ($arrayreturn->id_estado == NULL && $arrayreturn->completado == 17) {
+				} else if ($arrayreturn->id_estado == NULL && $arrayreturn->completado == 17 && !$arrayreturn->incompleto) {
 					$botones = ' <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="aceptar-periodo" class="btn btn-success btn-xs"> ACEPTAR</button> <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="rechazar-periodo" class="btn btn-danger btn-xs"> RECHAZAR</button> ';
 				} else {
 					$botones = ' <button class="btn btn-default btn-xs"> SIN ACCIONES</button> ';
@@ -981,6 +1002,12 @@ class TableroController extends AbstractPadronesController {
 		} else {
 			$name .= ' al '.date('Y-m-d');
 		}
+
+		$log            = new LogAcciones();
+		$log->provincia = Auth::user()->id_provincia;
+		$log->usuario   = Auth::user()->id_usuario;
+		$log->accion    = json_encode(array("accion" => "Descarga de excel de administracion en periodo ".$periodo." provincia ".$provincia, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log->save();
 
 		Excel::create($name, function ($e) use ($data) {
 				$e->sheet('Administracion_SUMAR', function ($s) use ($data) {
@@ -1032,6 +1059,12 @@ class TableroController extends AbstractPadronesController {
 		$data    = ['tablero' => $results->get(), 'id_entidad' => Auth::user()->id_entidad];
 		$name    = 'Rechazados - Tablero de Control SUMAR';
 
+		$log            = new LogAcciones();
+		$log->provincia = Auth::user()->id_provincia;
+		$log->usuario   = Auth::user()->id_usuario;
+		$log->accion    = json_encode(array("accion" => "Descarga de excel de rechazos", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log->save();
+
 		Excel::create("Rechazos - ".date('Y-m-d'), function ($e) use ($data) {
 				$e->sheet('Rechazados_SUMAR', function ($s) use ($data) {
 						$s->loadView('tablero.tabla_rechazados', $data);
@@ -1050,7 +1083,7 @@ class TableroController extends AbstractPadronesController {
 	public function datosRechazadosTabla() {
 
 		$results = Administracion::select('id', 'periodo', 'provincia', 'usuario_accion', DB::raw('\'RECHAZADO\' as estado'), DB::raw('tablero.administracion.updated_at::date as fecha'))
-			->with(['provincias','usuario'])            
+			->with(['provincias', 'usuario'])
 			->where('estado', '4');
 
 		if (Auth::user()->id_entidad != 1) {
@@ -1073,15 +1106,16 @@ class TableroController extends AbstractPadronesController {
 		$returned_array = [];
 
 		foreach ($fullarray as $field  => $value) {
-			foreach ($value as $provincia => $datos) {
-                //Log::info(dd($datos));                
+			foreach ($value as $provincia => &$datos) {
+				//Log::info(dd($datos));
 
 				if ($datos['estado'] == 'PENDIENTE') {
-                    $indicadores      = array_values(explode(',', substr(YearIndicadores::find(substr($datos['periodo'], 0, 4))->indicadores, 1, -1)));                    
-                    sort($indicadores);                    
-                    sort($datos['indicadores']);
-                    $indicadores_full = $indicadores == $datos['indicadores'];                    
-					$indicadores_full?(($datos['estado'] = 'COMPLETADO SIN ACEPTAR') && ($datos['completado'] = 17)):($datos['completado'] = count($datos['indicadores']));
+					$datos['incompleto'] = false;
+					$indicadores         = array_values(explode(',', substr(YearIndicadores::find(substr($datos['periodo'], 0, 4))->indicadores, 1, -1)));
+					sort($indicadores);
+					sort($datos['indicadores']);
+					$indicadores_full = $indicadores == $datos['indicadores'];
+					$indicadores_full?($datos['estado'] = 'COMPLETADO SIN ACEPTAR') && ($datos['completado'] = 17):($datos['completado'] = count($datos['indicadores'])) && ($datos['incompleto'] = true);
 				} else {
 					$datos['completado'] = 17;
 				}
@@ -1291,5 +1325,32 @@ class TableroController extends AbstractPadronesController {
 		}
 
 		return array('min_rojo' => $red, 'min_yellow' => $yellow, 'min_verde' => $green);
+	}
+
+	/**
+	 * Muestra el formulario de modificacion del indicador.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function getLogAcciones() {
+		$data = [
+			'page_title' => 'Historial de acciones',
+			'provincias' => Provincia::all(),
+			'user'       => Auth::user()
+		];
+
+		return view('tablero.log_acciones', $data);
+	}
+
+	/**
+	 * Muestra el listado de todas la acciones realizadas ordenado desde la más reciente.
+	 * @param void
+	 *
+	 * @return datatable
+	 */
+	public function listadoAcciones() {
+
+		$acciones = LogAcciones::with(['provincias', 'usuario'])->get();
+		return Datatables::of(collect($acciones))->make(true);
 	}
 }
