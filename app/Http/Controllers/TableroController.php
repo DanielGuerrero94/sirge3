@@ -180,10 +180,10 @@ class TableroController extends AbstractPadronesController {
 			return json_encode(["resultado" => 'Ha ocurrido un error']);
 		}
 
-		$log            = new LogAcciones();
-		$log->provincia = $unIndicador->provincia;
-		$log->usuario   = Auth::user()->id_usuario;
-		$log->accion    = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => $r->numerador, "denominador" => $r->denominador)));
+		$log               = new LogAcciones();
+		$log->id_provincia = $unIndicador->provincia;
+		$log->usuario      = Auth::user()->id_usuario;
+		$log->accion       = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => $r->numerador, "denominador" => $r->denominador)));
 		$log->save();
 
 		return 'Se han modificado los datos correctamente.';
@@ -297,10 +297,10 @@ class TableroController extends AbstractPadronesController {
 		$data = ['tablero' => $results, 'id_entidad' => Auth::user()->id_entidad, 'periodo' => $periodo];
 		$name = 'Ingresos en $periodo - Tablero de Control SUMAR';
 
-		$log            = new LogAcciones();
-		$log->provincia = $provincia;
-		$log->usuario   = Auth::user()->id_usuario;
-		$log->accion    = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log               = new LogAcciones();
+		$log->id_provincia = $provincia;
+		$log->usuario      = Auth::user()->id_usuario;
+		$log->accion       = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
 		Excel::create("Indicadores - $provincia - " .date('Y-m-d'), function ($e) use ($data) {
@@ -637,10 +637,10 @@ class TableroController extends AbstractPadronesController {
 			}
 		}
 
-		$log            = new LogAcciones();
-		$log->provincia = Auth::user()->id_provincia;
-		$log->usuario   = Auth::user()->id_usuario;
-		$log->accion    = json_encode(array("accion" => "Subida de archivo", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log               = new LogAcciones();
+		$log->id_provincia = Auth::user()->id_provincia;
+		$log->usuario      = Auth::user()->id_usuario;
+		$log->accion       = json_encode(array("accion" => "Subida de archivo", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
 		$this->actualizaLote($lote, $this->_resumen);
@@ -1003,10 +1003,10 @@ class TableroController extends AbstractPadronesController {
 			$name .= ' al '.date('Y-m-d');
 		}
 
-		$log            = new LogAcciones();
-		$log->provincia = Auth::user()->id_provincia;
-		$log->usuario   = Auth::user()->id_usuario;
-		$log->accion    = json_encode(array("accion" => "Descarga de excel de administracion en periodo ".$periodo." provincia ".$provincia, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log               = new LogAcciones();
+		$log->id_provincia = Auth::user()->id_provincia;
+		$log->usuario      = Auth::user()->id_usuario;
+		$log->accion       = json_encode(array("accion" => "Descarga de excel de administracion en periodo ".$periodo." provincia ".$provincia, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
 		Excel::create($name, function ($e) use ($data) {
@@ -1059,10 +1059,10 @@ class TableroController extends AbstractPadronesController {
 		$data    = ['tablero' => $results->get(), 'id_entidad' => Auth::user()->id_entidad];
 		$name    = 'Rechazados - Tablero de Control SUMAR';
 
-		$log            = new LogAcciones();
-		$log->provincia = Auth::user()->id_provincia;
-		$log->usuario   = Auth::user()->id_usuario;
-		$log->accion    = json_encode(array("accion" => "Descarga de excel de rechazos", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log               = new LogAcciones();
+		$log->id_provincia = Auth::user()->id_provincia;
+		$log->usuario      = Auth::user()->id_usuario;
+		$log->accion       = json_encode(array("accion" => "Descarga de excel de rechazos", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
 		Excel::create("Rechazos - ".date('Y-m-d'), function ($e) use ($data) {
