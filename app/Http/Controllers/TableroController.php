@@ -1350,7 +1350,7 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function listadoAcciones() {
 
-		$acciones = LogAcciones::with(['provincias', 'usuario'])->get();
+		$acciones = LogAcciones::with(['provincias', 'usuario'])->orderBy('id', 'desc')->get();
 		return Datatables::of(collect($acciones))->make(true);
 	}
 }
