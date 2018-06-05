@@ -299,7 +299,7 @@ class TableroController extends AbstractPadronesController {
 
 		$log               = new LogAcciones();
 		$log->id_provincia = $provincia;
-		$log->usuario      = Auth::user()->id_usuario;
+		$log->id_usuario   = Auth::user()->id_usuario;
 		$log->accion       = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
@@ -639,7 +639,7 @@ class TableroController extends AbstractPadronesController {
 
 		$log               = new LogAcciones();
 		$log->id_provincia = Auth::user()->id_provincia;
-		$log->usuario      = Auth::user()->id_usuario;
+		$log->id_usuario   = Auth::user()->id_usuario;
 		$log->accion       = json_encode(array("accion" => "Subida de archivo", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
@@ -1005,7 +1005,7 @@ class TableroController extends AbstractPadronesController {
 
 		$log               = new LogAcciones();
 		$log->id_provincia = Auth::user()->id_provincia;
-		$log->usuario      = Auth::user()->id_usuario;
+		$log->id_usuario   = Auth::user()->id_usuario;
 		$log->accion       = json_encode(array("accion" => "Descarga de excel de administracion en periodo ".$periodo." provincia ".$provincia, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
@@ -1061,7 +1061,7 @@ class TableroController extends AbstractPadronesController {
 
 		$log               = new LogAcciones();
 		$log->id_provincia = Auth::user()->id_provincia;
-		$log->usuario      = Auth::user()->id_usuario;
+		$log->id_usuario   = Auth::user()->id_usuario;
 		$log->accion       = json_encode(array("accion" => "Descarga de excel de rechazos", "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
