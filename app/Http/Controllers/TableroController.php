@@ -390,6 +390,8 @@ class TableroController extends AbstractPadronesController {
 			return (integer) $value;
 		} elseif (in_array($indicador, ['5|4', '5|5'])) {
 			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
+		} elseif (in_array($indicador, ['2|5'])) {
+			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " " && $id->denominador != "0") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " " && $id->numerador != "0"))?round((float) $id->numerador/(float) $id->denominador, 2):0;
 		} else {
 			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
 		}
@@ -1114,7 +1116,7 @@ class TableroController extends AbstractPadronesController {
 					$indicadores         = array_values(explode(',', substr(YearIndicadores::find(substr($datos['periodo'], 0, 4))->indicadores, 1, -1)));
 					sort($indicadores);
 					sort($datos['indicadores']);
-					$indicadores_full = $indicadores == $datos['indicadores'];
+					$indicadores_full = count(array_intersect($indicadores, $datos['indicadores'])) == count($indicadores);
 					$indicadores_full?($datos['estado'] = 'COMPLETADO SIN ACEPTAR') && ($datos['completado'] = 17):($datos['completado'] = count($datos['indicadores'])) && ($datos['incompleto'] = true);
 				} else {
 					$datos['completado'] = 17;
