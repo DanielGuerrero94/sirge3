@@ -317,11 +317,11 @@ class TableroController extends AbstractPadronesController {
 							$s->row($i, ['Col 6']);
 							switch (true) {
 								case ($row_fields['color'] == "success"):
-									$color_background = '#006400';
+									$color_background = '#00FF00';
 									break;
 
 								case ($row_fields['color'] == "warning"):
-									$color_background = '#FFD700';
+									$color_background = '#FFFF00';
 									break;
 
 								case ($row_fields['color'] == "danger"):
