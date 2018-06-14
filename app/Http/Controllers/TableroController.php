@@ -289,7 +289,9 @@ class TableroController extends AbstractPadronesController {
 		$results = $this->datosListadoTabla($periodo, $provincia);
 		$results = collect($results->get());
 		$results->transform(function ($item, $key) {
-				$item->estado = $this->checkStateValue($item);
+				$state = $this->checkState($item->id);
+				$item->estado = $state['value'];
+				$item->color = $state['color'];
 				$item->indicador = strtr($item->indicador, array("|" => "."));
 				return $item;
 			});
@@ -307,6 +309,33 @@ class TableroController extends AbstractPadronesController {
 				$e->sheet('Ingresos_SUMAR', function ($s) use ($data) {
 						$s->loadView('tablero.tabla_ingresos', $data);
 						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));
+						$i = 6;//COMIENZO DE DATOS EN EXCEL
+						foreach ($data['tablero'] as $row_fields) {
+
+							Log::info($row_fields);
+
+							$s->row($i, ['Col 6']);
+							switch (true) {
+								case ($row_fields['color'] == "success"):
+									$color_background = '#006400';
+									break;
+
+								case ($row_fields['color'] == "warning"):
+									$color_background = '#FFD700';
+									break;
+
+								case ($row_fields['color'] == "danger"):
+									$color_background = '#FF0000';
+									break;
+
+								default:
+									$color_background = '#C0C0C0';
+									break;
+							}
+							$s->cell('F'.$i, function ($color) use ($color_background) {$color->setBackground($color_background);});
+
+							$i++;
+						}
 					});
 			})
 			->export('xls');
@@ -393,7 +422,12 @@ class TableroController extends AbstractPadronesController {
 		} elseif (in_array($indicador, ['2|5'])) {
 			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " " && $id->denominador != "0") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " " && $id->numerador != "0"))?round((float) $id->numerador/(float) $id->denominador, 2):0;
 		} else {
-			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
+			try {
+				return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
+			} catch (\Exception $e) {
+				return 0;
+			}
+
 		}
 	}
 
