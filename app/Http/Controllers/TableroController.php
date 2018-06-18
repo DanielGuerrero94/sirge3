@@ -182,7 +182,7 @@ class TableroController extends AbstractPadronesController {
 
 		$log               = new LogAcciones();
 		$log->id_provincia = $unIndicador->provincia;
-		$log->usuario      = Auth::user()->id_usuario;
+		$log->id_usuario   = Auth::user()->id_usuario;
 		$log->accion       = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => $r->numerador, "denominador" => $r->denominador)));
 		$log->save();
 
