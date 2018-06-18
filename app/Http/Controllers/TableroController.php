@@ -355,14 +355,12 @@ class TableroController extends AbstractPadronesController {
 				if (count($observaciones)) {
 					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
 				}
-			} else if (in_array($id_area, array(19)) && $id_entidad == 1) {
-				$botones = '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
+			} else if (in_array($id_area, array(1, 19)) && $id_entidad == 1) {
+				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
 				if (count($observaciones)) {
 					$botones .= ' <i class="fa fa-exclamation-circle" style="color:red" data-toggle="listado-tooltip" data-placement="top" title="Hay mensajes intercambiados"></i>';
 				}
-			} else if (in_array($id_area, array(1)) && $id_entidad == 1) {
-				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
-				$botones .= ' <button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"><i class="fa fa-eye"></i> OBSERVAR</button> ';
 			}
 		} else {
 			if ($indicadores_full == 'completed') {
