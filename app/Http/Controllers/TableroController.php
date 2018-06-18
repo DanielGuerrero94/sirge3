@@ -212,9 +212,17 @@ class TableroController extends AbstractPadronesController {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
 					return (empty($result->numerador) && !is_numeric($result->numerador))?null:($result->numerador);
 				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4'])) {
-					return (empty($result->numerador) && !is_numeric($result->numerador))?null:(number_format($result->numerador, 0, ',', '.'));
+					try {
+						return (empty($result->numerador) && !is_numeric($result->numerador))?null:(number_format($result->numerador, 0, ',', '.'));
+					} catch (\Exception $e) {
+						return $result->numerador;
+					}
 				}
-				return (empty($result->numerador) && !is_numeric($result->numerador))?null:('$ '.number_format($result->numerador, 2, ',', '.'));
+				try {
+					return (empty($result->numerador) && !is_numeric($result->numerador))?null:('$ '.number_format($result->numerador, 2, ',', '.'));
+				} catch (\Exception $e) {
+					return $result->numerador;
+				}
 
 			}
 		)
@@ -224,9 +232,18 @@ class TableroController extends AbstractPadronesController {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
 					return (empty($result->denominador) && !is_numeric($result->denominador))?null:($result->denominador);
 				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4', '5|4', '5|5'])) {
-					return (empty($result->denominador) && !is_numeric($result->denominador))?null:(number_format($result->denominador, 0, ',', '.'));
+					try {
+						return (empty($result->denominador) && !is_numeric($result->denominador))?null:(number_format($result->denominador, 0, ',', '.'));
+					} catch (\Exception $e) {
+						return $result->denominador;
+					}
 				}
-				return (empty($result->denominador) && !is_numeric($result->denominador))?null:('$ '.number_format($result->denominador, 2, ',', '.'));
+				try {
+					return (empty($result->denominador) && !is_numeric($result->denominador))?null:('$ '.number_format($result->denominador, 2, ',', '.'));
+				} catch (\Exception $e) {
+					return $result->denominador;
+				}
+
 			}
 		)
 			->addColumn(
@@ -358,7 +375,7 @@ class TableroController extends AbstractPadronesController {
 			} else if (in_array($id_area, array(1, 19)) && $id_entidad == 1) {
 				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
-				if (count($observaciones)) {
+				if (isset($observaciones)) {
 					$botones .= ' <i class="fa fa-exclamation-circle" style="color:red" data-toggle="listado-tooltip" data-placement="top" title="Hay mensajes intercambiados"></i>';
 				}
 			}
