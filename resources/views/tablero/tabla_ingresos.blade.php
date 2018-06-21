@@ -55,7 +55,7 @@ n: </td>
 		<tr>
 			<td>{{$registro['periodo']  or '' }}</td>
 			<td>{{$registro['provincia']  or '' }}</td>
-			<td>{{$registro['indicador']  or '' }}</td>
+			<td><?php echo "'".$registro['indicador']?></td>
 			<td>{{$registro['numerador']  or '' }}</td>
 			<td>{{$registro['denominador']  or '' }}</td>
 			<td>{{$registro['estado'] or ''}}</td>
