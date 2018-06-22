@@ -435,7 +435,7 @@ class TableroController extends AbstractPadronesController {
 		} elseif (in_array($indicador, ['5|4', '5|5'])) {
 			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador, 2):'INCOMPLETO';
 		} elseif (in_array($indicador, ['2|5'])) {
-			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " " && $id->denominador != "0") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " " && $id->numerador != "0"))?round((float) $id->numerador/(float) $id->denominador, 2):0;
+			return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " " && $id->denominador != "0") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " " && $id->numerador != "0"))?round((float) $id->numerador/(float) $id->denominador*100, 2):0;
 		} else {
 			try {
 				return (($id->denominador != "" && $id->denominador != NULL && $id->denominador != " ") && ($id->numerador != "" && $id->numerador != NULL && $id->numerador != " "))?round((float) $id->numerador/(float) $id->denominador*100, 2):'INCOMPLETO';
