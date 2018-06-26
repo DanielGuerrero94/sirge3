@@ -135,7 +135,8 @@ class TableroController extends AbstractPadronesController {
 			$array_indicadores_cargados = array_values(Ingreso::where('periodo', $periodo)->where('provincia', $provincia)->lists('indicador')->toArray());
 			sort($array_indicadores);
 			sort($array_indicadores_cargados);
-			$indicadores_full = ($array_indicadores == $array_indicadores_cargados)?'true':'false';
+			$array_intersect  = array_intersect($array_indicadores, $array_indicadores_cargados);
+			$indicadores_full = ($array_indicadores == $array_intersect)?'true':'false';
 		}
 
 		if ($indicadores_full == 'true' && Administracion::where('periodo', $periodo)
