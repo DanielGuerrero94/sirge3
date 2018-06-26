@@ -381,9 +381,9 @@ class TableroController extends AbstractPadronesController {
 			}
 		} else {
 			if ($indicadores_full == 'completed') {
-				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-success btn-xs"> ACEPTADO</button> ';
+				$botones = ' <button id="'.$id.'" class="btn btn-success btn-xs"> ACEPTADO</button> ';
 			} else {
-				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-danger btn-xs"> RECHAZADO</button> ';
+				$botones = ' <button id="'.$id.'" class="btn btn-danger btn-xs"> RECHAZADO</button> ';
 			}
 
 		}
