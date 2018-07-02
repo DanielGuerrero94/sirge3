@@ -20,6 +20,7 @@ use App\Models\PUCO\Profe;
 use App\Models\PUCO\Super;
 use App\Models\Rechazo;
 use App\Models\Subida;
+use App\Models\Tablero\Ingreso;
 use Auth;
 use Datatables;
 use DB;
@@ -149,6 +150,9 @@ class LotesController extends Controller {
 			case 8:
 				$p = 'tablero';
 				break;
+			case 9:
+				$p = 'vphypap';
+				break;
 			default:
 				break;
 		}
@@ -221,6 +225,9 @@ class LotesController extends Controller {
 				break;
 			case 6:
 				Super::where('lote', $lote)->delete();
+				break;
+			case 8:
+				Ingreso::where('lote', $lote)->delete();
 				break;
 			default:
 				return null;
@@ -307,20 +314,31 @@ class LotesController extends Controller {
 		switch ($id) {
 			case 1:
 				return 'PRESTACIONES';
+				break;
 			case 2:
 				return 'APLICACIÓN DE FONDOS';
+				break;
 			case 3:
 				return 'COMPROBANTES';
+				break;
 			case 4:
 				return 'OBRA SOCIAL PROVINCIAL';
+				break;
 			case 5:
 				return 'PROGRAMA FEDERAL DE SALUD';
+				break;
 			case 6:
 				return 'SUPERINTENDENCIA DE SERVICIOS DE SALUD';
+				break;
 			case 7:
 				return 'TRAZADORAS';
+				break;
 			case 8:
 				return 'TABLERO DE CONTROL';
+				break;
+			case 9:
+				return 'VPH Y PAP';
+				break;
 			default:
 				break;
 		}
@@ -406,6 +424,38 @@ class LotesController extends Controller {
 					$m->to('rodrigo.cadaval.sumar@gmail.com');
 					$m->subject('ALERTA LOTES DEMORADOS');
 				});
+		}
+
+		foreach ($lotes as $lote) {
+
+			$subida = Subida::join('sistema.lotes', 'sistema.lotes.id_subida', '=', 'sistema.subidas.id_subida')
+				->where('sistema.lotes.lote', $lote)	->first();
+
+			switch ($subida->id_padron) {
+				case 1:
+					Prestacion::where('lote', $lote)->delete();
+					break;
+				case 2:
+					Fondo::where('lote', $lote)->delete();
+					break;
+				case 3:
+					Comprobante::where('lote', $lote)->delete();
+					break;
+				case 4:
+					Osp::where('lote', $lote)->delete();
+					break;
+				case 5:
+					Profe::where('lote', $lote)->delete();
+					break;
+				case 6:
+					Super::where('lote', $lote)->delete();
+					break;
+				case 8:
+					Ingreso::where('lote', $lote)->delete();
+					break;
+				default:
+					return null;
+			}
 		}
 
 		Subida::join('sistema.lotes', 'sistema.lotes.id_subida', '=', 'sistema.subidas.id_subida')
