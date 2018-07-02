@@ -533,3 +533,9 @@ Route::get('select-graficos-tablero', 'TableroController@getSelectGraficosTabler
 Route::get('graficos-tablero/{periodo}/{provincia}/{indicador}', 'TableroController@getGraficoTablero');
 Route::get('log-acciones', 'TableroController@getLogAcciones');
 Route::get('tablero-log-acciones-table', 'TableroController@listadoAcciones');
+
+/**
+*  SIGOP REPORTES (REDIRECT)
+*/
+
+Route::get('sigop/reportes', function () {return view('sigop.reportes.main')});;
