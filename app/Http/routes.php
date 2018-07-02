@@ -107,6 +107,8 @@ Route::post('eliminar-lote', 'LotesController@eliminarLote');
 #	RECHAZOS
 Route::get('rechazos-lote/{lote}', 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}', 'LotesController@getRechazosTabla');
+#   MAL PROCESADOS
+Route::get('subidas-mal-procesadas', 'LotesController@alertSubidasMalProcesadas');
 
 /**
  * DICCIONARIO
