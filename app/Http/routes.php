@@ -535,7 +535,7 @@ Route::get('log-acciones', 'TableroController@getLogAcciones');
 Route::get('tablero-log-acciones-table', 'TableroController@listadoAcciones');
 
 /**
-*  SIGOP REPORTES (REDIRECT)
-*/
+ *  SIGOP REPORTES (REDIRECT)
+ */
 
-Route::get('sigop/reportes', function () {return view('sigop.reportes.main')});
+Route::get('sigop/reportes', function () {return view('sigop.reportes.main');});
