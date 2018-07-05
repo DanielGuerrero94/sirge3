@@ -510,7 +510,7 @@ class LotesController extends Controller {
 		$archivos = Subida::whereIn('id_subida', $subidas)->select(['id_padron', 'nombre_actual'])->get();
 
 		foreach ($archivos as $tupla_padron_nombre) {
-			system('sudo rm /var/www/html/sirge3/storage/uploads/'.$this->getName($tupla_padron_nombre->id_padron).'/'.$tupla_padron_nombre->nombre_actual);
+			unlink($this->getName($tupla_padron_nombre->id_padron, true).'/'.$tupla_padron_nombre->nombre_actual);
 		}
 	}
 }
