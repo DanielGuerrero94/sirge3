@@ -511,7 +511,7 @@ class LotesController extends Controller {
 
 		foreach ($archivos as $tupla_padron_nombre) {
 			try {
-				unlink('/var/www/html/sirge3/storage/uploads/'$this->getName($tupla_padron_nombre->id_padron).'/'.$tupla_padron_nombre->nombre_actual);
+				unlink('/var/www/html/sirge3/storage/uploads/'.$this->getName($tupla_padron_nombre->id_padron).'/'.$tupla_padron_nombre->nombre_actual);
 			} catch (\Exception $e) {
 				echo $e->getMessage();
 			}
