@@ -495,4 +495,22 @@ class LotesController extends Controller {
 
 		return null;
 	}
+
+	/**
+	 * Elimina los archivos de padrones que fueron rechazados mayores a 30 días.
+	 *
+	 * @return null
+	 */
+	public function eliminarArchivosAntiguos() {
+
+		$subidas = Lote::where('id_estado', 4)->where(DB::raw('EXTRACT(DAY FROM now()-fin) > 30'))
+		                                      ->whereIn('id_subida', [6553, 6555, 6584, 6579, 6574, 6593, 6645, 6635])
+		                                      ->lists('id_subida');
+
+		$archivos = Subida::whereIn('id_subida', $subidas)->select(['id_padron', 'nombre_actual'])->get();
+
+		foreach ($archivos as $tupla_padron_nombre) {
+			system('sudo rm /var/www/html/sirge3/storage/uploads/'.$this->getName($tupla_padron_nombre->id_padron).'/'.$tupla_padron_nombre->nombre_actual);
+		}
+	}
 }

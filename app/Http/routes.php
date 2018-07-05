@@ -109,6 +109,7 @@ Route::get('rechazos-lote/{lote}', 'LotesController@getRechazos');
 Route::get('rechazos-lote-table/{lote}', 'LotesController@getRechazosTabla');
 #   MAL PROCESADOS
 Route::get('subidas-mal-procesadas', 'LotesController@alertSubidasMalProcesadas');
+Route::get('eliminar-archivos-antiguos', 'LotesController@eliminarArchivosAntiguos');
 
 /**
  * DICCIONARIO
