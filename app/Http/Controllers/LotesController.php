@@ -504,7 +504,7 @@ class LotesController extends Controller {
 	public function eliminarArchivosAntiguos() {
 
 		$subidas = Lote::where('id_estado', 4)->where(DB::raw('EXTRACT(DAY FROM now()-fin)::integer'), '>', 30)
-		                                      ->take(10)
+		                                      ->whereIn('id_subida', [12979, 12939, 12937, 12931, 12928, 12925, 12917, 12912, 12911, 12899])
 		                                      ->lists('id_subida');
 
 		$archivos = Subida::whereIn('id_subida', $subidas)->select(['id_padron', 'nombre_actual'])->get();
