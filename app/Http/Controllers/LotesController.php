@@ -503,20 +503,24 @@ class LotesController extends Controller {
 	 */
 	public function eliminarArchivosAntiguos() {
 
-		$subidas = Lote::where('id_estado', 4)->where(DB::raw('EXTRACT(DAY FROM now()-fin)::integer'), '>', 30)
-		                                      ->whereIn('id_subida', [12979, 12939, 12937, 12931, 12928, 12925, 12917, 12912, 12911, 12899])
-		                                      ->lists('id_subida');
+		$subidas = Lote::where('id_estado', 4)->where(DB::raw('EXTRACT(DAY FROM now()-fin)::integer'), '>', 30)->lists('id_subida');
 
 		$archivos = Subida::whereIn('id_subida', $subidas)->select(['id_padron', 'nombre_actual'])->get();
 
+		$count = 0;
 		foreach ($archivos as $tupla_padron_nombre) {
 			try {
 				unlink('/var/www/html/sirge3/storage/uploads/'.$this->getName($tupla_padron_nombre->id_padron).'/'.$tupla_padron_nombre->nombre_actual);
+				$count++;
 			} catch (\Exception $e) {
 				echo $e->getMessage();
 			}
 		}
 
-		echo json_encode($archivos, JSON_PRETTY_PRINT);
+		echo "<pre> CANTIDAD: ".$count."</pre>";
+		echo "<pre>".json_encode($archivos, JSON_PRETTY_PRINT)."</pre>";
+		unset($count);
+		unset($archivos);
+		unset($subidas);
 	}
 }
