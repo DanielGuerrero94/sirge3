@@ -510,7 +510,11 @@ class LotesController extends Controller {
 		$archivos = Subida::whereIn('id_subida', $subidas)->select(['id_padron', 'nombre_actual'])->get();
 
 		foreach ($archivos as $tupla_padron_nombre) {
-			unlink($this->getName($tupla_padron_nombre->id_padron, true).'/'.$tupla_padron_nombre->nombre_actual);
+			try {
+				unlink($this->getName($tupla_padron_nombre->id_padron, true).'/'.$tupla_padron_nombre->nombre_actual);
+			} catch (Exception $e) {
+				echo $e->getMessage();
+			}
 		}
 
 		echo json_encode($archivos, JSON_PRETTY_PRINT);
