@@ -37,7 +37,7 @@ $(document).ready(function(){
             pass : {
                 required: true,
                 minlength: 6,
-                maxlength: 30
+                maxlength: 60
             },
             area : {
                 required : true
