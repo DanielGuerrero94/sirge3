@@ -187,16 +187,14 @@ class PucoController extends Controller {
 
 		DB::statement("	SELECT public.copiar_puco_en_servidor(); ");
 
-		/*
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
 		file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_'.date("Y-m").'.txt', $puco);
 		unset($puco);
-		 */
 
-		$sys = "sudo todos < puco.txt > PUCO_".date('Y-m')."txt";
-		exec($sys);
-		unlink('/var/www/html/sirge3/storage/swap/puco.txt');
+		//$sys = "sudo todos < puco.txt > PUCO_".date('Y-m')."txt";
+		//exec($sys);
+		//unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
 		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" .date("Y-m").".zip PUCO_".date('Y-m').".txt";
 		exec($sys);
@@ -204,7 +202,7 @@ class PucoController extends Controller {
 		$this->actualizarPuco($password, $this->getBeneficiarios(date('Ym')));
 		$this->notificar($this->getBeneficiarios(date('Ym')), $password);
 
-		unlink('/var/www/html/sirge3/storage/swap/PUCO_'.date("Y-m").'.txt');
+		//unlink('/var/www/html/sirge3/storage/swap/PUCO_'.date("Y-m").'.txt');
 
 		$this->generarZipACE();
 
