@@ -1,6 +1,6 @@
 @extends('content')
 @section('content')
-<div class="row">	
+<div class="row">
 	<div class="col-md-10">
 		<div class="box box-info">
 			<div class="box-header">
@@ -58,28 +58,28 @@
                     @if ($estado->color == 'success')
                       <span class="description-percentage text-{{ $estado->color }}"><i class="fa fa-caret-up"></i>
                     @elseif ($estado->color == 'danger')
-                      <span class="description-percentage text-{{ $estado->color }}"><i class="fa fa-caret-down"></i>                    
+                      <span class="description-percentage text-{{ $estado->color }}"><i class="fa fa-caret-down"></i>
                     @endif
 
-                     <b>{{ $estado->value }}</b></span> 
+                     <b>{{ $estado->value }}</b></span>
                   </div>
                   <!-- /.description-block -->
                 </div>
               </div>
-				
+
 
 
 
 
 			</div>
-			<div class="box-body">				
-					<div id="scroll-historial-div">												
+			<div class="box-body">
+					<div id="scroll-historial-div">
 						<h4>Historial de observaciones realizadas</h4>
-						@if (count($indicador->observaciones))
+            @if ($indicador->observaciones <> NULL)
 						<ul class="timeline">
               <!-- timeline time label -->
-              <?php $fecha_anterior = ''; ?>
-              @foreach (json_decode($indicador->observaciones) as $unaObservacion)
+<?php $fecha_anterior = '';?>
+@foreach (json_decode($indicador->observaciones) as $unaObservacion)
               @if ($fecha_anterior != date('Y-m-d',strtotime($unaObservacion->fecha)))
               <li class="time-label">
                 <span class="bg-red">
@@ -101,7 +101,7 @@
                 </div>
               </li>
               <!-- END timeline item -->
-              <?php $fecha_anterior =  date('Y-m-d',strtotime($unaObservacion->fecha)); ?>
+<?php $fecha_anterior = date('Y-m-d', strtotime($unaObservacion->fecha));?>
               @endforeach
             </ul>
 						@else
@@ -110,9 +110,9 @@
 							<p>No hay observaciones asociadas al indicador</p>
 						</div>
 						@endif
-					</div>				
+					</div>
 			</div>
-    <div class="box-footer">      
+    <div class="box-footer">
       <form id="form-observacion">
         <div class="alert alert-danger" id="errores-div">
             <ul id="errores-form"></ul>
@@ -123,13 +123,13 @@
           <span class="input-group-btn">
             <button class="enviar btn btn-warning btn-flat">Enviar</button>
           </span>
-        </div>              
+        </div>
       </form>
       <br>
       <div class="btn-group " role="group">
           <button type="button" class="back btn btn-info">Atrás</button>
       </div>
-    </div>	
+    </div>
 		</div>
 	</div>
 </div>
@@ -165,11 +165,11 @@
       $('#form-observacion').validate({
         rules : {
                 observacion : {
-                    required: true                                        
-                }                
+                    required: true
+                }
             },
         submitHandler : function(form){
-          
+
           console.log($(form).serialize());
 
           $.ajax({
@@ -177,14 +177,14 @@
             data : $(form).serialize(),
             url  : 'nueva-observacion',
             success : function(data){
-              $('#errores-div').hide();              
+              $('#errores-div').hide();
               $('#modal-text').html('Se ha enviado la observacion');
               $('.modal').modal();
               $('.modal .modal-dialog button').on('click', function(){
                 $.get('{{ $reload }}' , function(data){
                   $('.content-wrapper').html(data);
-                }); 
-              });                          
+                });
+              });
             },
             error : function(data){
               var html = '';

@@ -538,7 +538,8 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function getObservacion($id) {
 		$indicador = Ingreso::find($id);
-		$data      = [
+
+		$data = [
 			'page_title' => 'Modificacion del indicador',
 			'ruta_back'  => 'main-tablero/'.$indicador->periodo.'/'.$indicador->provincia,
 			'reload'     => 'tablero-observar-indicador/'.$id,
@@ -563,12 +564,14 @@ class TableroController extends AbstractPadronesController {
 		}
 
 		array_push($observaciones, ["fecha" => date("Y-m-d H:i:s"), "id_usuario" => Auth::user()->id_usuario, "mensaje" => $r->observacion]);
+
 		$indicador->observaciones = json_encode($observaciones);
 		if ($indicador->save()) {
 
+			$cadena_ugsp = Usuario::where('id_entidad', 2)->where('id_provincia', $indicador->provincia)->whereIn('id_menu', [12, 14, 15])->lists('email');
+
 			if (Auth::user()->id_entidad == 2) {
-				//$cadena_uec = Usuario::where('id_entidad', 1)->where('id_area',19)->where('activo','S')->orderBy('id_usuario', 'asc')->lists('email');
-				$cadena_uec = Usuario::where('id_usuario', Auth::user()->id_usuario)->lists('email');
+				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16])->lists('email');
 
 				Mail::send('emails.respuesta-observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_uec) {
 						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
@@ -579,8 +582,7 @@ class TableroController extends AbstractPadronesController {
 						$m->subject('Respuesta a observacion en Tablero de Control!');
 					});
 			} else {
-				//$cadena_ugsp = Usuario::where('id_entidad', 2)->whereIn('id_area',[1,19])->where('id_provincia',$indicador->provincia)->where('activo','S')->orderBy('id_usuario', 'asc')->lists('email');
-				$cadena_ugsp = Usuario::where('id_usuario', Auth::user()->id_usuario)->lists('email');
+				$cadena_ugsp = Usuario::where('id_entidad', 2)->where('id_provincia', $indicador->provincia)->whereIn('id_menu', [12, 14, 15])->lists('email');
 
 				Mail::send('emails.observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_ugsp) {
 						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
