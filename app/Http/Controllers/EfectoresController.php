@@ -33,9 +33,10 @@ use Auth;
 use Datatables;
 use DB;
 use Excel;
-
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use Illuminate\Http\Request;
+use Log;
 use Mail;
 
 use ZipArchive;
@@ -604,6 +605,9 @@ class EfectoresController extends Controller {
 		$ef->compromiso_gestion            = $r->compromiso;
 		$ef->domicilio                     = $r->direccion;
 		$ef->codigo_postal                 = $r->codigo_postal;
+		if (isset($r->addenda_perinatal)) {
+			$ef->ppac = $r->addenda_perinatal == 'S'?'S':'N';
+		}
 		if (isset($r->hcd) && $r->hcd == 'S') {
 			$ef->hcd            = $r->hcd;
 			$ef->id_sistema_hcd = $r->sistema_hcd;
@@ -661,16 +665,23 @@ class EfectoresController extends Controller {
 			return 'Ha fallado la actualización de datos';
 		}
 
+		Log::info($r->addenda_perinatal);
+
 		if (strlen($r->addenda_perinatal)) {
 			try {
 				$pp = Ppac::findOrFail($ef->id_efector);
 			} catch (ModelNotFoundException $e) {
 				$pp             = new Ppac;
 				$pp->id_efector = $ef->id_efector;
+
+				Log::info($ef->id_efector);
 			}
-			$pp->addenda_perinatal       = $r->addenda_perinatal;
+			$pp->addenda_perinatal = $r->addenda_perinatal;
+			Log::info($pp->addenda_perinatal);
 			$pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal <> ''?$r->fecha_addenda_perinatal:null;
-			$pp->perinatal_ac            = $r->perinatal_ac;
+			Log::info($pp->fecha_addenda_perinatal);
+			$pp->perinatal_ac = $r->perinatal_ac;
+			Log::info($pp->perinatal_ac);
 			if ($pp->save()) {
 				$update = true;
 			} else {

@@ -188,9 +188,9 @@
 						    			<div class="form-group">
 							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
 							    			<div class="col-sm-8">
-								    			<select id="integrante" name="integrante" class="form-control" 
+								    			<select id="integrante" name="integrante" class="form-control"
 									    			@if (Auth::user()->id_area == 5 && Auth::user()->id_area == 16)
-									    				> 
+									    				>
 									    				@if ($efector->integrante == 'S')
 									    					<option selected="selected" value="S">SI</option>
 									    					<option value="N">NO</option>
@@ -201,13 +201,13 @@
 								    				@else
 								    					readonly>
 								    					@if ($efector->integrante == 'S')
-								    						<option selected="selected" value="S">SI</option>	
-									    				@else								    					
+								    						<option selected="selected" value="S">SI</option>
+									    				@else
 									    					<option selected="selected" value="N">NO</option>
 									    				@endif
 									    			@endif
-									    			
-								    				
+
+
 								    			</select>
 							    			</div>
 						    			</div>
@@ -259,7 +259,7 @@
 								    				@else
 								    					<option value="S">SI</option>
 								    					<option selected="selected" value="N">NO</option>
-								    				@endif				
+								    				@endif
 								    			</select>
 							    			</div>
 						    			</div>
@@ -284,7 +284,7 @@
 		                    					</select>
 							    			</div>
 						    			</div>
-						    		</div>						    		
+						    		</div>
 						    	</div>
 						    </div>
 						    <div class="tab-pane" id="domicilio">
@@ -551,8 +551,8 @@
 								    			@else
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
-								    			@endif								    		
-								    		@else 
+								    			@endif
+								    		@else
 								    			<option name="internet_efector" value="S">SI</option>
 							    				<option name="internet_efector" value="N">NO</option>
 								    		@endif
@@ -570,8 +570,8 @@
 								    			@else
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
-								    			@endif								    		
-								    		@else 
+								    			@endif
+								    		@else
 								    			<option name="factura_descentralizada" value="S">SI</option>
 							    				<option name="factura_descentralizada" value="N">NO</option>
 								    		@endif
@@ -589,8 +589,8 @@
 								    			@else
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
-								    			@endif								    		
-								    		@else 
+								    			@endif
+								    		@else
 								    			<option name="factura_on_line" value="S">SI</option>
 							    				<option name="factura_on_line" value="N">NO</option>
 								    		@endif
@@ -622,12 +622,12 @@
 		                  					<div class="col-sm-7">
 		                    					<input class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->perinatal->fecha_addenda_perinatal or ''}}" placeholder="dd/mm/aaaa">
 		                  					</div>
-		                    			</div>		                    			
+		                    			</div>
 						    		</div>
 						    		<div class="col-md-4">
-						    			<label for="internet-efector" class="col-sm-6 control-label">Perinatal AC</label>
+						    			<label for="perinatal_ac" class="col-sm-6 control-label">Perinatal AC</label>
 						    			<div class="col-sm-6">
-							    			<select id="internet-efector" name="internet-efector" class="form-control">
+							    			<select id="perinatal_ac" name="perinatal_ac" class="form-control">
 						    				@if($efector->perinatal->perinatal_ac == 'S')
 							    				<option selected="selected" value="S">SI</option>
 							    				<option value="N">NO</option>
@@ -724,7 +724,7 @@
 								<li class="previous"><a href="javascript:;">Anterior</a></li>
 							  	<li class="next"><a href="javascript:;">Siguiente</a></li>
 							</ul>
-						</div>	
+						</div>
 					</div>
 				</div>
 				<div class="box-footer">
@@ -755,7 +755,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-	
+
 	$('.finish').hide();
 	$('#errores-div').hide();
 
@@ -767,13 +767,13 @@ $(document).ready(function() {
 	var fechaActual = d.getFullYear() + '/' +
 	    (month<10 ? '0' : '') + month + '/' +
 	    (day<10 ? '0' : '') + day;*/
-	
+
 	$('#tel').inputmask({
 		mask : '9999 9999 9999',
 		placeholder : ''
 	});
 
-		
+
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
 
 	function checkCompromiso(integrante , compromiso){
@@ -788,12 +788,12 @@ $(document).ready(function() {
 			$('#compromiso').val('N').attr('disabled' , 'disabled');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
-		}		
+		}
 	}
 
 	function checkConvenio(integrante , compromiso , convenio){
 		if (integrante == 'N' || compromiso == 'N' || convenio == 'N'){
-			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');	
+			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
 		}
 	}
 
@@ -831,7 +831,7 @@ $(document).ready(function() {
 			$('#sistema_hcd').attr('disabled' , 'disabled');
 		} else {
 			$('#sistema_hcd option[value=""]').removeAttr('selected');
-			$('#sistema_hcd').removeAttr('disabled');	
+			$('#sistema_hcd').removeAttr('disabled');
 		}
 	});
 
@@ -840,7 +840,7 @@ $(document).ready(function() {
 		if (estado == 'N'){
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
 		} else {
-			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').removeAttr('disabled');	
+			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').removeAttr('disabled');
 		}
 	});
 
@@ -984,7 +984,7 @@ $(document).ready(function() {
 			})
 		}
 	});
-	
+
 
 	$('.back').click(function(){
 		$.get('efectores-modificacion' , function(data){
