@@ -262,7 +262,7 @@ class TableroController extends AbstractPadronesController {
 			->addColumn(
 			'action',
 			function ($result) {
-				return $this->datatableActions($this->indicadoresFull($result->periodo, $result->provincia), $this->_user->id_area, $this->_user->id_entidad, $result->observaciones, $result->id);
+				return $this->datatableActions($this->indicadoresFull($result->periodo, $result->provincia), $this->_user->id_menu, $this->_user->id_entidad, $result->observaciones, $result->id);
 			}
 		)
 			->make(true);
@@ -364,16 +364,16 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return text (HTML)
 	 */
-	public function datatableActions($indicadores_full, $id_area, $id_entidad, $observaciones, $id) {
+	public function datatableActions($indicadores_full, $id_menu, $id_entidad, $observaciones, $id) {
 
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
-			if (in_array($id_area, array(1, 16, 19)) && $id_entidad == 2) {
+			if (in_array($id_menu, array(12, 14) {
 				$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				if (count($observaciones)) {
 					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
 				}
-			} else if (in_array($id_area, array(1, 19)) && $id_entidad == 1) {
+			} else if (in_array($id_menu, array(1, 2, 5, 11, 16)) && $id_entidad == 1) {
 				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
 				if (isset($observaciones)) {
