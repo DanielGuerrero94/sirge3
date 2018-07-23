@@ -368,7 +368,7 @@ class TableroController extends AbstractPadronesController {
 
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
-			if (in_array($id_menu, array(12, 14) {
+			if (in_array($id_menu, array(12, 14)) {
 				$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				if (count($observaciones)) {
 					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
