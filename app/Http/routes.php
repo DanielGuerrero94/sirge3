@@ -243,6 +243,8 @@ Route::get('efectores-listado', 'EfectoresController@listado');
 Route::get('efectores-listado-table', 'EfectoresController@listadoTabla');
 Route::get('efectores-generar-tabla', 'EfectoresController@generarTabla');
 Route::get('efectores-descargar-tabla', 'EfectoresController@descargarTabla');
+Route::get('efectores-refrescar-tabla', 'EfectoresController@refrescarTabla');
+
 #	ALTA
 Route::get('efectores-alta', 'EfectoresController@getAlta');
 Route::post('efectores-alta', 'EfectoresController@postAlta');

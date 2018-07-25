@@ -851,4 +851,13 @@ class EfectoresController extends Controller {
 	public function descargarTabla() {
 		return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
 	}
+
+	/**
+	 * Refrescar vista materializada de efectores
+	 *
+	 * @return null
+	 */
+	public function refrescarTabla() {
+		DB::statement("REFRESH MATERIALIZED VIEW efectores.mv_efectores_completo;");
+	}
 }
