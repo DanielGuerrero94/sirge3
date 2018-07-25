@@ -20,7 +20,7 @@ use App\Models\Efectores\Email;
 use App\Models\Efectores\Estado;
 use App\Models\Efectores\Geografico;
 use App\Models\Efectores\Gestion;
-
+use App\Models\Efectores\MVExcelEfectores;
 use App\Models\Efectores\Ppac;
 use App\Models\Efectores\Referente;
 use App\Models\Efectores\Telefono;
@@ -782,35 +782,40 @@ class EfectoresController extends Controller {
 	 */
 	public function generarTabla() {
 
+		//$efectores = DB::select("SELECT * FROM efectores.mv_efectores_completo;");
+		$efectores = MVExcelEfectores::all();
+
+		/*
 		$efectores = Efector::with([
-				'estado',
-				'tipo',
-				'categoria',
-				'geo' => function ($q) {
-					$q->with(['provincia', 'departamento', 'localidad']);
-				},
-				'dependencia',
-				'compromiso',
-				'historiaclinica',
-				'emails',
-				'telefonos',
-				'referente',
-				'internet',
-				'convenio',
-				'neonatal' => function ($q) {
-					$q->with('info');
-				},
-				'obstetrico' => function ($q) {
-					$q->with('info');
-				},
-				'addendas' => function ($q) {
-					$q->with('tipo');
-				}
-			])
+		'estado',
+		'tipo',
+		'categoria',
+		'geo' => function ($q) {
+		$q->with(['provincia', 'departamento', 'localidad']);
+		},
+		'dependencia',
+		'compromiso',
+		'historiaclinica',
+		'emails',
+		'telefonos',
+		'referente',
+		'internet',
+		'convenio',
+		'neonatal' => function ($q) {
+		$q->with('info');
+		},
+		'obstetrico' => function ($q) {
+		$q->with('info');
+		},
+		'addendas' => function ($q) {
+		$q->with('tipo');
+		}
+		])
 		//->where('id_estado' , 1)
-		//->take(50)
-			->orderBy('cuie', 'asc')
-			->get();
+		->take(2)
+		->orderBy('cuie', 'asc')
+		->get();
+		 */
 
 		$data = ['efectores' => $efectores];
 
@@ -830,7 +835,7 @@ class EfectoresController extends Controller {
 						$s->loadView('efectores.tabla', $data);
 					});
 			})
-			->store('xls');
+			->store('xlsx');
 
 		$zip = new ZipArchive();
 		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
