@@ -379,7 +379,11 @@ class TableroController extends AbstractPadronesController {
 				if (isset($observaciones)) {
 					$botones .= ' <i class="fa fa-exclamation-circle" style="color:red" data-toggle="listado-tooltip" data-placement="top" title="Hay mensajes intercambiados"></i>';
 				}
+			} else if (in_array($id_menu, array(17)) && $id_entidad == 1) {
+				$botones = null;
+				}
 			}
+
 		} else {
 			if ($indicadores_full == 'completed') {
 				$botones = ' <button id="'.$id.'" class="btn btn-success btn-xs"> ACEPTADO</button> ';
@@ -679,7 +683,7 @@ class TableroController extends AbstractPadronesController {
 						Rechazo::insert($this->_error);
 					}
 				}
-			} elseif (count($linea) == 1 && $linea[0] == '') {
+			} elseif (count($linea) == 2 && $linea[0] == '') {
 				$this->_error['registro'] = json_encode($linea);
 				$this->_error['motivos']  = '{"registro invalido" : ["Linea en blanco"]}';
 				Rechazo::insert($this->_error);
