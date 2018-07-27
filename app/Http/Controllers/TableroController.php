@@ -683,7 +683,7 @@ class TableroController extends AbstractPadronesController {
 						Rechazo::insert($this->_error);
 					}
 				}
-			} elseif (count($linea) == 2 && $linea[0] == '') {
+			} elseif (count($linea) == 1 && $linea[0] == $lote) {
 				$this->_error['registro'] = json_encode($linea);
 				$this->_error['motivos']  = '{"registro invalido" : ["Linea en blanco"]}';
 				Rechazo::insert($this->_error);
