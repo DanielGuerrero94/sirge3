@@ -15,13 +15,13 @@
 	<div class="image-container set-full-height">
     <!--   Big container   -->
     <div class="container">
-        <div class="row">                    
-                <input id='volver' type='button' style='position:absolute;top:5px;left:5px;' class='btn btn-primary btn-fill btn-wd btn-sm' name='volver' value='INICIO' />            
+        <div class="row">
+                <input id='volver' type='button' style='position:absolute;top:5px;left:5px;' class='btn btn-primary btn-fill btn-wd btn-sm' name='volver' value='INICIO' />
         </div>
 
 	    <div class="col-sm-8 col-sm-offset-2">
-            <!-- Wizard container -->   
-            <div class="wizard-container"> 
+            <!-- Wizard container -->
+            <div class="wizard-container">
                 <form action="registrar" method="post" id="my-form">
                 <div class="card wizard-card ct-wizard-blue" id="wizard">
                 <!-- You can switch "ct-wizard-orange"  with one of the next bright colors: "ct-wizard-blue", "ct-wizard-green", "ct-wizard-orange", "ct-wizard-red"             -->
@@ -75,16 +75,16 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>    
+                            </div>
                         </div>
                         <div class="tab-pane" id="password">
                             <div class="row">
-                                <h4 class="info-text"> Para terminar ingrese una contraseña</h4>  
+                                <h4 class="info-text"> Para terminar ingrese una contraseña</h4>
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <div class="form-group">
                                       <label>Contraseña</label>
-                                      <input type="password" name="pass" class="form-control" id="pass">
+                                      <input type="password" name="pass" class="form-control" id="pass" maxlength="60">
                                       <div id="messages"></div>
                                   </div>
                                 </div>
@@ -108,7 +108,7 @@
                                     <label for="apellido">Apellido</label>
                                     <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido ...">
                                   </div>
-                              </div>                              
+                              </div>
                           </div>
                         </div>
                         <div class="tab-pane" id="account">
@@ -270,7 +270,7 @@
                             <input type='button' class='btn btn-previous btn-fill btn-default btn-wd btn-sm' name='previous' value='Anterior' />
                         </div>
                         <div class="clearfix"></div>
-                    </div>	
+                    </div>
                 </div>
                 {!! csrf_field() !!}
                 </form>

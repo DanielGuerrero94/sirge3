@@ -427,7 +427,7 @@ class TrazadorasController extends AbstractPadronesController {
 			'id_registro'
 		],
 		'Trz_05' => [
-			'codigo_departamento',
+			'departamento',
 			'denominador',
 			'casos',
 			'porcentaje'
@@ -654,12 +654,12 @@ class TrazadorasController extends AbstractPadronesController {
 		'tipo_regla' => 'required|max:25'
 	],
 	$_process_data = [
-		'FILE_DIR'        => '/var/www/html/sirge3/storage/uploads/tablero/',
+		'FILE_DIR'        => '/var/www/html/sirge3/storage/uploads/trazadoras/',
 		'FILE_NAME'       => '',
 		'FILE_PATH'       => '',
 		'TABLE_NAME'      => '',
 		'NUMBER_LOTE'     => '',
-		'LOGIC_DIR'       => '/var/www/html/sirge3/storage/uploads/tablero/process_logic/',
+		'LOGIC_DIR'       => '/var/www/html/sirge3/storage/uploads/trazadoras/process_logic/',
 		'LOGIC_FILE_NAME' => ''
 	];
 
