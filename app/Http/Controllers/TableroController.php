@@ -381,7 +381,7 @@ class TableroController extends AbstractPadronesController {
 				}
 			} else if (in_array($id_menu, array(17)) && $id_entidad == 1) {
 				$botones = null;
-				}
+
 			}
 
 		} else {
