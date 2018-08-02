@@ -223,7 +223,7 @@ $(function() {
                 });
     });
 
-    $('.descargar-indicador').click(function(event){
+    $('.descargar-indicador').on('click', function(event){
         event.preventDefault();
 
         var url = $(this).attr('href') + '/' + '{{$periodo}}' + '/' + '{{$provincia}}';
