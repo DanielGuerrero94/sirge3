@@ -323,7 +323,7 @@ class TableroController extends AbstractPadronesController {
 		$log->accion       = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
-		Excel::create("Indicadores - $provincia - " .date('Y-m-d'), function ($e) use ($data) {
+		Excel::create("Indicadores_".$provincia."_".date('Y-m-d'), function ($e) use ($data) {
 				$e->sheet('Ingresos_SUMAR', function ($s) use ($data) {
 						$s->loadView('tablero.tabla_ingresos', $data);
 						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));
@@ -356,7 +356,10 @@ class TableroController extends AbstractPadronesController {
 						}
 					});
 			})
-			->export('xls');
+			->store('xls');
+
+		return response()->download("../storage/exports/Indicadores_".$provincia."_".date('Y-m-d').".xls");
+
 	}
 
 	/**
@@ -572,10 +575,11 @@ class TableroController extends AbstractPadronesController {
 		$indicador->observaciones = json_encode($observaciones);
 		if ($indicador->save()) {
 
-			$cadena_ugsp = Usuario::where('id_entidad', 2)->where('id_provincia', $indicador->provincia)->whereIn('id_menu', [12, 14, 15])->lists('email');
-
 			if (Auth::user()->id_entidad == 2) {
-				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16])->lists('email');
+
+				$array_responsables = array("01" => 284, "02" => 284, "03" => 305, "04" => 330, "05" => 291, "06" => 305, "07" => 305, "08" => 284, "09" => 330, "10" => 305, "11" => 330, "12" => 291, "13" => 305, "14" => 330, "15" => 266, "16" => 330, "17" => 291, "18" => 291, "19" => 284, "20" => 305, "21" => 330, "22" => 291, "23" => 291, "24" => 266);
+
+				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16])->where('id_usuario', $array_responsables[Auth::user()->id_provincia])->lists('email');
 
 				Mail::send('emails.respuesta-observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_uec) {
 						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
