@@ -382,7 +382,7 @@ class TableroController extends AbstractPadronesController {
 				if (isset($observaciones)) {
 					$botones .= ' <i class="fa fa-exclamation-circle" style="color:red" data-toggle="listado-tooltip" data-placement="top" title="Hay mensajes intercambiados"></i>';
 				}
-			} else if (in_array($id_menu, array(17)) && $id_entidad == 1) {
+			} else if (in_array($id_menu, array(17, 15)) && $id_entidad == 1) {
 				$botones = null;
 
 			}
