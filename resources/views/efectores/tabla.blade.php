@@ -33,9 +33,7 @@
 		<td class="title-sumar">Tabla de Efectores</td>
 	</tr>
 	<tr>
-		<td>Fecha de &uacute;
-ltima actualizaci&oacute;
-n: </td>
+		<td>Fecha de ultima actualizacion: </td>
 		<td>{{date('d/m/Y')}} </td>
 	</tr>
 	<tr>
@@ -108,7 +106,7 @@ n: </td>
 		<tr>
 		@endif
 			<td>{{ $efector->cuie or ''}}</td>
-			<td>{{ $efector->siisa or ''}}</td>
+			<td> <?php echo "'".$efector->siisa?></td>
 			<td>{{ $efector->nombre_efector or ''}}</td>
 			<td>{{ $efector->domicilio or ''}}</td>
 			<td>{{ $efector->codigo_postal or ''}}</td>
