@@ -1,14 +1,7 @@
 
 <style type="text/css">
 
-	/*
-	.row-even {
-		background-color: #abcdef;
-	}
-	*/
-
 	.table-header {
-		font-size: 10px;
 		font-weight: bold;
 		text-align: center;
 		background-color: #00C0Ef;
@@ -16,13 +9,8 @@
 
 	.table-title , .title-sumar{
 		color: #FFFFFF;
-		font-size: 12px;
 		font-weight: bold;
 		background-color: #00C0Ef;
-	}
-
-	td {
-		font-size: 9px;
 	}
 
 </style>
