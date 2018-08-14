@@ -154,9 +154,9 @@
 			<td>{{ $efector->fecha_suscripcion_convenio or ''}}</td>
 			<td>{{ $efector->fecha_inicio_convenio or ''}}</td>
 			<td>{{ $efector->fecha_fin_convenio or ''}}</td>
-			<td>{{ $efector->neo_siisa or ''}}</td>
+			<td> <?php echo "'".$efector->neo_siisa?></td>
 			<td>{{ $efector->neonatal_id_categoria or ''}}</td>
-			<td>{{ $efector->obstetricos_siisa or ''}}</td>
+			<td> <?php echo "'".$efector->obstetricos_siisa?></td>
 			<td>{{ $efector->obstetricos_id_categoria or ''}}</td>
 			<td>{{ $efector->fecha_addenda_hombres or ''}}</td>
 			<td>{{ $efector->email or ''}}</td>
