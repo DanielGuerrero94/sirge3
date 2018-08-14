@@ -1,4 +1,4 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <style type="text/css">
 
 	/*
@@ -11,14 +11,14 @@
 		font-size: 10px;
 		font-weight: bold;
 		text-align: center;
-		background-color: #00c0ef;
+		background-color: #00C0Ef;
 	}
 
 	.table-title , .title-sumar{
-		color: #ffffff;
+		color: #FFFFFF;
 		font-size: 12px;
 		font-weight: bold;
-		background-color: #00c0ef;
+		background-color: #00C0Ef;
 	}
 
 	td {
