@@ -56,6 +56,7 @@
 		<td class="table-header">PERINATAL AC</td>
 		<td class="table-header">SISTEMA HCD</td>
 		<td class="table-header">ID PROVINCIA</td>
+		<td class="table-header">NOMBRE PROVINCIA</td>
 		<td class="table-header">INDEC DEPARTAMENTO</td>
 		<td class="table-header">DEPARTAMENTO</td>
 		<td class="table-header">INDEC LOCALIDAD</td>
@@ -119,6 +120,7 @@
 			<td>{{ $efector->perinatal_ac or ''}}</td>
 			<td>{{ $efector->sistema_hcd or ''}}</td>
 			<td>{{ $efector->id_provincia or ''}}</td>
+			<td>{{ $efector->nombre_provincia or ''}}</td>
 			<td>{{ $efector->indec_departamento or ''}}</td>
 			<td>{{ $efector->departamento or ''}}</td>
 			<td>{{ $efector->indec_localidad or ''}}</td>
