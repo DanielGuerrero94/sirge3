@@ -173,9 +173,9 @@ class TableroController extends AbstractPadronesController {
 
 		try {
 			$unIndicador              = Ingreso::find($r->id);
-			$estado_anterior          = array("numerador" => $unIndicador->numerador, "denominador" => $unIndicador->denominador);
-			$unIndicador->numerador   = $r->numerador;
-			$unIndicador->denominador = $r->denominador;
+			$estado_anterior          = array("nume rador" => $unIndicador->numerador, "denominador" => $unIndicador->denominador);
+			$unIndicador->numerador   = str_replace(array(","), ".", str_replace(array("$", "."), "", $r->numerador));
+			$unIndicador->denominador = str_replace(array(","), ".", str_replace(array("$", "."), "", $r->denominador));
 			$unIndicador->save();
 		} catch (\Exception $e) {
 			return json_encode(["resultado" => 'Ha ocurrido un error']);
@@ -184,7 +184,7 @@ class TableroController extends AbstractPadronesController {
 		$log               = new LogAcciones();
 		$log->id_provincia = $unIndicador->provincia;
 		$log->id_usuario   = Auth::user()->id_usuario;
-		$log->accion       = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => $r->numerador, "denominador" => $r->denominador)));
+		$log->accion       = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => str_replace(array(","), ".", str_replace(array("$", "."), "", $r->numerador)), "denominador" => str_replace(array(","), ".", str_replace(array("$", "."), "", $r->denominador)))));
 		$log->save();
 
 		return 'Se han modificado los datos correctamente.';
