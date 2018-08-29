@@ -45,7 +45,6 @@
 		<td class="table-header">SIGLA CATEGORIZACION</td>
 		<td class="table-header">CATEGORIZACION</td>
 		<td class="table-header">DEPENDENCIA SANITARIA</td>
-		<td class="table-header">COD PROVINCIAL</td>
 		<td class="table-header">INTEGRANTE</td>
 		<td class="table-header">COMPROMISO GESTION</td>
 		<td class="table-header">PRIORIZADO</td>
@@ -109,7 +108,6 @@
 			<td>{{ $efector->sigla_categorizacion or ''}}</td>
 			<td>{{ $efector->categorizacion or ''}}</td>
 			<td>{{ $efector->dependencia_sanitaria or ''}}</td>
-			<td>{{ $efector->cod_provincial or ''}}</td>
 			<td>{{ $efector->integrante or ''}}</td>
 			<td>{{ $efector->compromiso_gestion or ''}}</td>
 			<td>{{ $efector->priorizado or ''}}</td>
