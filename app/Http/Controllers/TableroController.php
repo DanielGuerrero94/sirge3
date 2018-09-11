@@ -77,7 +77,7 @@ class TableroController extends AbstractPadronesController {
 		$this->_year      = 0;
 		$this->_provincia = '';
 		$this->_user      = NULL;
-		$this->_rules     = ['periodo' => 'required|date_format:d/m/Y|before:'.date("Y/m/d").'|after:2004-01-01',
+		$this->_rules     = ['periodo' => 'required|date_format:d/m/Y|before:'.date("Y-m-d").'|after:2004-01-01',
 			'provincia'                   => 'required|max:100',
 			'indicador'                   => 'required|exists:tablero.descripcion,indicador',
 			'numerador'                   => 'required_without:denominador|valor_tablero',
@@ -173,7 +173,7 @@ class TableroController extends AbstractPadronesController {
 
 		try {
 			$unIndicador              = Ingreso::find($r->id);
-			$estado_anterior          = array("nume rador" => $unIndicador->numerador, "denominador" => $unIndicador->denominador);
+			$estado_anterior          = array("numerador" => $unIndicador->numerador, "denominador" => $unIndicador->denominador);
 			$unIndicador->numerador   = str_replace(array(","), ".", str_replace(array("$", "."), "", $r->numerador));
 			$unIndicador->denominador = str_replace(array(","), ".", str_replace(array("$", "."), "", $r->denominador));
 			$unIndicador->save();

@@ -106,6 +106,34 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
+		function isValidDate(dateString) {
+		  var regEx = /^\d{2}\/\d{2}\/\d{4}$/;
+		  if(!dateString.match(regEx)) return false;  // Invalid format
+		  var parts = dateString.split('/');
+		  var correctDateString = parts[1].toString() + '/' + parts[0].toString() + '/' + parts[2].toString();
+		  var d = new Date(correctDateString);
+		  if(Number.isNaN(d.getTime())) return false; // Invalid date
+		  var MyDateString = ('0' + d.getDate()).slice(-2) + '/'
+             + ('0' + (d.getMonth()+1)).slice(-2) + '/'
+             + d.getFullYear();
+		  return MyDateString === dateString;
+		}
+
+		jQuery.validator.addMethod("valid_date", function(value, element) {
+		  	if(  {{ in_array($indicador->indicador,["5.1","5.3"]) ? "true" : "false" }} ){
+		  		if( value ){
+		  			console.log(value);
+		  			return isValidDate(value.toString());
+		  		}
+		  		else{
+			  		return true;
+			  	}
+		  	}
+		  	else{
+		  		return true;
+		  	}
+		}, "Fecha invalida");
+
 		$('.back').click(function(){
 			$.get('{{ $ruta_back }}' , function(data){
 				$('.content-wrapper').html(data);
@@ -123,11 +151,26 @@
 				indicador : {
 					required : true
 				},
+				numerador: {
+					valid_date : true
+				},
+				denominador: {
+					valid_date : true
+				}
 			},
 			messages : {
 				provincia: {
 					required: 'El campo provincia es obligatorio'
-				}
+				},
+				indicador: {
+					required: 'El indicador es obligatorio'
+				},
+				numerador: {
+					valid_date: 'Fecha invalida'
+				},
+				denominador: {
+					valid_date: 'Fecha invalida'
+				},
 			},
 			submitHandler : function(form){
 				$('#compromiso').removeAttr('disabled');
