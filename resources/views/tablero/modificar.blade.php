@@ -119,10 +119,14 @@
 		  return MyDateString === dateString;
 		}
 
-		jQuery.validator.addMethod("valid_date", function(value, element) {
+		function hasNoWrongCharacters(value) {
+		  var regEx = /^[0-9]+[\.]{0,1}[0-9]+$/;
+		  return value.match(regEx);
+		}
+
+		jQuery.validator.addMethod("valid_value", function(value, element) {
 		  	if(  {{ in_array($indicador->indicador,["5.1","5.3"]) ? "true" : "false" }} ){
 		  		if( value ){
-		  			console.log(value);
 		  			return isValidDate(value.toString());
 		  		}
 		  		else{
@@ -130,9 +134,14 @@
 			  	}
 		  	}
 		  	else{
-		  		return true;
+		  		if( value ){
+		  			return hasNoWrongCharacters(value.toString());
+		  		}
+		  		else{
+			  		return true;
+			  	}
 		  	}
-		}, "Fecha invalida");
+		}, "Valor invalido");
 
 		$('.back').click(function(){
 			$.get('{{ $ruta_back }}' , function(data){
@@ -152,10 +161,10 @@
 					required : true
 				},
 				numerador: {
-					valid_date : true
+					valid_value : true
 				},
 				denominador: {
-					valid_date : true
+					valid_value : true
 				}
 			},
 			messages : {
