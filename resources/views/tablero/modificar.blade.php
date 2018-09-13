@@ -120,12 +120,12 @@
 		}
 
 		function hasNoWrongCharacters(value) {
-		  var regEx = /^[0-9]+[\.]{0,1}[0-9]+$/;
+		  var regEx = /^[0-9]+(\.[0-9]{1,3})?$/;
 		  return value.match(regEx);
 		}
 
 		jQuery.validator.addMethod("valid_value", function(value, element) {
-		  	if(  {{ in_array($indicador->indicador,["5.1","5.3"]) ? "true" : "false" }} ){
+		  	if(  {{ in_array(str_replace(array("."), "|", $indicador->indicador),["5|1","5|3"]) ? "true" : "false" }} ){
 		  		if( value ){
 		  			return isValidDate(value.toString());
 		  		}
