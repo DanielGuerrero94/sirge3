@@ -83,11 +83,16 @@
 			},
 			submitHandler : function(form){
 				$.get('main-tablero/' + $('#periodo').val() + '/' + $('#provincia').val(), function(data){
-					if(data != 'error'){
+					if(data != 1 && data != 2){
 						$('.content-wrapper').html(data);
 					}
 					else{
-						$('#modal-text').html("No existe ningún indicador en el periodo");
+						if(data == 1){
+							$('#modal-text').html("No puede visualizar este periodo");
+						}
+						else{
+							$('#modal-text').html("El periodo no tiene datos cargados");
+						}
 						$('.modal').modal();
 						$('.modal').on('hidden.bs.modal', function (e) {
 							$.get('tablero' , function(data){

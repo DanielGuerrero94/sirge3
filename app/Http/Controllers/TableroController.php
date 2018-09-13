@@ -106,7 +106,20 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function main($periodo, $provincia) {
 
-		if (Ingreso::where('periodo', $periodo)->count() == 0 && Auth::user()->id_menu != 1) {return 'error';}
+		if (Ingreso::join('tablero.administracion', function ($join) {
+					$join->on('tablero.administracion.periodo', '=', 'tablero.ingresos.periodo');
+					$join->on('tablero.administracion.provincia', '=', 'tablero.ingresos.provincia');
+				})
+				->where('tablero.ingresos.provincia', $provincia)
+			->where('tablero.ingresos.periodo', $periodo)
+				->count() == 0) {
+			if (!in_array(Auth::user()->id_menu, [1, 2, 3, 5, 11, 12, 16])) {
+				return 1;
+			}
+			if (Ingreso::where('periodo', $periodo)->where('provincia', $provincia)->count() == 0) {
+				return 2;
+			}
+		}
 
 		$indicadores_full = $this->indicadoresFull($periodo, $provincia);
 
