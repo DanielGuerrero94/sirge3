@@ -227,8 +227,9 @@ $(function() {
         event.preventDefault();
 
         var url = $(this).attr('href') + '/' + '{{$periodo}}' + '/' + '{{$provincia}}';
+        console.log(url);
 
-        location.href = url;
+        window.location=url;
     });
 
 });
