@@ -15,7 +15,7 @@
 						  <a class="rechazar-indicador btn btn-danger" href="indicadores-rechazar"><i class="fa fa-pencil-square-o"></i> Rechazar</a>
                         </div>
                         <div data-toggle="descargar-tooltip" data-placement="bottom" style="display:inline-block;">
-                            <a class="descargar-indicador btn btn-warning" href="listado-descargar-tabla"><i class="fa fa-download"></i> Descargar tabla</a>
+                            <a class="descargar-indicador btn btn-warning" href="listado-descargar-tabla/{{$periodo}}/{{$provincia}}"><i class="fa fa-download"></i> Descargar tabla</a>
                         </div>
                     </div>
 				@endif
@@ -222,16 +222,6 @@ $(function() {
                     }
                 });
     });
-
-    $('.descargar-indicador').on('click', function(event){
-        event.preventDefault();
-
-        var url = $(this).attr('href') + '/' + '{{$periodo}}' + '/' + '{{$provincia}}';
-        console.log(url);
-
-        window.location=url;
-    });
-
 });
 </script>
 @endsection
