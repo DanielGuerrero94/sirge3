@@ -113,7 +113,7 @@ class TableroController extends AbstractPadronesController {
 				->where('tablero.ingresos.provincia', $provincia)
 			->where('tablero.ingresos.periodo', $periodo)
 				->count() == 0) {
-			if (!in_array(Auth::user()->id_menu, [1, 2, 3, 5, 11, 12, 16])) {
+			if (!in_array(Auth::user()->id_menu, [1, 2, 3, 5, 11, 12, 14, 16])) {
 				return 1;
 			}
 			if (Ingreso::where('periodo', $periodo)->where('provincia', $provincia)->count() == 0) {
