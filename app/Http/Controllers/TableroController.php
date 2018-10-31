@@ -1460,7 +1460,7 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return datatable
 	 */
-	public function unlockIndicator(int $id) {
+	public function unlockIndicator($id) {
 
 		try {
 			$indicator          = Ingreso::find($id);
