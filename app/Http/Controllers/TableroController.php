@@ -233,7 +233,7 @@ class TableroController extends AbstractPadronesController {
 					}
 				}
 				try {
-					return (empty($result->numerador) && !is_numeric($result->numerador))?null:('$ '.number_format($result->numerador, 2, ',', '.'));
+					return (empty($result->numerador) && !is_numeric($result->numerador))?null:('$ '.number_format($result->numerador, 0, ',', '.'));
 				} catch (\Exception $e) {
 					return $result->numerador;
 				}
@@ -245,7 +245,7 @@ class TableroController extends AbstractPadronesController {
 			function ($result) {
 				if (in_array($result->indicador, ['5|1', '5|3'])) {
 					return (empty($result->denominador) && !is_numeric($result->denominador))?null:($result->denominador);
-				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4', '5|4', '5|5'])) {
+				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4', '5|4'])) {
 					try {
 						return (empty($result->denominador) && !is_numeric($result->denominador))?null:(number_format($result->denominador, 0, ',', '.'));
 					} catch (\Exception $e) {
@@ -253,7 +253,7 @@ class TableroController extends AbstractPadronesController {
 					}
 				}
 				try {
-					return (empty($result->denominador) && !is_numeric($result->denominador))?null:('$ '.number_format($result->denominador, 2, ',', '.'));
+					return (empty($result->denominador) && !is_numeric($result->denominador))?null:('$ '.number_format($result->denominador, 0, ',', '.'));
 				} catch (\Exception $e) {
 					return $result->denominador;
 				}
