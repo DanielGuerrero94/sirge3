@@ -87,7 +87,7 @@ $(function() {
         processing: true,
         serverSide: true,
         sortable: true,
-        pageLength: 17,
+        pageLength: 18,
         dataType: 'json',
         ajax : {
                 url: '{{url("/tablero-listado-table")}}/'+ '{{$periodo}}' + '/' + '{{$provincia}}'
