@@ -140,6 +140,49 @@ $(function() {
         	});
     });
 
+    $('#tablero-table').on('click' , '.bloquear-indicador' , function(){
+
+        var id = $(this).attr('id');
+        if($("#"+id+".bloquear-indicador").hasClass('btn-danger')){
+
+            $.get('tablero-bloquear-indicador/' + id , function(data){
+                if(!data){
+                    if($('.modal').hasClass('modal-success')){
+                        $('.modal').removeClass('modal-success').addClass('modal-danger');
+                    }
+                        $('#modal-text').html('<b> No se ha logrado efectuar el bloqueo del indicador en sistema. Por favor contactarse con un operador </b>');
+                        $('.modal').modal();
+                }
+                else{
+                    $("#"+id+".modificar-indicador").attr('disabled', true);
+                    $("#"+id+".bloquear-indicador").removeClass('btn-danger');
+                    $("#"+id+".bloquear-indicador").addClass('btn-success');
+                    $("#"+id+".bloquear-indicador").text("DESBLOQUEAR");
+                }
+            });
+
+        }
+        else{
+            $.get('tablero-desbloquear-indicador/' + id , function(data){
+                if(!data){
+                    if($('.modal').hasClass('modal-success')){
+                        $('.modal').removeClass('modal-success').addClass('modal-danger');
+                    }
+                        $('#modal-text').html('<b> No se ha logrado efectuar el desbloqueo del indicador en sistema. Por favor contactarse con un operador </b>');
+                        $('.modal').modal();
+                }
+                else{
+                    $("#"+id+".modificar-indicador").removeAttr('disabled');
+                    $("#"+id+".bloquear-indicador").removeClass('btn-success');
+                    $("#"+id+".bloquear-indicador").addClass('btn-danger');
+                    $("#"+id+".bloquear-indicador").text("BLOQUEAR");
+                }
+            });
+
+
+        }
+    });
+
     $('#tablero-table').on('click' , '.observar-indicador' , function(){
     	console.log($(this).attr('id'));
 

@@ -530,6 +530,8 @@ Route::post('aceptar-periodo', 'TableroController@aceptarPeriodo');
 Route::post('rechazar-periodo', 'TableroController@rechazarPeriodo');
 Route::get('tablero-rechazados-table', 'TableroController@listadoRechazadosTabla');
 Route::get('listado-descargar-tabla/{periodo}/{provincia}', 'TableroController@excelListadoTabla');
+Route::get('tablero-bloquear-indicador/{id}', 'TableroController@blockIndicator');
+Route::get('tablero-desbloquear-indicador/{id}', 'TableroController@unlockIndicator');
 Route::get('rechazados-descargar-tabla', 'TableroController@excelRechazadosTabla');
 Route::get('rechazados-tablero', 'TableroController@rechazados');
 Route::get('select-graficos-tablero', 'TableroController@getSelectGraficosTablero');

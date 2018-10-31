@@ -385,11 +385,17 @@ class TableroController extends AbstractPadronesController {
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
 			if (in_array($id_menu, array(12, 14)) && $id_entidad == 2) {
-				$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				if (Ingreso::find($id)->blocked) {
+					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				} else {
+					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				}
+
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
 			} else if (in_array($id_menu, array(1, 2, 5, 11, 16)) && $id_entidad == 1) {
 				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
+				$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-danger btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Bloquear modificacion del indicador"> BLOQUEAR</button> ';
 				if (isset($observaciones)) {
 					$botones .= ' <i class="fa fa-exclamation-circle" style="color:red" data-toggle="listado-tooltip" data-placement="top" title="Hay mensajes intercambiados"></i>';
 				}
@@ -1225,6 +1231,7 @@ class TableroController extends AbstractPadronesController {
 
 		$indicador = $this->datosListadoTabla($periodo, $id_provincia);
 		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
+
 		$collection = collect($indicador->get());
 
 		$tipo_indicador = Detail::find($sigla_indicador);
@@ -1275,6 +1282,8 @@ class TableroController extends AbstractPadronesController {
 
 		$indicador = $this->datosListadoTabla($periodo, $provincia);
 		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
+		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
+
 		$indicador = $indicador->get();
 		$i         = 0;
 
@@ -1333,7 +1342,7 @@ class TableroController extends AbstractPadronesController {
 		$interval[] = $dt->format('Y-m');
 
 		for ($i = 0; $i < 6; $i++) {
-			$dt->modify('-1 month');
+			$dt->modify('first day of last month');
 			$interval[] = $dt->format('Y-m');
 		}
 		return $interval;
@@ -1425,5 +1434,41 @@ class TableroController extends AbstractPadronesController {
 
 		$acciones = LogAcciones::with(['provincias', 'usuario'])->orderBy('id', 'desc')->get();
 		return Datatables::of(collect($acciones))->make(true);
+	}
+
+	/**
+	 * Bloquea la modificación de un indicador.
+	 * @param $id
+	 *
+	 * @return datatable
+	 */
+	public function blockIndicator(int $id) {
+
+		try {
+			$indicator          = Ingreso::find($id);
+			$indicator->blocked = TRUE;
+			$indicator->save();
+			return 1;
+		} catch (Exception $e) {
+			return 0;
+		}
+	}
+
+	/**
+	 * Desbloquea la modificación de un indicador.
+	 * @param $id
+	 *
+	 * @return datatable
+	 */
+	public function unlockIndicator(int $id) {
+
+		try {
+			$indicator          = Ingreso::find($id);
+			$indicator->blocked = FALSE;
+			$indicator->save();
+			return 1;
+		} catch (Exception $e) {
+			return 0;
+		}
 	}
 }
