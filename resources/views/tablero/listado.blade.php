@@ -27,8 +27,8 @@
 				            <th>Periodo</th>
 				            <th>Provincia</th>
 				            <th>Indicador</th>
-				            <th>Numerador</th>
-				            <th>Denominador</th>
+				            <th>Numerador (A)</th>
+				            <th>Denominador (B)</th>
 				            <th>Estado</th>
 				            <th>Accion</th>
 				        </tr>
