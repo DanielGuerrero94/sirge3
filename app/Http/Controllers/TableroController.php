@@ -427,7 +427,7 @@ class TableroController extends AbstractPadronesController {
 
 			if (in_array($id_menu, array(12, 14)) && $id_entidad == 2) {
 				if (Ingreso::find($id)->blocked) {
-					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				} else {
 					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				}
@@ -435,14 +435,12 @@ class TableroController extends AbstractPadronesController {
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
 			} else if (in_array($id_menu, array(1, 2, 5, 11, 16)) && $id_entidad == 1) {
 				if (Ingreso::find($id)->blocked) {
-					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
-				} else {
-					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
-				}
-				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
-				if (Ingreso::find($id)->blocked) {
+					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
 					$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-success btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Desbloquear modificacion del indicador"> DESBLOQUEAR</button> ';
 				} else {
+					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
 					$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-danger btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Bloquear modificacion del indicador"> BLOQUEAR</button> ';
 				}
 
