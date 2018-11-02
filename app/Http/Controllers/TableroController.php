@@ -124,8 +124,6 @@ class TableroController extends AbstractPadronesController {
 
 		$alertas = $this->checkRelations($indicators);
 
-		var_dump(Ingreso::find(1212233)->blocked);
-
 		$indicadores_full = $this->indicadoresFull($periodo, $provincia);
 
 		$data = [
@@ -428,7 +426,6 @@ class TableroController extends AbstractPadronesController {
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
 			if (in_array($id_menu, array(12, 14)) && $id_entidad == 2) {
-				Log::info(Ingreso::find($id)->blocked);
 				if (Ingreso::find($id)->blocked) {
 					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				} else {
