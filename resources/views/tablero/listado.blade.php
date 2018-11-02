@@ -44,7 +44,7 @@
 	</div>
 </div>
 </div>
-<div class="modal modal-success">
+<div class="modal modal-warning">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -53,6 +53,9 @@
       </div>
       <div class="modal-body">
         <p id="modal-text"></p>
+            @foreach ($alertas as $key => $alert)
+                <p id="alert"> {{$alert}} </p>
+            @endforeach
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" data-dismiss="modal">Cerrar</button>
@@ -69,6 +72,7 @@ $(function() {
 
 	var table;
 	var url = '';
+    var alerts = '';
 
 	$('[data-toggle="aceptar-tooltip"]').tooltip();
     $('[data-toggle="rechazar-tooltip"]').tooltip();
@@ -79,6 +83,16 @@ $(function() {
 	if({{ $user->id_area }} == 19 && {{ $user->id_entidad }}  == 1 && ('{{ $indicadores_full }}' != 'completed' && '{{ $indicadores_full }}' != 'rejected')){
 		$('.aceptar-indicador, .rechazar-indicador').show();
 	}
+
+    if($('#alert')[0]){
+        $('.modal').modal();
+    }
+
+    $('.modal').on('click','.close',function(){
+        if($('.modal').hasClass('modal-warning')){
+            $('.modal').removeClass('modal-warning').addClass('modal-success');
+        }
+    });
 
 	//url = 'tablero-listado-table/{{$periodo}}/{{$provincia}}';
 
@@ -128,7 +142,6 @@ $(function() {
             $('.content-wrapper').html(data);
         });
     });
-
 
 
     $('#tablero-table').on('click' , '.modificar-indicador' , function(){

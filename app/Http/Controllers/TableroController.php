@@ -105,7 +105,6 @@ class TableroController extends AbstractPadronesController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function main($periodo, $provincia) {
-
 		if (Ingreso::join('tablero.administracion', function ($join) {
 					$join->on('tablero.administracion.periodo', '=', 'tablero.ingresos.periodo');
 					$join->on('tablero.administracion.provincia', '=', 'tablero.ingresos.provincia');
@@ -121,12 +120,19 @@ class TableroController extends AbstractPadronesController {
 			}
 		}
 
+		$indicators = Ingreso::select('id', 'periodo', 'provincia', DB::raw("replace(indicador,'.','|') as indicador"), 'numerador', 'denominador')->where('provincia', $provincia)->where('periodo', $periodo)->get()->toArray();
+
+		$alertas = $this->checkRelations($indicators);
+
+		var_dump(Ingreso::find(1212233)->blocked);
+
 		$indicadores_full = $this->indicadoresFull($periodo, $provincia);
 
 		$data = [
 			'page_title'       => 'Ingresos: Tablero de Control',
 			'periodo'          => $periodo,
 			'provincia'        => $provincia,
+			'alertas'          => $alertas,
 			'user'             => Auth::user(),
 			'indicadores_full' => $indicadores_full
 		];
@@ -158,6 +164,43 @@ class TableroController extends AbstractPadronesController {
 		}
 
 		return $indicadores_full;
+	}
+
+	/**
+	 * Busca el no cumplimiento de alguna relacion existente y devuelve un objeto alerta
+	 *
+	 * @return $alert
+	 */
+	public function checkRelations($indicators) {
+
+		$alert = [];
+
+		if ($this->valueFromArrayIndicatorB($indicators, "2|2") != ($this->valueFromArrayIndicatorB($indicators, "2|3")+$this->valueFromArrayIndicatorB($indicators, "2|4"))) {
+			$alert["relation_2|2|b"] = "La relación del <b>denominador</b> en el indicador 2.2 no es la suma del 2.3 y 2.4";
+		}
+		if ($this->valueFromArrayIndicatorA($indicators, "2|2") != ($this->valueFromArrayIndicatorA($indicators, "2|3")+$this->valueFromArrayIndicatorA($indicators, "2|4"))) {
+			$alert["relation_2|2|a"] = "La relación del <b>numerador</b> en el indicador 2.2 no es la suma del 2.3 y 2.4";
+		}
+
+		return $alert;
+	}
+
+	/**
+	 * Devuelve el valor del indicador A
+	 *
+	 * @return Integer
+	 */
+	public function valueFromArrayIndicatorA($row, $indicator) {
+		return $row[array_search($indicator, array_column($row, 'indicador'))]["numerador"];
+	}
+
+	/**
+	 * Devuelve el valor del indicador B
+	 *
+	 * @return Integer
+	 */
+	public function valueFromArrayIndicatorB($row, $indicator) {
+		return $row[array_search($indicator, array_column($row, 'indicador'))]["denominador"];
 	}
 
 	/**
@@ -385,17 +428,27 @@ class TableroController extends AbstractPadronesController {
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
 			if (in_array($id_menu, array(12, 14)) && $id_entidad == 2) {
+				Log::info(Ingreso::find($id)->blocked);
 				if (Ingreso::find($id)->blocked) {
-					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				} else {
 					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				}
 
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
 			} else if (in_array($id_menu, array(1, 2, 5, 11, 16)) && $id_entidad == 1) {
-				$botones = ' <button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				if (Ingreso::find($id)->blocked) {
+					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				} else {
+					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+				}
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
-				$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-danger btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Bloquear modificacion del indicador"> BLOQUEAR</button> ';
+				if (Ingreso::find($id)->blocked) {
+					$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-success btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Desbloquear modificacion del indicador"> DESBLOQUEAR</button> ';
+				} else {
+					$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-danger btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Bloquear modificacion del indicador"> BLOQUEAR</button> ';
+				}
+
 				if (isset($observaciones)) {
 					$botones .= ' <i class="fa fa-exclamation-circle" style="color:red" data-toggle="listado-tooltip" data-placement="top" title="Hay mensajes intercambiados"></i>';
 				}
