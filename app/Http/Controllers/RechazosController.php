@@ -276,7 +276,6 @@ class RechazosController extends Controller {
 			$new_e->clase  = __CLASS__;
 			$new_e->metodo = __FUNCTION__;
 			$new_e->error  = $e->getMessage();
-			$new_e->timestamps();
 			$new_e->save();
 		}
 
