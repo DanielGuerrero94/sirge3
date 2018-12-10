@@ -36,7 +36,7 @@ use Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Illuminate\Http\Request;
-use Log;
+
 use Mail;
 
 use ZipArchive;
@@ -665,23 +665,16 @@ class EfectoresController extends Controller {
 			return 'Ha fallado la actualización de datos';
 		}
 
-		Log::info($r->addenda_perinatal);
-
 		if (strlen($r->addenda_perinatal)) {
 			try {
 				$pp = Ppac::findOrFail($ef->id_efector);
 			} catch (ModelNotFoundException $e) {
 				$pp             = new Ppac;
 				$pp->id_efector = $ef->id_efector;
-
-				Log::info($ef->id_efector);
 			}
-			$pp->addenda_perinatal = $r->addenda_perinatal;
-			Log::info($pp->addenda_perinatal);
+			$pp->addenda_perinatal       = $r->addenda_perinatal;
 			$pp->fecha_addenda_perinatal = $r->fecha_addenda_perinatal <> ''?$r->fecha_addenda_perinatal:null;
-			Log::info($pp->fecha_addenda_perinatal);
-			$pp->perinatal_ac = $r->perinatal_ac;
-			Log::info($pp->perinatal_ac);
+			$pp->perinatal_ac            = $r->perinatal_ac;
 			if ($pp->save()) {
 				$update = true;
 			} else {
@@ -835,7 +828,7 @@ class EfectoresController extends Controller {
 						$s->loadView('efectores.tabla', $data);
 					});
 			})
-			->store('xlsx');
+			->download('xlsx');
 
 		$zip = new ZipArchive();
 		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
