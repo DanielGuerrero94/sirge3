@@ -828,7 +828,7 @@ class EfectoresController extends Controller {
 						$s->loadView('efectores.tabla', $data);
 					});
 			})
-			->download('xlsx');
+			->store('xlsx');
 
 		$zip = new ZipArchive();
 		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
