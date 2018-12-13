@@ -41,7 +41,9 @@ class TestCommand extends Command {
 		//app("App\Http\Controllers\DatawarehouseController")->ejecutarTodas();
 		//app("App\Http\Controllers\LotesController")->eliminarArchivosAntiguos();
 		//app("App\Http\Controllers\WebServicesController")->cruzarBeneficiariosConSiisa();
-		app("App\Http\Controllers\RechazosController")->generarRechazosLotesNuevos();
+		//app("App\Http\Controllers\RechazosController")->generarRechazosLotesNuevos();
+		app("App\Http\Controllers\EfectoresController")->refrescarTabla();
+		app("App\Http\Controllers\EfectoresController")->generarTabla();
 
 		/*
 		$all = DW_FC001::get();
