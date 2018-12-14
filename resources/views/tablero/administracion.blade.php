@@ -45,7 +45,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Estado de cargas del tablero en periodo</h2>
 				<div class="box-tools pull-right">
-					<a class="descargar btn btn-warning" onclick="location.href='tablero-administracion-descargar/{{$periodo}}/'+$('#provincia').val()"><i class="fa fa-download"></i> Descargar tabla</a>
+					<a class="descargar btn btn-warning" onclick="location.href='tablero-administracion-descargar/'+$('#provincia').val()+'/{{$periodo}}'><i class="fa fa-download"></i> Descargar tabla</a>
 				</div>
 			</div>
 

@@ -525,7 +525,7 @@ Route::post('aceptar-indicadores', 'TableroController@aceptar');
 Route::post('rechazar-indicadores', 'TableroController@rechazar');
 Route::get('administrar-tablero', 'TableroController@administracion');
 Route::get('tablero-administracion-table/{provincia}/{periodo}', 'TableroController@listadoAdministracionTabla');
-Route::get('tablero-administracion-descargar/{provincia}/{periodo?}', 'TableroController@excelAdministracionTabla');
+Route::get('tablero-administracion-descargar/{provincia}/{periodo}', 'TableroController@excelAdministracionTabla');
 Route::post('aceptar-periodo', 'TableroController@aceptarPeriodo');
 Route::post('rechazar-periodo', 'TableroController@rechazarPeriodo');
 Route::get('tablero-rechazados-table', 'TableroController@listadoRechazadosTabla');

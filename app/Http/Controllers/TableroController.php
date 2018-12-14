@@ -1124,7 +1124,7 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return excel
 	 */
-	public function excelAdministracionTabla($periodo, $provincia) {
+	public function excelAdministracionTabla($provincia, $periodo) {
 
 		Log::info($provincia);
 
