@@ -989,7 +989,8 @@ class TableroController extends AbstractPadronesController {
 			'page_title' => 'Administrar periodo',
 			'periodo'    => date('Y-m', strtotime("now")),
 			'user'       => Auth::user(),
-			'provincias' => Provincia::all()
+			'provincias' => Provincia::all(),
+			'provincia'  => $provincia
 		];
 		return view('tablero.administracion', $data);
 	}
@@ -1088,7 +1089,7 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return view
 	 */
-	public function listadoAdministracionTabla($provincia, $periodo = null) {
+	public function listadoAdministracionTabla($provincia, $periodo) {
 
 		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);
 
@@ -1697,7 +1698,6 @@ class TableroController extends AbstractPadronesController {
 			});
 
 		$data = ['historico' => $results, 'periodo' => $periodo, 'indicador' => $indicador, 'provincia' => $provincia];
-		$name = 'Ingresos en $periodo - Tablero de Control SUMAR';
 
 		return Excel::create("Historico_".$provincia."_".$periodo."_".str_replace("|", ".", $indicador)."_".date('Y-m-d'), function ($e) use ($data) {
 				$e->sheet('Historico_SUMAR', function ($s) use ($data) {

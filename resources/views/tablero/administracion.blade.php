@@ -1,7 +1,7 @@
 @extends('content')
 @section('content')
 <div class="row">
-	<form class="parametros-tablero">
+	<form class="parametros-tablero" method="get" action="tablero-administracion-table">
 		<div class="col-md-8 col-md-offset-2">
 			<div class="box box-info">
 				<div class="box-header">
@@ -16,8 +16,8 @@
 	  					<div class="col-sm-9">
 	    					<select name="provincia" id="provincia" class="form-control">
 	    					<option value="99" selected>TODAS</option>
-	    						@foreach ($provincias as $provincia)
-	    						<option value="{{$provincia->id_provincia}}">{{$provincia->descripcion}}</option>
+	    						@foreach ($provincias as $a_provincia)
+	    						<option value="{{$a_provincia->id_provincia}}">{{$a_provincia->descripcion}}</option>
 	    						@endforeach
 	    					</select>
 	  					</div>
@@ -45,7 +45,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Estado de cargas del tablero en periodo</h2>
 				<div class="box-tools pull-right">
-					<a class="descargar btn btn-warning" href="tablero-administracion-descargar"><i class="fa fa-download"></i> Descargar tabla</a>
+					<a class="descargar btn btn-warning" onclick="location.href='tablero-administracion-descargar/{{$periodo}}/'+$('#provincia').val()"><i class="fa fa-download"></i> Descargar tabla</a>
 				</div>
 			</div>
 
@@ -88,7 +88,6 @@
 $( document ).ready(function() {
 
 	var table;
-	var url = '';
 	var periodo = '';
 
 	$('#periodo').inputmask({
@@ -98,9 +97,7 @@ $( document ).ready(function() {
 
 	table = datatable();
 
-    $('.send').click(function(){
-
-		$('.parametros-tablero').validate({
+	$('.parametros-tablero').validate({
 			rules : {
 				provincia : {
 					required : true
@@ -108,41 +105,25 @@ $( document ).ready(function() {
 				periodo : {
 					required : true
 				}
-			},
-			submitHandler : function(form){
-					table.clear();
-    				table = datatable();
-    				table.draw();
-				}
-			});
+			}
 	});
 
-	$('.descargar').click(function(event){
-		event.preventDefault();
+    $('.parametros-tablero').on('submit', function(event){
+    	event.preventDefault();
 
-		var url = $(this).attr('href') + '/' + $("#provincia").val() + '/' + ($('#periodo').val().length > 0 ? $('#periodo').val() : '9999-99');
-
-		$.ajax({
-			url: url,
-			type: 'GET'
-		})
-		.done(function() {
-			console.log("success");
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-			console.log("complete");
-		});
+    	if($("#periodo").val() != ""){
+    		table.destroy();
+			table = datatable();
+			table.draw();
+    	}
 	});
 
 	$('.tablero-historico').on('click' , function(event){
 		event.preventDefault();
     	console.log($(this).attr('href'));
 
-    	var href = $(this).attr('href');
-        	$.get(href , function(data){
+    	var v_href = $(this).attr('href');
+        	$.get(v_href , function(data){
         		$('.content-wrapper').html(data);
         	});
     });
@@ -199,8 +180,9 @@ function datatable(){
 				        paging: false,
 				        dataType: 'json',
 				        ajax : {
-				        		url: '{{url("/tablero-administracion-table")}}/'+ $("#provincia").val() + '/' + ($('#periodo').val().length > 0 ? $('#periodo').val() : '9999-99')
-				    	},
+				        	url: '{{url("/tablero-administracion-table")}}/'+ $("#provincia").val() + '/' + $("#periodo").val()
+
+				        },
 				        columns: [
 				            { data: 'periodo', orderable:false},
 				            { data: 'provincia_descripcion'},
