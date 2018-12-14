@@ -33,9 +33,7 @@
 		<td class="title-sumar">Administracion Tablero de Control</td>
 	</tr>
 	<tr>
-		<td>Fecha de &uacute;
-ltima actualizaci&oacute;
-n: </td>
+		<td>Fecha de ultima actualizacion: </td>
 		<td>{{date('d/m/Y')}} </td>
 	</tr>
 	<tr>

@@ -1141,7 +1141,7 @@ class TableroController extends AbstractPadronesController {
 		$log->accion       = json_encode(array("accion" => "Descarga de excel de administracion en periodo ".$periodo." provincia ".$provincia, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
-		Excel::create($name, function ($e) use ($data) {
+		return Excel::create($name, function ($e) use ($data) {
 				$e->sheet('Administracion_SUMAR', function ($s) use ($data) {
 						$s->loadView('tablero.tabla_administracion', $data);
 						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));
