@@ -1147,7 +1147,7 @@ class TableroController extends AbstractPadronesController {
 						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));
 					});
 			})
-			->export('xls');
+			->download('xls');
 	}
 
 	/**
