@@ -1001,7 +1001,7 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return array
 	 */
-	public function datosAdministracionTabla($provincia, $periodo = null) {
+	public function datosAdministracionTabla($provincia, $periodo) {
 
 		$arrayreturns = [];
 		$finalreturn  = [];
@@ -1124,7 +1124,9 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return excel
 	 */
-	public function excelAdministracionTabla($provincia, $periodo = null) {
+	public function excelAdministracionTabla($periodo, $provincia) {
+
+		Log::info($provincia);
 
 		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);
 		$data         = ['tablero' => collect($arrayreturns)];
