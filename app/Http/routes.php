@@ -538,6 +538,10 @@ Route::get('select-graficos-tablero', 'TableroController@getSelectGraficosTabler
 Route::get('graficos-tablero/{periodo}/{provincia}/{indicador}', 'TableroController@getGraficoTablero');
 Route::get('log-acciones', 'TableroController@getLogAcciones');
 Route::get('tablero-log-acciones-table', 'TableroController@listadoAcciones');
+Route::get('tablero-filtros-historico/{periodo?}/{provincia?}/{indicador?}', 'TableroController@mainHistorico');
+Route::get('tablero-listado-historico-view/{periodo}/{provincia}/{indicador}', 'TableroController@listadoHistoricoView');
+Route::get('tablero-listado-historico-table/{periodo}/{provincia}/{indicador}', 'TableroController@listadoHistoricoTable');
+Route::get('listado-historico-descargar/{periodo}/{provincia}/{indicador}', 'TableroController@excelHistorico');
 
 /**
  *  SIGOP REPORTES (REDIRECT)

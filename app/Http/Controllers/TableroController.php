@@ -330,14 +330,14 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function datosListadoTabla($periodo, $provincia) {
 
-		$results = Ingreso::select('id', 'periodo', 'provincia', DB::raw("replace(indicador,'.','|') as indicador"), 'numerador', 'denominador', 'observaciones')
+		$results = Ingreso::select('tablero.ingresos.id', 'tablero.ingresos.periodo', 'tablero.ingresos.provincia', DB::raw("replace(indicador,'.','|') as indicador"), 'numerador', 'denominador', 'observaciones')
 			->with(['provincias']);
 
 		if ($provincia != 99) {
-			$results->where('provincia', $provincia);
+			$results->where('tablero.ingresos.provincia', $provincia);
 		}
 		if ($periodo != '9999-99') {
-			$results->where('periodo', $periodo);
+			$results->where('tablero.ingresos.periodo', $periodo);
 		}
 
 		$results->orderBy('periodo', 'desc')
@@ -928,8 +928,6 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function aceptar(Request $r) {
 
-		Log::info($r->all());
-
 		if (Administracion::where('periodo', $r->periodo)->where('provincia', $r->provincia)->where('estado', 3)->count() > 0) {
 			response()->json(array("status" => "error", "msj" => "Ya fueron aceptados los indicadores de la provincia en el periodo"));
 		}
@@ -1005,6 +1003,7 @@ class TableroController extends AbstractPadronesController {
 	public function datosAdministracionTabla($provincia, $periodo = null) {
 
 		$arrayreturns = [];
+		$finalreturn  = [];
 		try {
 
 			$results = DB::table('tablero.ingresos as ing1')
@@ -1035,7 +1034,7 @@ class TableroController extends AbstractPadronesController {
 				->leftjoin('sistema.usuarios', 'tablero.administracion.usuario_accion', '=', 'sistema.usuarios.id_usuario')
 				->where('estado', '3');
 
-			if ($provincia != 0) {
+			if ($provincia != '99') {
 				$results->where('ing1.provincia', $provincia);
 				$rechazados->where('provincia', $provincia);
 			}
@@ -1054,6 +1053,9 @@ class TableroController extends AbstractPadronesController {
 
 			foreach ($results as $item) {
 
+				//$var_provincia = substr_replace($item->ingresos_provincia, "_", 1, 0);
+
+				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['incompleto']            = false;
 				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['provincia_descripcion'] = $item->provincia_descripcion;
 				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['id_ingreso']            = $item->id_ingreso;
 				$arrayreturns[$item->ingresos_periodo][$item->ingresos_provincia]['periodo']               = $item->ingresos_periodo;
@@ -1071,13 +1073,13 @@ class TableroController extends AbstractPadronesController {
 				}
 			}
 
-			$arrayreturns = $this->prepareArray($arrayreturns);
+			$finalreturn = $this->prepareArray($arrayreturns);
 
 		} catch (\Exception $e) {
 			logger($e->getMessage());
 		}
 
-		return $arrayreturns;
+		return $finalreturn;
 	}
 
 	/**
@@ -1098,16 +1100,19 @@ class TableroController extends AbstractPadronesController {
 
 				$botones = '';
 
-				if ($arrayreturn->id_estado == 3) {
-					$botones = ' <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="rechazar-periodo" class="btn btn-danger btn-xs"> RECHAZAR</button> ';
-				} else if ($arrayreturn->id_estado == NULL && $arrayreturn->completado == 17 && !$arrayreturn->incompleto) {
+				if (isset($arrayreturn->id_estado)) {
+					if ($arrayreturn->id_estado == 3) {
+						$botones = ' <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="rechazar-periodo" class="btn btn-danger btn-xs"> RECHAZAR</button> ';
+					}
+				} else if (!$arrayreturn->incompleto) {
 					$botones = ' <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="aceptar-periodo" class="btn btn-success btn-xs"> ACEPTAR</button> <button id_ingreso="'.$arrayreturn->id_ingreso.'" id="rechazar-periodo" class="btn btn-danger btn-xs"> RECHAZAR</button> ';
 				} else {
 					$botones = ' <button class="btn btn-default btn-xs"> SIN ACCIONES</button> ';
 				}
-
 				return $botones;
+
 			}
+
 		)
 			->make(true);
 	}
@@ -1232,22 +1237,29 @@ class TableroController extends AbstractPadronesController {
 
 		$returned_array = [];
 
-		foreach ($fullarray as $field  => $value) {
-			foreach ($value as $provincia => &$datos) {
-				//Log::info(dd($datos));
+		foreach ($fullarray as $field => $value) {
+
+			foreach ($value as $provincia => $data) {
+
+				$datos               = $data;
+				$indicadores_full    = false;
+				$provincia_cp        = strval($provincia);
+				$datos['incompleto'] = false;
+
+				$year = substr($datos['periodo'], 0, 4);
+
+				$datos['completado'] = count(array_values(explode(',', substr(YearIndicadores::find($year)->indicadores, 1, -1))));
 
 				if ($datos['estado'] == 'PENDIENTE') {
-					$datos['incompleto'] = false;
-					$indicadores         = array_values(explode(',', substr(YearIndicadores::find(substr($datos['periodo'], 0, 4))->indicadores, 1, -1)));
-					sort($indicadores);
-					sort($datos['indicadores']);
-					$indicadores_full = count(array_intersect($indicadores, $datos['indicadores'])) == count($indicadores);
-					$indicadores_full?($datos['estado'] = 'COMPLETADO SIN ACEPTAR') && ($datos['completado'] = 17):($datos['completado'] = count($datos['indicadores'])) && ($datos['incompleto'] = true);
-				} else {
-					$datos['completado'] = 17;
+					$indicadores_full = $this->checkCompletedPeriod($year, $datos['indicadores']);
 				}
-				unset($datos['indicadores']);
-				$returned_array[] = array_merge(array('periodo' => $field, 'provincia' => $provincia), $datos);
+
+				$indicadores_full?($datos['estado'] = 'COMPLETADO SIN ACEPTAR'):($datos['incompleto'] = true);
+
+				$datos['periodo']   = strval($field);
+				$datos['provincia'] = $provincia_cp;
+
+				$returned_array[] = $datos;
 			}
 		}
 
@@ -1255,10 +1267,25 @@ class TableroController extends AbstractPadronesController {
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Arma el array a mostrar en la datatable
+	 * @param object $r
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return array
 	 */
+	public function checkCompletedPeriod($year, $indicators) {
+
+		/**
+		 * Check if Tablero is completed on period.
+		 *
+		 * @return Boolean
+		 */
+
+		$indicadores = array_values(explode(',', substr(YearIndicadores::find($year)->indicadores, 1, -1)));
+		sort($indicadores);
+		sort($indicators);
+		return count(array_intersect($indicadores, $indicators)) == count($indicadores);
+
+	}
 	public function getSelectGraficosTablero() {
 		$data = [
 			'page_title'   => 'Seleccione el periodo a visualizar',
@@ -1518,5 +1545,193 @@ class TableroController extends AbstractPadronesController {
 		} catch (Exception $e) {
 			return 0;
 		}
+	}
+
+	/**
+	 * Display historical filters
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function mainHistorico($periodo = null, $provincia = null, $indicador = null) {
+		$data = [
+			'page_title'     => 'Seleccione provincia, periodo e indicador a descargar',
+			'provincias'     => Provincia::all(),
+			'indicadores'    => Detail::select(DB::raw("replace(indicador,'.','|') as indicador"))->where('indicador', 'LIKE', '%.%')->get(),
+			'back_periodo'   => $periodo,
+			'back_provincia' => $provincia,
+			'back_indicador' => $indicador
+		];
+
+		return view('tablero.select-periodo-indicador', $data);
+	}
+
+	/**
+	 * Display historical filters
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function listadoHistoricoView($periodo, $provincia, $indicador) {
+		$data = [
+			'page_title' => 'Listado completo de indicadores para los filtros elegidos',
+			'periodo'    => $periodo,
+			'provincia'  => $provincia,
+			'indicador'  => $indicador
+		];
+
+		return view('tablero.listado-historico', $data);
+	}
+
+	/**
+	 * Filter by indicator
+	 *
+	 * @return Eloquent Object
+	 */
+	public function datosExtraHistorico($results, $indicador) {
+
+		if (strval($indicador) != "999") {
+			$results->where('indicador', str_replace("|", ".", $indicador));
+		}
+
+		$results->join('tablero.administracion', function ($join) {
+				$join->on('tablero.administracion.periodo', '=', 'tablero.ingresos.periodo');
+				$join->on('tablero.administracion.provincia', '=', 'tablero.ingresos.provincia');
+			})->where('tablero.administracion.estado', 3);
+
+		return $results;
+	}
+
+	/**
+	 * Devuelve un json para la datatable
+	 *
+	 * @return json
+	 */
+	public function listadoHistoricoTable($periodo, $provincia, $indicador) {
+
+		$results = $this->datosListadoTabla($periodo, $provincia);
+
+		$this->datosExtraHistorico($results, $indicador);
+
+		return Datatables::of($results)
+			->addColumn(
+			'indicador_real',
+			function ($result) {
+				$indicador_real = strtr($result->indicador, array("|" => "."));
+				return $indicador_real;
+			}
+		)
+			->addColumn(
+			'numerador_format',
+			function ($result) {
+				if (in_array($result->indicador, ['5|1', '5|3'])) {
+					return (empty($result->numerador) && !is_numeric($result->numerador))?null:($result->numerador);
+				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4'])) {
+					try {
+						return (empty($result->numerador) && !is_numeric($result->numerador))?null:(number_format($result->numerador, 0, ',', '.'));
+					} catch (\Exception $e) {
+						return $result->numerador;
+					}
+				}
+				try {
+					return (empty($result->numerador) && !is_numeric($result->numerador))?null:('$ '.number_format($result->numerador, 0, ',', '.'));
+				} catch (\Exception $e) {
+					return $result->numerador;
+				}
+
+			}
+		)
+			->addColumn(
+			'denominador_format',
+			function ($result) {
+				if (in_array($result->indicador, ['5|1', '5|3'])) {
+					return (empty($result->denominador) && !is_numeric($result->denominador))?null:($result->denominador);
+				} else if (in_array($result->indicador, ['1|1', '1|2', '2|1', '2|2', '2|3', '2|4', '5|4'])) {
+					try {
+						return (empty($result->denominador) && !is_numeric($result->denominador))?null:(number_format($result->denominador, 0, ',', '.'));
+					} catch (\Exception $e) {
+						return $result->denominador;
+					}
+				}
+				try {
+					return (empty($result->denominador) && !is_numeric($result->denominador))?null:('$ '.number_format($result->denominador, 0, ',', '.'));
+				} catch (\Exception $e) {
+					return $result->denominador;
+				}
+
+			}
+		)
+			->addColumn(
+			'estado',
+			function ($result) {
+				$var_state = $this->checkState($result->id);
+				if (!in_array($result->indicador, ['5|1', '5|3', '5|4', '5|5'])) {
+					$var_state['value'] == 'INCOMPLETO'?$tipo_valor = "":$tipo_valor = " % ";
+				} else {
+					$tipo_valor = "";
+				}
+				return '<button class="btn btn-'.$var_state['color'].' btn-xs"> '.$var_state['value'].$tipo_valor.'</button>';
+			}
+		)
+			->make(true);
+	}
+
+	/**
+	 * Arma el excel historico
+	 * @param $periodo, $provincia, $indicador
+	 *
+	 * @return excel
+	 */
+	public function excelHistorico($periodo, $provincia, $indicador) {
+
+		$results = $this->datosListadoTabla($periodo, $provincia);
+
+		$this->datosExtraHistorico($results, $indicador);
+
+		$results = collect($results->get());
+
+		$results->transform(function ($item, $key) {
+				$state = $this->checkState($item->id);
+				$item->estado = $state['value'];
+				$item->color = $state['color'];
+				$item->indicador = strtr($item->indicador, array("|" => "."));
+				return $item;
+			});
+
+		$data = ['historico' => $results, 'periodo' => $periodo, 'indicador' => $indicador, 'provincia' => $provincia];
+		$name = 'Ingresos en $periodo - Tablero de Control SUMAR';
+
+		return Excel::create("Historico_".$provincia."_".$periodo."_".str_replace("|", ".", $indicador)."_".date('Y-m-d'), function ($e) use ($data) {
+				$e->sheet('Historico_SUMAR', function ($s) use ($data) {
+						$s->loadView('tablero.tabla_historico', $data);
+						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));
+						$i = 6;//COMIENZO DE DATOS EN EXCEL
+						foreach ($data['historico'] as $row_fields) {
+
+							Log::info($row_fields);
+
+							$s->row($i, ['Col 6']);
+							switch (true) {
+								case ($row_fields['color'] == "success"):
+									$color_background = '#00FF00';
+									break;
+
+								case ($row_fields['color'] == "warning"):
+									$color_background = '#FFFF00';
+									break;
+
+								case ($row_fields['color'] == "danger"):
+									$color_background = '#FF0000';
+									break;
+
+								default:
+									$color_background = '#C0C0C0';
+									break;
+							}
+							$s->cell('F'.$i, function ($color) use ($color_background) {$color->setBackground($color_background);});
+
+							$i++;
+						}
+					});
+			})
+			->download('xls');
 	}
 }

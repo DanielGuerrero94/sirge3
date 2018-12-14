@@ -6,13 +6,16 @@
 			<div class="box box-info">
 				<div class="box-header">
 					<h2 class="box-title">Ingrese parámetros</h2>
+					<div class="box-tools pull-right">
+					<a class="tablero-historico btn btn-info" href="tablero-filtros-historico"><i class="fa fa-download"></i>  HISTORIAL TABLEROS ACEPTADOS</a>
+					</div>
 				</div>
 				<div class="box-body">
 					<div class="form-group">
 	      				<label for="provincia" class="col-sm-3 control-label">Provincia</label>
 	  					<div class="col-sm-9">
 	    					<select name="provincia" id="provincia" class="form-control">
-	    					<option value="0" selected>TODAS</option>
+	    					<option value="99" selected>TODAS</option>
 	    						@foreach ($provincias as $provincia)
 	    						<option value="{{$provincia->id_provincia}}">{{$provincia->descripcion}}</option>
 	    						@endforeach
@@ -53,7 +56,7 @@
 				            <th>Periodo</th>
 				            <th>Provincia</th>
 				            <th>Resuelto por</th>
-				            <th>Ingresado (de 17)</th>
+				            <th>Ingresado</th>
 				            <th>Estado</th>
 				            <th>Accion</th>
 				        </tr>
@@ -119,8 +122,30 @@ $( document ).ready(function() {
 
 		var url = $(this).attr('href') + '/' + $("#provincia").val() + '/' + ($('#periodo').val().length > 0 ? $('#periodo').val() : '9999-99');
 
-		location.href = url;
+		$.ajax({
+			url: url,
+			type: 'GET'
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
 	});
+
+	$('.tablero-historico').on('click' , function(event){
+		event.preventDefault();
+    	console.log($(this).attr('href'));
+
+    	var href = $(this).attr('href');
+        	$.get(href , function(data){
+        		$('.content-wrapper').html(data);
+        	});
+    });
 
 	$('#tablero-administracion-table').on('click', '#aceptar-periodo,#rechazar-periodo', function (){
 
@@ -150,6 +175,7 @@ $( document ).ready(function() {
                     error : function(data){
                         $('.modal').removeClass('modal-success').addClass('modal-danger');
                         $('#modal-text').html('Ha ocurrido un error en la aceptacion del periodo');
+                        console.log(data);
                         $('.modal').modal();
                         $('.modal .modal-dialog button').on('click', function(){
                             table.clear();
