@@ -1129,7 +1129,7 @@ class TableroController extends AbstractPadronesController {
 		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);
 		$data         = ['tablero' => collect($arrayreturns)];
 		$name         = 'Administracion - Tablero de Control SUMAR';
-		if ($provincia != 0) {$name .= ' - '.$provincia;
+		if ($provincia != '99') {$name .= ' - '.$provincia;
 		}
 		if ($periodo != '9999-99') {$name .= ' - '.$periodo;
 		} else {
