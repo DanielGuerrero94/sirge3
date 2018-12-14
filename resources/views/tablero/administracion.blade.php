@@ -45,7 +45,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Estado de cargas del tablero en periodo</h2>
 				<div class="box-tools pull-right">
-					<a class="descargar btn btn-warning" onclick="location.href='tablero-administracion-descargar/'+$('#provincia').val()+'/{{$periodo}}'"><i class="fa fa-download"></i> Descargar tabla</a>
+					<a class="descargar btn btn-warning"><i class="fa fa-download"></i> Descargar tabla</a>
 				</div>
 			</div>
 
@@ -89,6 +89,7 @@ $( document ).ready(function() {
 
 	var table;
 	var periodo = '';
+	var href = '';
 
 	$('#periodo').inputmask({
 		mask : '9999-99',
@@ -117,6 +118,16 @@ $( document ).ready(function() {
 			table.draw();
     	}
 	});
+
+    $('#periodo, #provincia').on('change', function(event) {
+    	href = 'tablero-administracion-descargar/'+$("#provincia").val()+'/'+$("#periodo").val();
+
+    	console.log(href);
+    });
+
+    $(".descargar").click(function(event) {
+		$(".descargar").prop('href', href);
+    });
 
 	$('.tablero-historico').on('click' , function(event){
 		event.preventDefault();

@@ -1126,11 +1126,10 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function excelAdministracionTabla($provincia, $periodo) {
 
-		Log::info($provincia);
-
 		$arrayreturns = $this->datosAdministracionTabla($provincia, $periodo);
-		$data         = ['tablero' => collect($arrayreturns)];
-		$name         = 'Administracion - Tablero de Control SUMAR';
+
+		$data = ['tablero' => collect($arrayreturns)];
+		$name = 'Administracion - Tablero de Control SUMAR';
 		if ($provincia != '99') {$name .= ' - '.$provincia;
 		}
 		if ($periodo != '9999-99') {$name .= ' - '.$periodo;

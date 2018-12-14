@@ -45,7 +45,7 @@
 		<td class="table-header">PERIODO</th>
 		<td class="table-header">PROVINCIA</th>
 		<td class="table-header">RESUELTO POR</th>
-		<td class="table-header">CANTIDAD INGRESADA (de 17)</th>
+		<td class="table-header">CANTIDAD INGRESADA</th>
 		<td class="table-header">ESTADO</th>
 	</tr>
 	@foreach($tablero as $key => $registro)
