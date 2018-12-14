@@ -45,7 +45,7 @@
 			<div class="box-header">
 				<h2 class="box-title">Estado de cargas del tablero en periodo</h2>
 				<div class="box-tools pull-right">
-					<a class="descargar btn btn-warning" href="tablero-descargar-tabla"><i class="fa fa-download"></i> Descargar tabla</a>
+					<a class="descargar btn btn-warning" href="tablero-administracion-descargar"><i class="fa fa-download"></i> Descargar tabla</a>
 				</div>
 			</div>
 
