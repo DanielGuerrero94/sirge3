@@ -26,7 +26,7 @@
 	    			</div>
 	    			<br />
 	    			<div class="form-group">
-	      				<label for="periodo" class="col-sm-3 control-label">Desde</label>
+	      				<label for="periodo_desde" class="col-sm-3 control-label">Desde</label>
 	  					<div class="col-sm-9">
 	  						@if ($back_periodo_desde != '9999-99' && $back_periodo_desde != null)
 								<input type="text" class="form-control" id="periodo_desde" name="periodo_desde" value="{{$back_periodo_desde}}">
@@ -38,7 +38,7 @@
 	    			</div>
 	    			<br />
 	    			<div class="form-group">
-	      				<label for="periodo" class="col-sm-3 control-label">Hasta</label>
+	      				<label for="periodo_hasta" class="col-sm-3 control-label">Hasta</label>
 	  					<div class="col-sm-9">
 	  						@if ($back_periodo_hasta != '9999-99' && $back_periodo_hasta != null)
 								<input type="text" class="form-control" id="periodo_hasta" name="periodo_hasta" value="{{$back_periodo_hasta}}">

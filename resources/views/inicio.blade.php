@@ -6,7 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; UTF-8"> 
+    <meta http-equiv="Content-Type" content="text/html; UTF-8">
     <link rel="shortcut icon" href="{{ asset("/dist/img/logo_shortcut_icon.png")}}">
     <title>SIRGe Web</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Bootstrap 3.3.2 -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}"  />
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"  />    
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"  />
     <!-- Ionicons -->
     <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css"  />
     <!-- Fullcalendar -->
@@ -136,7 +136,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       user experience -->
 <script>
 $(document).ready(function(){
-    
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN-SIRGE': $('meta[name="csrf-token"]').attr('content')
@@ -166,8 +166,41 @@ $(document).ready(function(){
                     }
                     else{
                         return false;
-                    }                                
+                    }
     });
+
+  $.validator.addMethod('le', function(value, element, param) {
+
+    return value <= $(param).val();
+
+  }, 'El valor debe ser menor que su comparativa.');
+
+  $.validator.addMethod('ge', function(value, element, param) {
+
+    return value >= $(param).val();
+
+  },'El valor debe ser mayor que su comparativa.');
+
+    $.validator.addMethod( "correct_period", function( value, element ) {
+    var check = false,
+        re = /^\d{4}\-\d{1,2}$/,
+        adata, gg, mm, aaaa, xdata;
+    if ( re.test( value ) ) {check = false;
+        adata = value.split( "-" );
+        aaaa = parseInt( adata[ 0 ], 10 );
+        mm = parseInt( adata[ 1 ], 10 );
+        gg = 1;
+        xdata = new Date( Date.UTC( aaaa, mm - 1, gg, 12, 0, 0, 0 ) );
+        if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth() === mm - 1 ) && ( xdata.getUTCDate() === gg ) ) {
+            check = true;
+        } else {
+            check = false;
+        }
+    } else {
+        check = false;
+    }
+        return this.optional( element ) || check;
+    }, $.validator.messages.date );
 
     ion.sound({
         sounds: [
@@ -192,7 +225,7 @@ $(document).ready(function(){
 
     $(document).on({
         ajaxStart: function() { $('body').addClass("loading"); },
-        ajaxStop: function() { $('body').removeClass("loading"); }    
+        ajaxStop: function() { $('body').removeClass("loading"); }
     });
 
     $.get('dashboard', function(data){
@@ -210,7 +243,7 @@ $(document).ready(function(){
     function getMessages(){
 
         if(! $('.navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu').hasClass('open')){
-            
+
             $.ajax({
                 global : false,
                 url : 'nuevos-mensajes',
@@ -223,36 +256,36 @@ $(document).ready(function(){
                     var texto = '<ul>';
 
                     if(typeof data['subidas'] !== "undefined"){
-                        
+
                         ion.sound.play("branch_break");
-                        
-                        var subidas = data['subidas'];                    
-                        m = m + subidas.length;                                        
+
+                        var subidas = data['subidas'];
+                        m = m + subidas.length;
                         var estado = 'FINALIZO su procesamiento.';
                         for (i = 0; i < subidas.length; ++i) {
                             if((subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 1) || (subidas[i]['id_estado'] == 3 && subidas[i]['avisado'] == 2) ){
-                                if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){                                
+                                if(subidas[i]['id_estado'] == 5 && subidas[i]['avisado'] == 1){
                                     estado = 'HA COMENZADO a procesarse.';
                                 }
-                                texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> ' + estado + '</li>';    
+                                texto += '<li class="subidas" subida="'+subidas[i]['id_subida']+'">El lote <b>' + subidas[i]['lote'] + '</b> ' + estado + '</li>';
                             }
                             else{
                                 m = m - 1;
-                            }                        
+                            }
                         }
-                        texto += '<li>Diríjase a adm. lotes para más detalles.</li><br />';                    
+                        texto += '<li>Diríjase a adm. lotes para más detalles.</li><br />';
                     }
-                    
+
                     if (m > 0) {
                         $('.new-messages').html(m);
                         texto += '<li> Usted tiene ' + m_no_leido + ' conversaciones no leídas </li>';
                         texto += '</ul>';
                         $('.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu').css('width','380px');
-                        $('.new-messages-text').html(texto);                        
+                        $('.new-messages-text').html(texto);
                     } else {
                         $('.new-messages').html('');
                         $('.new-messages-text').html('Usted no tiene mensajes nuevos');
-                    }        
+                    }
                 }
             })
         }
@@ -264,14 +297,14 @@ $(document).ready(function(){
             $.ajax({
                     global : false,
                     method : 'get',
-                    url : 'sonido-notificacion',                        
+                    url : 'sonido-notificacion',
                     success : function(data){
                         if(data == 1){
                             ion.sound.play("water_droplet_3");
                         }
-                    }                        
-            });     
-        }        
+                    }
+            });
+        }
     }
 
     function newMessages(){
@@ -286,18 +319,18 @@ $(document).ready(function(){
         var variables = '';
         $('.new-messages-text .subidas').each(function(i){
             variables += $(this).attr('subida') + ',';
-        });        
+        });
 
         $.ajax({
-            method: 'post',            
+            method: 'post',
             url: 'avisos-leidos',
             data: {subidas: variables},
             success: function(data){
-                console.log(data); 
-            }, 
+                console.log(data);
+            },
             global: false,     // this makes sure ajaxStart is not triggered
-            dataType: 'json'            
-        });        
+            dataType: 'json'
+        });
     });
 
     $.extend( true, $.fn.dataTable.defaults, {
