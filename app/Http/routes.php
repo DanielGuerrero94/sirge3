@@ -535,7 +535,7 @@ Route::get('tablero-desbloquear-indicador/{id}', 'TableroController@unlockIndica
 Route::get('rechazados-descargar-tabla', 'TableroController@excelRechazadosTabla');
 Route::get('rechazados-tablero', 'TableroController@rechazados');
 Route::get('select-graficos-tablero', 'TableroController@getSelectGraficosTablero');
-Route::get('graficos-tablero/{periodo}/{provincia}/{indicador}', 'TableroController@getGraficoTablero');
+Route::get('graficos-tablero/{periodo_desde}/{periodo_hasta}/{provincia}/{indicador}', 'TableroController@getGraficoTablero');
 Route::get('log-acciones', 'TableroController@getLogAcciones');
 Route::get('tablero-log-acciones-table', 'TableroController@listadoAcciones');
 Route::get('tablero-filtros-historico/{periodo?}/{provincia?}/{indicador?}', 'TableroController@mainHistorico');

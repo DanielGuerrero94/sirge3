@@ -58,6 +58,8 @@ $(function() {
 
 	var table;
 
+    console.log('{{url("/tablero-listado-historico-table")}}/'+ '{{$periodo}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}');
+
     table = $('#tablero-historico-table').DataTable({
         type: 'get',
         processing: true,

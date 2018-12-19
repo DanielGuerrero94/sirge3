@@ -106,7 +106,7 @@
 				enabled: false
 			},
 			series: [{
-				name : 'resultado',
+				name : 'Resultado',
 				data : {!! json_encode($unGrafico["data"]) !!}
 			}]
 		});

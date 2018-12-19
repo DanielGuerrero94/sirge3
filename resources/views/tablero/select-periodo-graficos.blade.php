@@ -31,14 +31,20 @@
 	    			</div>
 	    			<br />
 	    			<div class="form-group">
-	      				<label for="periodo" class="col-sm-3 control-label">Período</label>
+	      				<label for="periodo_desde" class="col-sm-3 control-label">Desde</label>
 	  					<div class="col-sm-9">
-	    					<input type="text" class="form-control" id="periodo" name="periodo">
+	    					<input type="text" class="form-control" id="periodo_desde" name="periodo_desde">
+	  					</div>
+	    			</div>
+	    			<div class="form-group">
+	      				<label for="periodo_hasta" class="col-sm-3 control-label">Hasta</label>
+	  					<div class="col-sm-9">
+	    					<input type="text" class="form-control" id="periodo_hasta" name="periodo_hasta">
 	  					</div>
 	    			</div>
 	    			<br />
 	    			<div class="form-group">
-	      				<label for="periodo" class="col-sm-3 control-label">Indicador</label>
+	      				<label for="indicador" class="col-sm-3 control-label">Indicador</label>
 	  					<div class="col-sm-9">
 	    					<select id="indicador" name="indicador" class="form-control">
 							@foreach ($indicadores as $main)
@@ -75,7 +81,33 @@
 </div>
 <script type="text/javascript">
 
-	$('#periodo').inputmask({
+	$.validator.addMethod( "correct_period", function( value, element ) {
+	var check = false,
+		re = /^\d{4}\-\d{1,2}$/,
+		adata, gg, mm, aaaa, xdata;
+	if ( re.test( value ) ) {check = false;
+		adata = value.split( "-" );
+		aaaa = parseInt( adata[ 0 ], 10 );
+		mm = parseInt( adata[ 1 ], 10 );
+		gg = 1;
+		xdata = new Date( Date.UTC( aaaa, mm - 1, gg, 12, 0, 0, 0 ) );
+		if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth() === mm - 1 ) && ( xdata.getUTCDate() === gg ) ) {
+			check = true;
+		} else {
+			check = false;
+		}
+	} else {
+		check = false;
+	}
+		return this.optional( element ) || check;
+	}, $.validator.messages.date );
+
+	$('#periodo_desde').inputmask({
+		mask : '9999-99',
+		placeholder : 'AAAA-MM'
+	});
+
+	$('#periodo_hasta').inputmask({
 		mask : '9999-99',
 		placeholder : 'AAAA-MM'
 	});
@@ -86,18 +118,23 @@
 				provincia : {
 					required : true
 				},
-				periodo : {
+				periodo_desde : {
 					required : true,
 					minlength : 7,
-					maxlength : 7
+					maxlength : 7,
+					correct_period: true
+				},
+				periodo_hasta : {
+					required : true,
+					minlength : 7,
+					maxlength : 7,
+					correct_period: true
 				}
 			},
 			submitHandler : function(form){
-				$.get('graficos-tablero/' + $('#periodo').val() + '/' + $('#provincia').val() + '/' + $('#indicador').val(), function(data){
-					if(data != 'error'){
-						$('.content-wrapper').html(data);
-					}
-					else{
+				$.get('graficos-tablero/' + $('#periodo_desde').val() + '/' + $('#periodo_hasta').val() + '/' + $('#provincia').val() + '/' + $('#indicador').val(), function(data){
+
+					if(data == 'error'){
 						$('#modal-text').html("No existe ningún indicador en el periodo");
 						$('.modal').modal();
 						$('.modal').on('hidden.bs.modal', function (e) {
@@ -105,6 +142,18 @@
 								$('.content-wrapper').html(data);
 							});
 						});
+					}
+					if(data == '0'){
+						$('#modal-text').html("El periodo HASTA elegido no se encuentra aceptado");
+						$('.modal').modal();
+						$('.modal').on('hidden.bs.modal', function (e) {
+							$.get('select-graficos-tablero' , function(data){
+								$('.content-wrapper').html(data);
+							});
+						});
+					}
+					else{
+						$('.content-wrapper').html(data);
 					}
 				});
 			}

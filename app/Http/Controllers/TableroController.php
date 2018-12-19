@@ -384,8 +384,6 @@ class TableroController extends AbstractPadronesController {
 						$i = 6;//COMIENZO DE DATOS EN EXCEL
 						foreach ($data['tablero'] as $row_fields) {
 
-							Log::info($row_fields);
-
 							$s->row($i, ['Col 6']);
 							switch (true) {
 								case ($row_fields['color'] == "success"):
@@ -1288,6 +1286,7 @@ class TableroController extends AbstractPadronesController {
 		return count(array_intersect($indicadores, $indicators)) == count($indicadores);
 
 	}
+
 	public function getSelectGraficosTablero() {
 		$data = [
 			'page_title'   => 'Seleccione el periodo a visualizar',
@@ -1304,9 +1303,18 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return null
 	 */
-	public function getGraficoTablero($periodo, $id_provincia, $sigla_indicador) {
+	public function getGraficoTablero($periodo_desde, $periodo_hasta, $id_provincia, $sigla_indicador) {
 
-		$indicador = $this->datosListadoTabla($periodo, $id_provincia);
+		if (Administracion::where('provincia', $id_provincia)->where('periodo', $periodo_hasta)->where('estado', 3)->count() == 0) {
+			return 0;
+		}
+
+		$indicador = $this->datosListadoTabla($periodo_hasta, $id_provincia);
+		$indicador->join('tablero.administracion', function ($join) {
+				$join->on('tablero.administracion.periodo', '=', 'tablero.ingresos.periodo');
+				$join->on('tablero.administracion.provincia', '=', 'tablero.ingresos.provincia');
+			})
+			->where('tablero.administracion.estado', 3);
 		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
 
 		$collection = collect($indicador->get());
@@ -1331,15 +1339,15 @@ class TableroController extends AbstractPadronesController {
 
 		$provincia = Provincia::find($id_provincia);
 
-		$grafico = $this->getGraficoEvolucion($periodo, $id_provincia, $sigla_indicador);
+		$grafico = $this->getGraficoEvolucion($periodo_desde, $periodo_hasta, $id_provincia, $sigla_indicador);
 
 		$data = [
-			'page_title'     => 'Indicadores Tablero: '.$provincia->descripcion.' periodo: '.$periodo,
+			'page_title'     => 'Indicadores Tablero: '.$provincia->descripcion.' hasta periodo: '.$periodo_hasta,
 			'indicadores'    => $indicadorActual,
 			'back'           => 'select-graficos-tablero',
 			'id_provincia'   => $id_provincia,
 			'provincia'      => $provincia,
-			'periodo'        => $periodo,
+			'periodo'        => $periodo_hasta,
 			'grafico'        => $grafico,
 			'tipo_indicador' => $tipo_indicador
 		];
@@ -1355,21 +1363,27 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return array
 	 */
-	public function getGraficoEvolucion($periodo, $provincia, $sigla_indicador) {
+	public function getGraficoEvolucion($periodo_desde, $periodo_hasta, $provincia, $sigla_indicador) {
 
-		$indicador = $this->datosListadoTabla($periodo, $provincia);
-		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
-		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
+		$indicador = $this->datosListadoTabla($periodo_hasta, $provincia);
+		$indicador->join('tablero.administracion', function ($join) {
+				$join->on('tablero.administracion.periodo', '=', 'tablero.ingresos.periodo');
+				$join->on('tablero.administracion.provincia', '=', 'tablero.ingresos.provincia');
+			})
+			->where('tablero.administracion.estado', 3)
+			->whereIn('tablero.administracion.periodo', $this->getDateIntervalBetween($periodo_desde, $periodo_hasta));
 
+		$indicador->where(DB::raw('left(indicador,1)'), $sigla_indicador);
 		$indicador = $indicador->get();
-		$i         = 0;
+
+		$i = 0;
 
 		if (!empty($indicador)) {
 			foreach ($indicador as $field => $item) {
 
 				$grafico[$i]['indicador'] = $item->indicador;
 				//DEBO CALCULAR RANGOS $grafico[$i]['rangos']     = $item['rangoIndicador'];
-				$grafico[$i]['resultados'] = $this->getUltimosIndicadores($item);
+				$grafico[$i]['resultados'] = $this->getUltimosIndicadores($item, $periodo_desde);
 				$grafico[$i]['rangos']     = $this->getRangos($item);
 				$grafico[$i]['categories'] = array();
 				$grafico[$i]['data']       = array();
@@ -1393,9 +1407,13 @@ class TableroController extends AbstractPadronesController {
 	 * @param  integer  $id
 	 * @return array[float]
 	 */
-	public function getUltimosIndicadores($id) {
+	public function getUltimosIndicadores($id, $periodo_desde = null) {
 
-		$periodos = $this->getDateInterval6Months($id->periodo);
+		if ($periodo_desde) {
+			$periodos = $this->getDateIntervalBetween($periodo_desde, $id->periodo);
+		} else {
+			$periodos = $this->getDateInterval6Months($id->periodo);
+		}
 
 		$rows = Ingreso::whereIn('periodo', array_values($periodos))
 			->where(DB::raw("replace(indicador,'.','|')"), $id->indicador)
@@ -1422,6 +1440,21 @@ class TableroController extends AbstractPadronesController {
 			$dt->modify('first day of last month');
 			$interval[] = $dt->format('Y-m');
 		}
+		return $interval;
+	}
+
+	protected function getDateIntervalBetween($periodo_desde, $periodo_hasta) {
+
+		$dt         = \DateTime::createFromFormat('Y-m', $periodo_hasta);
+		$dt_desde   = \DateTime::createFromFormat('Y-m', $periodo_desde);
+		$month_diff = $dt->diff($dt_desde)->m;
+		$interval[] = $dt->format('Y-m');
+
+		for ($i = 0; $i < $month_diff; $i++) {
+			$dt->modify('first day of last month');
+			$interval[] = $dt->format('Y-m');
+		}
+
 		return $interval;
 	}
 
@@ -1706,8 +1739,6 @@ class TableroController extends AbstractPadronesController {
 						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));
 						$i = 6;//COMIENZO DE DATOS EN EXCEL
 						foreach ($data['historico'] as $row_fields) {
-
-							Log::info($row_fields);
 
 							$s->row($i, ['Col 6']);
 							switch (true) {
