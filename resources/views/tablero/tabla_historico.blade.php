@@ -30,7 +30,7 @@
 <table class="table">
 	<tr>
 		<td class="title-sumar">PROGRAMA SUMAR</td>
-		<td class="title-sumar">Historico Tablero de Control - {{$periodo}} - {{$provincia}}</td>
+		<td class="title-sumar">Historico Tablero de Control - {{$periodo_desde}} a {{$periodo_hasta}} - {{$provincia}}</td>
 	</tr>
 	<tr>
 		<td>Fecha de ultima actualizacion: </td>

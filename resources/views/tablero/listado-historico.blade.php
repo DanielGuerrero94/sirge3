@@ -8,7 +8,7 @@
 				<h2 class="box-title">Listado completo de indicadores</h2>
 					<div class="box-tools pull-right">
                         <div data-toggle="descargar-tooltip" data-placement="bottom" style="display:inline-block;">
-                            <a class="descargar-historico btn btn-warning" href="listado-historico-descargar/{{$periodo}}/{{$provincia}}/{{$indicador}}"><i class="fa fa-download"></i> Descargar</a>
+                            <a class="descargar-historico btn btn-warning" href="listado-historico-descargar/{{$periodo_desde}}/{{$periodo_hasta}}/{{$provincia}}/{{$indicador}}"><i class="fa fa-download"></i> Descargar</a>
                         </div>
                     </div>
 			<div class="box-body" style="margin-top: 10px">
@@ -58,7 +58,7 @@ $(function() {
 
 	var table;
 
-    console.log('{{url("/tablero-listado-historico-table")}}/'+ '{{$periodo}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}');
+    console.log('{{url("/tablero-listado-historico-table")}}/'+ '{{$periodo_desde}}' + '/' + '{{$periodo_hasta}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}');
 
     table = $('#tablero-historico-table').DataTable({
         type: 'get',
@@ -68,7 +68,7 @@ $(function() {
         pageLength: 18,
         dataType: 'json',
         ajax : {
-                url: '{{url("/tablero-listado-historico-table")}}/'+ '{{$periodo}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}'
+                url: '{{url("/tablero-listado-historico-table")}}/' + '{{$periodo_desde}}' + '/' + '{{$periodo_hasta}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}'
         },
         columns: [
             { data: 'periodo'},
@@ -81,7 +81,7 @@ $(function() {
     });
 
     $('.back').click(function(){
-        $.get('tablero-filtros-historico/' + '{{$periodo}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}' , function(data){
+        $.get('tablero-filtros-historico/' + '{{$periodo_desde}}' + '/' + '{{$periodo_hasta}}' + '/' + '{{$provincia}}' + '/' + '{{$indicador}}' , function(data){
             $('.content-wrapper').html(data);
         });
     });

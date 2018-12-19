@@ -1587,14 +1587,15 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function mainHistorico($periodo = null, $provincia = null, $indicador = null) {
+	public function mainHistorico($periodo_desde = null, $periodo_hasta = null, $provincia = null, $indicador = null) {
 		$data = [
-			'page_title'     => 'Seleccione provincia, periodo e indicador a descargar',
-			'provincias'     => Provincia::all(),
-			'indicadores'    => Detail::select(DB::raw("replace(indicador,'.','|') as indicador"))->where('indicador', 'LIKE', '%.%')->get(),
-			'back_periodo'   => $periodo,
-			'back_provincia' => $provincia,
-			'back_indicador' => $indicador
+			'page_title'         => 'Seleccione provincia, periodo e indicador a descargar',
+			'provincias'         => Provincia::all(),
+			'indicadores'        => Detail::select(DB::raw("replace(indicador,'.','|') as indicador"))->where('indicador', 'LIKE', '%.%')->get(),
+			'back_periodo_desde' => $periodo_desde,
+			'back_periodo_hasta' => $periodo_hasta,
+			'back_provincia'     => $provincia,
+			'back_indicador'     => $indicador
 		];
 
 		return view('tablero.select-periodo-indicador', $data);
@@ -1605,12 +1606,13 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function listadoHistoricoView($periodo, $provincia, $indicador) {
+	public function listadoHistoricoView($periodo_desde, $periodo_hasta, $provincia, $indicador) {
 		$data = [
-			'page_title' => 'Listado completo de indicadores para los filtros elegidos',
-			'periodo'    => $periodo,
-			'provincia'  => $provincia,
-			'indicador'  => $indicador
+			'page_title'    => 'Listado completo de indicadores para los filtros elegidos',
+			'periodo_desde' => $periodo_desde,
+			'periodo_hasta' => $periodo_hasta,
+			'provincia'     => $provincia,
+			'indicador'     => $indicador
 		];
 
 		return view('tablero.listado-historico', $data);
@@ -1621,11 +1623,13 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return Eloquent Object
 	 */
-	public function datosExtraHistorico($results, $indicador) {
+	public function datosExtraHistorico($results, $indicador, $periodo_desde, $periodo_hasta) {
 
 		if (strval($indicador) != "999") {
 			$results->where('indicador', str_replace("|", ".", $indicador));
 		}
+
+		$results->whereBetween('tablero.administracion.periodo', array($periodo_desde, $periodo_hasta));
 
 		$results->join('tablero.administracion', function ($join) {
 				$join->on('tablero.administracion.periodo', '=', 'tablero.ingresos.periodo');
@@ -1640,11 +1644,11 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return json
 	 */
-	public function listadoHistoricoTable($periodo, $provincia, $indicador) {
+	public function listadoHistoricoTable($periodo_desde, $periodo_hasta, $provincia, $indicador) {
 
-		$results = $this->datosListadoTabla($periodo, $provincia);
+		$results = $this->datosListadoTabla('9999-99', $provincia);
 
-		$this->datosExtraHistorico($results, $indicador);
+		$this->datosExtraHistorico($results, $indicador, $periodo_desde, $periodo_hasta);
 
 		return Datatables::of($results)
 			->addColumn(
@@ -1715,11 +1719,11 @@ class TableroController extends AbstractPadronesController {
 	 *
 	 * @return excel
 	 */
-	public function excelHistorico($periodo, $provincia, $indicador) {
+	public function excelHistorico($periodo_desde, $periodo_hasta, $provincia, $indicador) {
 
-		$results = $this->datosListadoTabla($periodo, $provincia);
+		$results = $this->datosListadoTabla('9999-99', $provincia);
 
-		$this->datosExtraHistorico($results, $indicador);
+		$this->datosExtraHistorico($results, $indicador, $periodo_desde, $periodo_hasta);
 
 		$results = collect($results->get());
 
@@ -1731,9 +1735,9 @@ class TableroController extends AbstractPadronesController {
 				return $item;
 			});
 
-		$data = ['historico' => $results, 'periodo' => $periodo, 'indicador' => $indicador, 'provincia' => $provincia];
+		$data = ['historico' => $results, 'periodo_desde' => $periodo_desde, 'periodo_hasta' => $periodo_hasta, 'indicador' => $indicador, 'provincia' => $provincia];
 
-		return Excel::create("Historico_".$provincia."_".$periodo."_".str_replace("|", ".", $indicador)."_".date('Y-m-d'), function ($e) use ($data) {
+		return Excel::create("Historico_".$provincia."_".$periodo_desde."_a_".$periodo_hasta."_".str_replace("|", ".", $indicador)."_".date('Y-m-d'), function ($e) use ($data) {
 				$e->sheet('Historico_SUMAR', function ($s) use ($data) {
 						$s->loadView('tablero.tabla_historico', $data);
 						$s->setColumnFormat(array('A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@'));

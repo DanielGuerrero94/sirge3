@@ -81,27 +81,6 @@
 </div>
 <script type="text/javascript">
 
-	$.validator.addMethod( "correct_period", function( value, element ) {
-	var check = false,
-		re = /^\d{4}\-\d{1,2}$/,
-		adata, gg, mm, aaaa, xdata;
-	if ( re.test( value ) ) {check = false;
-		adata = value.split( "-" );
-		aaaa = parseInt( adata[ 0 ], 10 );
-		mm = parseInt( adata[ 1 ], 10 );
-		gg = 1;
-		xdata = new Date( Date.UTC( aaaa, mm - 1, gg, 12, 0, 0, 0 ) );
-		if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth() === mm - 1 ) && ( xdata.getUTCDate() === gg ) ) {
-			check = true;
-		} else {
-			check = false;
-		}
-	} else {
-		check = false;
-	}
-		return this.optional( element ) || check;
-	}, $.validator.messages.date );
-
 	$('#periodo_desde').inputmask({
 		mask : '9999-99',
 		placeholder : 'AAAA-MM'
@@ -122,7 +101,8 @@
 					required : true,
 					minlength : 7,
 					maxlength : 7,
-					correct_period: true
+					correct_period: true,
+					le: periodo_hasta
 				},
 				periodo_hasta : {
 					required : true,

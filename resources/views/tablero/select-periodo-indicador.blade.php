@@ -26,14 +26,25 @@
 	    			</div>
 	    			<br />
 	    			<div class="form-group">
-	      				<label for="periodo" class="col-sm-3 control-label">Período</label>
+	      				<label for="periodo" class="col-sm-3 control-label">Desde</label>
 	  					<div class="col-sm-9">
-	  						@if ($back_periodo != '9999-99' && $back_periodo != null)
-								<input type="text" class="form-control" id="periodo" name="periodo" value="{{$back_periodo}}">
+	  						@if ($back_periodo_desde != '9999-99' && $back_periodo_desde != null)
+								<input type="text" class="form-control" id="periodo_desde" name="periodo_desde" value="{{$back_periodo_desde}}">
 							@else
-								<input type="text" class="form-control" id="periodo" name="periodo">
+								<input type="text" class="form-control" id="periodo_desde" name="periodo_desde">
 							@endif
 
+	  					</div>
+	    			</div>
+	    			<br />
+	    			<div class="form-group">
+	      				<label for="periodo" class="col-sm-3 control-label">Hasta</label>
+	  					<div class="col-sm-9">
+	  						@if ($back_periodo_hasta != '9999-99' && $back_periodo_hasta != null)
+								<input type="text" class="form-control" id="periodo_hasta" name="periodo_hasta" value="{{$back_periodo_hasta}}">
+							@else
+								<input type="text" class="form-control" id="periodo_hasta" name="periodo_hasta">
+							@endif
 	  					</div>
 	    			</div>
 	    			<br />
@@ -81,7 +92,12 @@
 </div>
 <script type="text/javascript">
 
-	$('#periodo').inputmask({
+	$('#periodo_desde').inputmask({
+		mask : '9999-99',
+		placeholder : 'AAAA-MM'
+	});
+
+	$('#periodo_hasta').inputmask({
 		mask : '9999-99',
 		placeholder : 'AAAA-MM'
 	});
@@ -92,17 +108,25 @@
 				provincia : {
 					required : true
 				},
-				periodo : {
+				periodo_desde : {
 					required : true,
 					minlength : 7,
-					maxlength : 7
+					maxlength : 7,
+					correct_period: true,
+					le: periodo_hasta
+				},
+				periodo_hasta : {
+					required : true,
+					minlength : 7,
+					maxlength : 7,
+					correct_period: true
 				},
 				indicador : {
 					required : true
 				},
 			},
 			submitHandler : function(form){
-				$.get('tablero-listado-historico-view/' + $('#periodo').val() + '/' + $('#provincia').val() + '/' + $('#indicador').val(), function(data){
+				$.get('tablero-listado-historico-view/' + $('#periodo_desde').val() + '/' + $('#periodo_hasta').val() + '/' + $('#provincia').val() + '/' + $('#indicador').val(), function(data){
 					if(data){
 						$('.content-wrapper').html(data);
 					}
