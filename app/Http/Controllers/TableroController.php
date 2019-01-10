@@ -25,6 +25,7 @@ use Excel;
 use Illuminate\Http\Request;
 use Log;
 use Mail;
+
 use Validator;
 
 class TableroController extends AbstractPadronesController {
@@ -357,6 +358,184 @@ class TableroController extends AbstractPadronesController {
 	 * @return excel
 	 */
 	public function excelListadoTabla($periodo, $provincia) {
+
+		$data    = [];
+		$results = $this->datosListadoTabla($periodo, $provincia);
+		$results = collect($results->get());
+		$results->transform(function ($item, $key) {
+				$state = $this->checkState($item->id);
+				$item->estado = $state['value'];
+				$item->color = $state['color'];
+				return $item;
+			});
+
+		$nombre_provincia = Provincia::find($provincia)->descripcion;
+		if ($provincia == "01") {
+			$nombre_provincia = "CABA";
+		}
+
+		$data = ['tablero' => $results, 'id_entidad' => Auth::user()->id_entidad, 'periodo' => $periodo, 'nombre_provincia' => $nombre_provincia];
+		$name = 'Ingresos en $periodo - Tablero de Control SUMAR';
+
+		$log               = new LogAcciones();
+		$log->id_provincia = $provincia;
+		$log->id_usuario   = Auth::user()->id_usuario;
+		$log->accion       = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
+		$log->save();
+
+		Excel::load('/var/www/html/sirge3/storage/uploads/tablero'.'/exported.xls', function ($reader) use ($data) {
+
+				$s = $reader->sheet(0);
+				$i = 6;//COMIENZO DE DATOS EN EXCEL
+				setlocale(LC_MONETARY, 'it_AR');
+				$s->setCellValue('D1', $data['nombre_provincia']);
+				$s->setCellValue('G1', $data['periodo']);
+				$s->setCellValue('A2', "TABLERO DE CONTROL GENERAL AL ".date("Y/m/d"));
+				foreach ($data['tablero'] as $row_fields) {
+					$row_number = $this->returnExcelRow($row_fields['indicador']);
+					$s->setCellValue('F'.strval($row_number), $row_fields['numerador']);
+					$s->setCellValue('G'.strval($row_number), $row_fields['estado']);
+					$s->setCellValue('F'.strval($row_number+1), $row_fields['denominador']);
+
+					$color = '#ADC5E7';
+
+					if ($row_fields['color'] == 'success') {
+						$s->cells('H'.strval($row_number).':H'.strval($row_number+1), function ($row) use ($color) {$row->setBackground($color);});
+					} elseif ($row_fields['color'] == 'warning') {
+						$s->cells('I'.strval($row_number).':I'.strval($row_number+1), function ($row) use ($color) {$row->setBackground($color);});
+					} elseif ($row_fields['color'] == 'danger') {
+						$s->cells('J'.strval($row_number).':J'.strval($row_number+1), function ($row) use ($color) {$row->setBackground($color);});
+
+					}
+
+					if ($row_fields['indicador'] == "5|5") {
+						$saldo_inmovilizado_en_ugsp = $row_fields['numerador'];
+						$s->setCellValue('D87', money_format('%.2n', $row_fields['numerador']));
+					} elseif ($row_fields['indicador'] == "5|9") {
+						$total_immovilizado_en_efectores = $row_fields['denominador']-$row_fields['numerador'];
+						$denominador_5_9 = $row_fields['denominador'];
+						$s->setCellValue('D88', money_format('%.2n', $total_immovilizado_en_efectores));
+						//$s->setCellValue('D88', number_format(, 0, ',', '.'));
+					} elseif ($row_fields['indicador'] == "5|8") {
+						$denominador_5_8 = $row_fields['denominador'];
+					} elseif ($row_fields['indicador'] == "5|4") {
+						$benef_activos = $row_fields['denominador'];
+					}
+				}
+
+				if (isset($saldo_inmovilizado_en_ugsp) && isset($total_immovilizado_en_efectores)) {
+					$total_saldo_inmovilizado = $saldo_inmovilizado_en_ugsp+$total_immovilizado_en_efectores;
+					$s->setCellValue('D89', money_format('%.2n', $total_saldo_inmovilizado));
+					$s->setCellValue('E87', strval(round(($saldo_inmovilizado_en_ugsp/$denominador_5_8)*100, 2))."%");
+					$s->setCellValue('E88', strval(round(($total_immovilizado_en_efectores/$denominador_5_9)*100, 2))."%");
+					$s->setCellValue('E89', strval(round(($total_saldo_inmovilizado/$denominador_5_8)*100, 2))."%");
+					$s->setCellValue('F91', money_format('%.2n', $total_saldo_inmovilizado/$benef_activos));
+				}
+				$s->setCellValue('C86', "TOTAL SALDO INMOVILIZADO AL ".date("Y/m/d"));
+			})->export('xls');
+	}
+
+	/**
+	 * Return row number
+	 * @param string $indicador
+	 *
+	 * @return $row_number
+	 */
+	public function returnExcelRow($indicador) {
+
+		switch ($indicador) {
+			case '1|1':
+				return 10;
+				break;
+			case '1|2':
+				return 14;
+				break;
+			case '2|1':
+				return 20;
+				break;
+			case '2|2':
+				return 24;
+				break;
+			case '2|3':
+				return 28;
+				break;
+			case '2|4':
+				return 32;
+				break;
+			case '2|5':
+				return 36;
+				break;
+			case '5|1':
+				return 42;
+				break;
+			case '5|2':
+				return 46;
+				break;
+			case '5|3':
+				return 50;
+				break;
+			case '5|4':
+				return 54;
+				break;
+			case '5|5':
+				return 58;
+				break;
+			case '5|6':
+				return 62;
+				break;
+			case '5|7':
+				return 66;
+				break;
+			case '5|8':
+				return 70;
+				break;
+			case '5|9':
+				return 74;
+				break;
+			case '5|10':
+				return 78;
+				break;
+			case '5|11':
+				return 82;
+				break;
+
+			default:
+				return 100;
+				break;
+		}
+	}
+
+	/**
+	 * Return state color and fill background
+	 * @param $state, $sheet
+	 *
+	 * @return $sheet
+	 */
+	public function returnExcelStateColor($state, $sheet, $row_number) {
+
+		switch (true) {
+			case ($state == 'success'):
+				$sheet->cell('H'.strval($row_number), function ($color) {$color->setBackground("#82fa58");	});
+				break;
+			case ($state == 'warning'):
+				$sheet->cell('I'.strval($row_number), function ($color2) {$color2->setBackground("#ffff00");	});
+				break;
+			case ($state == 'danger'):
+				$sheet->cell('J'.strval($row_number), function ($color3) {$color3->setBackground("#b40404");	});
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * Arma el excel de ingresos
+	 * @param variables $r
+	 *
+	 * @return excel
+	 */
+	public function excelListadoTablaOriginal($periodo, $provincia) {
 
 		$results = $this->datosListadoTabla($periodo, $provincia);
 		$results = collect($results->get());
