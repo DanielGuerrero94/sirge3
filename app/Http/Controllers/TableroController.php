@@ -432,7 +432,7 @@ class TableroController extends AbstractPadronesController {
 					$s->setCellValue('F91', money_format('%.2n', $total_saldo_inmovilizado/$benef_activos));
 				}
 				$s->setCellValue('C86', "TOTAL SALDO INMOVILIZADO AL ".date("Y/m/d"));
-			})->export('xls');
+			})->setFilename("DDJJ_".$nombre_provincia."_".$periodo)->export('xls');
 	}
 
 	/**
