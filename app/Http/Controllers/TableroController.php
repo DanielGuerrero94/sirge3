@@ -374,7 +374,14 @@ class TableroController extends AbstractPadronesController {
 			$nombre_provincia = "CABA";
 		}
 
-		$data = ['tablero' => $results, 'id_entidad' => Auth::user()->id_entidad, 'periodo' => $periodo, 'nombre_provincia' => $nombre_provincia];
+		$administracion = Administracion::where('periodo', $periodo)->where('provincia', $provincia)->first();
+
+		$dt   = \DateTime::createFromFormat('Y-m', $periodo);
+		$date = $dt->format('Y-m');
+		$dt->modify('last day of this month');
+		$last_day_period = $dt->format('d/m/Y');
+
+		$data = ['tablero' => $results, 'id_entidad' => Auth::user()->id_entidad, 'periodo' => $periodo, 'nombre_provincia' => $nombre_provincia, 'usuario_aceptacion' => Usuario::find($administracion->usuario_accion)->nombre, 'fecha_aceptacion' => date_format($administracion->created_at, 'd/m/Y'), 'last_day_period' => $last_day_period];
 		$name = 'Ingresos en $periodo - Tablero de Control SUMAR';
 
 		$log               = new LogAcciones();
@@ -383,30 +390,19 @@ class TableroController extends AbstractPadronesController {
 		$log->accion       = json_encode(array("accion" => "Descarga de excel de indicadores cargados en periodo ".$periodo, "estado_anterior" => "No aplica", "estado_actual" => "No aplica"));
 		$log->save();
 
-		Excel::load('/var/www/html/sirge3/storage/uploads/tablero'.'/exported.xls', function ($reader) use ($data) {
+		Excel::load('/var/www/html/sirge3/storage/uploads/tablero'.'/exported.xlsx', function ($reader) use ($data) {
 
 				$s = $reader->sheet(0);
 				$i = 6;//COMIENZO DE DATOS EN EXCEL
 				setlocale(LC_MONETARY, 'it_AR');
 				$s->setCellValue('D1', $data['nombre_provincia']);
 				$s->setCellValue('G1', $data['periodo']);
-				$s->setCellValue('A2', "TABLERO DE CONTROL GENERAL AL ".date("Y/m/d"));
+				$s->setCellValue('A2', "TABLERO DE CONTROL GENERAL ACEPTADO EL ".$data['fecha_aceptacion']);
 				foreach ($data['tablero'] as $row_fields) {
 					$row_number = $this->returnExcelRow($row_fields['indicador']);
 					$s->setCellValue('F'.strval($row_number), $row_fields['numerador']);
 					$s->setCellValue('G'.strval($row_number), $row_fields['estado']);
 					$s->setCellValue('F'.strval($row_number+1), $row_fields['denominador']);
-
-					$color = '#ADC5E7';
-
-					if ($row_fields['color'] == 'success') {
-						$s->cells('H'.strval($row_number).':H'.strval($row_number+1), function ($row) use ($color) {$row->setBackground($color);});
-					} elseif ($row_fields['color'] == 'warning') {
-						$s->cells('I'.strval($row_number).':I'.strval($row_number+1), function ($row) use ($color) {$row->setBackground($color);});
-					} elseif ($row_fields['color'] == 'danger') {
-						$s->cells('J'.strval($row_number).':J'.strval($row_number+1), function ($row) use ($color) {$row->setBackground($color);});
-
-					}
 
 					if ($row_fields['indicador'] == "5|5") {
 						$saldo_inmovilizado_en_ugsp = $row_fields['numerador'];
@@ -426,13 +422,13 @@ class TableroController extends AbstractPadronesController {
 				if (isset($saldo_inmovilizado_en_ugsp) && isset($total_immovilizado_en_efectores)) {
 					$total_saldo_inmovilizado = $saldo_inmovilizado_en_ugsp+$total_immovilizado_en_efectores;
 					$s->setCellValue('D89', money_format('%.2n', $total_saldo_inmovilizado));
-					$s->setCellValue('E87', strval(round(($saldo_inmovilizado_en_ugsp/$denominador_5_8)*100, 2))."%");
-					$s->setCellValue('E88', strval(round(($total_immovilizado_en_efectores/$denominador_5_9)*100, 2))."%");
-					$s->setCellValue('E89', strval(round(($total_saldo_inmovilizado/$denominador_5_8)*100, 2))."%");
+					$s->setCellValue('E87', ($saldo_inmovilizado_en_ugsp/$denominador_5_8));
+					$s->setCellValue('E88', ($total_immovilizado_en_efectores/$denominador_5_9));
+					$s->setCellValue('E89', ($total_saldo_inmovilizado/$denominador_5_8));
 					$s->setCellValue('F91', money_format('%.2n', $total_saldo_inmovilizado/$benef_activos));
 				}
-				$s->setCellValue('C86', "TOTAL SALDO INMOVILIZADO AL ".date("Y/m/d"));
-			})->setFilename("DDJJ_".$nombre_provincia."_".$periodo)->export('xls');
+				$s->setCellValue('C86', "TOTAL SALDO INMOVILIZADO AL ".$data['last_day_period']);
+			})->setFilename("T_".$nombre_provincia."_".$periodo)->export('xlsx');
 	}
 
 	/**
