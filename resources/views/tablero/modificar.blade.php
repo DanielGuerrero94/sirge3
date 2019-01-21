@@ -63,7 +63,20 @@
 							<div class="form-group">
 				    			<label for="numerador" class="col-sm-4 control-label">Numerador</label>
 				    			<div class="col-sm-8">
-					    			<input type="text" name="numerador" class="form-control" id="numerador" value="{{ $indicador->numerador }}">
+				    				@if(isset($rules_indicadores[str_replace(".", "|", $indicador->indicador)]))
+				    					@if($rules_indicadores[str_replace(".", "|", $indicador->indicador)] == 'both' || $rules_indicadores[str_replace(".", "|", $indicador->indicador)] == 'numerador')
+				    						@if( $user->id_menu != 18 )
+					    						<input type="text" name="numerador" class="form-control" id="numerador" value="{{ $indicador->numerador }}" readonly>
+				    						@else
+					    						<input type="text" name="numerador" class="form-control" id="numerador" value="{{ $indicador->numerador }}">
+				    						@endif
+										@else
+											<input type="text" name="numerador" class="form-control" id="numerador" value="{{ $indicador->numerador }}">
+				    					@endif
+				    				@else
+				    					<input type="text" name="numerador" class="form-control" id="numerador" value="{{ $indicador->numerador }}">
+				    				@endif
+
 				    			</div>
 			    			</div>
 			    		</div>
@@ -71,7 +84,19 @@
 							<div class="form-group">
 				    			<label for="denominador" class="col-sm-4 control-label">Denominador</label>
 				    			<div class="col-sm-8">
-					    			<input type="text" name="denominador" class="form-control" id="denominador" value="{{ $indicador->denominador }}">
+					    			@if(isset($rules_indicadores[str_replace(".", "|", $indicador->indicador)]))
+				    					@if($rules_indicadores[str_replace(".", "|", $indicador->indicador)] == 'both' || $rules_indicadores[str_replace(".", "|", $indicador->indicador)] == 'denominador')
+				    						@if( $user->id_menu != 18 )
+					    						<input type="text" name="denominador" class="form-control" id="denominador" value="{{ $indicador->denominador }}" readonly>
+				    						@else
+					    						<input type="text" name="denominador" class="form-control" id="denominador" value="{{ $indicador->denominador }}">
+				    						@endif
+										@else
+											<input type="text" name="denominador" class="form-control" id="denominador" value="{{ $indicador->denominador }}">
+				    					@endif
+				    				@else
+				    					<input type="text" name="denominador" class="form-control" id="denominador" value="{{ $indicador->denominador }}">
+				    				@endif
 				    			</div>
 			    			</div>
 			    		</div>

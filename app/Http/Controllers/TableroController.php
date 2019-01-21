@@ -113,7 +113,7 @@ class TableroController extends AbstractPadronesController {
 				->where('tablero.ingresos.provincia', $provincia)
 			->where('tablero.ingresos.periodo', $periodo)
 				->count() == 0) {
-			if (!in_array(Auth::user()->id_menu, [1, 2, 3, 5, 11, 12, 14, 16])) {
+			if (!in_array(Auth::user()->id_menu, [1, 2, 3, 5, 11, 12, 14, 16, 18])) {
 				return 1;
 			}
 			if (Ingreso::where('periodo', $periodo)->where('provincia', $provincia)->count() == 0) {
@@ -209,12 +209,23 @@ class TableroController extends AbstractPadronesController {
 	 */
 	public function getModificar($id) {
 		$indicador = Ingreso::find($id);
-		$data      = [
-			'page_title' => 'Modificacion del indicador',
-			'ruta_back'  => 'main-tablero/'.$indicador->periodo.'/'.$indicador->provincia,
-			'provincias' => Provincia::all(),
-			'user'       => Auth::user(),
-			'indicador'  => $indicador];
+
+		$_rules_indicadores = ['1|1' => 'both',
+			'1|2'                       => 'both',
+			'2|1'                       => 'both',
+			'2|2'                       => 'denominador',
+			'2|3'                       => 'denominador',
+			'2|4'                       => 'denominador',
+			'5|2'                       => 'both',
+			'5|4'                       => 'denominador'];
+
+		$data = [
+			'page_title'        => 'Modificacion del indicador',
+			'ruta_back'         => 'main-tablero/'.$indicador->periodo.'/'.$indicador->provincia,
+			'provincias'        => Provincia::all(),
+			'user'              => Auth::user(),
+			'indicador'         => $indicador,
+			'rules_indicadores' => $_rules_indicadores];
 
 		return view('tablero.modificar', $data);
 	}
@@ -606,7 +617,7 @@ class TableroController extends AbstractPadronesController {
 				}
 
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
-			} else if (in_array($id_menu, array(1, 2, 5, 11, 16)) && $id_entidad == 1) {
+			} else if (in_array($id_menu, array(1, 2, 5, 11, 16, 18)) && $id_entidad == 1) {
 				if (Ingreso::find($id)->blocked) {
 					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
@@ -817,7 +828,7 @@ class TableroController extends AbstractPadronesController {
 
 				$array_responsables = array("01" => 284, "02" => 284, "03" => 305, "04" => 330, "05" => 291, "06" => 305, "07" => 305, "08" => 284, "09" => 330, "10" => 305, "11" => 330, "12" => 291, "13" => 305, "14" => 330, "15" => 266, "16" => 330, "17" => 291, "18" => 291, "19" => 284, "20" => 305, "21" => 330, "22" => 291, "23" => 291, "24" => 266);
 
-				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16])->where('id_usuario', $array_responsables[Auth::user()->id_provincia])->lists('email');
+				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16, 18])->where('id_usuario', $array_responsables[Auth::user()->id_provincia])->lists('email');
 
 				Mail::send('emails.respuesta-observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_uec) {
 						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
@@ -828,7 +839,7 @@ class TableroController extends AbstractPadronesController {
 						$m->subject('Respuesta a observacion en Tablero de Control!');
 					});
 			} else {
-				$cadena_ugsp = Usuario::where('id_entidad', 2)->where('id_provincia', $indicador->provincia)->whereIn('id_menu', [12, 14, 15])->lists('email');
+				$cadena_ugsp = Usuario::where('id_entidad', 2)->where('id_provincia', $indicador->provincia)->whereIn('id_menu', [12, 14, 16])->lists('email');
 
 				Mail::send('emails.observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_ugsp) {
 						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');

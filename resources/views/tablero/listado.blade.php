@@ -6,7 +6,7 @@
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Listado completo de indicadores</h2>
-				@if(in_array($user->id_menu,array(1,2,5,11,15)) && $user->id_entidad == 1)
+				@if(in_array($user->id_menu,array(1,2,5,11,15,18)) && $user->id_entidad == 1)
 					<div class="box-tools pull-right">
                         <div data-toggle="aceptar-tooltip" data-placement="left" style="display:inline-block;">
 						  <a class="aceptar-indicador btn btn-success" href="indicadores-aceptar"><i class="fa fa-thumbs-up" style="margin-right: 5px;"></i> Aceptar indicadores</a>
