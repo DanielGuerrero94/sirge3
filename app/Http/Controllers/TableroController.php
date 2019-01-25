@@ -250,7 +250,7 @@ class TableroController extends AbstractPadronesController {
 		$log               = new LogAcciones();
 		$log->id_provincia = $unIndicador->provincia;
 		$log->id_usuario   = Auth::user()->id_usuario;
-		$log->accion       = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => str_replace(array(","), ".", str_replace(array("$", "."), "", $r->numerador)), "denominador" => str_replace(array(","), ".", str_replace(array("$", "."), "", $r->denominador)))));
+		$log->accion       = json_encode(array("accion" => "Modificacion del Numerador o Denominador del indicador", "indicador" => $unIndicador->indicador, "estado_anterior" => $estado_anterior, "estado_actual" => array("numerador" => str_replace(array(","), ".", str_replace(array("$", "."), "", $r->numerador)), "denominador" => str_replace(array(","), ".", str_replace(array("$", "."), "", $r->denominador)))));
 		$log->save();
 
 		return 'Se han modificado los datos correctamente.';
