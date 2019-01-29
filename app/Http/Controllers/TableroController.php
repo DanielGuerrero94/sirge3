@@ -1234,6 +1234,7 @@ class TableroController extends AbstractPadronesController {
 			        ->orderBy(DB::raw('3'), 'asc')
 			        ->orderBy(DB::raw('1'), 'asc');
 
+			//Log::info($results->toSql());
 			$results = $results->get();
 
 			foreach ($results as $item) {
@@ -1440,7 +1441,17 @@ class TableroController extends AbstractPadronesController {
 					$indicadores_full = $this->checkCompletedPeriod($year, $datos['indicadores']);
 				}
 
-				$indicadores_full?($datos['estado'] = 'COMPLETADO SIN ACEPTAR'):($datos['incompleto'] = true);
+				if ($indicadores_full) {
+					$datos['estado']     = 'COMPLETADO SIN ACEPTAR';
+					$datos['completado'] = "COMPLETO";
+				} else {
+					$datos['incompleto'] = true;
+					if (isset($datos['indicadores'])) {
+						$datos['completado'] = strval(count($datos['indicadores']))."/".strval($datos['completado']);
+					} else {
+						$datos['completado'] = strval($datos['completado'])."/".strval($datos['completado']);
+					}
+				}
 
 				$datos['periodo']   = strval($field);
 				$datos['provincia'] = $provincia_cp;
