@@ -619,7 +619,7 @@ class TableroController extends AbstractPadronesController {
 				$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-grey btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Ver observaciones"> <i class="fa fa-envelope-o"></i></button> ';
 			} else if (in_array($id_menu, array(1, 2, 5, 11, 16, 18)) && $id_entidad == 1) {
 				if (Ingreso::find($id)->blocked) {
-					$botones = '<button id="'.$id.'" clas s="modificar-indicador btn btn-info btn-xs" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
+					$botones = '<button id="'.$id.'" class="modificar-indicador btn btn-info btn-xs" disabled><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 					$botones .= '<button id="'.$id.'" class="observar-indicador btn bg-primary btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Detalle una observacion para alertar a la provincia"> <i class="fa fa-eye"></i>  OBSERVAR</button> ';
 					$botones .= '<button id="'.$id.'" class="bloquear-indicador btn btn-success btn-xs" data-toggle="listado-tooltip" data-placement="top" title="Desbloquear modificacion del indicador"> DESBLOQUEAR</button> ';
 				} else {
