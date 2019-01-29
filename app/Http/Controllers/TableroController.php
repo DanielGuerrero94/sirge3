@@ -1443,7 +1443,7 @@ class TableroController extends AbstractPadronesController {
 
 				if ($indicadores_full) {
 					$datos['estado']     = 'COMPLETADO SIN ACEPTAR';
-					$datos['completado'] = "COMPLETO";
+					$datos['completado'] = strval($datos['completado'])."/".strval($datos['completado']);
 				} else {
 					$datos['incompleto'] = true;
 					if (isset($datos['indicadores'])) {
