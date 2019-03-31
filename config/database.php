@@ -73,6 +73,9 @@ return [
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',
+            'options'   => array(
+                PDO::ATTR_TIMEOUT => 40
+            ),
 		],
 
 		'pss'       => [

@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel {
 	 * @var array
 	 */
 	protected $commands = [
+		\App\Console\Commands\Diff::class ,
 		\App\Console\Commands\Inspire::class ,
 		\App\Console\Commands\CommandScheduler::class ,
 		\App\Console\Commands\TestCommand::class ,
@@ -27,9 +28,12 @@ class Kernel extends ConsoleKernel {
 	 * @return void
 	 */
 	protected function schedule(Schedule $schedule) {
+
+//        $count = DB::table('efectorees.efectores')->count();
+  //      Log::info($count);
 		//$schedule->call('App\Http\Controllers\HomeController@test', ['Alejandro'])->everyMinute();
 
-		$periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado', 1)->first()->max;
+		//$periodo_a_automatizar = Scheduler::select(DB::raw('max(periodo)'))->where('estado', 1)->first()->max;
 
 		$schedule->call('App\Http\Controllers\EfectoresController@refrescarTabla')->dailyAt('21:20');
 		$schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('21:30');
