@@ -1,7 +1,7 @@
 ﻿INSERT INTO estadisticas.ceb_002(periodo,id_provincia,beneficiarios_registrados,beneficiarios_activos,beneficiarios_ceb)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008',
+		FROM dblink('dbname=sirge3 host=192.3.0.37 user=postgres password=BernardoCafe008',
 		    'select
 				p.periodo
 				, id_provincia_alta

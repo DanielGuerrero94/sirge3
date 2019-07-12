@@ -1,7 +1,7 @@
 INSERT INTO indicadores.ca_16_001(id_provincia,periodo,volumen,descentralizacion)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008',
+		FROM dblink('dbname=sirge3 host=192.3.0.37 user=postgres password=BernardoCafe008',
 		    'select
 		p.id_provincia				
 		,(extract(year from now())::text || lpad(extract(mons from now())::text,2,''0''))::integer as periodo		

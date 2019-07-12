@@ -3,7 +3,7 @@ TRUNCATE TABLE estadisticas.fc_002;
 INSERT INTO estadisticas.fc_002(periodo,id_provincia,codigo_prestacion,cantidad,monto)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008','
+		FROM dblink('dbname=sirge3 host=192.3.0.37 user=postgres password=BernardoCafe008','
 			SELECT
 				extract (year from fecha_prestacion) :: text || lpad ( extract (month from fecha_prestacion) :: text , 2 , ''0'') as periodo
 				, id_provincia

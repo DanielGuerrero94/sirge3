@@ -1,7 +1,7 @@
 INSERT INTO estadisticas.fc_009(periodo,id_provincia,codigo_prestacion,cantidad_dr,cantidad_total_dr,cantidad)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008',
+		FROM dblink('dbname=sirge3 host=192.3.0.37 user=postgres password=BernardoCafe008',
 		    'SELECT 
 				extract(''year'' from fecha_prestacion)::varchar || lpad(extract(''mons'' from fecha_prestacion)::varchar, 2,''0'') as "PERIODO PRESTACION"				
 				, p.id_provincia as "PROVINCIA"

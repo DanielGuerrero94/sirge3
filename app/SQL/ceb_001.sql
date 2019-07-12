@@ -1,7 +1,7 @@
 ﻿INSERT INTO estadisticas.ceb_001(periodo,id_provincia,codigo_prestacion,grupo_etario,sexo,cantidad)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008',
+		FROM dblink('dbname=sirge3 host=192.3.0.37 user=postgres password=BernardoCafe008',
 		    'select 
 				extract (year from fecha_prestacion) :: text || lpad (extract (month from fecha_prestacion) :: text, 2 , ''0'') as periodo
 				, id_provincia

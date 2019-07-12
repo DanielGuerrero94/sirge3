@@ -3,7 +3,7 @@
 INSERT INTO estadisticas.uf_001(periodo,id_provincia,rubro,subrubro,monto)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge3 host=192.6.0.37 user=postgres password=BernardoCafe008',
+		FROM dblink('dbname=sirge3 host=192.3.0.37 user=postgres password=BernardoCafe008',
 		    'SELECT
 				replace(periodo , ''-'' , '''') ::int AS periodo
 				, id_provincia
