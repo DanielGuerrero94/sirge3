@@ -266,9 +266,9 @@ class RechazosController extends Controller {
 
 		try {
 			Mail::send('emails.excel-rechazo', ['usuario' => $u, 'lote' => $lote], function ($m) use ($u) {
-					$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to($u->email, $u->nombre);
-					$m->to('rodrigo.cadaval.sumar@gmail.com', $u->nombre);
+					$m->to('javier.minsky@gmail.com', $u->nombre);
 					$m->subject('Excel generado');
 				});
 		} catch (\Exception $e) {

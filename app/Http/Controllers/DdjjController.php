@@ -476,7 +476,7 @@ class DdjjController extends Controller
 			$pdf->save($path);
 
 			Mail::send('emails.ddjj-sirge', ['usuario' => $user , 'id' => $d9->id_impresion], function ($m) use ($user , $path , $id) {
-                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');                
+                $m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');                
                 $m->to($user->email, $user->nombre);
                 $m->subject('DDJJ DOIU Nº 9 - Información Priorizada Nº ' . $id);
                 $m->attach($path);
@@ -665,7 +665,7 @@ class DdjjController extends Controller
 			$pdf->save($path);
 
 			Mail::send('emails.ddjj-sirge', ['usuario' => $user , 'id' => $b->id_impresion], function ($m) use ($user , $path , $id) {
-                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
                 $m->to($user->email, $user->nombre);
                 //$m->to('rodrigo.cadaval.sumar@gmail.com', $user->nombre);
                 $m->subject('DDJJ BACKUP Nº ' . $id);

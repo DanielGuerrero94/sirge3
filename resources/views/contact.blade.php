@@ -16,10 +16,10 @@
 				<div class="row">
 					<div class="col-md-6">
 						<address>
-							<strong>Programa SUMAR</strong><br>
+							<strong>PACES</strong><br>
 							Av. 9 de Julio 1925<br>
 							Ciudad Autónoma de Buenos Aires, CP C1073ACA <br>
-							<abbr title="Tel"></abbr> (011) 4344-4300
+							<abbr title="Tel"></abbr> (011) 7090-3600
 						</address>
 						
 						<address>
@@ -82,7 +82,7 @@
 	        new google.maps.Marker({
 	            map: map,
 	            position: myLatlng,
-	            title: 'Programa SUMAR'
+	            title: 'PACES'
 	        });
 	    }
     	initialize();

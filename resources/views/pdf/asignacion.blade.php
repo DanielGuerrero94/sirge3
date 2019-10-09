@@ -12,7 +12,7 @@
 <body>
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
+			<img src="/var/www/html/sirge3/public/dist/img/Zocalo_PACES.jpg" style="margin-left: 2%; width: 100%;">
 			<div class="box box-danger">
 				<div class="box-header">
 					<h2 class="box-title">Asignación requerimiento Nº: <b>{{ $solicitud->id }}</b></h2>
@@ -38,14 +38,14 @@
 					<br/>
 					<br/>
 					<address>
-						<strong>Programa SUMAR.</strong><br>
+						<strong>PACES</strong><br>
 							Av. 9 de Julio 1925 P.12<br>
 							Ciudad Autónoma de Buenos Aires, CP C1072AAH<br>
-							<abbr>Tel:</abbr> (011) 4331-5701
+							<abbr>Tel:</abbr> (011) 7090-3600
 						</address>
 
 						<address>
-							<strong>Área Sistemas Informáticos</strong><br>
+							<strong>Área Cápitas - Sistemas de Información</strong><br>
 							<a href="mailto:#">sistemasuec@gmail.com</a>
 						</address>
 				</div>

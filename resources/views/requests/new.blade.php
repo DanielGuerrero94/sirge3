@@ -19,7 +19,7 @@
 						<div class="col-md-6">
 							<!--- SECTOR PARA SOLICITUD -->
 							<div class="form-group">
-								<label for="grupo">Seleccione hacia quien va dirigido su requrimiento</label>
+								<label for="grupo">Seleccione hacia quien va dirigido su requerimiento</label>
 								@include('common.select-sector-solicitud')
 							</div>
 						</div>
@@ -45,8 +45,8 @@
 						</div>
 						<div class="col-md-4">
 							<div class="form-group">
-								<label for="ref">Reclamo asociado</label>
-								<input class="form-control" type="number" name="ref" id="ref" data-toggle="tooltip" data-placement="left" title="Ingrese el número de reclamo anterior si la solución brindada no es satisfactoria">
+								<label for="ref">Requerimiento asociado</label>
+								<input class="form-control" type="number" name="ref" id="ref" data-toggle="tooltip" data-placement="left" title="Ingrese el número de requerimiento anterior si la solución brindada no es satisfactoria">
 							</div>
 						</div>
 					</div>

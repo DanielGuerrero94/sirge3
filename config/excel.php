@@ -60,13 +60,13 @@ return array(
     'properties' => array(
         'creator'        => 'SIRGe Web',
         'lastModifiedBy' => 'SIRGe Web',
-        'title'          => 'Programa SUMAR',
+        'title'          => 'PACES',
         'description'    => 'Archivo generado por SIRGe Web',
         'subject'        => 'Archivo generado por SIRGe Web',
         'keywords'       => 'sirge, web',
         'category'       => 'Excel',
-        'manager'        => 'Gustavo D. Hekel',
-        'company'        => 'Programa SUMAR',
+        'manager'        => 'Alvaro Ocariz',
+        'company'        => 'PACES',
     ),
 
     /*

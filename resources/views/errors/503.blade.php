@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Servidor en mantenimiento.</title>
+        <title>Realizando tareas de mantenimiento en servidores. Pruebe en 10 minutos.</title>
 
         <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
 
@@ -40,7 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Solucionando problemas en el servidor.</div>
+                <div class="title">Realizando tareas de mantenimiento en servidores. Pruebe en 10 minutos.</div>
             </div>
         </div>
     </body>

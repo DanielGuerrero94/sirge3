@@ -22,13 +22,18 @@ use App\Models\Rechazo;
 use App\Models\Subida;
 use App\Models\Tablero\Ingreso;
 use Auth;
+use Artisan;
 use Datatables;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Mail;
 use PDF;
 
 class LotesController extends Controller {
+
+    protected $lote;
+
 	/**
 	 * Create a new authentication controller instance.
 	 *
@@ -394,7 +399,7 @@ class LotesController extends Controller {
 			$pdf  = PDF::loadView('pdf.ddjj.sirge', $data);
 			$pdf->save($path);
 			Mail::send('emails.ddjj-sirge', ['id' => $id, 'usuario' => $user], function ($m) use ($user, $path, $id) {
-					$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to($user->email);
 					$m->subject('DDJJ Nº '.$id);
 					$m->attach($path);
@@ -418,10 +423,10 @@ class LotesController extends Controller {
 
 		if (isset($lotes[0])) {
 			Mail::send('emails.alert-lotes', ['lotes' => $lotes], function ($m) use ($lotes) {
-					$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('sirgeweb@gmail.com');
 					$m->to('javier.minsky@gmail.com');
-					$m->to('rodrigo.cadaval.sumar@gmail.com');
+				//	$m->to('rodrigo.cadaval.sumar@gmail.com');
 					$m->subject('ALERTA LOTES DEMORADOS');
 				});
 		}
@@ -484,10 +489,10 @@ class LotesController extends Controller {
 		foreach ($lotes as $lote) {
 			echo "Enviando mail a: ".$lote->email." por el lote pendiente ".$lote->lote."\n";
 			Mail::send('emails.alert-lotes-pendientes', ['lote' => $lote], function ($m) use ($lote) {
-					$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('sirgeweb@gmail.com');
 					$m->to('javier.minsky@gmail.com');
-					$m->to('rodrigo.cadaval.sumar@gmail.com');
+				//	$m->to('rodrigo.cadaval.sumar@gmail.com');
 					$m->to($lote->email);
 					$m->subject('ALERTA LOTES PENDIENTES');
 				});
@@ -523,4 +528,68 @@ class LotesController extends Controller {
 		unset($archivos);
 		unset($subidas);
 	}
+
+	/**
+     * Cancela a la fuerza el lote cambiando los estados para que corra el trigger.
+     * Solo deberia usarse en casos que haya quedado trabado.
+	 *
+	 * @return null
+	 */
+    public function cancelarLote(Request $r) {
+        $this->lote = Lote::find($r->lote);
+
+        try {
+            $this->cancelarSubidaAsociada();
+            $this->cancelar();
+        } catch(Exception $e){
+            echo $e->getMessage();
+        }
+    }
+
+	/**
+     * Chequea que sea correcto cancelarlo.
+	 *
+	 * @return null
+	 */
+    public function cancelar() {
+        if($this->lote->id_estado != 1) {
+            throw new Exception("Para cancelar un lote tiene que estar en el estado procesando");
+        }
+
+        $this->id_estado = 4;
+        $this->save();
+        echo "Lote {$this->lote->lote} cancelado.\n";
+    }
+
+	/**
+     * Cancela la subida asociada al lote.
+	 *
+	 * @return null
+	 */
+	public function cancelarSubidaAsociada() {
+
+        $subida = $this->lote->archivo()->first();
+
+        if($subida->id_estado != 3) {
+            throw new Exception("Para cancelar una subida tiene que estar en el estado procesando");
+        }
+
+        $this->id_estado = 4;
+        $this->save();
+        echo "Subida {$subida->id_subida} del padron {$subida->id_padron} cancelado.";
+    }
+
+	/**
+     * Listar lotes pendientes.
+	 *
+	 * @return null
+	 */
+	public function listarPendientes() {
+
+        Artisan::call("lote:listar");
+    }
+
+
+
+   
 }

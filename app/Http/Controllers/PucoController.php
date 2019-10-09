@@ -15,6 +15,7 @@ use Datatables;
 use DB;
 
 use Mail;
+use Log;
 
 use ZipArchive;
 
@@ -35,14 +36,13 @@ class PucoController extends Controller {
 	 */
 	public function getGenerar() {
 
-		//return var_dump($this->reportesEnPeriodo());
-
 		$data = [
 			'page_title' => 'Generar PUCO '.date('M y'),
 			'puco_ready' => $this->checkPuco(),
 			'meses'      => $this->reportesEnPeriodo(),
 			'periodo'    => date('M y')
-		];
+        ];
+        
 		return view('puco.generar', $data);
 	}
 
@@ -61,7 +61,7 @@ class PucoController extends Controller {
 	 *
 	 * @return string
 	 */
-	protected function password($length = 6) {
+	private function password($length = 6) {
 		$chars    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$?";
 		$password = substr(str_shuffle($chars), 0, $length);
 		return $password;
@@ -82,10 +82,8 @@ class PucoController extends Controller {
 			->leftJoin('puco.procesos_obras_sociales', function ($j) {
 				$j->on('sistema.lotes.lote', '=', 'puco.procesos_obras_sociales.lote');
 			})->leftJoin('puco.obras_sociales', 'puco.obras_sociales_provinciales.codigo_osp', '=', 'puco.obras_sociales.codigo_osp')
-		   ->where('puco.procesos_obras_sociales.periodo', '=', date('Ym'))
-		//->toSql()
-		;
-		//return var_dump($datos);
+		   ->where('puco.procesos_obras_sociales.periodo', '=', date('Ym'));
+
 		return Datatables::of($datos)->make(true);
 	}
 
@@ -94,7 +92,7 @@ class PucoController extends Controller {
 	 *
 	 * @return int
 	 */
-	protected function checkPuco() {
+	private function checkPuco() {
 		return Proceso::join('sistema.lotes', 'puco.procesos_obras_sociales.lote', '=', 'sistema.lotes.lote')
 			->where('periodo', date('Ym'))
 			->where('id_estado', 3)
@@ -108,12 +106,11 @@ class PucoController extends Controller {
 	 * @return int
 	 */
 	public function getBeneficiarios($periodo) {
-		$b = Proceso::join('sistema.lotes', 'puco.procesos_obras_sociales.lote', '=', 'sistema.lotes.lote')
+		return Proceso::join('sistema.lotes', 'puco.procesos_obras_sociales.lote', '=', 'sistema.lotes.lote')
 			->where('periodo', $periodo)
 			->where('id_estado', 3)
 			->select('registros_in')
 			->sum('registros_in');
-		return $b;
 	}
 
 	/**
@@ -123,7 +120,7 @@ class PucoController extends Controller {
 	 *
 	 * @return bool
 	 */
-	protected function actualizarPuco($pass, $beneficiarios) {
+	private function actualizarPuco($pass, $beneficiarios) {
 		$np            = Puco::findOrNew(date('Ym'));
 		$np->periodo   = date('Ym');
 		$np->clave     = $pass;
@@ -136,12 +133,13 @@ class PucoController extends Controller {
 	 *
 	 *
 	 */
-	protected function notificar($beneficiarios, $pass) {
+	private function notificar($beneficiarios, $pass) {
 		Mail::send('emails.noti-puco', ['mes' => date('F'), 'beneficiarios' => $beneficiarios, 'pass' => $pass], function ($m) {
-				$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+				$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 				$m->to('sistemasuec@gmail.com');
 				$m->to('javier.minsky@gmail.com');
-				$m->to('rodrigo.cadaval.sumar@gmail.com');
+			//	$m->to('rodrigo.cadaval.sumar@gmail.com');
+			//	$m->to('danielcussumar@gmail.com');
 				$m->subject('PUCO '.date('Ym'));
 			});
 	}
@@ -152,6 +150,8 @@ class PucoController extends Controller {
 	 * @return string
 	 */
 	public function generar() {
+
+        Log::info("Ejecuta query");
 
 		$datos = Provincia::leftJoin('sistema.subidas_osp', 'sistema.subidas_osp.codigo_osp', '=', 'puco.obras_sociales_provinciales.codigo_osp')
 			->leftJoin('sistema.subidas', 'sistema.subidas_osp.id_subida', '=', 'sistema.subidas.id_subida')
@@ -164,9 +164,12 @@ class PucoController extends Controller {
 			})->leftJoin('puco.obras_sociales', 'puco.obras_sociales_provinciales.codigo_osp', '=', 'puco.obras_sociales.codigo_osp')
 		   ->where('puco.procesos_obras_sociales.periodo', '=', date('Ym'))
 		   ->get();
+
+        Log::info("datos ".json_encode(count($datos)));
 		$i = 0;
 
 		foreach ($datos as $fila) {
+            Log::info("lote a insertar ".json_encode($fila));
 			$objeto_a_insertar[$i]['lote']         = $fila->lote;
 			$objeto_a_insertar[$i]['id_provincia'] = $fila->id_provincia;
 			$objeto_a_insertar[$i]['nombre']       = $fila->nombre;
@@ -185,27 +188,39 @@ class PucoController extends Controller {
 
 		$password = $this->password();
 
+        Log::info("ejecutar copiar_puco_en_servidor");
 		DB::statement("	SELECT public.copiar_puco_en_servidor(); ");
+
+        Log::info("copio a servidor");
 
 		$puco = file_get_contents('/var/www/html/sirge3/storage/swap/puco.txt');
 		$puco = str_replace("\n", "\r\n", $puco);
 		file_put_contents('/var/www/html/sirge3/storage/swap/PUCO_'.date("Y-m").'.txt', $puco);
 		unset($puco);
 
+        Log::info("genero PUCO_.txt");
+
 		//$sys = "sudo todos < puco.txt > PUCO_".date('Y-m')."txt";
 		//exec($sys);
 		//unlink('/var/www/html/sirge3/storage/swap/puco.txt');
 
 		$sys = "cd /var/www/html/sirge3/storage/swap/; zip -P $password PUCO_" .date("Y-m").".zip PUCO_".date('Y-m').".txt";
+
+        Log::info("genero puco zip");
 		exec($sys);
 
+        Log::info("actualiza puco");
 		$this->actualizarPuco($password, $this->getBeneficiarios(date('Ym')));
+
+        Log::info("actualizo puco");
+        Log::info("notifica");
 		$this->notificar($this->getBeneficiarios(date('Ym')), $password);
 
-		//unlink('/var/www/html/sirge3/storage/swap/PUCO_'.date("Y-m").'.txt');
+        Log::info("generar zip");
 
 		$this->generarZipACE();
 
+        Log::info("ejecuta store os beneficiarios sss");
 		DB::statement("	SELECT puco.store_os_beneficiarios_sss(); ");
 	}
 

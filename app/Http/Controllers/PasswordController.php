@@ -38,7 +38,7 @@ class PasswordController extends Controller
         } else {
 
         	Mail::send('emails.new_password', ['usuario' => $user[0]], function ($m) use ($user) {
-                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
                 $m->to($user[0]->email, $user[0]->nombre);
                 $m->subject('Cambio de contraseña');
             });

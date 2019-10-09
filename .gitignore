@@ -4,4 +4,4 @@
 composer.json
 composer.lock
 /storage
-
+!*/storage/uploads/trazadoras/process_logic/trz*

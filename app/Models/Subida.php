@@ -69,4 +69,14 @@ class Subida extends Model {
 		return $this->hasOne('App\Models\SubidaOsp', 'id_subida', 'id_subida');
 	}
 
+	/**
+	 * Setter del estado eliminado.
+	 */
+	public function setEstadoEliminado(){
+        $this->id_estado = 4;
+        $this->save();
+	}
+
+
+
 }

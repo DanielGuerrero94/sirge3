@@ -21,6 +21,7 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Mail;
+use Log;
 
 class HomeController extends Controller {
 
@@ -44,7 +45,7 @@ class HomeController extends Controller {
 	 * @return null
 	 */
 	public function index() {
-		return redirect()->intended('inicio');
+        return redirect()->intended('inicio');
 	}
 
 	/**
@@ -99,12 +100,19 @@ class HomeController extends Controller {
 	 */
 	public function inicio() {
 
+        $id_menu = Auth::user()->id_menu;
+        /*   
+        if ($id_menu == 22) {
+            return redirect()->intended('telesalud');
+        }
+         */
 		$data = [
 			'usuario'   => Auth::user()->nombre,
 			'ocupacion' => Auth::user()->ocupacion,
 			'mensaje'   => Auth::user()->mensaje,
-			'modulos'   => $this->getMenu(Auth::user()->id_menu)
+			'modulos'   => $this->getMenu($id_menu)
 		];
+
 		return view('inicio', $data);
 	}
 
@@ -184,7 +192,7 @@ class HomeController extends Controller {
 	protected function getFondosAll() {
 
 		$fondos = AfRubro::join('estadisticas.uf_001', 'af_rubros.rubro', '=', 'estadisticas.uf_001.rubro')
-			->select('af_rubros.nombre as name', DB::raw('sum(monto)::int as y'))
+			->select('af_rubros.nombre as name', DB::raw('sum(monto)::bigint as y'))
 			->groupBy('af_rubros.nombre')
 			->get();
 
@@ -429,6 +437,10 @@ class HomeController extends Controller {
 	 * @return null
 	 */
 	public function dashboard() {
+        $id_menu = Auth::user()->id_menu;
+        if ($id_menu == 22) {
+            return redirect()->action('TelesaludController@mainForm');
+        }
 
 		$visitas   = $this->getVisitas();
 		$efectores = $this->getAltasEfectores();

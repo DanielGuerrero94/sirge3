@@ -20,23 +20,22 @@
 	</style>
 </head>
 <body>
-<!-- <img src="{{ asset("/dist/img/header-sumar.png") }}" style="width: 100%;"> -->
-<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
+<!-- <img src="{{ asset("/dist/img/Zocalo_PACES.jpg") }}" style="width: 100%;"> -->
+<img src="/var/www/html/sirge3/public/dist/img/Zocalo_PACES.jpg" style="margin-left: 2%; width: 100%;">
 	<div style="text-align: right">
 		<i>{{ $mensaje->valor }}</i>
 	</div>
 	<hr />
 	<table style="width: 100%">
 		<tr>
-			<td style="font-size:12px;">FORMULARIO DE INFORMACIÓN PRIORIZADA - COBERTURA UNIVERSAL DE SALUD - SUMAR</td>
+			<td style="font-size:12px;">FORMULARIO DE INFORMACIÓN PRIORIZADA - COBERTURA UNIVERSAL DE SALUD - PACES</td>
 			<td style="font-size:12px;">Nº {{ $ddjj->id_provincia}}/{{ $ddjj->periodo_reportado}}</td>
 		</tr>
 	</table>
 	<p class="lugar-dia-hora"><b>{{ ucwords(strtolower($ddjj->provincia->descripcion)) }} , {{ $fecha_impresion }}</b></p>
 	<p style="font-weight: bold">
 		DIRECTOR NACIONAL DEL PROYECTO <br/>	
-		DR. JUAN CARLOS VASSALLO <br />
-		COBERTURA UNIVERSAL DE SALUD - SUMAR
+		COBERTURA UNIVERSAL DE SALUD - PACES
 		
 	</p>
 	<p>
@@ -57,16 +56,16 @@
 				Se encuentra cargado y autorizado el Tablero de Control con los datos correspondientes al período {{ $ddjj->periodo_tablero_control }}.
 			</li>
 			<li>
-				Con fecha {{ $ddjj->fecha_cuenta_capitas }} se remitió al Área de Supervisión y Auditoría de la Gestión Administrativa y Financiera de la UEC
+				Con fecha {{ $ddjj->fecha_cuenta_capitas }} se remitió al Área de Supervisión y Auditoría de la Gestión Administrativa y Financiera de la ECP
 				 la Declaración Jurada que incluye los ingresos y egresos de la Cuenta Cápitas Provincial del SPS durante el mes de {{ $fecha_cc }}, 
 				 y la copia del extracto bancario de dicha cuenta correspondiente al mismo período.
 			</li>
 			<li>
-				Con fecha {{ $ddjj->fecha_sirge }} se remitió al Área Sistemas Informáticos de la UEC la Declaración Jurada de Prestaciones, Comprobantes y Uso de Fondos 
+				Con fecha {{ $ddjj->fecha_sirge }} se remitió al Área Cápitas - Gestión de la Información  de la ECP la Declaración Jurada de Prestaciones, Comprobantes y Uso de Fondos 
 				realizado por los efectores correspondientes al Sistema de Reportes de Gestión (SIRGE), actualizando con los datos correspondientes al período {{ $ddjj->periodo_sirge }}.
 			</li>
 			<li>
-				Con fecha {{ $ddjj->fecha_reporte_bimestral }} se remitió al Área Planificación Estratégica de la UEC, el Reporte bimestral de Prestaciones del SPS y 
+				Con fecha {{ $ddjj->fecha_reporte_bimestral }} se remitió al Área Planificación Estratégica de la ECP, el Reporte bimestral de Prestaciones del SPS y 
 				el Reporte bimestral de Uso de Fondos del SPS correspondientes al bimestre Nº {{ $ddjj->bimestre }} del año {{ $ddjj->anio_bimestre }}.
 			</li>
 		</ol>

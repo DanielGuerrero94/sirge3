@@ -144,7 +144,7 @@ class UserController extends Controller
         $u->activo = 'S';
         if ($u->save()) {
             Mail::send('emails.alta', ['usuario' => $u], function ($m) use ($u) {
-                $m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+                $m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
                 $m->to($u->email, $u->nombre);
                 $m->to('rodrigo.cadaval.sumar@gmail.com', $u->nombre);
                 $m->subject('Usuario habilitado');

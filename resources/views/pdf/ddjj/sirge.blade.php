@@ -18,12 +18,12 @@
 </head>
 <body>
 	<!-- <img src="{{ asset("/var/www/html/sirge3/public/dist/img/header-sumar.png") }}" style="width: 100%;"> -->
-	<img src="/var/www/html/sirge3/public/dist/img/encabezado-cus-sin-linea.jpg" style="margin-left: 2%; width: 100%;">
+	<img src="/var/www/html/sirge3/public/dist/img/Zocalo_PACES.jpg" style="margin-left: 2%; width: 100%;">
 	
 	<p class="resumen"><b>{{ $jurisdiccion->descripcion }} , {{ $ddjj->fecha_impresion }}</b></p>
 	<p><b>SEÑOR</b></p>
-	<p><b>COORDINADOR DEL ÁREA SISTEMAS INFORMÁTICOS</b></p>
-	<p><b>LIC. JAVIER E. MINSKY</b></p>
+	<p><b>COORDINADOR DEL ÁREA CÁPITAS - SISTEMAS DE INFORMACIÓN</b></p>
+	<p><b>ALVARO OCARIZ</b></p>
 	<p><b><u>S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D</u></b></p>
 	<p>De mi mayor consideración</p>
 	<p style="text-indent: 10em;">Por medio de la presente elevo a Ud. en carácter de Declaración Jurada, 
@@ -35,7 +35,7 @@
 		<table class="table table-condensed table-bordered">
 			<tr class="active" style="text-align:center;">
 				<th>Lote</th>
-				@if ($padron == 4)
+				@if (isset($padron) && $padron == 4)
 				<th>Obra Social</th>
 				@endif
 				<th>Ingresados</th>
@@ -45,7 +45,7 @@
 		@foreach ($lotes as $lote)
 			<tr style="text-align:right;">
 				<td>{{ $lote->lote }}</td>
-				@if ($padron == 4)
+				@if (isset($padron) && $padron == 4)
 				<td>{{ $lote->nombre }}</td>				
 				@endif
 				<td>{{ number_format($lote->registros_in) }}</td>
@@ -55,7 +55,7 @@
 		@endforeach
 			<tr class="active">
 				<td>Totales</td>
-				@if ($padron == 4)
+				@if (isset($padron) && $padron == 4)
 				<td></td>
 				@endif
 				<td class="resumen">{{ number_format($resumen['in']) }}</td>

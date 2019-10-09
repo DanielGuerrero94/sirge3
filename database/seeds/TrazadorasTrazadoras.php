@@ -14,7 +14,7 @@ class TrazadorasTrazadoras extends Seeder
         \DB::statement("INSERT INTO trazadoras.trazadoras(id_trazadora,nombre)
 	(
 		SELECT *
-		FROM dblink('dbname=sirge host=192.6.0.118 user=postgres password=PN2012\$',
+		FROM dblink('dbname=sirge host=192.3.0.66 user=postgres password=BernardoCafe008',
 		    'SELECT id_trazadora,nombre
 			    FROM trazadoras.trazadoras')
 		    AS migracion(id_trazadora smallint,

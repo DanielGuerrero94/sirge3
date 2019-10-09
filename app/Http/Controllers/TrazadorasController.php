@@ -935,7 +935,11 @@ class TrazadorasController extends AbstractPadronesController {
 			return response()->json(['success' => 'false', 'errors' => "El archivo no ha podido procesarse"]);
 		}
 
-		$lote = Lote::where('id_subida', $id_subida)->first()->lote;
+        try {
+    		$lote = Lote::where('id_subida', $id_subida)->first()->lote;
+        } catch(ErrorException $e) {
+			return response()->json(['success' => 'false', 'errors' => "No existe lote asociado al archivo"]);
+        }
 
 		$nro_linea = 1;
 

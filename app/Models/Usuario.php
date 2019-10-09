@@ -39,6 +39,8 @@ class Usuario extends Model implements AuthenticatableContract, CanResetPassword
      * @var array
      */
     //protected $hidden = ['password', 'remember_token'];
+    //
+    protected $fillable = ['usuario', 'nombre', 'email', 'password', 'activo', 'id_provincia', 'id_entidad', 'id_menu'];
 
     /**
      * Ingresar el nombre del usuario

@@ -88,10 +88,10 @@ class SolicitudController extends Controller {
 			$s->usuario_solicitante;
 			$user = Usuario::select('nombre', 'usuario', 'email', 'id_usuario', 'id_provincia', 'id_entidad')->with(['provincia', 'entidad'])->where('id_usuario', $s->usuario_solicitante)->first();
 			Mail::send('emails.new-solicitud', ['usuario' => $user], function ($m) use ($user) {
-					$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('javier.minsky@gmail.com');
 					$m->to('sirgeweb@gmail.com');
-					$m->to('rodrigo.cadaval.sumar@gmail.com');
+					$m->to('aocariz@hotmail.com');
 					$m->subject('Nuevo requerimiento!');
 				});
 
@@ -233,7 +233,7 @@ class SolicitudController extends Controller {
 		$pdf->save($path);
 
 		Mail::send('emails.request-asignacion', ['usuario' => $user], function ($m) use ($user, $path, $id, $s) {
-				$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+				$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 				$m->to($s->usuario->email)->cc($s->operador->email);
 				$m->subject('Asignación requerimiento Nº '.$id);
 				$m->attach($path);
@@ -314,7 +314,7 @@ class SolicitudController extends Controller {
 			isset($s->adjuntos->nombre_actual_respuesta)?$adjunto = 'S':$adjunto = 'N';
 
 			Mail::send('emails.request-cierre', ['usuario' => $user, 'id' => $id, 'hash' => $s->hash, 'adjunto' => $adjunto], function ($m) use ($user, $path, $id, $s) {
-					$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to($s->usuario->email);
 					$m->subject('Cierre requerimiento Nº '.$id);
 					$m->attach($path);
@@ -400,7 +400,7 @@ class SolicitudController extends Controller {
 		isset($s->adjuntos->nombre_actual_respuesta)?$adjunto = 'S':$adjunto = 'N';
 
 		Mail::send('emails.request-cierre', ['usuario' => $user, 'id' => $id, 'hash' => $s->hash, 'adjunto' => $adjunto], function ($m) use ($user, $path, $id, $s) {
-				$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+				$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 				$m->to($s->usuario->email);
 				$m->subject('Cierre requerimiento Nº '.$id);
 				$m->attach($path);

@@ -121,7 +121,7 @@
                                             <div class="icon">
                                                 <i class="fa fa-building-o"></i>
                                             </div>
-                                            <h6>UEC</h6>
+                                            <h6>ECP</h6>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -130,7 +130,7 @@
                                             <div class="icon">
                                                 <i class="fa fa-university"></i>
                                             </div>
-                                            <h6>UGSP</h6>
+                                            <h6>UIP</h6>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

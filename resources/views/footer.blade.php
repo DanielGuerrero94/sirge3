@@ -1,8 +1,8 @@
 <footer class="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
-        SIRGE Web - Unidad Ejecutora Central
+        SIRGe Web - Equipo Coordinador de Programa
     </div>
     <!-- Default to the left -->
-    <strong> <a href="#">Cobertura Universal de Salud - sumar</a></strong>
+    <strong> <a href="#">Cobertura Universal de Salud - PACES</a></strong>
 </footer>

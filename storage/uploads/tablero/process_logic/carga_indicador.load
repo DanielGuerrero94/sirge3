@@ -10,7 +10,7 @@ LOAD CSV
 		denominador [null if blanks, trim both whitespace]
 	)
 
-	INTO postgresql://postgres:BernardoCafe008@192.6.0.153:5432/sirge3?tablero.:TABLE_NAME
+	INTO postgresql://postgres:BernardoCafe008@192.3.0.68:5432/sirge3?tablero.:TABLE_NAME
 	TARGET COLUMNS
 	(
 		periodo,
@@ -25,7 +25,7 @@ LOAD CSV
 	     fields optionally enclosed by '"'
 
 BEFORE LOAD DO       	 
-	 $$ CREATE TABLE IF NOT EXISTS trazadoras.ingresos
+	 $$ CREATE TABLE IF NOT EXISTS tablero.ingresos
         (
 	 	id serial PRIMARY KEY,
 		periodo character varying(7) NOT NULL,
@@ -34,7 +34,9 @@ BEFORE LOAD DO
 		numerador text,
 		denominador text,
 		observaciones jsonb,
-		lote integer NOT NULL
+		lote integer NOT NULL,
+		blocked boolean NOT NULL DEFAULT false,
+		CONSTRAINT ingresos_periodo_indicador_provincia_key UNIQUE (periodo, indicador, provincia)
         );
         $$,
 	$$ CREATE INDEX IF NOT EXISTS idx_tablero_ingresos_lote ON tablero.ingresos(lote); $$

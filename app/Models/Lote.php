@@ -89,4 +89,13 @@ class Lote extends Model
 	public function provincia(){
 		return $this->hasOne('App\Models\Geo\Provincia' , 'id_provincia' , 'id_provincia');
 	}
+
+	/**
+	 * Setter del estado eliminado.
+	 */
+	public function setEstadoEliminado(){
+        $this->id_estado = 4;
+        $this->save();
+	}
+
 }

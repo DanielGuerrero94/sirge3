@@ -265,6 +265,7 @@ class TableroController extends AbstractPadronesController {
 
 		$results = $this->datosListadoTabla($periodo, $provincia);
 
+
 		return Datatables::of($results)
 			->addColumn(
 			'indicador_real',
@@ -358,6 +359,8 @@ class TableroController extends AbstractPadronesController {
 		        ->orderBy(DB::raw('right(indicador,-2)::integer'), 'asc');
 
 		$this->_user = Auth::user();
+
+        Log::info($results->toSql());
 
 		return $results;
 	}
@@ -606,6 +609,7 @@ class TableroController extends AbstractPadronesController {
 	 * @return text (HTML)
 	 */
 	public function datatableActions($indicadores_full, $id_menu, $id_entidad, $observaciones, $id) {
+        $botones;
 
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
@@ -826,27 +830,27 @@ class TableroController extends AbstractPadronesController {
 
 			if (Auth::user()->id_entidad == 2) {
 
-				$array_responsables = array("01" => 284, "02" => 284, "03" => 305, "04" => 330, "05" => 291, "06" => 305, "07" => 305, "08" => 284, "09" => 330, "10" => 305, "11" => 330, "12" => 291, "13" => 305, "14" => 330, "15" => 266, "16" => 330, "17" => 291, "18" => 291, "19" => 284, "20" => 305, "21" => 330, "22" => 291, "23" => 291, "24" => 266);
+				$array_responsables = array("01" => 292, "02" => 292, "03" => 305, "04" => 330, "05" => 291, "06" => 305, "07" => 305, "08" => 284, "09" => 330, "10" => 305, "11" => 330, "12" => 291, "13" => 292, "14" => 330, "15" => 266, "16" => 330, "17" => 291, "18" => 291, "19" => 284, "20" => 305, "21" => 330, "22" => 291, "23" => 291, "24" => 266);
 
 				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16, 18])->where('id_usuario', $array_responsables[Auth::user()->id_provincia])->lists('email');
 
 				Mail::send('emails.respuesta-observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_uec) {
-						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+						$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 						foreach ($cadena_uec as $supervision_uec) {
 							$m->to($supervision_uec);
 						}
-						$m->bcc('rodrigo.cadaval.sumar@gmail.com');
+						$m->bcc('javier.minsky@gmail.com');
 						$m->subject('Respuesta a observacion en Tablero de Control!');
 					});
 			} else {
 				$cadena_ugsp = Usuario::where('id_entidad', 2)->where('id_provincia', $indicador->provincia)->whereIn('id_menu', [12, 14, 16])->lists('email');
 
 				Mail::send('emails.observacion', ['user' => Auth::user(), 'indicador' => $indicador, 'mensaje' => $r->observacion], function ($m) use ($cadena_ugsp) {
-						$m->from('sirgeweb@sumar.com.ar', 'Programa SUMAR');
+						$m->from('sirgeweb@sumar.com.ar', 'Sirge Web');
 						foreach ($cadena_ugsp as $supervision_ugsp) {
 							$m->to($supervision_ugsp);
 						}
-						$m->bcc('rodrigo.cadaval.sumar@gmail.com');
+						$m->bcc('javier.minsky@gmail.com');
 						$m->subject('Observacion en Tablero de Control!');
 					});
 			}

@@ -548,3 +548,19 @@ Route::get('listado-historico-descargar/{periodo_desde}/{periodo_hasta}/{provinc
  */
 
 Route::get('sigop/reportes', function () {return view('sigop.reportes.main');});
+//Route::get('sigop/reportes', 'SIGOPACController@mapping');
+//
+
+/**
+ *  TELESALUD
+ */
+Route::get('telesalud', 'TelesaludController@mainForm');
+Route::get('telesalud/consulta', 'TelesaludController@consulta');
+Route::get('telesalud/usuario', 'TelesaludController@usuario');
+Route::get('telesalud/descarga', 'TelesaludController@descarga');
+
+/**
+ *  FIXES
+ */
+Route::get('cancelar-lote/{lote}', 'LotesController@cancelarLote');
+Route::get('listar-pendientes', 'LotesController@listarPendientes');
