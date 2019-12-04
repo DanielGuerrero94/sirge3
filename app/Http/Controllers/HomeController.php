@@ -54,13 +54,15 @@ class HomeController extends Controller {
 	 *
 	 * @return array
 	 */
-	protected function getMenu($id_menu) {
+	public function getMenu($id_menu) {
 		$menu       = array();
 		$relaciones = ModuloMenu::join('sistema.modulos', 'sistema.modulos_menu.id_modulo', '=', 'sistema.modulos.id_modulo')
 			->where('id_menu', $id_menu)
 			->orderBy('nivel_1')
-			->orderBy('nivel_2')
-			->get();
+			->orderBy('nivel_2');
+
+            Log::debug($relaciones->toSql());
+        $relaciones = $relaciones->get();
 
 		foreach ($relaciones as $key => $relacion) {
 			$modulo                                  = Modulo::find($relacion->id_modulo);
@@ -82,7 +84,7 @@ class HomeController extends Controller {
 	 *
 	 * @return string
 	 */
-	protected function armaArbol($menu) {
+	public function armaArbol($menu) {
 		foreach ($menu as $key => $modulo) {
 			if ($modulo['id_padre']) {
 				$index = $modulo['id_padre'];
@@ -121,7 +123,7 @@ class HomeController extends Controller {
 	 *
 	 * @return array
 	 */
-	protected function getDateInterval() {
+	public function getDateInterval() {
 
 		$dt = new \DateTime();
 		$dt->modify('-1 month');
@@ -137,7 +139,7 @@ class HomeController extends Controller {
 	 *
 	 * @return json
 	 */
-	protected function getProgresoCeb() {
+	public function getProgresoCeb() {
 
 		$interval = $this->getDateInterval();
 
@@ -162,7 +164,7 @@ class HomeController extends Controller {
 	 *
 	 * @return json
 	 */
-	protected function getProgresoFc() {
+	public function getProgresoFc() {
 
 		$interval = $this->getDateInterval();
 
@@ -189,7 +191,7 @@ class HomeController extends Controller {
 	 *
 	 * @return json
 	 */
-	protected function getFondosAll() {
+	public function getFondosAll() {
 
 		$fondos = AfRubro::join('estadisticas.uf_001', 'af_rubros.rubro', '=', 'estadisticas.uf_001.rubro')
 			->select('af_rubros.nombre as name', DB::raw('sum(monto)::bigint as y'))
@@ -204,7 +206,7 @@ class HomeController extends Controller {
 	 *
 	 * @return json
 	 */
-	protected function getMesesArray() {
+	public function getMesesArray() {
 
 		$dt = new \DateTime();
 		$dt->modify('-13 months');
@@ -221,7 +223,7 @@ class HomeController extends Controller {
 	 *
 	 * @return string
 	 */
-	protected function getPrestacionesFacturadas() {
+	public function getPrestacionesFacturadas() {
 		$ps = Fc001::sum('cantidad');
 		return round($ps/1000000, 2).'M';
 	}
@@ -231,7 +233,7 @@ class HomeController extends Controller {
 	 *
 	 * @return int
 	 */
-	protected function getEfectores() {
+	public function getEfectores() {
 		return Efector::where('id_estado', 1)->count();
 	}
 
@@ -240,7 +242,7 @@ class HomeController extends Controller {
 	 *
 	 * @return int
 	 */
-	protected function getUsuarios() {
+	public function getUsuarios() {
 		return Usuario::where('activo', 'S')->count();
 	}
 
@@ -249,7 +251,7 @@ class HomeController extends Controller {
 	 *
 	 * @return int
 	 */
-	protected function getBeneficiariosTotal() {
+	public function getBeneficiariosTotal() {
 		$periodo = Ceb002::select(DB::raw('max(periodo)'))->first()->max;
 		return round(Ceb002::where('periodo', $periodo)->sum('beneficiarios_registrados')/1000000, 2);
 	}
@@ -260,7 +262,7 @@ class HomeController extends Controller {
 	 *
 	 * @return int
 	 */
-	protected function getRegistrosIn($id) {
+	public function getRegistrosIn($id) {
 
 		$dt = new \DateTime();
 		$dt->modify('first day of this month');
@@ -289,7 +291,7 @@ class HomeController extends Controller {
 	 *
 	 * @return int
 	 */
-	protected function getPorcentajeIn($id) {
+	public function getPorcentajeIn($id) {
 		$dt = new \DateTime();
 		$dt->modify('first day of this month');
 		$min = $dt->format('Y-m-d');
@@ -321,7 +323,7 @@ class HomeController extends Controller {
 	 *
 	 * @return array
 	 */
-	protected function getVisitas() {
+	public function getVisitas() {
 		$array = [
 			'total'   => 0,
 			'visitas' => []
@@ -351,7 +353,7 @@ class HomeController extends Controller {
 	 *
 	 * @return array
 	 */
-	protected function getAltasEfectores() {
+	public function getAltasEfectores() {
 		$array = [
 			'total' => 0,
 			'altas' => []
@@ -381,7 +383,7 @@ class HomeController extends Controller {
 	 *
 	 * @return array
 	 */
-	protected function getAltasUsuarios() {
+	public function getAltasUsuarios() {
 		$array = [
 			'total' => 0,
 			'altas' => []
@@ -411,7 +413,7 @@ class HomeController extends Controller {
 	 *
 	 * @return json
 	 */
-	protected function getDataMap() {
+	public function getDataMap() {
 		$periodo = Ceb002::select(DB::raw('max(periodo)'))->first()->max;
 
 		$provincias = Indec::leftJoin('geo.geojson', 'indec.poblacion.id_provincia', '=', 'geo.geojson.id_provincia')

@@ -188,7 +188,7 @@ class EfectoresController extends Controller {
 				'codigo_tercer_administrador' => $r->cuie_admin,
 				'fecha_suscripcion'           => $r->convenio_fsus,
 				'fecha_inicio'                => $r->convenio_fini,
-				'fecha_fin'                   => $r->convenio_ffin
+				'fecha_fin'                   => $r->compromiso_ffin
 			]);
 
 		$ef                                = new Efector;
@@ -417,7 +417,7 @@ class EfectoresController extends Controller {
 					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('sirgeweb@gmail.com');
                                         $m->to('javier.minsky@gmail.com');
-				//	$m->to('rodrigo.cadaval.sumar@gmail.com');
+					$m->to('aocariz@hotmail.com');
 					$m->subject('Solicitud de baja de efector!');
 				});
 
@@ -813,15 +813,15 @@ class EfectoresController extends Controller {
 
 		$data = ['efectores' => $efectores];
 
-		if (file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx')) {
-			unlink('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx');
+		if (file_exists('/var/www/html/sirge3/storage/exports/Efectores_PACES.xlsx')) {
+			unlink('/var/www/html/sirge3/storage/exports/Efectores_PACES.xlsx');
 		}
-		if (file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip')) {
-			unlink('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip');
+		if (file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_PACES.zip')) {
+			unlink('/var/www/html/sirge3/storage/exports/EFECTORES_PACES.zip');
 		}
 
-		Excel::create('Efectores_SUMAR', function ($e) use ($data) {
-				$e->sheet('Tabla_SUMAR', function ($s) use ($data) {
+		Excel::create('Efectores_PACES', function ($e) use ($data) {
+				$e->sheet('Tabla_PACES', function ($s) use ($data) {
 						$s->setHeight(1, 20);
 						$s->setColumnFormat([
 								'B' => '00000000000000'
@@ -832,8 +832,8 @@ class EfectoresController extends Controller {
 			->store('xlsx');
 
 		$zip = new ZipArchive();
-		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
-		$zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx', 'Efectores_SUMAR.xlsx');
+		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_PACES.zip', ZipArchive::CREATE);
+		$zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_PACES.xlsx', 'Efectores_PACES.xlsx');
 		$zip->close();
 	}
 
@@ -843,7 +843,7 @@ class EfectoresController extends Controller {
 	 * @return null
 	 */
 	public function descargarTabla() {
-		return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
+		return response()->download('../storage/exports/EFECTORES_PACES.zip');
 	}
 
 	/**

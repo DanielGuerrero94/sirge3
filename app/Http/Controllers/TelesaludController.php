@@ -8,10 +8,14 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Telesalud\Telesalud;
+use App\Models\Telesalud\UsuarioTelesalud;
+use App\Models\Telesalud\CentroTelesalud;
+use App\Models\Telesalud\Sirge;
 use App\Models\Geo\Provincia;
 
 use Auth;
 use Hash;
+use Excel;
 use App\Models\Usuario;
 
 class TelesaludController extends Controller
@@ -34,15 +38,25 @@ class TelesaludController extends Controller
 	public function mainForm(){
 
         $user = Auth::user();
+     
+        $usuario = Sirge::where('id_sirge', $user->id_usuario)->first();
 
-        $json = json_decode('{"id":"75159","nombre":"Nora Analía del Valle","apellido":"Vizgarra","username":"24808157","password":"$2a$10$QIV.ZCOsAjsKQrh1S4nRJeXrlPf3NAxRD2di9pndXcwIpi5XVf93y","centro_id":"1271","enabled":"1","especialidad_id":"","matricula":"1993","domicilio":"Victor Alcorta 5020","telefono":"","mail":"noriviz@yahoo.com.ar","matricula_provincial":"1993","tipo_documento":"DNI","numero_documento":"24808157","primer_ingreso":"0","centro":"Hospital Zonal Dr. Cazzaniga - Fernandez"}', true);
-
+        if($usuario != null) {
 		$data = [
 			'page_title' => 'Telesalud',
-            'user' => $user,
-            'json' => $json
+            'json' => $usuario
 		];
-		return view('telesalud.main' , $data);
+        return view('telesalud.main' , $data);
+        }
+
+        $ids = Sirge::select('id_sirge')->get()
+        ->map(function ($v){
+            return $v->id_sirge;
+        })->toArray();
+        $usuarios = Usuario::select('usuario')
+        ->whereIn('id_usuario', $ids)->get()->toJson();
+
+        return response()->json($usuarios);
 	}
 
 	/**
@@ -68,18 +82,25 @@ class TelesaludController extends Controller
 	 */
 	public function usuario(){
 
-        $data = json_decode('{"id":"75159","nombre":"Nora Analía del Valle","apellido":"Vizgarra","username":"24808157","password":"123456","centro_id":"1271","enabled":"1","especialidad_id":"","matricula":"1993","domicilio":"Victor Alcorta 5020","telefono":"","mail":"noriviz@yahoo.com.ar","matricula_provincial":"1993","tipo_documento":"DNI","numero_documento":"24808157","primer_ingreso":"0","centro":"Hospital Zonal Dr. Cazzaniga - Fernandez"}', true);
-        return Usuario::create([
+        $usuarios = json_decode('{"telesalud":[{"mail":"mocd333@gmail.com","nombre":"Maria del Carmen","apellido":"Cuello","id_provincia":"07"}]}', true);
+
+        $usuarios = $usuarios['telesalud'];
+
+        foreach($usuarios as $data) {
+
+
+        $nuevo =  Usuario::create([
             'usuario' => $data['mail'],
             'nombre' => $data['nombre'] . ' ' . $data['apellido'],
             'email' => $data['mail'],
             'activo' => "S",
-            'id_provincia' => "14",
+            'id_provincia' => $data['id_provincia'],
             'id_entidad' => "3",
             'id_menu' => "22",
-            'password' => bcrypt($data['password'])
+            'password' => bcrypt('Tele$alud2019')
         ]);
-
+            \Log::info($nuevo);
+        }
 	}
 
 	/**
@@ -88,7 +109,38 @@ class TelesaludController extends Controller
 	 * @return null
 	 */
     public function descarga(){
-		return response()->download('../storage/telesalud/consultas.xls');
+        $user = Auth::user();
+     
+        $usuario = Sirge::where('id_sirge', $user->id_usuario)->first();
+
+        $id = $usuario->id;
+
+        $consulta = Telesalud::where('creador_id', $id)->get();
+		$data = [
+			'resultados'    => $consulta
+		];
+
+        \Log::info($data);
+
+		Excel::create(
+			'telesalud-'.$id,
+			function ($excel) use ($data) {
+				$excel->sheet(
+					'Telesalud',
+					function ($sheet) use ($data) {
+						$sheet->setHeight(1, 20);
+						$sheet->setColumnFormat(
+							[
+								'A' => '@'
+							]
+						);
+						$sheet->loadView('telesalud.excel-template', $data);
+					}
+				);
+			}
+		)->store('xls');
+
+		return response()->download('../storage/exports/telesalud-'.$id.'.xls');
     }
 
 

@@ -830,7 +830,7 @@ class TableroController extends AbstractPadronesController {
 
 			if (Auth::user()->id_entidad == 2) {
 
-				$array_responsables = array("01" => 292, "02" => 292, "03" => 305, "04" => 330, "05" => 291, "06" => 305, "07" => 305, "08" => 284, "09" => 330, "10" => 305, "11" => 330, "12" => 291, "13" => 292, "14" => 330, "15" => 266, "16" => 330, "17" => 291, "18" => 291, "19" => 284, "20" => 305, "21" => 330, "22" => 291, "23" => 291, "24" => 266);
+				$array_responsables = array("01" => 292, "02" => 292, "03" => 386, "04" => 330, "05" => 291, "06" => 386, "07" => 330, "08" => 291, "09" => 330, "10" => 386, "11" => 330, "12" => 291, "13" => 292, "14" => 330, "15" => 386, "16" => 330, "17" => 291, "18" => 291, "19" => 386, "20" => 386, "21" => 330, "22" => 291, "23" => 291, "24" => 386);
 
 				$cadena_uec = Usuario::where('id_entidad', 1)->whereIn('id_menu', [11, 16, 18])->where('id_usuario', $array_responsables[Auth::user()->id_provincia])->lists('email');
 
@@ -839,6 +839,7 @@ class TableroController extends AbstractPadronesController {
 						foreach ($cadena_uec as $supervision_uec) {
 							$m->to($supervision_uec);
 						}
+						$m->cc('syaecp@gmail.com');
 						$m->bcc('javier.minsky@gmail.com');
 						$m->subject('Respuesta a observacion en Tablero de Control!');
 					});
@@ -850,6 +851,7 @@ class TableroController extends AbstractPadronesController {
 						foreach ($cadena_ugsp as $supervision_ugsp) {
 							$m->to($supervision_ugsp);
 						}
+						$m->cc('syaecp@gmail.com');
 						$m->bcc('javier.minsky@gmail.com');
 						$m->subject('Observacion en Tablero de Control!');
 					});

@@ -86,12 +86,22 @@
       });
     
       $.backstretch([
-        "http://i.imgur.com/TKZpSPq.jpg"
-      , "http://i.imgur.com/wvAoHzO.jpg"
-      , "http://i.imgur.com/cjBRlew.jpg"
-      , "http://i.imgur.com/2konMTs.jpg"
-      , "http://i.imgur.com/7MyX5Vg.jpg"
-      ], {duration: 3000, fade: 2000});
+        "https://cas.gde.gob.ar/src/img/fondo/semana_01.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_02.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_03.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_04.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_05.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_06.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_07.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_08.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_09.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_10.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_11.jpg"
+      , "https://cas.gde.gob.ar/src/img/fondo/semana_12.jpg"
+      , "https://cas.gde.gov.ar/src/img/fondo/semana_13.jpg"
+      , "https://cas.gde.gov.ar/src/img/fondo/semana_14.jpg"
+      , "https://cas.gde.gov.ar/src/img/fondo/semana_15.jpg"
+      ], {duration: 6000, fade: 2000});
     </script>
   </body>
 </html>

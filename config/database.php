@@ -265,6 +265,19 @@ return [
 			'schema'       => 'public',
 		],
 
+		'telesalud' => [
+			'driver'       => 'pgsql',
+			'host'         => env('DB_HOST_TELESALUD', 'localhost'),
+			'database'     => env('DB_DATABASE_TELESALUD', 'forge'),
+			'username'     => env('DB_USERNAME_TELESALUD', 'forge'),
+			'password'     => env('DB_PASSWORD_TELESALUD', ''),
+            'port'         => env('DB_PORT_TELESALUD', 5432),
+			'charset'      => 'utf8',
+			'prefix'       => '',
+			'schema'       => 'telesalud',
+		],
+
+
 		'sqlsrv'    => [
 			'driver'   => 'sqlsrv',
 			'host'     => env('DB_HOST_SQLSERVER', 'localhost'),

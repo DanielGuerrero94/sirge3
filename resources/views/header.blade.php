@@ -25,59 +25,34 @@
                         <li class="header new-messages-text"></li>
                         <li class="footer"><a href="inbox" class="ajax-link">Ver todos los mensajes</a></li>
                     </ul>
-                        <!--
-                        <li>
-                            <ul class="menu">
-                                <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                        <img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image"/>
-                                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
-                                    </div>
-                                    <h4>
-                                        Support Team
-                                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                    </h4>
-                                    <p>Why not buy a new awesome theme?</p>
-                                </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="footer"><a href="#">See All Messages</a></li>
-                    </ul>
-                    -->
                 </li><!-- /.messages-menu -->
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <!-- The user image in the navbar-->
-                        <img src="{{ asset("/dist/img/usuarios/" . '/' . Auth::user()->ruta_imagen ) }}" class="user-image" alt="User Image"/>
+                        @if (Auth::user()->ruta_imagen != null)
+                          <img src="{{ asset("/dist/img/usuarios/" . '/' . Auth::user()->ruta_imagen ) }}" class="user-image" alt="User Image" />
+                        @else
+                          <img src="{{ asset("/dist/img/usuarios/" . '/' . 'default-avatar.png' ) }}" class="user-image" alt="User Image" />
+                        @endif
+
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">{{ $usuario }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
                         <li class="user-header">
-                            <img src="{{ asset("/dist/img/usuarios/" . '/' . Auth::user()->ruta_imagen ) }}" class="img-circle" alt="User Image" />
+                        @if (Auth::user()->ruta_imagen != null)
+                          <img src="{{ asset("/dist/img/usuarios/" . '/' . Auth::user()->ruta_imagen ) }}" class="img-circle" alt="User Image" />
+                        @else
+                          <img src="{{ asset("/dist/img/usuarios/" . '/' . 'default-avatar.png' ) }}" class="img-circle" alt="User Image" />
+                        @endif
+
                             <p>
                                 {{ $usuario }} - {{ $ocupacion }}
                                 <small>{{ $mensaje }}</small>
                             </p>
                         </li>
-                        <!-- Menu Body 
-                        <li class="user-body">
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Sales</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Friends</a>
-                            </div>
-                        </li>
-                        -->
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">

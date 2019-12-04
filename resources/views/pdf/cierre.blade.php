@@ -48,8 +48,8 @@
 					<br/>
 					<address>
 						<strong>PACES</strong><br>
-							Av. 9 de Julio 1925 P.12<br>
-							Ciudad Autónoma de Buenos Aires, CP C1072AAH<br>
+							Av. Hipolito Yrigoyen  440/60 P.3<br>
+							Ciudad Autónoma de Buenos Aires, CP C1086AAF<br>
 							<abbr>Tel:</abbr> (011) 7090-3600
 						</address>
 

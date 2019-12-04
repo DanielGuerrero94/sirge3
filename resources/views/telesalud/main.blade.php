@@ -34,13 +34,13 @@
 	    			<div class="form-group">
 	      				<label for="periodo" class="col-sm-3 control-label">Matricula</label>
 	  					<div class="col-sm-9">
-                            <p>{{$json['matricula']}}</p>
+                            <p>{{$json['matricula']?:'sin dato'}}</p>
 	  					</div>
 	    			</div>
 	    			<div class="form-group">
 	      				<label for="periodo" class="col-sm-3 control-label">Centro</label>
 	  					<div class="col-sm-9">
-                            <p>{{$json['centro']}}</p>
+                            <p>{{$json['centro']?:'sin dato'}}</p>
 	  					</div>
 	    			</div>
 
