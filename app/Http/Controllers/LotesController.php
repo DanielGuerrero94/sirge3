@@ -129,58 +129,18 @@ class LotesController extends Controller {
 	 *
 	 * @return string
 	 */
-	protected function getName($id, $route = false) {
-		switch ($id) {
-			case 1:
-				$p = 'prestaciones';
-				break;
-			case 2:
-				$p = 'fondos';
-				break;
-			case 3:
-				$p = 'comprobantes';
-				break;
-			case 4:
-				$p = 'osp';
-				break;
-			case 5:
-				$p = 'profe';
-				break;
-			case 6:
-				$p = 'sss';
-				break;
-			case 7:
-				$p = 'trazadoras';
-				break;
-			case 8:
-				$p = 'tablero';
-				break;
-			case 9:
-				$p = 'vphypap';
-				break;
-			default:
-				break;
+	public function getName($id, $route = false) {
+		$padrones = ['','prestaciones', 'fondos', 'comprobantes', 'osp', 'profe', 'sss', 'trazadoras', 'tablero', 'vphypap'];
+		try {
+			$respuesta = $padrones[$id];
+		} catch(Exception $e) {
+			$respuesta = '';	
 		}
-		if ($route) {
-			return '../storage/uploads/'.$p;
-		} else {
-			return $p;
-		}
-	}
 
-	/**
-	 * Sube el archivo al FTP
-	 * @param int $lote
-	 *
-	 * @return bool
-	 */
-	protected function uploadFTP($lote) {
-		/*$l = Lote::with('archivo')->findOrFail($lote);
-	$ruta = $this->getName($l->archivo->id_padron , TRUE);
-	$fh = fopen($ruta . '/' . $l->archivo->nombre_actual , 'r');
-	if (Storage::put('sirg3/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual , $fh)){
-	unlink('../storage/uploads/' . $this->getName($l->archivo->id_padron) . '/' . $l->archivo->nombre_actual);
-	}*/
+		if ($route) {
+			$respuesta = "../storage/uploads/" . $respuesta;
+		} 
+		return $respuesta;
 	}
 
 	/**
@@ -198,8 +158,6 @@ class LotesController extends Controller {
 			$la->id_usuario     = Auth::user()->id_usuario;
 			$la->fecha_aceptado = 'now';
 			if ($la->save()) {
-				$this->uploadFTP($r->lote);
-
 				return 'Se ha aceptado el lote. Recuerde declararlo para imprimir la DDJJ.';
 			}
 		}
@@ -256,28 +214,15 @@ class LotesController extends Controller {
 	 * @return string
 	 */
 	public function eliminarLote(Request $r) {
-		$l            = Lote::findOrFail($r->lote);
-		$l->id_estado = 4;
-
 		try {
+			$l            = Lote::findOrFail($r->lote);
+			$l->id_estado = 4;
+
 			$l->save();
 			return 'Se ha rechazado el lote.';
 		} catch (Exception $e) {
-			return response('Error: '.$e->getMessage(), $e->getCode());
+			return response('Error: '.$e->getMessage(), 404);
 		}
-		/*$s = Subida::findOrFail($l->id_subida);
-	$this->eliminarRegistros($s->id_padron , $r->lote);
-	$this->eliminarRegistrosRechazados($r->lote);
-
-	if ($l->save()){
-	$lr = new LoteRechazado;
-	$lr->lote = $l->lote;
-	$lr->id_usuario = Auth::user()->id_usuario;
-	$lr->fecha_rechazado = 'now';
-	if ($lr->save()){
-	return 'Se ha rechazado el lote.';
-	}
-	}*/
 	}
 
 	/**
@@ -315,38 +260,14 @@ class LotesController extends Controller {
 	 *
 	 * @return string
 	 */
-	protected function getNombrePadron($id) {
-		switch ($id) {
-			case 1:
-				return 'PRESTACIONES';
-				break;
-			case 2:
-				return 'APLICACIÓN DE FONDOS';
-				break;
-			case 3:
-				return 'COMPROBANTES';
-				break;
-			case 4:
-				return 'OBRA SOCIAL PROVINCIAL';
-				break;
-			case 5:
-				return 'PROGRAMA FEDERAL DE SALUD';
-				break;
-			case 6:
-				return 'SUPERINTENDENCIA DE SERVICIOS DE SALUD';
-				break;
-			case 7:
-				return 'TRAZADORAS';
-				break;
-			case 8:
-				return 'TABLERO DE CONTROL';
-				break;
-			case 9:
-				return 'VPH Y PAP';
-				break;
-			default:
-				break;
-		}
+	public function getNombrePadron($id) {
+		$padrones = ['', 'PRESTACIONES', 'APLICACIÓN DE FONDOS', 'COMPROBANTES', 'OBRA SOCIAL PROVINCIAL', 'PROGRAMA FEDERAL DE SALUD', 'SUPERINTENDENCIA DE SERVICIOS DE SALUD', 'TRAZADORAS', 'TABLERO DE CONTROL', 'VPH Y PAP'];
+		$respuesta = '';
+
+		try {
+			$respuesta = $padrones[$id];
+		} catch(Exception $e) {}
+		return $respuesta;
 	}
 
 	/**
@@ -579,17 +500,4 @@ class LotesController extends Controller {
         echo "Subida {$subida->id_subida} del padron {$subida->id_padron} cancelado.";
     }
 
-	/**
-     * Listar lotes pendientes.
-	 *
-	 * @return null
-	 */
-	public function listarPendientes() {
-
-        Artisan::call("lote:listar");
-    }
-
-
-
-   
 }

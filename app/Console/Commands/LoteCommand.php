@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use DB;
 
 class LoteCommand extends Command {
 	/**
@@ -11,14 +10,14 @@ class LoteCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $signature = "lote:listar";
+	protected $signature = "lote:ver {id}";
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = "Lista los lotes y su estado, muestra por default pendientes";
+	protected $description = "Ver lote segun id";
 
 	/**
 	 * Execute the console command.
@@ -26,7 +25,7 @@ class LoteCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-        $this->pendientes();
+	    $this->mostrarLote();
 	}
 
 	/**
@@ -34,9 +33,9 @@ class LoteCommand extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function pendientes() {
-        $pendientes = DB::select('select * from v_estado_lotes where id_estado = 1');
-        dump($pendientes);
+	public function mostrarLote() {
+	$lote = \App\Models\Lote::with('archivo')->where('lote', $this->argument('id'))->first()->toArray();
+       	dump($lote);
 	}
 
 }

@@ -312,7 +312,7 @@ class PrestacionesController extends AbstractPadronesController
      *
      * @return resource
      */
-    protected function abrirArchivo($id)
+    public function abrirArchivo($id)
     {
         $info = Subida::findOrFail($id);
         try {

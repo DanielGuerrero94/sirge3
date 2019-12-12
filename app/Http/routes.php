@@ -563,4 +563,3 @@ Route::get('telesalud/descarga', 'TelesaludController@descarga');
  *  FIXES
  */
 Route::get('cancelar-lote/{lote}', 'LotesController@cancelarLote');
-Route::get('listar-pendientes', 'LotesController@listarPendientes');

@@ -19,6 +19,8 @@ class Kernel extends ConsoleKernel {
 		\App\Console\Commands\CommandScheduler::class ,
 		\App\Console\Commands\TestCommand::class ,
 		\App\Console\Commands\LoteCommand::class ,
+		\App\Console\Commands\ListarLoteCommand::class ,
+		\App\Console\Commands\RechazarLoteCommand::class ,
 		\App\Console\Commands\SqlServerTests::class
 	];
 
