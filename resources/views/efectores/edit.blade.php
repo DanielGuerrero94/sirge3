@@ -37,9 +37,7 @@
 										<li><a href="#email" data-toggle="tab">Email</a></li>
 										<li><a href="#referente" data-toggle="tab">Referente</a></li>
 										<li><a href="#internet" data-toggle="tab">Descentralización</a></li>
-										<li><a href="#ppac" data-toggle="tab">PPAC</a></li>
-										<li><a href="#addendas" data-toggle="tab">Addendas</a></li>
-									</ul>
+								</ul>
 						 		</div>
 						  	</div>
 						</div>
@@ -186,50 +184,6 @@
 						    	<div class="row">
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
-							    			<div class="col-sm-8">
-								    			<select id="integrante" name="integrante" class="form-control"
-									    			@if (Auth::user()->id_area == 5 && Auth::user()->id_area == 16)
-									    				>
-									    				@if ($efector->integrante == 'S')
-									    					<option selected="selected" value="S">SI</option>
-									    					<option value="N">NO</option>
-								    					@else
-									    					<option value="S">SI</option>
-									    					<option selected="selected" value="N">NO</option>
-								    					@endif
-								    				@else
-								    					readonly>
-								    					@if ($efector->integrante == 'S')
-								    						<option selected="selected" value="S">SI</option>
-									    				@else
-									    					<option selected="selected" value="N">NO</option>
-									    				@endif
-									    			@endif
-
-
-								    			</select>
-							    			</div>
-						    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-							    			<label for="priorizado" class="col-sm-4 control-label">Priorizado</label>
-							    			<div class="col-sm-8">
-								    			<select id="priorizado" name="priorizado" class="form-control">
-								    				@if ($efector->priorizado == 'S')
-								    					<option selected="selected" value="S">SI</option>
-								    					<option value="N">NO</option>
-								    				@else
-								    					<option value="S">SI</option>
-								    					<option selected="selected" value="N">NO</option>
-								    				@endif
-								    			</select>
-							    			</div>
-						    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
 							    			<label for="compromiso" class="col-sm-4 control-label">Compromiso</label>
 							    			<div class="col-sm-8">
 								    			<select id="compromiso" name="compromiso" class="form-control">
@@ -245,10 +199,7 @@
 							    			</div>
 						    			</div>
 						    		</div>
-						    	</div>
-						    	<br />
-						    	<div class="row">
-						    		<div class="col-md-6">
+						    		<div class="col-md-4">
 						    			<div class="form-group">
 							    			<label for="hcd" class="col-sm-4 control-label">Historia Clinica Digital</label>
 							    			<div class="col-sm-8">
@@ -264,7 +215,7 @@
 							    			</div>
 						    			</div>
 						    		</div>
-						    		<div class="col-md-6">
+						    		<div class="col-md-4">
 						    			<div class="form-group">
 							    			<label for="sistema_hcd" class="col-sm-4 control-label">Sistema HCD</label>
 							    			<div class="col-sm-8">
@@ -599,127 +550,7 @@
 						    		</div>
 						    	</div>
 						    </div>
-						    <div class="tab-pane" id="ppac">
-						    @if(isset($efector->perinatal))
-						    	<div class="row">
-						    		<div class="col-md-4">
-						    			<label for="addenda_perinatal" class="col-sm-6 control-label">Addenda Perinatal</label>
-						    			<div class="col-sm-6">
-							    			<select id="addenda_perinatal" name="addenda_perinatal" class="form-control">
-						    				@if($efector->perinatal->addenda_perinatal == 'S')
-							    				<option selected="selected" value="S">SI</option>
-							    				<option value="N">NO</option>
-							    			@else
-							    				<option value="S">SI</option>
-							    				<option selected="selected" value="N">NO</option>
-							    			@endif
-							    			</select>
-						    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
-		                  					<div class="col-sm-7">
-		                    					<input class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" value="{{ $efector->perinatal->fecha_addenda_perinatal or ''}}" placeholder="dd/mm/aaaa">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<label for="perinatal_ac" class="col-sm-6 control-label">Perinatal AC</label>
-						    			<div class="col-sm-6">
-							    			<select id="perinatal_ac" name="perinatal_ac" class="form-control">
-						    				@if($efector->perinatal->perinatal_ac == 'S')
-							    				<option selected="selected" value="S">SI</option>
-							    				<option value="N">NO</option>
-							    			@else
-							    				<option value="S">SI</option>
-							    				<option selected="selected" value="N">NO</option>
-							    			@endif
-							    			</select>
-						    			</div>
-						    		</div>
-						    	</div>
-						    @else
-						    	<div class="row">
-						    		<div class="col-md-4">
-						    			<label for="addenda_perinatal" class="col-sm-6 control-label">Addenda Perinatal</label>
-						    			<div class="col-sm-6">
-							    			<select id="addenda_perinatal" name="addenda_perinatal" class="form-control">
-							    				<option value="">Seleccione...</option>
-							    				<option value="S">SI</option>
-							    				<option value="N">NO</option>
-							    			</select>
-						    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-		                      				<label for="fecha_addenda_perinatal" class="col-sm-5 control-label">Fecha Addenda Perinatal</label>
-		                  					<div class="col-sm-7">
-		                    					<input class="form-control" id="fecha_addenda_perinatal" name="fecha_addenda_perinatal" placeholder="dd/mm/aaaa">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<label for="perinatal_ac" class="col-sm-6 control-label">Perinatal AC</label>
-						    			<div class="col-sm-6">
-							    			<select id="perinatal_ac" name="perinatal_ac" class="form-control">
-							    				<option value="">Seleccione...</option>
-							    				<option value="S">SI</option>
-							    				<option value="N">NO</option>
-							    			</select>
-						    			</div>
-						    		</div>
-						    	</div>
-						    @endif
-						    </div>
-						    <div class="tab-pane" id="addendas">
-					    	@if (count($efector->addendas))
-					    		@foreach ($efector->addendas as $add)
-					    		<div class="row">
-					    			<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="nombre_add" class="col-sm-5 control-label">Addenda</label>
-		                  					<div class="col-sm-7">
-		                    					<input readonly="readonly" type="text" class="form-control" value="{{ $add->tipo->nombre }}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    		<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="fecha_addenda" class="col-sm-5 control-label">Fecha firma</label>
-		                  					<div class="col-sm-7">
-		                    					<input readonly="readonly" type="text" class="form-control" value="{{ $add->fecha_addenda }}">
-		                  					</div>
-		                    			</div>
-						    		</div>
-						    	</div>
-						    	<br />
-					    		@endforeach
-					    	@endif
-					    	@if (count($addendas))
-					    		<div class="row">
-					    			<div class="col-md-6">
-					    				<label for="tipo_addenda" class="col-sm-5 control-label">Tipo Addenda</label>
-						    			<div class="col-sm-7">
-							    			<select id="tipo_addenda" name="tipo_addenda" class="form-control">
-							    				<option value="">Seleccione...</option>
-									    		@foreach ($addendas as $a)
-									    		<option value="{{ $a->id }}">{{ $a->nombre }}</option>
-									    		@endforeach
-							    			</select>
-						    			</div>
-					    			</div>
-					    			<div class="col-md-6">
-						    			<div class="form-group">
-		                      				<label for="fecha_firma" class="col-sm-5 control-label">Fecha firma</label>
-		                  					<div class="col-sm-7">
-		                    					<input type="text" id="fecha_firma" name="fecha_firma" type="text" class="form-control fecha_firma" placeholder="dd/mm/aaaa">
-		                  					</div>
-		                    			</div>
-						    		</div>
-					    		</div>
-					    	@endif
-						    </div>
+						    						    
 							<ul class="pager wizard">
 								<li class="previous"><a href="javascript:;">Anterior</a></li>
 							  	<li class="next"><a href="javascript:;">Siguiente</a></li>
@@ -759,15 +590,6 @@ $(document).ready(function() {
 	$('.finish').hide();
 	$('#errores-div').hide();
 
-	/*var d = new Date();
-
-	var month = d.getMonth()+1;
-	var day = d.getDate();
-
-	var fechaActual = d.getFullYear() + '/' +
-	    (month<10 ? '0' : '') + month + '/' +
-	    (day<10 ? '0' : '') + day;*/
-
 	$('#tel').inputmask({
 		mask : '9999 9999 9999',
 		placeholder : ''
@@ -779,13 +601,11 @@ $(document).ready(function() {
 	function checkCompromiso(integrante , compromiso){
 		if(integrante == 'S'){
 			if(compromiso == 'N'){
-				$('#compromiso').removeAttr('disabled');
 				$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 				$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' ,'disabled');
 			}
 		}
 		else if(integrante == 'N' || compromiso == 'N'){
-			$('#compromiso').val('N').attr('disabled' , 'disabled');
 			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
 			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
 		}
@@ -906,11 +726,9 @@ $(document).ready(function() {
 				maxlength : 8
 			},
 			numero_compromiso : {
-				//required : true,
 				minlength : 2
 			},
 			firmante_compromiso : {
-				//required : true,
 				minlength : 8
 			},
 			indirecto : {
@@ -926,11 +744,9 @@ $(document).ready(function() {
 				required : true
 			},
 			convenio_firmante : {
-				//required : true,
 				minlength : 8
 			},
 			convenio_numero : {
-				//required : true,
 				minlength : 3
 			},
 			convenio_fsus : {
@@ -947,10 +763,7 @@ $(document).ready(function() {
 			},
 			correo : {
 				email : true
-			}/*,
-			fecha_firma: {
-				date: fechaActual
-			}*/
+			}
 		},
 		messages : {
 			fecha_firma: {

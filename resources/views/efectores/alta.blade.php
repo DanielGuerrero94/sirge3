@@ -162,30 +162,6 @@
 						    	<div class="row">
 						    		<div class="col-md-4">
 						    			<div class="form-group">
-							    			<label for="integrante" class="col-sm-4 control-label">Integrante</label>
-							    			<div class="col-sm-8">
-								    			<select id="integrante" name="integrante" class="form-control">
-								    				<option value="">Seleccione...</option>
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
-								    			</select>
-							    			</div>
-						    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
-							    			<label for="priorizado" class="col-sm-4 control-label">Priorizado</label>
-							    			<div class="col-sm-8">
-								    			<select id="priorizado" name="priorizado" class="form-control">
-								    				<option value="">Seleccione...</option>
-								    				<option value="S">SI</option>
-								    				<option value="N">NO</option>
-								    			</select>
-							    			</div>
-						    			</div>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<div class="form-group">
 							    			<label for="compromiso" class="col-sm-4 control-label">Compromiso</label>
 							    			<div class="col-sm-8">
 								    			<select id="compromiso" name="compromiso" class="form-control">
@@ -196,10 +172,7 @@
 							    			</div>
 						    			</div>
 						    		</div>
-						    	</div>
-						    	<br />
-						    	<div class="row">
-						    		<div class="col-md-6">
+						    		<div class="col-md-4">
 						    			<div class="form-group">
 							    			<label for="hcd" class="col-sm-4 control-label">Historia Clinica Digital</label>
 							    			<div class="col-sm-8">
@@ -210,7 +183,7 @@
 							    			</div>
 						    			</div>
 						    		</div>
-						    		<div class="col-md-6">
+						    		<div class="col-md-4">
 						    			<div class="form-group">
 							    			<label for="sistema_hcd" class="col-sm-4 control-label">Sistema HCD</label>
 							    			<div class="col-sm-8">
@@ -516,19 +489,6 @@ $(document).ready(function() {
 
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin').inputmask('99/99/9999');
 
-	$('#integrante').change(function(){
-		var estado = $(this).val();
-		if (estado == 'N'){
-			$('#compromiso').val('N').attr('readonly' , 'readonly');
-			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').attr('disabled' , 'disabled');
-			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').attr('disabled' , 'disabled');
-		} else {
-			$('#compromiso').val('').removeAttr('readonly');
-			$('#firmante_compromiso , #numero_compromiso , #compromiso_fini , #compromiso_fsus , #compromiso_ffin , #indirecto').removeAttr('disabled');
-			$('#convenio_firmante , #convenio_numero , #convenio_fsus , #convenio_fini , #convenio_ffin , #cuie_admin , #nombre_admin').removeAttr('disabled');
-		}
-	});
-
 	$('#compromiso').change(function(){
 		var estado = $(this).val();
 		if (estado == 'N') {
@@ -586,12 +546,6 @@ $(document).ready(function() {
 				required : true
 			},
 			categoria : {
-				required : true
-			},
-			integrante : {
-				required : true
-			},
-			priorizado : {
 				required : true
 			},
 			compromiso : {

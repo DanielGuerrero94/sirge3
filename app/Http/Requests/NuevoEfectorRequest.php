@@ -32,8 +32,6 @@ class NuevoEfectorRequest extends Request
             'cics' => 'required',
             'rural' => 'required',
             'categoria' => 'required',
-            'integrante' => 'required',
-            'priorizado' => 'required',
             'compromiso' => 'required',
             'hcd' => 'required',
             'sistema_hcd' => 'required_if:hcd,S',

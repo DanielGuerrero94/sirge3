@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use Mail;
+use Log;
 
 use ZipArchive;
 
@@ -144,6 +145,8 @@ class EfectoresController extends Controller {
 	 * @return string
 	 */
 	public function postAlta(NuevoEfectorRequest $r) {
+		//Log::info($r->toJson());
+		//var_dump($r);
 		$ge = new Geografico([
 				'id_provincia'    => $r->provincia,
 				'id_departamento' => $r->departamento,
@@ -204,9 +207,7 @@ class EfectoresController extends Controller {
 		$ef->id_categorizacion             = $r->categoria;
 		$ef->id_dependencia_administrativa = $r->dep_adm;
 		$ef->dependencia_sanitaria         = $r->dep_san;
-		$ef->integrante                    = $r->integrante;
 		$ef->compromiso_gestion            = $r->compromiso;
-		$ef->priorizado                    = $r->priorizado;
 		if (isset($r->hcd) && $r->hcd == 'S') {
 			$ef->hcd            = $r->hcd;
 			$ef->id_sistema_hcd = $r->sistema_hcd;
@@ -235,7 +236,9 @@ class EfectoresController extends Controller {
 					}
 				}
 			});
+		Log::info(json_encode($result));
 		if (is_null($result)) {
+			Log::info("Intenta enviar el email");
 			Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
 					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('sirgeweb@gmail.com');
@@ -246,8 +249,10 @@ class EfectoresController extends Controller {
 
 			return 'Se ha solicitado el alta del efector '.$ef->nombre;
 		} else {
+			Log::info("Error");
 			return json_encode(["resultado" => 'Ha ocurrido un error']);
 		}
+
 	}
 
 	/**
@@ -601,8 +606,6 @@ class EfectoresController extends Controller {
 		$ef->cics                          = $r->cics;
 		$ef->rural                         = $r->rural;
 		$ef->id_categorizacion             = $r->categoria;
-		$ef->integrante                    = $r->integrante;
-		$ef->priorizado                    = $r->priorizado;
 		$ef->compromiso_gestion            = $r->compromiso;
 		$ef->domicilio                     = $r->direccion;
 		$ef->codigo_postal                 = $r->codigo_postal;
@@ -713,7 +716,7 @@ class EfectoresController extends Controller {
 			}
 		}
 
-		if ($r->integrante == 'S' && $r->compromiso == 'S') {
+		if ($r->compromiso == 'S') {
 			try {
 				$cg = Gestion::findOrFail($ef->id_efector);
 			} catch (ModelNotFoundException $e) {
@@ -852,6 +855,7 @@ class EfectoresController extends Controller {
 	 * @return null
 	 */
 	public function refrescarTabla() {
-		DB::statement("REFRESH MATERIALIZED VIEW efectores.mv_efectores_completo;");
+		$result = DB::statement("REFRESH MATERIALIZED VIEW efectores.mv_efectores_completo;");
+		return json_encode($result);
 	}
 }

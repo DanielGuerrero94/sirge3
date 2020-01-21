@@ -48,51 +48,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-2">
-							<!-- PRIORIZADO -->
-							<div class="form-group">
-								<label class="col-md-6 control-label">Priorizado</label>
-								<div class="col-md-6">
-									<p class="form-control-static">
-									@if ($efector->priorizado == 'S')
-										<span class="label label-success">SI</span>
-									@else
-										<span class="label label-danger">NO</span>
-									@endif
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-2">
-							<!-- INTEGRANTE -->
-							<div class="form-group">
-								<label class="col-md-6 control-label">Integrante</label>
-								<div class="col-md-6">
-									<p class="form-control-static">
-									@if ($efector->integrante == 'S')
-										<span class="label label-success">SI</span>
-									@else
-										<span class="label label-danger">NO</span>
-									@endif
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-2">
-							<!-- PPAC -->
-							<div class="form-group">
-								<label class="col-md-3 control-label">PPAC</label>
-								<div class="col-md-6">
-									<p class="form-control-static">
-									@if ($efector->ppac == 'S')
-										<span class="label label-success">SI</span>
-									@else
-										<span class="label label-danger">NO</span>
-									@endif
-									</p>
-								</div>
-							</div>
-						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-4">

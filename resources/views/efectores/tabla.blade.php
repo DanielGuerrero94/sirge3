@@ -47,12 +47,6 @@
 		<td class="table-header">DEPENDENCIA SANITARIA</td>
 		<td class="table-header">INTEGRANTE</td>
 		<td class="table-header">COMPROMISO GESTION</td>
-		<td class="table-header">PRIORIZADO</td>
-		<td class="table-header">FECHA COMIENZO PRIORIZADO</td>
-		<td class="table-header">PPAC</td>
-		<td class="table-header">ADDENDA PERINATAL</td>
-		<td class="table-header">FECHA ADDENDA PERINATAL</td>
-		<td class="table-header">PERINATAL AC</td>
 		<td class="table-header">SISTEMA HCD</td>
 		<td class="table-header">ID PROVINCIA</td>
 		<td class="table-header">NOMBRE PROVINCIA</td>
@@ -110,12 +104,6 @@
 			<td>{{ $efector->dependencia_sanitaria or ''}}</td>
 			<td>{{ $efector->integrante or ''}}</td>
 			<td>{{ $efector->compromiso_gestion or ''}}</td>
-			<td>{{ $efector->priorizado or ''}}</td>
-			<td>{{ $efector->fecha_comienzo_priorizado or ''}}</td>
-			<td>{{ $efector->ppac or ''}}</td>
-			<td>{{ $efector->addenda_perinatal or ''}}</td>
-			<td>{{ $efector->fecha_addenda_perinatal or ''}}</td>
-			<td>{{ $efector->perinatal_ac or ''}}</td>
 			<td>{{ $efector->sistema_hcd or ''}}</td>
 			<td>{{ $efector->id_provincia or ''}}</td>
 			<td>{{ $efector->nombre_provincia or ''}}</td>
