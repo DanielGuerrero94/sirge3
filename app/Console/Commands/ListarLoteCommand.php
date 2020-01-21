@@ -11,33 +11,45 @@ class ListarLoteCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $signature = "lote:listar {padron=1} {estado=1}";
+    protected $signature = "lote:listar 
+        {--i|--info : Display detailed information}
+        {padron=1 : Ids en --info} 
+        {estado=1 : Ids en --info}";
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = "Lista los lostes de un padron y su estado, default prestaciones pendientes
-  id_padron | padron
-  ----------+-------------------
-          1 | PRESTACIONES
-	    2 | FONDOS
-          3 | COMPROBANTES
-	    4 | OSP
-	    5 | PROFE
-	    6 | SSS
-	    7 | TRAZADORAS
-	    8 | TABLERO DE CONTROL
-	    9 | VPH Y PAP
+	protected $description = "Lista los lostes de un padron y su estado, default prestaciones pendientes";
 
-  id_estado | estado
-  ----------+------------
-	    1 | PENDIENTE
-	    2 | EN REVISION
-	    3 | ACEPTADO
-	    4 | ELIMINADO
-	    5 | PROCESANDO
+
+	/**
+	 * The console command detailed information.
+	 *
+	 * @var string
+	 */
+	protected $information = "
+id_padron | padron
+----------+-------------------
+        1 | PRESTACIONES
+        2 | FONDOS
+        3 | COMPROBANTES
+        4 | OSP
+        5 | PROFE
+        6 | SSS
+        7 | TRAZADORAS
+        8 | TABLERO DE CONTROL
+        9 | VPH Y PAP
+
+id_estado | estado
+----------+------------
+        1 | PENDIENTE
+        2 | EN REVISION
+        3 | ACEPTADO
+        4 | ELIMINADO
+        5 | PROCESANDO
+
 ";
 
 	/**
@@ -46,7 +58,11 @@ class ListarLoteCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-        $this->pendientes();
+        if ($this->option('info')) {
+            $this->line($this->information);
+            return;
+        }
+        $this->listar();
 	}
 
 	/**
@@ -54,8 +70,12 @@ class ListarLoteCommand extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function pendientes() {
-	$query = "select * from v_estado_lotes where id_estado = " . $this->argument('estado') . " and id_padron = " . $this->argument('padron');
+	public function listar() {
+        $query = "select * from v_estado_lotes where id_estado = "
+            . $this->argument('estado')
+            . " and id_padron = "
+            . $this->argument('padron');
+
         $pendientes = DB::select($query);
         dump($pendientes);
 	}
