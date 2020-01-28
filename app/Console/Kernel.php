@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel {
 		\App\Console\Commands\ListarLoteCommand::class ,
 		\App\Console\Commands\RevisarLote::class ,
 		\App\Console\Commands\RechazarLoteCommand::class ,
+		\App\Console\Commands\RangosTableroCommand::class ,
 		\App\Console\Commands\SqlServerTests::class
 	];
 

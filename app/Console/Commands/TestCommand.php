@@ -17,7 +17,7 @@ class TestCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = "Corre el refresh de la materialized view y genera el excel/zip para el listado de efectores"
+	protected $description = "Corre el refresh de la materialized view y genera el excel/zip para el listado de efectores";
 
 	/**
 	 * Create a new command instance.
