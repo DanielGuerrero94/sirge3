@@ -51,6 +51,9 @@ class NuevoEfectorRequest extends Request
             'convenio_fini' => 'required_if:indirecto,S|date_format:d/m/Y',
             'convenio_ffin' => 'required_if:indirecto,S|date_format:d/m/Y',
             'correo' => 'email',
+            'osp' => 'required',
+            'pami' => 'required',
+            'os_directo' => 'required',
             'refer' => 'between:8,200'
         ];
     }

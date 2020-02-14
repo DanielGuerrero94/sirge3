@@ -197,6 +197,38 @@
 						    			</div>
 						    		</div>						    		
 						    	</div>
+							</br>
+<div class="row">
+						    		<div class="col-md-4">
+						    			<label for="osp" class="col-sm-6 control-label">Obra social provincial</label>
+						    			<div class="col-sm-6">
+							    			<select id="osp" name="osp" class="form-control">
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<label for="pami" class="col-sm-7 control-label">PAMI</label>
+						    			<div class="col-sm-5">
+							    			<select id="pami" name="pami" class="form-control">
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-4">
+						    			<label for="os_directo" class="col-sm-6 control-label">Convenio directo con otra obra social</label>
+						    			<div class="col-sm-6">
+							    			<select id="os_directo" name="os_directo" class="form-control">
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+
+								</div>
+
 						    </div>
 						    <div class="tab-pane" id="domicilio">
 						    	<div class="row">
@@ -613,6 +645,15 @@ $(document).ready(function() {
 				required : true
 			},
 			refer : {
+				required : true
+			},			
+			osp : {
+				required : true
+			},			
+			pami : {
+				required : true
+			},			
+			os_directo : {
 				required : true
 			},			
 			correo : {

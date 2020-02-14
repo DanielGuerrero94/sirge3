@@ -331,6 +331,37 @@
                 		<p>No hay información de descentralización sobre este efector</p>
               		</div>
 					@endif
+					<h4>Recupero de costos</h4>
+						<div class="row">
+							<div class="col-md-4">
+								<!-- OSP -->
+								<div class="form-group">
+									<label class="col-md-5 control-label">Obra social provincial</label>
+									<div class="col-md-4">
+										<p class="form-control-static">{{ $efector->osp }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<!-- FC -->
+								<div class="form-group">
+									<label class="col-md-4 control-label">PAMI</label>
+									<div class="col-md-5">
+										<p class="form-control-static">{{ $efector->pami }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<!-- INTERNET -->
+								<div class="form-group">
+									<label class="col-md-5 control-label">Convenio directo con otra obra social</label>
+									<div class="col-md-4">
+										<p class="form-control-static">{{ $efector->os_directo }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
 				</form>
 			</div>
 			<div class="box-footer">

@@ -48,6 +48,18 @@
 		<td class="table-header">INTEGRANTE</td>
 		<td class="table-header">COMPROMISO GESTION</td>
 		<td class="table-header">SISTEMA HCD</td>
+		<td class="table-header">RECUPERA COSTOS</td>
+		<td class="table-header">OSP</td>
+		<td class="table-header">PAMI</td>
+		<td class="table-header">OS DIRECTO</td>
+		<td class="table-header">OTRO</td>
+		<td class="table-header">CATEGORIA MATERNIDAD</td>
+		<td class="table-header">CUMPLE CONE</td>
+		<td class="table-header">CATEGORIA NEONATOLOGIA</td>
+		<td class="table-header">OPERA MALFORMACIONES</td>
+		<td class="table-header">CATEGORIA CC</td>
+		<td class="table-header">CATEGORIA IAM</td>
+		<td class="table-header">RED FLAP</td>
 		<td class="table-header">ID PROVINCIA</td>
 		<td class="table-header">NOMBRE PROVINCIA</td>
 		<td class="table-header">INDEC DEPARTAMENTO</td>
@@ -105,6 +117,18 @@
 			<td>{{ $efector->integrante or ''}}</td>
 			<td>{{ $efector->compromiso_gestion or ''}}</td>
 			<td>{{ $efector->sistema_hcd or ''}}</td>
+			<td>{{ $efector->recupera_costos or ''}}</td>
+			<td>{{ $efector->osp or ''}}</td>
+			<td>{{ $efector->pami or ''}}</td>
+			<td>{{ $efector->os_directo or ''}}</td>
+			<td>{{ $efector->otro or ''}}</td>
+			<td>{{ $efector->categoria_maternidad or '' }}</td>
+			<td>{{ $efector->cumple_cone or 'N' }}</td>
+			<td>{{ $efector->categoria_neonatologia or '' }}</td>
+			<td>{{ $efector->opera_malformaciones or 'N' }}</td>
+			<td>{{ $efector->categoria_cc or '' }}</td>
+			<td>{{ $efector->categoria_iam or '' }}</td>
+			<td>{{ $efector->red_flap or 'N' }}</td>
 			<td>{{ $efector->id_provincia or ''}}</td>
 			<td>{{ $efector->nombre_provincia or ''}}</td>
 			<td>{{ $efector->indec_departamento or ''}}</td>
