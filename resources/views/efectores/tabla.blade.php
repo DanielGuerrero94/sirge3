@@ -45,7 +45,6 @@
 		<td class="table-header">SIGLA CATEGORIZACION</td>
 		<td class="table-header">CATEGORIZACION</td>
 		<td class="table-header">DEPENDENCIA SANITARIA</td>
-		<td class="table-header">INTEGRANTE</td>
 		<td class="table-header">COMPROMISO GESTION</td>
 		<td class="table-header">SISTEMA HCD</td>
 		<td class="table-header">ID PROVINCIA</td>
@@ -73,11 +72,6 @@
 		<td class="table-header">FECHA SUSCRIPCION CONVENIO</td>
 		<td class="table-header">FECHA INICIO CONVENIO</td>
 		<td class="table-header">FECHA FIN CONVENIO</td>
-		<td class="table-header">NEONATAL SIISA</td>
-		<td class="table-header">ID CATEGORIA NEONATAL</td>
-		<td class="table-header">OBSTETRICOS SIISA</td>
-		<td class="table-header">OBSTETRICOS ID CATEGORIA</td>
-		<td class="table-header">FECHA ADDENDA</td>
 		<td class="table-header">EMAIL</td>
 		<td class="table-header">TELEFONO</td>
 	</tr>
@@ -102,7 +96,6 @@
 			<td>{{ $efector->sigla_categorizacion or ''}}</td>
 			<td>{{ $efector->categorizacion or ''}}</td>
 			<td>{{ $efector->dependencia_sanitaria or ''}}</td>
-			<td>{{ $efector->integrante or ''}}</td>
 			<td>{{ $efector->compromiso_gestion or ''}}</td>
 			<td>{{ $efector->sistema_hcd or ''}}</td>
 			<td>{{ $efector->id_provincia or ''}}</td>
@@ -130,11 +123,6 @@
 			<td>{{ $efector->fecha_suscripcion_convenio or ''}}</td>
 			<td>{{ $efector->fecha_inicio_convenio or ''}}</td>
 			<td>{{ $efector->fecha_fin_convenio or ''}}</td>
-			<td> <?php echo "'".$efector->neo_siisa?></td>
-			<td>{{ $efector->neonatal_id_categoria or ''}}</td>
-			<td> <?php echo "'".$efector->obstetricos_siisa?></td>
-			<td>{{ $efector->obstetricos_id_categoria or ''}}</td>
-			<td>{{ $efector->fecha_addenda_hombres or ''}}</td>
 			<td>{{ $efector->email or ''}}</td>
 			<td>{{ $efector->telefono or ''}}</td>
 		</tr>
