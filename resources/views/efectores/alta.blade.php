@@ -196,39 +196,61 @@
 							    			</div>
 						    			</div>
 						    		</div>						    		
+							</div>
+							</br>
+						    	<div class="row">
+						    		<div class="col-md-3">
+						    			<label for="recupera_costos" class="col-sm-6 control-label">Recupera costos</label>
+						    			<div class="col-sm-6">
+							    			<select id="recupera_costos" name="recupera_costos" class="form-control">
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
 						    	</div>
 							</br>
-<div class="row">
-						    		<div class="col-md-4">
-						    			<label for="osp" class="col-sm-6 control-label">Obra social provincial</label>
-						    			<div class="col-sm-6">
+							<div class="row">
+						    		<div class="col-md-6">
+						    			<label for="osp" class="col-sm-8 control-label">Obra social provincial</label>
+						    			<div class="col-sm-4">
 							    			<select id="osp" name="osp" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
 							    			</select>
 						    			</div>
 						    		</div>
-						    		<div class="col-md-4">
-						    			<label for="pami" class="col-sm-7 control-label">PAMI</label>
-						    			<div class="col-sm-5">
+						    		<div class="col-md-6">
+						    			<label for="pami" class="col-sm-8 control-label">PAMI</label>
+						    			<div class="col-sm-4">
 							    			<select id="pami" name="pami" class="form-control">
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
 							    			</select>
 						    			</div>
 						    		</div>
-						    		<div class="col-md-4">
-						    			<label for="os_directo" class="col-sm-6 control-label">Convenio directo con otra obra social</label>
-						    			<div class="col-sm-6">
+						    	</div>
+							</br>
+							<div class="row">
+						    		<div class="col-md-6">
+						    			<label for="os_directo" class="col-sm-8 control-label">Convenio directo con otra obra social</label>
+						    			<div class="col-sm-4">
 							    			<select id="os_directo" name="os_directo" class="form-control">
-								    				<option selected="selected" value="S">SI</option>
-								    				<option value="N">NO</option>
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
 							    			</select>
 						    			</div>
 						    		</div>
-
-								</div>
-
+						    		<div class="col-md-6">
+						    			<label for="otro" class="col-sm-8 control-label">Otro</label>
+						    			<div class="col-sm-4">
+							    			<select id="otro" name="otro" class="form-control">
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+						    	</div>
 						    </div>
 						    <div class="tab-pane" id="domicilio">
 						    	<div class="row">
@@ -512,6 +534,20 @@
   	</div><!-- /.modal-dialog -->
 </div>
 <script type="text/javascript">
+	function toggleRecuperaCostos() {
+		if ($("#recupera_costos").val() == 'N') {
+			    $("#osp").parent().parent().hide();
+			    $("#pami").parent().parent().hide();
+			    $("#os_directo").parent().parent().hide();
+			    $("#otro").parent().parent().hide();
+		} else {
+			    $("#osp").parent().parent().show();
+			    $("#pami").parent().parent().show();
+			    $("#os_directo").parent().parent().show();
+			    $("#otro").parent().parent().show();
+		}
+	}
+
 $(document).ready(function() {
 	
 	$('.finish').hide();
@@ -520,6 +556,9 @@ $(document).ready(function() {
 	$('#tel').inputmask('9999 9999 9999');
 
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin').inputmask('99/99/9999');
+
+	toggleRecuperaCostos();
+	$('#recupera_costos').change(toggleRecuperaCostos);
 
 	$('#compromiso').change(function(){
 		var estado = $(this).val();
@@ -647,6 +686,9 @@ $(document).ready(function() {
 			refer : {
 				required : true
 			},			
+			recupera_costos : {
+				required : true
+			},			
 			osp : {
 				required : true
 			},			
@@ -654,6 +696,9 @@ $(document).ready(function() {
 				required : true
 			},			
 			os_directo : {
+				required : true
+			},			
+			otro : {
 				required : true
 			},			
 			correo : {

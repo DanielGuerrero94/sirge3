@@ -21,7 +21,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<!-- CUIE -->
 							<div class="form-group">
 								<label class="col-md-6 control-label">CUIE</label>
@@ -30,7 +30,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<!-- SIISA -->
 							<div class="form-group">
 								<label class="col-md-6 control-label">SIISA</label>
@@ -39,7 +39,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<!-- ESTADO -->
 							<div class="form-group">
 								<label class="col-md-6 control-label">Estado</label>
@@ -333,8 +333,17 @@
 					@endif
 					<h4>Recupero de costos</h4>
 						<div class="row">
-							<div class="col-md-4">
-								<!-- OSP -->
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="col-md-5 control-label">Recupera costos</label>
+									<div class="col-md-4">
+										<p class="form-control-static">{{ $efector->recupera_costos }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
 								<div class="form-group">
 									<label class="col-md-5 control-label">Obra social provincial</label>
 									<div class="col-md-4">
@@ -342,8 +351,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4">
-								<!-- FC -->
+							<div class="col-md-3">
 								<div class="form-group">
 									<label class="col-md-4 control-label">PAMI</label>
 									<div class="col-md-5">
@@ -351,12 +359,19 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4">
-								<!-- INTERNET -->
+							<div class="col-md-3">
 								<div class="form-group">
-									<label class="col-md-5 control-label">Convenio directo con otra obra social</label>
-									<div class="col-md-4">
+									<label class="col-md-8 control-label">Convenio directo con otra obra social</label>
+									<div class="col-md-1">
 										<p class="form-control-static">{{ $efector->os_directo }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="col-md-5 control-label">Otro</label>
+									<div class="col-md-4">
+										<p class="form-control-static">{{ $efector->otro }}</p>
 									</div>
 								</div>
 							</div>

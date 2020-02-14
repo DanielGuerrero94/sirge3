@@ -238,12 +238,12 @@
 						    		</div>
 						    	</div>
 							</br>
-<div class="row">
-						    		<div class="col-md-4">
-						    			<label for="osp" class="col-sm-6 control-label">Obra social provincial</label>
+						    	<div class="row">
+						    		<div class="col-md-3">
+						    			<label for="recupera_costos" class="col-sm-6 control-label">Recupera costos</label>
 						    			<div class="col-sm-6">
-							    			<select id="osp" name="osp" class="form-control">
-							    			@if($efector->osp == 'S')
+							    			<select id="recupera_costos" name="recupera_costos" class="form-control">
+										@if($efector->recupera_costos == 'S')
 								    				<option selected="selected" value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			@else
@@ -253,36 +253,70 @@
 							    			</select>
 						    			</div>
 						    		</div>
-						    		<div class="col-md-4">
-						    			<label for="pami" class="col-sm-7 control-label">PAMI</label>
-						    			<div class="col-sm-5">
-							    			<select id="pami" name="pami" class="form-control">
-							    			@if ($efector->pami == 'S')
+						    	</div>
+							</br>
+							<div class="row">
+						    		<div class="col-md-6">
+						    			<label for="osp" class="col-sm-8 control-label">Obra social provincial</label>
+						    			<div class="col-sm-4">
+							    			<select id="osp" name="osp" class="form-control">
+										@if($efector->osp == 'S')
 								    				<option selected="selected" value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			@else
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
-								    			@endif
+								    		@endif
 							    			</select>
 						    			</div>
 						    		</div>
-						    		<div class="col-md-4">
-						    			<label for="os_directo" class="col-sm-6 control-label">Convenio directo con otra obra social</label>
-						    			<div class="col-sm-6">
-							    			<select id="os_directo" name="os_directo" class="form-control">
-							    			@if ($efector->os_directo == 'S')
+						    		<div class="col-md-6">
+						    			<label for="pami" class="col-sm-8 control-label">PAMI</label>
+						    			<div class="col-sm-4">
+							    			<select id="pami" name="pami" class="form-control">
+										@if($efector->pami == 'S')
 								    				<option selected="selected" value="S">SI</option>
 								    				<option value="N">NO</option>
 								    			@else
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
-								    			@endif
+								    		@endif
 							    			</select>
 						    			</div>
 						    		</div>
 						    	</div>
+							</br>
+							<div class="row">
+						    		<div class="col-md-6">
+						    			<label for="os_directo" class="col-sm-8 control-label">Convenio directo con otra obra social</label>
+						    			<div class="col-sm-4">
+							    			<select id="os_directo" name="os_directo" class="form-control">
+							    			@if($efector->os_directo == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    		@endif
+							    			</select>
+						    			</div>
+						    		</div>
+						    		<div class="col-md-6">
+						    			<label for="otro" class="col-sm-8 control-label">Otro</label>
+						    			<div class="col-sm-4">
+							    			<select id="otro" name="otro" class="form-control">
+							    			@if($efector->otro == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    		@endif
 
+							    			</select>
+						    			</div>
+						    		</div>
+						    	</div>
 						    </div>
 						    <div class="tab-pane" id="domicilio">
 						    	<div class="row">
@@ -633,6 +667,20 @@
   	</div><!-- /.modal-dialog -->
 </div>
 <script type="text/javascript">
+	function toggleRecuperaCostos() {
+		if ($("#recupera_costos").val() == 'N') {
+			    $("#osp").parent().parent().hide();
+			    $("#pami").parent().parent().hide();
+			    $("#os_directo").parent().parent().hide();
+			    $("#otro").parent().parent().hide();
+		} else {
+			    $("#osp").parent().parent().show();
+			    $("#pami").parent().parent().show();
+			    $("#os_directo").parent().parent().show();
+			    $("#otro").parent().parent().show();
+		}
+	}
+
 $(document).ready(function() {
 
 	$('.finish').hide();
@@ -643,6 +691,8 @@ $(document).ready(function() {
 		placeholder : ''
 	});
 
+	toggleRecuperaCostos();
+	$('#recupera_costos').change(toggleRecuperaCostos);
 
 	$('#compromiso_ffin , #compromiso_fini , #compromiso_fsus , #convenio_fsus , #convenio_fini, #convenio_ffin , #fecha_addenda_perinatal , .fecha_firma').inputmask('99/99/9999');
 
@@ -809,6 +859,9 @@ $(document).ready(function() {
 			refer : {
 				required : true
 			},
+			recupera_costos : {
+				required : true
+			},
 			osp : {
 				required : true
 			},
@@ -816,6 +869,9 @@ $(document).ready(function() {
 				required : true
 			},
 			os_directo : {
+				required : true
+			},
+			otro : {
 				required : true
 			},
 			correo : {

@@ -206,9 +206,11 @@ class EfectoresController extends Controller {
 		$ef->id_dependencia_administrativa = $r->dep_adm;
 		$ef->dependencia_sanitaria         = $r->dep_san;
 		$ef->compromiso_gestion            = $r->compromiso;
+		$ef->recupera_costos               = $r->recupera_costos;
 		$ef->osp                           = $r->osp;
 		$ef->pami                          = $r->pami;
 		$ef->os_directo                    = $r->os_directo;
+		$ef->otro                    	   = $r->otro;
 		if (isset($r->hcd) && $r->hcd == 'S') {
 			$ef->hcd            = $r->hcd;
 			$ef->id_sistema_hcd = $r->sistema_hcd;
@@ -606,9 +608,11 @@ class EfectoresController extends Controller {
 		$ef->compromiso_gestion            = $r->compromiso;
 		$ef->domicilio                     = $r->direccion;
 		$ef->codigo_postal                 = $r->codigo_postal;
+		$ef->recupera_costos          	   = $r->recupera_costos;
 		$ef->osp                 	   = $r->osp;
 		$ef->pami                          = $r->pami;
 		$ef->os_directo                    = $r->os_directo;
+		$ef->otro                          = $r->otro;
 		Log::info($ef->toJson());
 		if (isset($r->addenda_perinatal)) {
 			$ef->ppac = $r->addenda_perinatal == 'S'?'S':'N';
