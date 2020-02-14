@@ -145,8 +145,6 @@ class EfectoresController extends Controller {
 	 * @return string
 	 */
 	public function postAlta(NuevoEfectorRequest $r) {
-		//Log::info($r->toJson());
-		//var_dump($r);
 		$ge = new Geografico([
 				'id_provincia'    => $r->provincia,
 				'id_departamento' => $r->departamento,
@@ -208,6 +206,9 @@ class EfectoresController extends Controller {
 		$ef->id_dependencia_administrativa = $r->dep_adm;
 		$ef->dependencia_sanitaria         = $r->dep_san;
 		$ef->compromiso_gestion            = $r->compromiso;
+		$ef->osp                           = $r->osp;
+		$ef->pami                          = $r->pami;
+		$ef->os_directo                    = $r->os_directo;
 		if (isset($r->hcd) && $r->hcd == 'S') {
 			$ef->hcd            = $r->hcd;
 			$ef->id_sistema_hcd = $r->sistema_hcd;
@@ -240,11 +241,9 @@ class EfectoresController extends Controller {
 		if (is_null($result)) {
 			Log::info("Intenta enviar el email");
 			Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
-					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web TEST');
 					$m->to('sirgeweb@gmail.com');
-					$m->to('javier.minsky@gmail.com');
-				//	$m->to('rodrigo.cadaval.sumar@gmail.com');
-					$m->subject('Solicitud de alta de efector!');
+					$m->subject('TEST Solicitud de alta de efector!');
 				});
 
 			return 'Se ha solicitado el alta del efector '.$ef->nombre;
@@ -419,11 +418,9 @@ class EfectoresController extends Controller {
 		$e->id_estado = 3;
 		if ($e->save()) {
 			Mail::send('emails.down-efector', ['efector' => $e], function ($m) use ($e) {
-					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web TEST');
 					$m->to('sirgeweb@gmail.com');
-                                        $m->to('javier.minsky@gmail.com');
-					$m->to('aocariz@hotmail.com');
-					$m->subject('Solicitud de baja de efector!');
+					$m->subject('TEST Solicitud de baja de efector!');
 				});
 
 			return 'Se ha solicitado la baja del efector '.$e->cuie;
@@ -609,6 +606,10 @@ class EfectoresController extends Controller {
 		$ef->compromiso_gestion            = $r->compromiso;
 		$ef->domicilio                     = $r->direccion;
 		$ef->codigo_postal                 = $r->codigo_postal;
+		$ef->osp                 	   = $r->osp;
+		$ef->pami                          = $r->pami;
+		$ef->os_directo                    = $r->os_directo;
+		Log::info($ef->toJson());
 		if (isset($r->addenda_perinatal)) {
 			$ef->ppac = $r->addenda_perinatal == 'S'?'S':'N';
 		}
@@ -779,40 +780,7 @@ class EfectoresController extends Controller {
 	 */
 	public function generarTabla() {
 
-		//$efectores = DB::select("SELECT * FROM efectores.mv_efectores_completo;");
 		$efectores = MVExcelEfectores::all();
-
-		/*
-		$efectores = Efector::with([
-		'estado',
-		'tipo',
-		'categoria',
-		'geo' => function ($q) {
-		$q->with(['provincia', 'departamento', 'localidad']);
-		},
-		'dependencia',
-		'compromiso',
-		'historiaclinica',
-		'emails',
-		'telefonos',
-		'referente',
-		'internet',
-		'convenio',
-		'neonatal' => function ($q) {
-		$q->with('info');
-		},
-		'obstetrico' => function ($q) {
-		$q->with('info');
-		},
-		'addendas' => function ($q) {
-		$q->with('tipo');
-		}
-		])
-		//->where('id_estado' , 1)
-		->take(2)
-		->orderBy('cuie', 'asc')
-		->get();
-		 */
 
 		$data = ['efectores' => $efectores];
 

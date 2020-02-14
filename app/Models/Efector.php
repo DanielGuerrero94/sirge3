@@ -197,4 +197,12 @@ class Efector extends Model {
 	public function historiaclinica() {
 		return $this->hasOne('App\Models\HCD\Sistemas', 'id_sistema', 'id_sistema_hcd');
 	}
+
+	/**
+	 * Devuelve los nuevos datos para efectores
+	 */
+	public function datos() {
+		return $this->hasOne('App\Models\Efectores\Datos', 'id_efector', 'id_efector');
+	}
+
 }
