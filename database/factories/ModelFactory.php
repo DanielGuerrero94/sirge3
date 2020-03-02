@@ -20,6 +20,19 @@ $factory->define(App\User::class, function ($faker) {
     ];
 });
 
+$factory->define(App\Models\Subida::class, function ($faker) {
+	$original_name = 'CABA-02.csv';
+	$nombre_archivo = 'CABA-10.csv';
+	$size = 10240;
+	$id_padron = 10;
+	return [
+		'id_padron' => $id_padron,
+		'nombre_original' => $original_name,
+		'nombre_actual' => $nombre_archivo,
+		'size' => $size
+	];
+});
+
 $factory->define(App\Models\PrestacionDOIFacturada::class, function ($faker) {
     //Format 'B90838'
     $letra = $faker->randomLetter();

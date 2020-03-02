@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Subida;
 use Auth;
-
+use Log;
 use Illuminate\Console\Command;
 
 class CommandScheduler extends Command {
@@ -77,6 +77,18 @@ class CommandScheduler extends Command {
 								break;
 							case 8:
 								app('App\Http\Controllers\TableroController')->procesarArchivo($subida->id_subida);
+								break;
+							case 10:
+								$result = app('App\Http\Controllers\PrestacionesDoiFacturadasController')->procesarArchivo($subida->id_subida);
+								var_dump($result->getContent());
+								break;
+							case 11:
+								app('App\Http\Controllers\PrestacionesDoiLiquidadasController')->procesarArchivo($subida->id_subida);
+								break;
+							case 12:
+								app('App\Http\Controllers\PrestacionesDoiPagadasController')->procesarArchivo($subida->id_subida);
+								break;
+							default:
 								break;
 						}
 						Auth::logout();

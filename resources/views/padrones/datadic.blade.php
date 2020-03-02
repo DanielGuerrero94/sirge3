@@ -1,7 +1,7 @@
 @extends('content')
 @section('content')
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12">
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Datadic</h2>
@@ -18,6 +18,7 @@
 	                    <th>Campo</th>
 	                    <th>Tipo</th>
 	                    <th>Obligatorio</th>
+	                    <th>Ejemplo</th>
 	                    <th>Descripción</th>
 	                  </tr>
 	                </thead>
@@ -52,6 +53,7 @@
                 { data: 'campo' , name : 'campo'},
                 { data: 'tipo' , name: 'tipo'},
                 { data: 'obligatorio'},
+                { data: 'ejemplo'},
                 { data: 'descripcion'}
                 
             ],

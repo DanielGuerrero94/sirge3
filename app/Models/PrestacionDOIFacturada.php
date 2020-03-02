@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class PrestacionDOIFacturada extends Model
 {
@@ -33,5 +34,11 @@ class PrestacionDOIFacturada extends Model
 		'alta_complejidad'
 	];
 
-	
+	public function __construct(array $attributes=[])
+	{
+		$user = Auth::user();
+        	$attributes['id_provincia'] = $user['id_provincia'];
+        	parent::__construct($attributes);
+	}
+
 }

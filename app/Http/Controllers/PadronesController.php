@@ -116,9 +116,9 @@ class PadronesController extends Controller
                 'trazadoras',
                 'tablero',
 		'',
-		'prestaciones doi3 facturadas',
-		'prestaciones doi3 liquidadas',
-		'prestaciones doi3 pagadas'
+		'facturadas',
+		'liquidadas',
+		'pagadas'
 	];
 	$name = $padrones[$id];
 
@@ -167,9 +167,7 @@ class PadronesController extends Controller
 
             if (!empty($pending_lotes)) {
                 return array('status' => 'error', 'detalle' => json_encode($pending_lotes));
-            } else {
-                return array('status' => 'ok');
-            }
+            } 
         }
         return array('status' => 'ok');
     }
@@ -210,6 +208,7 @@ class PadronesController extends Controller
             return response()->json(['success' => 'false',
                     'errors'                         => "Ha ocurrido un error: ".$e->getMessage()]);
         }
+
         if ($s->save()) {
             switch ($r->id_padron) {
                 case 4:
