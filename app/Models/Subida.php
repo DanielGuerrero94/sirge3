@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Subida extends Model {
 	/**
@@ -26,6 +27,16 @@ class Subida extends Model {
 	 */
 	public $timestamps = false;
 
+	protected $fillable = ['id_usuario', 'id_estado', 'id_padron', 'nombre_original', 'nombre_actual', 'size'];
+
+	public function __construct(array $attributes=[])
+	{
+		$attributes['id_usuario'] = Auth::user()['id_usuario'];
+		$attributes['id_estado'] = 1;
+        	parent::__construct($attributes);
+	}
+
+
 	/**
      * Devuelve la fecha formateada
      *
@@ -45,7 +56,7 @@ class Subida extends Model {
      */
     public function getSizeAttribute($value)
     {
-        return round(($value / 1024 / 1024) , 2) . ' mb';
+        return $value;//round(($value / 1024 / 1024) , 2) . ' mb';
     }
 
 	/**
@@ -73,10 +84,13 @@ class Subida extends Model {
 	 * Setter del estado eliminado.
 	 */
 	public function setEstadoEliminado(){
-        $this->id_estado = 4;
-        $this->save();
+        	$this->id_estado = 4;
+	        $this->save();
 	}
 
-
+	public function scopePendientes($query)
+	{
+		return $query->where('id_estado', 1);
+	}
 
 }

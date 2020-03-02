@@ -118,14 +118,7 @@ class PrestacionesController extends AbstractPadronesController
      */
     protected function nuevoLote($id_subida)
     {
-        $l = new Lote;
-        $l->id_subida = $id_subida;
-        $l->id_usuario = Auth::user()->id_usuario;
-        $l->id_provincia = Auth::user()->id_provincia;
-        $l->registros_in = 0;
-        $l->registros_out = 0;
-        $l->registros_mod = 0;
-        $l->id_estado = 1;
+        $l = new Lote(['id_subida' => $id_subida]);
         $l->save();
         return $l->lote;
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Lote extends Model 
 {
@@ -26,6 +27,22 @@ class Lote extends Model
 	 * @var bool
 	 */
 	public $timestamps = true;
+
+	protected $fillable = ['id_usuario', 'id_estado', 'id_provincia', 'id_subida', 'registros_in', 'registros_out', 'registros_mod'];
+
+	public function __construct(array $attributes=[])
+	{
+		$user = Auth::user();
+        $attributes['id_usuario'] = $user['id_usuario'];
+        $attributes['id_provincia'] = $user['id_provincia'];
+        $attributes['registros_in'] = 0;
+        $attributes['registros_out'] = 0;
+        $attributes['registros_mod'] = 0;
+        $attributes['id_estado'] = 1;
+
+        	parent::__construct($attributes);
+	}
+
 
 	/**
      * Devuelve la fecha formateada
@@ -97,5 +114,15 @@ class Lote extends Model
         $this->id_estado = 4;
         $this->save();
 	}
+
+	//Scopes
+
+	/**
+	 * Devuelve solo las pendientes
+	 */
+	public function scopePendientes($query){
+		return $query->where('id_estado' , 1);
+	}
+
 
 }
