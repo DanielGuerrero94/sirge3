@@ -8,6 +8,7 @@ CREATE MATERIALIZED VIEW efectores.mv_efectores_completo AS
     v_efectores_completo.id_tipo_efector,
     v_efectores_completo.sigla AS sigla_tipo,
     v_efectores_completo.tipo_efector_descripcion AS tipo_efector,
+    v_efectores_completo.dependencia,
     v_efectores_completo.rural,
     v_efectores_completo.cics,
     v_efectores_completo.id_categorizacion,

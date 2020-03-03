@@ -39,6 +39,7 @@
 		<td class="table-header">ID TIPO EFECTOR</td>
 		<td class="table-header">SIGLA TIPO EFECTOR</td>
 		<td class="table-header">TIPO EFECTOR</td>
+		<td class="table-header">DEPENDENCIA</td>
 		<td class="table-header">RURAL</td>
 		<td class="table-header">CICS</td>
 		<td class="table-header">ID CATEGORIZACION</td>
@@ -102,6 +103,7 @@
 			<td>{{ $efector->id_tipo_efector or ''}}</td>
 			<td>{{ $efector->sigla_tipo or ''}}</td>
 			<td>{{ $efector->tipo_efector or ''}}</td>
+			<td>{{ $efector->dependencia or ''}}</td>
 			<td>{{ $efector->rural or ''}}</td>
 			<td>{{ $efector->cics or ''}}</td>
 			<td>{{ $efector->id_categorizacion or ''}}</td>

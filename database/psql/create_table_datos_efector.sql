@@ -1,4 +1,6 @@
-CREATE TABLE efectores.datos_efector (
+CREATE SEQUENCE efectores.datos_efector_id_datos_efector_seq;
+ 
+    CREATE TABLE efectores.datos_efector (
     id_datos_efector integer DEFAULT nextval('efectores.datos_efector_id_datos_efector_seq'::regclass) NOT NULL,
     id_efector integer NOT NULL,
     categoria_maternidad character(4),
@@ -9,6 +11,9 @@ CREATE TABLE efectores.datos_efector (
     categoria_iam character(3),
     red_flap character(1) DEFAULT 'N'::character NOT NULL
     );
+
+ALTER SEQUENCE efectores.datos_efector_id_datos_efector_seq
+    OWNED BY efectores.datos_efector.id_datos_efector;
 
 ALTER TABLE efectores.datos_efector OWNER TO postgres;
 

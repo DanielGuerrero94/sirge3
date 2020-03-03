@@ -1,3 +1,4 @@
+drop view efectores.v_efectores_completo cascade;
 CREATE OR REPLACE VIEW efectores.v_efectores_completo AS
  SELECT e.id_efector,
     e.cuie,
@@ -7,6 +8,7 @@ CREATE OR REPLACE VIEW efectores.v_efectores_completo AS
     e.codigo_postal,
     e.denominacion_legal,
     e.id_tipo_efector,
+    tda.descripcion as dependencia,
     e.rural,
     e.cics,
     e.id_categorizacion,
@@ -112,6 +114,7 @@ CREATE OR REPLACE VIEW efectores.v_efectores_completo AS
      LEFT JOIN efectores.efectores_addendas add ON ((e.id_efector = add.id_efector)))
      LEFT JOIN efectores.tipo_efector tipo ON ((e.id_tipo_efector = tipo.id_tipo_efector)))
      LEFT JOIN efectores.tipo_categorizacion cat ON ((e.id_categorizacion = cat.id_categorizacion)))
+     LEFT JOIN efectores.tipo_dependencia_administrativa tda ON ((e.id_dependencia_administrativa = tda.id_dependencia_administrativa))
      LEFT JOIN geo.provincias prov ON ((dg.id_provincia = prov.id_provincia)))
      LEFT JOIN hcd.sistemas hcd ON ((e.id_sistema_hcd = hcd.id_sistema))
      LEFT JOIN efectores.datos_efector de ON ((de.id_efector = e.id_efector)))
