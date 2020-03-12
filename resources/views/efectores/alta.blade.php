@@ -208,6 +208,16 @@
 							    			</select>
 						    			</div>
 						    		</div>
+						    		<div class="col-md-3">
+						    			<label for="hpgd" class="col-sm-6 control-label">HPGD</label>
+						    			<div class="col-sm-6">
+							    			<select id="hpgd" name="hpgd" class="form-control">
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+							    			</select>
+						    			</div>
+						    		</div>
+
 						    	</div>
 							</br>
 							<div class="row">

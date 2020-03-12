@@ -211,6 +211,7 @@ class EfectoresController extends Controller {
 		$ef->pami                          = $r->pami;
 		$ef->os_directo                    = $r->os_directo;
 		$ef->otro                    	   = $r->otro;
+		$ef->hpgd                    	   = $r->hpgd;
 		if (isset($r->hcd) && $r->hcd == 'S') {
 			$ef->hcd            = $r->hcd;
 			$ef->id_sistema_hcd = $r->sistema_hcd;
@@ -615,6 +616,7 @@ class EfectoresController extends Controller {
 		$ef->pami                          = $r->pami;
 		$ef->os_directo                    = $r->os_directo;
 		$ef->otro                          = $r->otro;
+		$ef->hpgd                          = $r->hpgd;
 		Log::info($ef->toJson());
 		if (isset($r->addenda_perinatal)) {
 			$ef->ppac = $r->addenda_perinatal == 'S'?'S':'N';

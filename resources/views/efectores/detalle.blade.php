@@ -341,6 +341,15 @@
 									</div>
 								</div>
 							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="col-md-5 control-label">HPGD</label>
+									<div class="col-md-4">
+										<p class="form-control-static">{{ $efector->hpgd }}</p>
+									</div>
+								</div>
+							</div>
+
 						</div>
 						<div class="row">
 							<div class="col-md-3">

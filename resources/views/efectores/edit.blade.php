@@ -253,6 +253,20 @@
 							    			</select>
 						    			</div>
 						    		</div>
+						    		<div class="col-md-3">
+						    			<label for="hpgd" class="col-sm-6 control-label">HPGD</label>
+						    			<div class="col-sm-6">
+							    			<select id="hpgd" name="hpgd" class="form-control">
+										@if($efector->hpgd == 'S')
+								    				<option selected="selected" value="S">SI</option>
+								    				<option value="N">NO</option>
+								    			@else
+								    				<option value="S">SI</option>
+								    				<option selected="selected" value="N">NO</option>
+								    		@endif
+							    			</select>
+						    			</div>
+						    		</div>
 						    	</div>
 							</br>
 							<div class="row">

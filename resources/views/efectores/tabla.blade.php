@@ -53,6 +53,7 @@
 		<td class="table-header">PAMI</td>
 		<td class="table-header">OS DIRECTO</td>
 		<td class="table-header">OTRO</td>
+		<td class="table-header">HPGD</td>
 		<td class="table-header">CATEGORIA MATERNIDAD</td>
 		<td class="table-header">CUMPLE CONE</td>
 		<td class="table-header">CATEGORIA NEONATOLOGIA</td>
@@ -111,12 +112,13 @@
 			<td>{{ $efector->categorizacion or ''}}</td>
 			<td>{{ $efector->dependencia_sanitaria or ''}}</td>
 			<td>{{ $efector->compromiso_gestion or ''}}</td>
-			<td>{{ $efector->sistema_hcd or ''}}</td>
+			<td>{{ $efector->nombre_hce or ''}}</td>
 			<td>{{ $efector->recupera_costos or ''}}</td>
 			<td>{{ $efector->osp or ''}}</td>
 			<td>{{ $efector->pami or ''}}</td>
 			<td>{{ $efector->os_directo or ''}}</td>
 			<td>{{ $efector->otro or ''}}</td>
+			<td>{{ $efector->hpgd or ''}}</td>
 			<td>{{ $efector->categoria_maternidad or '' }}</td>
 			<td>{{ $efector->cumple_cone or 'N' }}</td>
 			<td>{{ $efector->categoria_neonatologia or '' }}</td>
