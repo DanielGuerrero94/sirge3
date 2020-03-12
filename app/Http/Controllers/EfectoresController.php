@@ -243,9 +243,10 @@ class EfectoresController extends Controller {
 		if (is_null($result)) {
 			Log::info("Intenta enviar el email");
 			Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
-					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web TEST');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('sirgeweb@gmail.com');
-					$m->subject('TEST Solicitud de alta de efector!');
+					$m->to('javier.minsky@gmail.com');
+					$m->subject('Solicitud de alta de efector!');
 				});
 
 			return 'Se ha solicitado el alta del efector '.$ef->nombre;
@@ -420,9 +421,10 @@ class EfectoresController extends Controller {
 		$e->id_estado = 3;
 		if ($e->save()) {
 			Mail::send('emails.down-efector', ['efector' => $e], function ($m) use ($e) {
-					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web TEST');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('sirgeweb@gmail.com');
-					$m->subject('TEST Solicitud de baja de efector!');
+					$m->to('javier.minsky@gmail.com');
+					$m->subject('Solicitud de baja de efector!');
 				});
 
 			return 'Se ha solicitado la baja del efector '.$e->cuie;

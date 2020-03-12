@@ -91,7 +91,7 @@ class SolicitudController extends Controller {
 					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
 					$m->to('javier.minsky@gmail.com');
 					$m->to('sirgeweb@gmail.com');
-					$m->to('aocariz@hotmail.com');
+				//	$m->to('aocariz@hotmail.com');
 					$m->subject('Nuevo requerimiento!');
 				});
 

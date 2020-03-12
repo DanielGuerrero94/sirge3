@@ -57,7 +57,7 @@ class RegistrationController extends Controller {
 					$m->from('sirgeweb@sumar.com.ar', 'PACES');
 					$m->to('sirgeweb@gmail.com');
 					$m->to('javier.minsky@gmail.com');
-					$m->to('aocariz@hotmail.com');
+				//	$m->to('aocariz@hotmail.com');
 				//	$m->to('gavacca@msal.gov.ar');
 				//	$m->to('rodrigo.cadaval.sumar@gmail.com');
 					$m->subject('Solicitud de usuario!');
