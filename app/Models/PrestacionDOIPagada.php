@@ -9,7 +9,6 @@ class PrestacionDOIPagada extends Model
 	protected $table = 'prestaciones.prestaciones_doi_pagadas'; 
 	//
 	protected $fillable = [
-		'id_provincia',
 		'id_prestacion',
 		'prestacion_codigo',
 		'cuie',
@@ -32,6 +31,13 @@ class PrestacionDOIPagada extends Model
 		'factura_fecha_recepcion',
 		'alta_complejidad'
 	];
+
+	public function __construct() {
+		parent::__construct();
+		$this->id_provincia = '02';
+	}
+
+	
 
 	
 }

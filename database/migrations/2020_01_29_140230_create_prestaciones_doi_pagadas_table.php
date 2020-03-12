@@ -41,29 +41,29 @@ class CreatePrestacionesDoiPagadasTable extends Migration
 	$table->char('alta_complejidad', 1);
 	//Liquidadas
 	
-$table->integer('id_liquidacion');
-$table->date('liquidacion_fecha');
-$table->decimal('valor_unitario_aprobado', 7, 2);
-$table->integer('cantidad_aprobada');
-$table->decimal('importe_prestacion_aprobado', 9, 2);
+$table->integer('id_liquidacion')->nullable();
+$table->date('liquidacion_fecha')->nullable();
+$table->decimal('valor_unitario_aprobado', 7, 2)->nullable();
+$table->integer('cantidad_aprobada')->nullable();
+$table->decimal('importe_prestacion_aprobado', 9, 2)->nullable();
 
 	//Pagadas
-$table->integer('id_dato_reportable_1');
-$table->string('dato_reportable_1');
-$table->integer('id_dato_reportable_2');
-$table->string('dato_reportable_2');
-$table->integer('id_dato_reportable_3');
-$table->string('dato_reportable_3');
-$table->integer('id_dato_reportable_4');
-$table->string('dato_reportable_4');
-$table->integer('id_op');
-$table->integer('numero_op');
-$table->date('fecha_op');
-$table->decimal('importe_total_op', 7, 2);
-$table->integer('numero_expte');
-$table->date('fecha_debito_bancario');
-$table->decimal('importe_debito_bancario', 9, 2);
-$table->date('fecha_notificacion_efector');
+$table->integer('id_dato_reportable_1')->nullable();
+$table->string('dato_reportable_1')->nullable();
+$table->integer('id_dato_reportable_2')->nullable();
+$table->string('dato_reportable_2')->nullable();
+$table->integer('id_dato_reportable_3')->nullable();
+$table->string('dato_reportable_3')->nullable();
+$table->integer('id_dato_reportable_4')->nullable();
+$table->string('dato_reportable_4')->nullable();
+$table->integer('id_op')->nullable();
+$table->integer('numero_op')->nullable();
+$table->date('fecha_op')->nullable();
+$table->decimal('importe_total_op', 7, 2)->nullable();
+$table->integer('numero_expte')->nullable();
+$table->date('fecha_debito_bancario')->nullable();
+$table->decimal('importe_debito_bancario', 9, 2)->nullable();
+$table->date('fecha_notificacion_efector')->nullable();
 
 
 

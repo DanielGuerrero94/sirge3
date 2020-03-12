@@ -23,6 +23,7 @@ use App\Models\Rechazo;
 use App\Models\Prestacion;
 use App\Models\PrestacionModificada;
 use App\Models\PrestacionDRModificado;
+use App\Models\PrestacionDOIPagada;
 use App\Models\Dw\FC\Fc001;
 use App\Models\Dw\FC\Fc005;
 
@@ -30,12 +31,12 @@ use App\Models\Geo\Provincia;
 
 class PrestacionesDoiController extends PrestacionesController
 {
-	
-	private $_resumen = [
-		'liquidadas' => 0,
-		'pagadas' => 0,
-		'no-procesadas' => 0
-	];
+    
+    private $_resumen = [
+        'liquidadas' => 0,
+        'pagadas' => 0,
+        'no-procesadas' => 0
+    ];
 
     /**
      * Actualiza el lote con los datos procesados
@@ -95,53 +96,90 @@ class PrestacionesDoiController extends PrestacionesController
         $fh = $this->abrirArchivo($id);
         if (is_array($fh)) {
             return response()->json(['success' => 'false', 'errors'  => "El archivo no ha podido procesarse", 'details' => $fh['mensaje']]);
-	}
+        }
 
-            $lote = Lote::where('id_subida', $id)->first()->lote;
+        $lote = Lote::where('id_subida', $id)->first()->lote;
 
-            fgets($fh);
+        $keys = [
+        'id_provincia',
+        'id_prestacion',
+        'prestacion_codigo',
+        'cuie',
+        'prestacion_fecha',
+        'beneficiario_apellido',
+        'beneficiario_nombre',
+        'beneficiario_clave',
+        'beneficiario_tipo_documento',
+        'beneficiario_clase_documento',
+        'beneficiario_nro_documento',
+        'beneficiario_sexo',
+        'beneficiario_nacimiento',
+        'valor_unitario_facturado',
+        'cantidad_facturado',
+        'importe_prestacion_facturado',
+        'id_factura',
+        'factura_nro',
+        'factura_fecha',
+        'factura_importe_total',
+        'factura_fecha_recepcion',
+        'alta_complejidad'
+        ];
+
+        fgets($fh);
         for ($i = 1; !feof($fh); $i++) {
             $fila = trim(fgets($fh), "\r\n");
             $columnas = preg_split("/;/", $fila);
-
-	    $estado = $this->identificarEstado($columnas);
+	    $count_columnas = count($columnas);
+	    $count_keys = count($keys);
+	    if ($count_columnas == $count_keys) {
+	    	$data = array_combine($keys, $columnas);
+	        $prestacion = new PrestacionDOIPagada($data);
+                $result = $prestacion->save();
+	    } else {
+		var_dump($count_columnas);
+		var_dump($count_keys);
+	   	$this->_errors[] = 'La fila contiene {$columnas} y necesita {$keys}'; 
+	    }
+        }
+	if (count($this->_errors)) {
+           return response()->json(array('success' => 'false', 'data' => $this->_errors));
 	}
         
         return response()->json(array('success' => 'true', 'data' => $this->_resumen));
     }
 
     private function identificarEstado($columnas)
-    {	
-	if($this->informaPago($columnas)) {
-	  $this->_resumen['pagadas']++;
-	} else if ($this->informaLiquidacion($columnas)) {
-	  $this->_resumen['liquidadas']++;
-	}
+    {
+        if ($this->informaPago($columnas)) {
+            $this->_resumen['pagadas']++;
+        } elseif ($this->informaLiquidacion($columnas)) {
+            $this->_resumen['liquidadas']++;
+        }
     }
 
-    private function informaLiquidacion($columnas) 
+    private function informaLiquidacion($columnas)
     {
-	    try {
-		$fecha = $columnas[20];
-		var_dump(array('fecha_liquidacion' => $fecha));
-		return $columnas[20] != "";
-	    } catch (Exception $e) {
-	        var_dump($e->getMessage());
-		$this->_resumen['no-procesadas']++;
-	    }
-	    return false;
+        try {
+            $fecha = $columnas[20];
+            var_dump(array('fecha_liquidacion' => $fecha));
+            return $columnas[20] != "";
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+            $this->_resumen['no-procesadas']++;
+        }
+        return false;
     }
 
-    private function informaPago($columnas) 
+    private function informaPago($columnas)
     {
-	    try {
-		$fecha = $columnas[23];
-		var_dump(array('fecha_notificacion_pago' => $fecha));
-		return $columnas[23] != "";
-	    } catch (Exception $e) {
-	        var_dump($e->getMessage());
-	    }
-	    return false;
+        try {
+            $fecha = $columnas[23];
+            var_dump(array('fecha_notificacion_pago' => $fecha));
+            return $columnas[23] != "";
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+        }
+        return false;
     }
 
     /**
