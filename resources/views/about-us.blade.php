@@ -6,7 +6,7 @@
 			<div class="box-body">
 				<div class="row">
 					<div class="col-md-6">
-						<p>La misión del sistema SIRGe Web consiste en organizar la información de que genera el PACES para que todos puedan acceder a ella y usarla. 
+						<p>La misión del sistema SIRGe Web consiste en organizar la información de que genera el SUMAR para que todos puedan acceder a ella y usarla. 
 	Nos encontramos en constante crecimiento, desarrollando y mejorando funcionalidades para ofrecer el mejor servicio posible. 
 	Entre toda la información que se puede encontrar se encuentran:</p>
 						<ul>

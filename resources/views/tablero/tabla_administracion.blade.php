@@ -29,7 +29,7 @@
 
 <table class="table">
 	<tr>
-		<td class="title-sumar">PACES</td>
+		<td class="title-sumar">SUMAR</td>
 		<td class="title-sumar">Administracion Tablero de Control</td>
 	</tr>
 	<tr>

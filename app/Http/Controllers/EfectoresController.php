@@ -792,15 +792,15 @@ class EfectoresController extends Controller {
 
 		$data = ['efectores' => $efectores];
 
-		if (file_exists('/var/www/html/sirge3/storage/exports/Efectores_PACES.xlsx')) {
-			unlink('/var/www/html/sirge3/storage/exports/Efectores_PACES.xlsx');
+		if (file_exists('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx')) {
+			unlink('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx');
 		}
-		if (file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_PACES.zip')) {
-			unlink('/var/www/html/sirge3/storage/exports/EFECTORES_PACES.zip');
+		if (file_exists('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip')) {
+			unlink('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip');
 		}
 
-		Excel::create('Efectores_PACES', function ($e) use ($data) {
-				$e->sheet('Tabla_PACES', function ($s) use ($data) {
+		Excel::create('Efectores_SUMAR', function ($e) use ($data) {
+				$e->sheet('Tabla_SUMAR', function ($s) use ($data) {
 						$s->setHeight(1, 20);
 						$s->setColumnFormat([
 								'B' => '00000000000000'
@@ -811,8 +811,8 @@ class EfectoresController extends Controller {
 			->store('xlsx');
 
 		$zip = new ZipArchive();
-		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_PACES.zip', ZipArchive::CREATE);
-		$zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_PACES.xlsx', 'Efectores_PACES.xlsx');
+		$zip->open('/var/www/html/sirge3/storage/exports/EFECTORES_SUMAR.zip', ZipArchive::CREATE);
+		$zip->addFile('/var/www/html/sirge3/storage/exports/Efectores_SUMAR.xlsx', 'Efectores_SUMAR.xlsx');
 		$zip->close();
 	}
 
@@ -822,7 +822,7 @@ class EfectoresController extends Controller {
 	 * @return null
 	 */
 	public function descargarTabla() {
-		return response()->download('../storage/exports/EFECTORES_PACES.zip');
+		return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
 	}
 
 	/**

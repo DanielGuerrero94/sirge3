@@ -20,22 +20,22 @@
 	</style>
 </head>
 <body>
-<!-- <img src="{{ asset("/dist/img/Zocalo_PACES.jpg") }}" style="width: 100%;"> -->
-<img src="/var/www/html/sirge3/public/dist/img/Zocalo_PACES.jpg" style="margin-left: 2%; width: 100%;">
+<!-- <img src="{{ asset("/dist/img/Zocalo_SUMAR.jpg") }}" style="width: 100%;"> -->
+<img src="/var/www/html/sirge3/public/dist/img/Zocalo_SUMAR.jpg" style="margin-left: 2%; width: 100%;">
 	<div style="text-align: right">
 		<i>{{ $mensaje->valor }}</i>
 	</div>
 	<hr />
 	<table style="width: 100%">
 		<tr>
-			<td style="font-size:12px;">FORMULARIO DE INFORMACIÓN PRIORIZADA - COBERTURA UNIVERSAL DE SALUD - PACES</td>
+			<td style="font-size:12px;">FORMULARIO DE INFORMACIÓN PRIORIZADA - COBERTURA UNIVERSAL DE SALUD - SUMAR</td>
 			<td style="font-size:12px;">Nº {{ $ddjj->id_provincia}}/{{ $ddjj->periodo_reportado}}</td>
 		</tr>
 	</table>
 	<p class="lugar-dia-hora"><b>{{ ucwords(strtolower($ddjj->provincia->descripcion)) }} , {{ $fecha_impresion }}</b></p>
 	<p style="font-weight: bold">
 		DIRECTOR NACIONAL DEL PROYECTO <br/>	
-		COBERTURA UNIVERSAL DE SALUD - PACES
+		COBERTURA UNIVERSAL DE SALUD - SUMAR
 		
 	</p>
 	<p>

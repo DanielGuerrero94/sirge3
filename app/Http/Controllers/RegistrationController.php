@@ -54,7 +54,7 @@ class RegistrationController extends Controller {
 
 		if ($user->save()) {
 			Mail::send('emails.reminder', ['usuario' => $user], function ($m) use ($user) {
-					$m->from('sirgeweb@sumar.com.ar', 'PACES');
+					$m->from('sirgeweb@sumar.com.ar', 'SUMAR');
 					$m->to('sirgeweb@gmail.com');
 					$m->to('javier.minsky@gmail.com');
 				//	$m->to('aocariz@hotmail.com');

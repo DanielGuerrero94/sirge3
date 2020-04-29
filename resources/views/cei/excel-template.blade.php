@@ -26,7 +26,7 @@
 </style>
 <table>
 	<tr>
-		<td class="title-sumar">PACES</td>
+		<td class="title-sumar">SUMAR</td>
 		<td class="title-sumar">{{$linea_cuidado}}</td>
 	</tr>
 	<tr>

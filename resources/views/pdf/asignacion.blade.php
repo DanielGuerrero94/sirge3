@@ -12,7 +12,7 @@
 <body>
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<img src="/var/www/html/sirge3/public/dist/img/Zocalo_PACES.jpg" style="margin-left: 2%; width: 100%;">
+			<img src="/var/www/html/sirge3/public/dist/img/Zocalo_SUMAR.jpg" style="margin-left: 2%; width: 100%;">
 			<div class="box box-danger">
 				<div class="box-header">
 					<h2 class="box-title">Asignación requerimiento Nº: <b>{{ $solicitud->id }}</b></h2>
@@ -38,7 +38,7 @@
 					<br/>
 					<br/>
 					<address>
-						<strong>PACES</strong><br>
+						<strong>SUMAR</strong><br>
 							Av. Hipolito Yrigoyen 440/60  P.3<br>
 							Ciudad Autónoma de Buenos Aires, CP C1086AAF<br>
 							<abbr>Tel:</abbr> (011) 7090-3600

@@ -4,5 +4,5 @@
         SIRGe Web - Equipo Coordinador de Programa
     </div>
     <!-- Default to the left -->
-    <strong> <a href="#">Cobertura Universal de Salud - PACES</a></strong>
+    <strong> <a href="#">Cobertura Universal de Salud - SUMAR</a></strong>
 </footer>
