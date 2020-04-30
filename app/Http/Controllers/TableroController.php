@@ -609,11 +609,11 @@ class TableroController extends AbstractPadronesController {
 	 * @return text (HTML)
 	 */
 	public function datatableActions($indicadores_full, $id_menu, $id_entidad, $observaciones, $id) {
-        $botones;
+        $botones = '';
 
 		if (!in_array($indicadores_full, array('completed', 'rejected'))) {
 
-			if (in_array($id_menu, array(12, 14)) && $id_entidad == 2) {
+			if (in_array($id_menu, array(12, 14, 3)) && $id_entidad == 2) {
 				if (Ingreso::find($id)->blocked) {
 					$botones = '<button id="'.$id.'" class="btn btn-default btn-xs" data-toggle="listado-tooltip" data-placement="top" title="El indicador fue bloqueado por la UEC" style="background-coĺor:#ccc; border-color:#e8e7e7; color:#b1aeae"><i class="fa fa-pencil-square-o"></i> Editar</button> ';
 				} else {
@@ -637,7 +637,6 @@ class TableroController extends AbstractPadronesController {
 				}
 			} else if (in_array($id_menu, array(17, 15)) && $id_entidad == 1) {
 				$botones = ' <button class="btn btn-default btn-xs">SIN PRIVILEGIOS</button> ';
-
 			}
 
 		} else {
@@ -646,7 +645,6 @@ class TableroController extends AbstractPadronesController {
 			} else {
 				$botones = ' <button id="'.$id.'" class="btn btn-danger btn-xs"> RECHAZADO</button> ';
 			}
-
 		}
 		return $botones;
 	}

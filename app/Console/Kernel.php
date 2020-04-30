@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel {
 		$schedule->call('App\Http\Controllers\EfectoresController@generarTabla')->dailyAt('21:30');
 		$schedule->call('App\Http\Controllers\PssController@generarTabla')->dailyAt('22:00');
 		$schedule->call('App\Http\Controllers\RechazosController@generarRechazosLotesNuevos')->hourly();
-		$schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('31 15 26 * * *');
+		$schedule->call('App\Http\Controllers\DatawarehouseController@ejecutarTodas')->cron('31 15 23 * *');
 
 		$schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:02');
 		$schedule->call('App\Http\Controllers\WebServicesController@cruzarBeneficiariosConSiisa')->dailyAt('20:05');

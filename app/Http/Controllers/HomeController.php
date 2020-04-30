@@ -21,7 +21,6 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Mail;
-use Log;
 
 class HomeController extends Controller {
 
@@ -61,7 +60,6 @@ class HomeController extends Controller {
 			->orderBy('nivel_1')
 			->orderBy('nivel_2');
 
-            Log::debug($relaciones->toSql());
         $relaciones = $relaciones->get();
 
 		foreach ($relaciones as $key => $relacion) {
@@ -146,8 +144,10 @@ class HomeController extends Controller {
 		$periodos = Ceb002::select('periodo', DB::raw('sum(beneficiarios_activos) as b'), DB::raw('sum(beneficiarios_ceb) as c'))
 			->whereBetween('periodo', [$interval['min'], $interval['max']])
 			->groupBy('periodo')
-			->orderBy('periodo')
-			->get();
+            ->orderBy('periodo');
+	    $periodos = $periodos->get();
+
+        $chart = [];
 
 		foreach ($periodos as $key => $periodo) {
 			$chart[0]['name']       = 'Benef. CEB';
@@ -171,8 +171,11 @@ class HomeController extends Controller {
 		$periodos = Fc001::select('periodo', DB::raw('sum(cantidad) as cf'), DB::raw('sum(monto) as mf'))
 			->whereBetween('periodo', [$interval['min'], $interval['max']])
 			->groupBy('periodo')
-			->orderBy('periodo')
-			->get();
+			->orderBy('periodo');
+	    $periodos = $periodos->get();
+        
+        $chart = [];
+
 		foreach ($periodos as $key => $periodo) {
 			$chart[0]['name']              = 'Prest. fact.';
 			$chart[0]['data'][$key]        = $periodo->cf;

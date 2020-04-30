@@ -190,10 +190,17 @@ class SolicitudController extends Controller {
 		$s = Solicitud::with(['tipos' => function ($q) {
 					$q->with('grupos');
 				}, 'estados', 'operador', 'prioridades', 'adjuntos'])->find($id);
+
+        $user_priority = 0;
+        if (Auth::user()->id_menu == 1) $user_priority = 1;
+        if (Auth::user()->id_entidad == 1) {
+            $id_menu = Auth::user()->id_menu;
+            if ($id_menu == 7 || $id_menu == 23) $user_priority = 1;
+        }
 		$data = [
 			'solicitud'     => $s,
 			'back'          => $back,
-			'user_priority' => (Auth::user()->id_menu == 1 || (Auth::user()->id_menu == 7 && Auth::user()->id_entidad == 1))?1:0
+			'user_priority' => $user_priority 
 		];
 		return view('requests.details', $data);
 	}

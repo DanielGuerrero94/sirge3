@@ -25,4 +25,5 @@ class YearIndicadores extends Model {
 	 * @var bool
 	 */
 	public $timestamps = false;
+    protected $fillable = ['year', 'indicadores'];
 }
