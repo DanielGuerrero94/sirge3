@@ -18,6 +18,7 @@ use App\Models\Trazadoras\Header;
 use Auth;
 use Datatables;
 use DB;
+use Http;
 use ErrorException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -607,4 +608,7 @@ class PadronesController extends Controller
             return response()->json(['status' => 'error', 'detalle' => "El archivo no ha podido procesarse"]);
         }
     }
+
+
+
 }

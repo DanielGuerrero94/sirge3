@@ -36,6 +36,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           apply the skin class to the body tag so the changes take effect.
     -->
     <link href="{{ asset("/bower_components/admin-lte/dist/css/skins/skin-red-light.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/skins/skin-green-light.min.css")}}" rel="stylesheet" type="text/css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -43,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="skin-red-light">
+<body class="skin-green-light">
 <div class="wrapper">
 
     <!-- Header -->
@@ -222,11 +223,12 @@ $(document).ready(function(){
         path: "/sirge3/public/dist/sounds/",
         preload: true
     });
-
+	/*
     $(document).on({
         ajaxStart: function() { $('body').addClass("loading"); },
         ajaxStop: function() { $('body').removeClass("loading"); }
-    });
+});
+	*/
 
     $.get('dashboard', function(data){
         $('.content-wrapper').html(data);

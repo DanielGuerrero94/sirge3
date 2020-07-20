@@ -329,6 +329,7 @@ class TableroController extends AbstractPadronesController {
 			->addColumn(
 			'action',
 			function ($result) {
+				Log::info($this->_user);
 				return $this->datatableActions($this->indicadoresFull($result->periodo, $result->provincia), $this->_user->id_menu, $this->_user->id_entidad, $result->observaciones, $result->id);
 			}
 		)

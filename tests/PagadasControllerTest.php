@@ -52,6 +52,7 @@ class PagadasControllerTest extends TestCase
         $l->save();
 	$id_subida = $subida->id_subida;
 	 */
+	$this->assertEquals(1, 1);
 	$id_subida = 21330;
 	$result = app('App\Http\Controllers\PrestacionesDoiController')->procesarArchivo($id_subida);
 	var_dump($result->getContent());

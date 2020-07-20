@@ -101,28 +101,49 @@ class PrestacionesDoiController extends PrestacionesController
         $lote = Lote::where('id_subida', $id)->first()->lote;
 
         $keys = [
-        'id_provincia',
-        'id_prestacion',
-        'prestacion_codigo',
-        'cuie',
-        'prestacion_fecha',
-        'beneficiario_apellido',
-        'beneficiario_nombre',
-        'beneficiario_clave',
-        'beneficiario_tipo_documento',
-        'beneficiario_clase_documento',
-        'beneficiario_nro_documento',
-        'beneficiario_sexo',
-        'beneficiario_nacimiento',
-        'valor_unitario_facturado',
-        'cantidad_facturado',
-        'importe_prestacion_facturado',
-        'id_factura',
-        'factura_nro',
-        'factura_fecha',
-        'factura_importe_total',
-        'factura_fecha_recepcion',
-        'alta_complejidad'
+		'id_prestacion',
+		'prestacion_codigo',
+		'cuie',
+		'prestacion_fecha',
+		'beneficiario_apellido',
+		'beneficiario_nombre',
+		'beneficiario_clave',
+		'beneficiario_tipo_documento',
+		'beneficiario_clase_documento',
+		'beneficiario_nro_documento',
+		'beneficiario_sexo',
+		'beneficiario_nacimiento',
+		'valor_unitario_facturado',
+		'cantidad_facturado',
+		'importe_prestacion_facturado',
+		'id_factura',
+		'factura_nro',
+		'factura_fecha',
+		'factura_importe_total',
+		'factura_fecha_recepcion',
+		'alta_complejidad',
+        	'id_liquidacion',
+        	'num_liquidacion',
+	        'liquidacion_fecha',
+	        'valor_unitario_aprobado',
+	        'cantidad_aprobada',
+	        'importe_prestacion_aprobado',
+	        'id_dato_reportable_1',
+	        'dato_reportable_1',
+	        'id_dato_reportable_2',
+	        'dato_reportable_2',
+	        'id_dato_reportable_3',
+	        'dato_reportable_3',
+	        'id_dato_reportable_4',
+	        'dato_reportable_4',
+	        'id_op',
+	        'numero_op',
+	        'fecha_op',
+	        'importe_total_op',
+	        'numero_expte',
+	        'fecha_debito_bancario',
+	        'importe_debito_bancario',
+	        'fecha_notificacion_efector'
         ];
 
         fgets($fh);
@@ -133,12 +154,16 @@ class PrestacionesDoiController extends PrestacionesController
 	    $count_keys = count($keys);
 	    if ($count_columnas == $count_keys) {
 	    	$data = array_combine($keys, $columnas);
-	        $prestacion = new PrestacionDOIPagada($data);
-                $result = $prestacion->save();
+		try {
+	          $result = PrestacionDOIPagada::create($data);
+		} catch (QueryException $e) {
+		  //$message = $this->getBetterMessageError($e);
+	 	  $message = $e->getMessage();
+		  $this->_errors[] = $message;
+		  //PDOException: SQLSTATE[23502]
+		}
 	    } else {
-		var_dump($count_columnas);
-		var_dump($count_keys);
-	   	$this->_errors[] = 'La fila contiene {$columnas} y necesita {$keys}'; 
+	   	$this->_errors[] = "La fila {$i} contiene {$count_columnas} columnas y necesita {$count_keys} columnas"; 
 	    }
         }
 	if (count($this->_errors)) {
@@ -148,69 +173,12 @@ class PrestacionesDoiController extends PrestacionesController
         return response()->json(array('success' => 'true', 'data' => $this->_resumen));
     }
 
-    private function identificarEstado($columnas)
+    public function getBetterMessageError(QueryException $e)
     {
-        if ($this->informaPago($columnas)) {
-            $this->_resumen['pagadas']++;
-        } elseif ($this->informaLiquidacion($columnas)) {
-            $this->_resumen['liquidadas']++;
-        }
-    }
-
-    private function informaLiquidacion($columnas)
-    {
-        try {
-            $fecha = $columnas[20];
-            var_dump(array('fecha_liquidacion' => $fecha));
-            return $columnas[20] != "";
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-            $this->_resumen['no-procesadas']++;
-        }
-        return false;
-    }
-
-    private function informaPago($columnas)
-    {
-        try {
-            $fecha = $columnas[23];
-            var_dump(array('fecha_notificacion_pago' => $fecha));
-            return $columnas[23] != "";
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
-        return false;
-    }
-
-    /**
-     * Devuelve la vista para ingresar el periodo
-     *
-     * @return null
-     */
-    public function getPeriodo()
-    {
-        $data = [
-            'page_title' => 'Filtros'
-        ];
-        return view('prestaciones.periodo', $data);
-    }
-
-    /**
-     * Devuelve listado de 6 meses
-     *
-     * @return json
-     */
-    protected function getMesesArray($periodo)
-    {
-
-        $dt = \DateTime::createFromFormat('Y-m', $periodo);
-        $dt->modify('-12 month');
-        for ($i = 0; $i < 12; $i ++) {
-            $dt->modify('+1 month');
-
-            $meses[$i] = strftime("%b", $dt->getTimeStamp());
-        }
-        return json_encode($meses);
+        $message = $e->getMessage();
+	preg_match('/for type numeric: "(.*)" \(SQL:/', $message, $matches);
+	$message = isset($matches[1])?$matches[1]:$message;
+	return $message;
     }
 
     /**
@@ -227,29 +195,6 @@ class PrestacionesDoiController extends PrestacionesController
         $interval['min'] = $dt->format('Ym');
 
         return $interval;
-    }
-
-    /**
-     * Devuelve la info para generar un gráfico
-     *
-     * @return json
-     */
-    protected function getProgresoPrestaciones($periodo)
-    {
-
-        $interval = $this->getDateInterval($periodo);
-
-        $periodos = Fc001::select('periodo', DB::raw('sum(cantidad) as b'))
-                    ->whereBetween('periodo', [$interval['min'],$interval['max']])
-                    ->groupBy('periodo')
-                    ->orderBy('periodo')
-                    ->get();
-
-        foreach ($periodos as $key => $periodo) {
-            $chart[0]['name'] = 'Prest. Fact.';
-            $chart[0]['data'][$key] = $periodo->b;
-        }
-        return json_encode($chart);
     }
 
     /**

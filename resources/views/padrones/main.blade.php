@@ -16,30 +16,6 @@
 			</div>
 		</div>
 	</div>
-	<!--
-	<div class="col-md-4">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h2 class="box-title">Generar lotes</h2>
-				<div class="box-tools pull-right">
-					@if ($archivos_pendientes != 0)
-					<span class="label label-warning">{{ $archivos_pendientes }} archivo(s) sin procesar</span>
-					@else
-					<span class="label label-success">No hay archivos pendientes</span>
-					@endif
-				</div>
-			</div>
-			<div class="box-body">
-				<p>Desde esta opción usted podrá procesar aquellos archivos que ha subido y aceptarlos o no en caso que ud. lo desee. Recuerde revisar los errores informados una vez finalizado el proceso.</p>
-			</div>
-			<div class="box-footer">
-				<div class="btn-group" role="group">
-					<button href="listar-archivos/{{ $id_padron }}" class="action btn btn-primary" disabled>Ver archivos (removido)</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	-->
 	<div class="col-md-4">
 		<div class="box box-primary">
 			<div class="box-header">
@@ -116,6 +92,23 @@
 			</div>
 		</div>
 	</div>
+	@if($id_padron == 12)
+	<div class="col-md-4">
+		<div class="box box-info">
+			<div class="box-header">
+				<h2 class="box-title">Revision de datos reportables</h2>
+			</div>
+			<div class="box-body">
+				<p>Esta herramienta le permitira hacer pruebas sobre el formato de los datos reportables</p>
+			</div>
+			<div class="box-footer">
+				<div class="btn-group" role="group">
+					<button href="herramientas/datos-reportables" class="action btn btn-info">Probar DR</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	@endif
 </div>
 <script type="text/javascript">
 	$('.action').click(function(){

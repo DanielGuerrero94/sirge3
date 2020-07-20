@@ -80,6 +80,14 @@ return [
             'url_type'  => 'publicURL',
         ],
 
+        'sirge-web' => [
+            'driver'   => 'ftp',
+            'host'     => env('FTP_SIRGE_WEB_HOST'),
+            'username' => env('FTP_SIRGE_WEB_USERNAME'),
+            'password' => env('FTP_SIRGE_WEB_PASSWORD'),
+	    'root' => env('FTP_SIRGE_WEB_ROOT'),
+        ],
+
     ],
 
 ];

@@ -13,32 +13,32 @@ class CreatePrestacionesDoiPagadasTable extends Migration
     public function up()
     {
         Schema::create('prestaciones.prestaciones_doi_pagadas', function (Blueprint $table) {
-            $table->increments('id');
-	$table->char('id_provincia', 2);
+        $table->increments('id');
+	$table->char('id_provincia', 2)->nullable();
 	//Es unique en conjunto con la provincia
-        $table->integer('id_prestacion');
-        $table->string('prestacion_codigo', 11);
-	$table->char('cuie', 6);
-	$table->date('prestacion_fecha');
-	$table->string('beneficiario_apellido', 100);
-	$table->string('beneficiario_nombre', 100);
-	$table->string('beneficiario_clave', 16);
-	$table->char('beneficiario_tipo_documento', 3);
-	$table->char('beneficiario_clase_documento', 1);
-	$table->string('beneficiario_nro_documento', 14);
-	$table->char('beneficiario_sexo', 1);
-	$table->date('beneficiario_nacimiento');
+        $table->integer('id_prestacion')->nullable();
+        $table->string('prestacion_codigo', 11)->nullable();
+	$table->char('cuie', 6)->nullable();
+	$table->date('prestacion_fecha')->nullable();
+	$table->string('beneficiario_apellido', 100)->nullable();
+	$table->string('beneficiario_nombre', 100)->nullable();
+	$table->string('beneficiario_clave', 16)->nullable();
+	$table->char('beneficiario_tipo_documento', 3)->nullable();
+	$table->char('beneficiario_clase_documento', 1)->nullable();
+	$table->string('beneficiario_nro_documento', 14)->nullable();
+	$table->char('beneficiario_sexo', 1)->nullable();
+	$table->date('beneficiario_nacimiento')->nullable();
 
-	$table->decimal('valor_unitario_facturado', 7, 2);
-	$table->integer('cantidad_facturado');
-	$table->decimal('importe_prestacion_facturado', 9, 2);
+	$table->decimal('valor_unitario_facturado', 7, 2)->nullable();
+	$table->integer('cantidad_facturado')->nullable();
+	$table->decimal('importe_prestacion_facturado', 9, 2)->nullable();
 	//Es unique en conjunto con la provincia pero puede tener varias prestaciones
 	$table->integer('id_factura'); 
-	$table->integer('factura_nro');
-	$table->date('factura_fecha');
-	$table->decimal('factura_importe_total', 9, 2);
-	$table->date('factura_fecha_recepcion');
-	$table->char('alta_complejidad', 1);
+	$table->string('factura_nro', 100)->nullable();
+	$table->date('factura_fecha')->nullable();
+	$table->decimal('factura_importe_total', 9, 2)->nullable();
+	$table->date('factura_fecha_recepcion')->nullable();
+	$table->char('alta_complejidad', 1)->nullable();
 	//Liquidadas
 	
 $table->integer('id_liquidacion')->nullable();
@@ -57,10 +57,10 @@ $table->string('dato_reportable_3')->nullable();
 $table->integer('id_dato_reportable_4')->nullable();
 $table->string('dato_reportable_4')->nullable();
 $table->integer('id_op')->nullable();
-$table->integer('numero_op')->nullable();
+$table->string('numero_op', 100)->nullable();
 $table->date('fecha_op')->nullable();
 $table->decimal('importe_total_op', 7, 2)->nullable();
-$table->integer('numero_expte')->nullable();
+$table->string('numero_expte', 100)->nullable();
 $table->date('fecha_debito_bancario')->nullable();
 $table->decimal('importe_debito_bancario', 9, 2)->nullable();
 $table->date('fecha_notificacion_efector')->nullable();
