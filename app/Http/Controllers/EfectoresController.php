@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use Mail;
+use Storage;
 use Log;
 
 use ZipArchive;
@@ -58,8 +59,13 @@ class EfectoresController extends Controller {
 	 * @return null
 	 */
 	public function listado() {
+        $ultima_modificacion = 'fech';
+        if ($zip = Storage::has('exports/EFECTORES_SUMAR.zip')) {
+            $ultima_modificacion = 'true';
+        }
 		$data = [
-			'page_title' => 'Listado de efectores'
+			'page_title' => 'Listado de efectores',
+			'title' => $ultima_modificacion
 		];
 		return view('efectores.listado', $data);
 	}

@@ -30,6 +30,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'uec' => \App\Http\Middleware\Uec::class,
-        'padronok' => \App\Http\Middleware\Padronok::class
+        'padronok' => \App\Http\Middleware\Padronok::class,
+        'log.debug' => \App\Http\Middleware\LogDebug::class
     ];
 }

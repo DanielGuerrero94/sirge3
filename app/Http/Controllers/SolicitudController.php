@@ -30,6 +30,7 @@ class SolicitudController extends Controller {
 	 */
 	public function __construct() {
 		$this->middleware('auth', ['except' => 'finalizarSolicitud']);
+		$this->middleware('log.debug');
 	}
 
 	/**

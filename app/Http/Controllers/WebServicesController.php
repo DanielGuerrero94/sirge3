@@ -114,7 +114,7 @@ class WebServicesController extends Controller {
 	public function siisaXMLRequest($nrdoc, $sexo = null) {
 		$client = $this->create();
 
-		$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';
+		$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=jeminsky&clave=lau07jem';
 
 		if ($sexo) {
 			$url = $url.'&sexo='.$sexo;
@@ -140,7 +140,7 @@ class WebServicesController extends Controller {
 	public function cruceSiisaXMLRequest($nrdoc, $client) {
 
 		if (!InscriptosPadronSisa::find($nrdoc)) {
-			$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=fnunez&clave=fernandonunez';
+			$url = 'https://sisa.msal.gov.ar/sisa/services/rest/cmdb/obtener?nrodoc='.$nrdoc.'&usuario=jeminsky&clave=lau07jem';
 
 			try {
 				//throw new Exception("Error Processing Request", 1);

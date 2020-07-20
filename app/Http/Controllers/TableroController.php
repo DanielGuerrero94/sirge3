@@ -77,13 +77,15 @@ class TableroController extends AbstractPadronesController {
 		$this->_indicador = '';
 		$this->_year      = 0;
 		$this->_provincia = '';
-		$this->_user      = NULL;
+		$this->_user      = Auth::user();
 		$this->_rules     = ['periodo' => 'required|date_format:d/m/Y|before:'.date('d-m-Y', strtotime('Dec 31')).'|after:2004-01-01',
 			'provincia'                   => 'required|max:100',
 			'indicador'                   => 'required|exists:tablero.descripcion,indicador',
 			'numerador'                   => 'required_without:denominador|valor_tablero',
 			'denominador'                 => 'required_without:numerador|valor_tablero',
 			'lote'                        => 'required|integer'];
+		$this->middleware('auth');
+		$this->middleware('log.debug');
 	}
 
 	/**
@@ -92,9 +94,11 @@ class TableroController extends AbstractPadronesController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
+        $user = Auth::user();
+        $id_provincia = $user?$user->id_provincia:0;
 		$data = [
 			'page_title'   => 'Seleccione el periodo a visualizar',
-			'id_provincia' => Auth::user()->id_provincia,
+			'id_provincia' => $id_provincia,
 			'provincias'   => Provincia::all()
 		];
 		return view('tablero.select-periodo', $data);
@@ -113,7 +117,9 @@ class TableroController extends AbstractPadronesController {
 				->where('tablero.ingresos.provincia', $provincia)
 			->where('tablero.ingresos.periodo', $periodo)
 				->count() == 0) {
-			if (!in_array(Auth::user()->id_menu, [1, 2, 3, 5, 11, 12, 14, 16, 18])) {
+            $user = Auth::user();
+            $id_menu = $user?$user->id_menu:0;
+			if (!in_array($id_menu, [1, 2, 3, 5, 11, 12, 14, 16, 18])) {
 				return 1;
 			}
 			if (Ingreso::where('periodo', $periodo)->where('provincia', $provincia)->count() == 0) {
@@ -329,7 +335,12 @@ class TableroController extends AbstractPadronesController {
 			->addColumn(
 			'action',
 			function ($result) {
-				return $this->datatableActions($this->indicadoresFull($result->periodo, $result->provincia), $this->_user->id_menu, $this->_user->id_entidad, $result->observaciones, $result->id);
+                $indicadores_full = $this->indicadoresFull($result->periodo, $result->provincia);
+                $id_menu = $this->_user->id_menu;
+                $id_entidad = $this->_user->id_entidad;
+                $observaciones = $result->observaciones;
+                $id = $result->id;
+				return $this->datatableActions($indicadores_full, $id_menu, $id_entidad, $observaciones, $id);
 			}
 		)
 			->make(true);
@@ -357,10 +368,6 @@ class TableroController extends AbstractPadronesController {
 		        ->orderBy('provincia', 'asc')
 		        ->orderBy(DB::raw('left(indicador,1)::integer'), 'asc')
 		        ->orderBy(DB::raw('right(indicador,-2)::integer'), 'asc');
-
-		$this->_user = Auth::user();
-
-        Log::info($results->toSql());
 
 		return $results;
 	}
