@@ -1,4 +1,4 @@
-drop view efectores.v_efectores_completo cascade;
+//drop view efectores.v_efectores_completo cascade;
 CREATE OR REPLACE VIEW efectores.v_efectores_completo AS
  SELECT e.id_efector,
     e.cuie,

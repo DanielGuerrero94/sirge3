@@ -51,6 +51,9 @@ class DiccionariosController extends Controller
 			'page_title' => 'Diccionario de datos ' . $this->getNombrePadron($id),
 			'padron' => $id
 		];
+		if ($id == 12) {
+			$data['aclaraciones'] = "Aclaraciones";
+		}
 		return view('padrones.datadic' , $data);
 	}
 

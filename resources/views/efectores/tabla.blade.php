@@ -155,4 +155,4 @@
 			<td>{{ $efector->telefono or ''}}</td>
 		</tr>
 	@endforeach
-</table>z
+</table>

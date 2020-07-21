@@ -326,7 +326,6 @@
 								    				<option value="S">SI</option>
 								    				<option selected="selected" value="N">NO</option>
 								    		@endif
-
 							    			</select>
 						    			</div>
 						    		</div>

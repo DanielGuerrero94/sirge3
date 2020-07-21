@@ -13,7 +13,7 @@ class ListarLoteCommand extends Command {
 	 */
     protected $signature = "lote:listar 
         {--i|--info : Display detailed information}
-        {padron=1 : Ids en --info} 
+        {padron=12 : Ids en --info} 
         {estado=1 : Ids en --info}";
 
 	/**
@@ -41,6 +41,9 @@ id_padron | padron
         7 | TRAZADORAS
         8 | TABLERO DE CONTROL
         9 | VPH Y PAP
+        10 | FACTURADAS
+        11 | LIQUIDADAS
+        12 | PAGADAS
 
 id_estado | estado
 ----------+------------

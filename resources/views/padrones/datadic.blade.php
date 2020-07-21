@@ -1,7 +1,25 @@
 @extends('content')
 @section('content')
+@if($padron == 12)
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12">
+          <div class="box box-warning">
+            <div class="box-header with-border">
+              <h3 class="box-title">Aclaraciones</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body" style="">
+              Prestaciones con codigo CON*: Tienen que llevar los datos del beneficiario y of the box
+            </div>
+          </div>
+	</div>
+</div>
+@endif
+<div class="row">
+	<div class="col-md-12">
 		<div class="box box-info">
 			<div class="box-header">
 				<h2 class="box-title">Datadic</h2>
@@ -18,6 +36,9 @@
 	                    <th>Campo</th>
 	                    <th>Tipo</th>
 	                    <th>Obligatorio</th>
+			    @if($padron == 12)
+			    <th>Ejemplo</th>
+			    @endif
 	                    <th>Descripción</th>
 	                  </tr>
 	                </thead>
@@ -52,6 +73,9 @@
                 { data: 'campo' , name : 'campo'},
                 { data: 'tipo' , name: 'tipo'},
                 { data: 'obligatorio'},
+	 	@if($padron == 12)
+                { data: 'ejemplo'},
+		@endif
                 { data: 'descripcion'}
                 
             ],

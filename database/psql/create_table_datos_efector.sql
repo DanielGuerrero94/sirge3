@@ -1,6 +1,6 @@
 CREATE SEQUENCE efectores.datos_efector_id_datos_efector_seq;
  
-    CREATE TABLE efectores.datos_efector (
+CREATE TABLE efectores.datos_efector (
     id_datos_efector integer DEFAULT nextval('efectores.datos_efector_id_datos_efector_seq'::regclass) NOT NULL,
     id_efector integer NOT NULL,
     categoria_maternidad character(4),
@@ -21,3 +21,11 @@ ALTER TABLE ONLY efectores.datos_efector
     ADD CONSTRAINT datos_efector_pkey PRIMARY KEY (id_datos_efector);
 
 create unique index id_efector on efectores.datos_efector (id_efector);
+-- ALTER TABLE ONLY efectores.datos_efector
+-- ADD COLUMNS AFTER IMPORT
+-- id_efector integer NOT NULL,
+-- created_at timestamp(0) without time zone,
+-- updated_at timestamp(0) without time zone
+
+-- ALTER TABLE ONLY efectores.datos_efector
+-- ADD CONSTRAINT efectores_datos_efector_id_datos_efector_foreign FOREIGN KEY (id_efector) REFERENCES efectores.efectores(id_efector) ON DELETE CASCADE;

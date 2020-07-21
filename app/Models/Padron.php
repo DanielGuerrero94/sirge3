@@ -25,4 +25,6 @@ class Padron extends Model {
 	 * @var bool
 	 */
 	public $timestamps = true;
+
+	protected $fillable = ['descripcion'];
 }

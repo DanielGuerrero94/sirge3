@@ -250,7 +250,7 @@ class EfectoresController extends Controller {
 		if (is_null($result)) {
 			Log::info("Intenta enviar el email");
 			Mail::send('emails.new-efector', ['efector' => $ef], function ($m) use ($ef) {
-					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web TEST');
 					$m->to('sirgeweb@gmail.com');
 					$m->to('javier.minsky@gmail.com');
 					$m->subject('Solicitud de alta de efector!');
@@ -428,11 +428,11 @@ class EfectoresController extends Controller {
 		$e->id_estado = 3;
 		if ($e->save()) {
 			Mail::send('emails.down-efector', ['efector' => $e], function ($m) use ($e) {
-					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web');
+					$m->from('sirgeweb@sumar.com.ar', 'SIRGe Web TEST');
 					$m->to('sirgeweb@gmail.com');
 					$m->to('javier.minsky@gmail.com');
 					$m->subject('Solicitud de baja de efector!');
-				});
+                    });
 
 			return 'Se ha solicitado la baja del efector '.$e->cuie;
 		}
@@ -827,7 +827,7 @@ class EfectoresController extends Controller {
 	 *
 	 * @return null
 	 */
-	public function descargarTabla() {
+        public function descargarTabla() {
 		return response()->download('../storage/exports/EFECTORES_SUMAR.zip');
 	}
 
