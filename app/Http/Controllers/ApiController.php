@@ -13,34 +13,54 @@ use Carbon\Carbon;
 class ApiController extends Controller
 {
     public function curlCall($url) {
+          
+        \Log::info($url);
+
+        $user = Auth::user();
+
     	$ch = curl_init(env("API_URL").$url);
 
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'X-Authorization: '.$user->token,
+        ));
 
         $response = curl_exec($ch);
+
         if(curl_error($ch)) {
             \Log::error(curl_error($ch));
-	    return response()->json(['mensaje' => curl_error($ch)], 400);
+	        return response()->json(['mensaje' => curl_error($ch)], 400);
         }
+
         curl_close($ch);
-	return $response;
+
+    	return $response;
     }
 
     public function postCall($url, $id_provincia, $filename) {
+
+        $user = Auth::user();
+
     	$ch = curl_init(env("API_URL").$url);
 
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, 
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($ch, CURLOPT_POST, 1);
+    	curl_setopt($ch, CURLOPT_POSTFIELDS, 
 		"periodo=2020-06&id_provincia=".$id_provincia."&filename=".$filename);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'X-Authorization: '.$user->token,
+        ));
 
         $response = curl_exec($ch);
+
         if(curl_error($ch)) {
             \Log::error(curl_error($ch));
-	    return response()->json(['mensaje' => curl_error($ch)], 400);
+	        return response()->json(['mensaje' => curl_error($ch)], 400);
         }
+
         curl_close($ch);
-	return $response;
+
+    	return $response;
     }
 
     /**
@@ -48,9 +68,9 @@ class ApiController extends Controller
      *
      * @return view
      */
-    public function getAnalisis()
+    public function getAnalisis($id)
     {
-	return $this->curlCall("analisis");
+	    return $this->curlCall("analisis/".$id);
     }
 
     /**
@@ -117,5 +137,16 @@ class ApiController extends Controller
 
 	return 'OK';
     }
+
+    public function getImportacionErrores($id)
+    {
+        return $this->curlCall("importaciones/".$id."/errores");
+    }
+
+    public function getImportacionValidaciones($id)
+    {
+        return $this->curlCall("importaciones/".$id."/validaciones");
+    }
+
 
 }
