@@ -35,7 +35,7 @@ class PrestacionesController extends AbstractPadronesController
             'estado' => 'required|in:L,D',
             'numero_comprobante' => 'required|max:50',
            // 'codigo_prestacion' => 'required|exists:pss.codigos,codigo_prestacion',
-	    'codigo_prestacion' => 'required|max:11',
+	    'codigo_prestacion' => 'required|max:21',
             'subcodigo_prestacion' => 'max:3',
             'precio_unitario' => 'required|numeric',
             'fecha_prestacion' => 'required|date_format:Y-m-d',
