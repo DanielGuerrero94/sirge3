@@ -36,15 +36,13 @@
 		<td class="table-header">DOMICILIO</td>
 		<td class="table-header">CODIGO POSTAL</td>
 		<td class="table-header">DENOMINACION LEGAL</td>
-		<td class="table-header">ID TIPO EFECTOR</td>
 		<td class="table-header">SIGLA TIPO EFECTOR</td>
 		<td class="table-header">TIPO EFECTOR</td>
-		<td class="table-header">DEPENDENCIA</td>
 		<td class="table-header">RURAL</td>
 		<td class="table-header">CICS</td>
-		<td class="table-header">ID CATEGORIZACION</td>
 		<td class="table-header">SIGLA CATEGORIZACION</td>
 		<td class="table-header">CATEGORIZACION</td>
+		<td class="table-header">DEPENDENCIA ADMINISTRATIVA</td>
 		<td class="table-header">DEPENDENCIA SANITARIA</td>
 		<td class="table-header">COMPROMISO GESTION</td>
 		<td class="table-header">SISTEMA HCD</td>
@@ -63,11 +61,10 @@
 		<td class="table-header">RED FLAP</td>
 		<td class="table-header">ID PROVINCIA</td>
 		<td class="table-header">NOMBRE PROVINCIA</td>
-		<td class="table-header">INDEC DEPARTAMENTO</td>
 		<td class="table-header">DEPARTAMENTO</td>
-		<td class="table-header">INDEC LOCALIDAD</td>
 		<td class="table-header">LOCALIDAD</td>
 		<td class="table-header">CIUDAD</td>
+		<td class="table-header">MENOS 10MIL HABITANTES</td>
 		<td class="table-header">LATITUD</td>
 		<td class="table-header">LONGITUD</td>
 		<td class="table-header">INTERNET</td>
@@ -101,15 +98,13 @@
 			<td>{{ $efector->domicilio or ''}}</td>
 			<td>{{ $efector->codigo_postal or ''}}</td>
 			<td>{{ $efector->denominacion_legal or ''}}</td>
-			<td>{{ $efector->id_tipo_efector or ''}}</td>
 			<td>{{ $efector->sigla_tipo or ''}}</td>
 			<td>{{ $efector->tipo_efector or ''}}</td>
-			<td>{{ $efector->dependencia or ''}}</td>
 			<td>{{ $efector->rural or ''}}</td>
 			<td>{{ $efector->cics or ''}}</td>
-			<td>{{ $efector->id_categorizacion or ''}}</td>
 			<td>{{ $efector->sigla_categorizacion or ''}}</td>
 			<td>{{ $efector->categorizacion or ''}}</td>
+			<td>{{ $efector->dependencia_administrativa or ''}}</td>
 			<td>{{ $efector->dependencia_sanitaria or ''}}</td>
 			<td>{{ $efector->compromiso_gestion or ''}}</td>
 			<td>{{ $efector->nombre_hce or ''}}</td>
@@ -128,11 +123,10 @@
 			<td>{{ $efector->red_flap or 'N' }}</td>
 			<td>{{ $efector->id_provincia or ''}}</td>
 			<td>{{ $efector->nombre_provincia or ''}}</td>
-			<td>{{ $efector->indec_departamento or ''}}</td>
 			<td>{{ $efector->departamento or ''}}</td>
-			<td>{{ $efector->indec_localidad or ''}}</td>
 			<td>{{ $efector->localidad or ''}}</td>
 			<td>{{ $efector->ciudad or ''}}</td>
+			<td>{{ $efector->menor_10k or ''}}</td>
 			<td>{{ $efector->latitud or ''}}</td>
 			<td>{{ $efector->longitud or ''}}</td>
 			<td>{{ $efector->internet or ''}}</td>

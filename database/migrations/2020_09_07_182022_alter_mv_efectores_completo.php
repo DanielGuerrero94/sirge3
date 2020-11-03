@@ -1,0 +1,231 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AlterMvEfectoresCompleto extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+	$statements = [];
+	//UPDATE de las tablas que usa el excel de efectores
+	$statements[] = <<<HEREDOC
+	    DROP MATERIALIZED VIEW IF EXISTS efectores.mv_efectores_completo;
+HEREDOC;
+
+	$statements[] = <<<HEREDOC
+	    DROP VIEW IF EXISTS efectores.v_efectores_completo;
+HEREDOC;
+
+    $statements[] = <<<HEREDOC
+        CREATE VIEW efectores.v_efectores_completo as
+ SELECT e.id_efector,
+    e.cuie,
+    e.siisa,
+    e.nombre,
+    e.domicilio,
+    e.codigo_postal,
+    e.denominacion_legal,
+    e.id_tipo_efector,
+    e.rural,
+    e.cics,
+    e.id_categorizacion,
+    e.id_dependencia_administrativa,
+    e.dependencia_sanitaria,
+    e.integrante,
+    e.compromiso_gestion,
+    e.priorizado,
+    e.ppac,
+    e.id_estado,
+    e.created_at,
+    e.updated_at,
+    e.hcd,
+    e.id_sistema_hcd,
+    hcd.nombre AS sistema_hcd,
+    e.recupera_costos,
+    e.osp,
+    e.pami,
+    e.os_directo,
+    e.otro,
+    e.hpgd,
+    e.menor_10k,
+    de.categoria_maternidad,
+    de.cumple_cone,
+    de.categoria_neonatologia,
+    de.opera_malformaciones,
+    de.categoria_cc,
+    de.categoria_iam,
+    de.red_flap,
+    dg.id_efector AS dg_id_efector,
+    dg.id_provincia,
+    prov.descripcion AS nombre_provincia,
+    dg.id_departamento,
+    dg.id_localidad,
+    dg.ciudad,
+    dg.latitud,
+    dg.longitud,
+    dep.id_departamento AS indec_departamento,
+    dep.nombre_departamento,
+    loc.id_departamento AS loc_indec_departamento,
+    loc.id_localidad AS indec_localidad,
+    loc.nombre_localidad,
+    des.id_efector AS desc_id_efector,
+    des.internet,
+    des.factura_descentralizada,
+    des.factura_on_line,
+    comp.id_compromiso,
+    comp.id_efector AS comp_id_efector,
+    comp.numero_compromiso,
+    comp.firmante,
+    comp.fecha_suscripcion,
+    comp.fecha_inicio,
+    comp.fecha_fin,
+    comp.pago_indirecto,
+    conv.id_convenio,
+    conv.id_efector AS conv_id_efector,
+    conv.numero_compromiso AS numero_convenio,
+    conv.firmante AS convenio_firmante,
+    conv.nombre_tercer_administrador,
+    conv.codigo_tercer_administrador,
+    conv.fecha_suscripcion AS convenio_fecha_suscripcion,
+    conv.fecha_inicio AS convenio_fecha_inicio,
+    conv.fecha_fin AS convenio_fecha_fin,
+    neo.siisa AS neo_siisa,
+    neo.id_categoria,
+    neo.id AS neo_id,
+    obs.siisa AS obs_siisa,
+    obs.id_categoria AS obs_id_categoria,
+    obs.id AS obs_id,
+    ppac.id_efector AS ppac_id_efector,
+    ppac.addenda_perinatal,
+    ppac.fecha_addenda_perinatal,
+    ppac.perinatal_ac,
+    add.id AS add_id,
+    add.id_efector AS add_id_efector,
+    add.id_addenda,
+    add.fecha_addenda,
+    tipo.id_tipo_efector AS tipo_id_tipo_efector,
+    tipo.sigla,
+    tipo.descripcion AS tipo_efector_descripcion,
+    cat.id_categorizacion AS tipo_cat_id_categorizacion,
+    cat.sigla AS cat_sigla,
+    cat.descripcion AS tipo_cat_descripcion,
+    depe.id_dependencia_administrativa AS tipo_id_dependencia_administrativa,
+    depe.sigla as dep_sigla,
+    depe.descripcion as tipo_dep_descripcion,
+    ( SELECT max(p.fecha) AS prio_fecha
+           FROM efectores.priorizados p
+          WHERE p.cuie = e.cuie) AS prio_fecha,
+    ( SELECT em.email
+           FROM efectores.email em
+          WHERE em.id_efector = e.id_efector
+         LIMIT 1) AS email,
+    ( SELECT tele.numero_telefono AS telefono
+           FROM efectores.telefonos tele
+          WHERE tele.id_efector = e.id_efector
+         LIMIT 1) AS telefono
+   FROM efectores.efectores e
+     LEFT JOIN efectores.datos_geograficos dg ON e.id_efector = dg.id_efector
+     LEFT JOIN geo.departamentos dep ON dep.id = dg.id_departamento
+     LEFT JOIN geo.localidades loc ON loc.id = dg.id_localidad
+     LEFT JOIN efectores.descentralizacion des ON e.id_efector = des.id_efector
+     LEFT JOIN efectores.compromiso_gestion comp ON e.id_efector = comp.id_efector
+     LEFT JOIN efectores.convenio_administrativo conv ON e.id_efector = conv.id_efector
+     LEFT JOIN efectores.efectores_neonatales neo ON e.siisa = neo.siisa
+     LEFT JOIN efectores.efectores_obstetricos obs ON e.siisa = obs.siisa
+     LEFT JOIN efectores.efectores_ppac ppac ON e.id_efector = ppac.id_efector
+     LEFT JOIN efectores.efectores_addendas add ON e.id_efector = add.id_efector
+     LEFT JOIN efectores.tipo_efector tipo ON e.id_tipo_efector = tipo.id_tipo_efector
+     LEFT JOIN efectores.tipo_categorizacion cat ON e.id_categorizacion = cat.id_categorizacion
+     LEFT JOIN efectores.tipo_dependencia_administrativa depe ON e.id_dependencia_administrativa = depe.id_dependencia_administrativa
+     LEFT JOIN geo.provincias prov ON dg.id_provincia = prov.id_provincia
+     LEFT JOIN hcd.sistemas hcd ON e.id_sistema_hcd = hcd.id_sistema
+     LEFT JOIN efectores.datos_efector de ON de.id_efector = e.id_efector
+  WHERE e.id_estado = 1;
+HEREDOC;
+
+    $statements[] = <<<HEREDOC
+        CREATE MATERIALIZED VIEW efectores.mv_efectores_completo as
+SELECT v_efectores_completo.cuie,
+    v_efectores_completo.siisa,
+    v_efectores_completo.nombre AS nombre_efector,
+    v_efectores_completo.domicilio,
+    v_efectores_completo.codigo_postal,
+    v_efectores_completo.denominacion_legal,
+    v_efectores_completo.id_tipo_efector,
+    v_efectores_completo.sigla AS sigla_tipo,
+    v_efectores_completo.tipo_efector_descripcion AS tipo_efector,
+    v_efectores_completo.rural,
+    v_efectores_completo.cics,
+    v_efectores_completo.id_categorizacion,
+    v_efectores_completo.cat_sigla AS sigla_categorizacion,
+    v_efectores_completo.tipo_cat_descripcion AS categorizacion,
+    v_efectores_completo.tipo_dep_descripcion AS dependencia_administrativa,
+    v_efectores_completo.dependencia_sanitaria,
+    v_efectores_completo.compromiso_gestion,
+    v_efectores_completo.sistema_hcd AS nombre_hce,
+    v_efectores_completo.recupera_costos,
+    v_efectores_completo.osp,
+    v_efectores_completo.pami,
+    v_efectores_completo.os_directo,
+    v_efectores_completo.otro,
+    v_efectores_completo.hpgd,
+    v_efectores_completo.menor_10k,
+    v_efectores_completo.categoria_maternidad,
+    v_efectores_completo.cumple_cone,
+    v_efectores_completo.categoria_neonatologia,
+    v_efectores_completo.opera_malformaciones,
+    v_efectores_completo.categoria_cc,
+    v_efectores_completo.categoria_iam,
+    v_efectores_completo.red_flap,
+    v_efectores_completo.id_provincia,
+    v_efectores_completo.nombre_provincia,
+    v_efectores_completo.indec_departamento,
+    v_efectores_completo.nombre_departamento AS departamento,
+    v_efectores_completo.indec_localidad,
+    v_efectores_completo.nombre_localidad AS localidad,
+    v_efectores_completo.ciudad,
+    v_efectores_completo.latitud,
+    v_efectores_completo.longitud,
+    v_efectores_completo.internet,
+    v_efectores_completo.factura_descentralizada,
+    v_efectores_completo.factura_on_line AS factura_online,
+    v_efectores_completo.numero_compromiso,
+    v_efectores_completo.firmante AS firmante_compromiso,
+    v_efectores_completo.fecha_suscripcion AS fecha_suscripcion_compromiso,
+    v_efectores_completo.fecha_inicio AS fecha_inicio_compromiso,
+    v_efectores_completo.fecha_fin AS fecha_fin_compromiso,
+    v_efectores_completo.pago_indirecto,
+    v_efectores_completo.numero_convenio,
+    v_efectores_completo.convenio_firmante AS firmante_convenio,
+    v_efectores_completo.nombre_tercer_administrador,
+    v_efectores_completo.codigo_tercer_administrador,
+    v_efectores_completo.convenio_fecha_suscripcion AS fecha_suscripcion_convenio,
+    v_efectores_completo.convenio_fecha_inicio AS fecha_inicio_convenio,
+    v_efectores_completo.convenio_fecha_fin AS fecha_fin_convenio,
+    v_efectores_completo.email,
+    v_efectores_completo.telefono
+   FROM efectores.v_efectores_completo;
+HEREDOC;
+
+    foreach($statements as $statement) {
+	    DB::connection('pgsql')->statement($statement);
+	}
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+
+    }
+}
